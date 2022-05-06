@@ -9,17 +9,17 @@ public class CustardState : MonoBehaviour
     private const int BLOCKS_WIDTH = 128;
     private const int BLOCKS_HEIGHT = 128;
 
-    public GameObject CustardBlockPrefab;
+    public GameObject custardBlockPrefab;
 
-    private byte[,] CustardArea;
-    private GameObject[,] CustardCells;
+    private byte[,] _custardArea;
+    private GameObject[,] _custardCells;
 
-    private List<byte[]> CellsThatMightCauseChange = new();
+    private List<byte[]> _cellsThatMightCauseChange = new();
 
     private void Start()
     {
-        CustardArea = new byte[BLOCKS_WIDTH, BLOCKS_HEIGHT];
-        CustardCells = new GameObject[BLOCKS_WIDTH, BLOCKS_HEIGHT];
+        _custardArea = new byte[BLOCKS_WIDTH, BLOCKS_HEIGHT];
+        _custardCells = new GameObject[BLOCKS_WIDTH, BLOCKS_HEIGHT];
 
         InitCustardBlocks();
     }
@@ -30,10 +30,10 @@ public class CustardState : MonoBehaviour
         for (var j = 0; j < BLOCKS_HEIGHT; j++)
         {
             var custardPosition = GetCustardPosition(i, j);
-            var custardCell = Instantiate(CustardBlockPrefab,
+            var custardCell = Instantiate(custardBlockPrefab,
                 new Vector3(custardPosition.x, 1.5f, custardPosition.y),
                 Quaternion.identity);
-            CustardCells[i, j] =
+            _custardCells[i, j] =
                 custardCell;
             if (IsInitialWorldCustard(i, j)) custardCell.GetComponent<CustardBlock>().Show();
         }
