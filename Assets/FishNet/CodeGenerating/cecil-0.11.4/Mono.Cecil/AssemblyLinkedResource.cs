@@ -8,30 +8,29 @@
 // Licensed under the MIT/X11 license.
 //
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public sealed class AssemblyLinkedResource : Resource
+    {
+        private AssemblyNameReference reference;
 
-	public sealed class AssemblyLinkedResource : Resource {
+        public AssemblyNameReference Assembly
+        {
+            get => reference;
+            set => reference = value;
+        }
 
-		AssemblyNameReference reference;
+        public override ResourceType ResourceType => ResourceType.AssemblyLinked;
 
-		public AssemblyNameReference Assembly {
-			get { return reference; }
-			set { reference = value; }
-		}
+        public AssemblyLinkedResource(string name, ManifestResourceAttributes flags)
+            : base(name, flags)
+        {
+        }
 
-		public override ResourceType ResourceType {
-			get { return ResourceType.AssemblyLinked; }
-		}
-
-		public AssemblyLinkedResource (string name, ManifestResourceAttributes flags)
-			: base (name, flags)
-		{
-		}
-
-		public AssemblyLinkedResource (string name, ManifestResourceAttributes flags, AssemblyNameReference reference)
-			: base (name, flags)
-		{
-			this.reference = reference;
-		}
-	}
+        public AssemblyLinkedResource(string name, ManifestResourceAttributes flags, AssemblyNameReference reference)
+            : base(name, flags)
+        {
+            this.reference = reference;
+        }
+    }
 }

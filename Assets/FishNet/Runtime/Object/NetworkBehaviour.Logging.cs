@@ -3,10 +3,8 @@ using UnityEngine;
 
 namespace FishNet.Object
 {
-
     public abstract partial class NetworkBehaviour : MonoBehaviour
     {
-
         /// <summary>
         /// True if can log for loggingType.
         /// </summary>
@@ -14,9 +12,7 @@ namespace FishNet.Object
         /// <returns></returns>
         public bool CanLog(LoggingType loggingType)
         {
-            return (NetworkManager == null) ? false : NetworkManager.CanLog(loggingType);
+            return NetworkManager == null ? false : NetworkManager.CanLog(loggingType);
         }
     }
-
-
 }

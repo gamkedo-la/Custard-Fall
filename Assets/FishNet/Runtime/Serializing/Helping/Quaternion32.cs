@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace FishNet.Serializing.Helping
@@ -17,14 +16,14 @@ namespace FishNet.Serializing.Helping
 
         internal static uint Compress(Quaternion quaternion)
         {
-            float absX = Mathf.Abs(quaternion.x);
-            float absY = Mathf.Abs(quaternion.y);
-            float absZ = Mathf.Abs(quaternion.z);
-            float absW = Mathf.Abs(quaternion.w);
+            var absX = Mathf.Abs(quaternion.x);
+            var absY = Mathf.Abs(quaternion.y);
+            var absZ = Mathf.Abs(quaternion.z);
+            var absW = Mathf.Abs(quaternion.w);
 
-            ComponentType largestComponent = ComponentType.X;
-            float largestAbs = absX;
-            float largest = quaternion.x;
+            var largestComponent = ComponentType.X;
+            var largestAbs = absX;
+            var largest = quaternion.x;
 
             if (absY > largestAbs)
             {
@@ -32,12 +31,14 @@ namespace FishNet.Serializing.Helping
                 largestComponent = ComponentType.Y;
                 largest = quaternion.y;
             }
+
             if (absZ > largestAbs)
             {
                 largestAbs = absZ;
                 largestComponent = ComponentType.Z;
                 largest = quaternion.z;
             }
+
             if (absW > largestAbs)
             {
                 largestComponent = ComponentType.W;
@@ -78,22 +79,23 @@ namespace FishNet.Serializing.Helping
                 c = -c;
             }
 
-            uint integerA = ScaleToUint(a);
-            uint integerB = ScaleToUint(b);
-            uint integerC = ScaleToUint(c);
+            var integerA = ScaleToUint(a);
+            var integerB = ScaleToUint(b);
+            var integerC = ScaleToUint(c);
 
-            return (((uint)largestComponent) << LargestComponentShift) | (integerA << AShift) | (integerB << BShift) | integerC;
+            return ((uint) largestComponent << LargestComponentShift) | (integerA << AShift) | (integerB << BShift) |
+                   integerC;
         }
 
         private static uint ScaleToUint(float v)
         {
-            float normalized = v / Maximum;
-            return (uint)Mathf.RoundToInt(normalized * IntScale) & IntMask;
+            var normalized = v / Maximum;
+            return (uint) Mathf.RoundToInt(normalized * IntScale) & IntMask;
         }
 
         private static float ScaleToFloat(uint v)
         {
-            float unscaled = v * Maximum / IntScale;
+            var unscaled = v * Maximum / IntScale;
 
             if (unscaled > Maximum)
                 unscaled -= Maximum * 2;
@@ -102,14 +104,14 @@ namespace FishNet.Serializing.Helping
 
         internal static Quaternion Decompress(uint compressed)
         {
-            var largestComponentType = (ComponentType)(compressed >> LargestComponentShift);
-            uint integerA = (compressed >> AShift) & IntMask;
-            uint integerB = (compressed >> BShift) & IntMask;
-            uint integerC = compressed & IntMask;
+            var largestComponentType = (ComponentType) (compressed >> LargestComponentShift);
+            var integerA = (compressed >> AShift) & IntMask;
+            var integerB = (compressed >> BShift) & IntMask;
+            var integerC = compressed & IntMask;
 
-            float a = ScaleToFloat(integerA);
-            float b = ScaleToFloat(integerB);
-            float c = ScaleToFloat(integerC);
+            var a = ScaleToFloat(integerA);
+            var b = ScaleToFloat(integerB);
+            var c = ScaleToFloat(integerC);
 
             Quaternion rotation;
             switch (largestComponentType)
@@ -120,8 +122,8 @@ namespace FishNet.Serializing.Helping
                     rotation.z = b;
                     rotation.w = c;
                     rotation.x = Mathf.Sqrt(1 - rotation.y * rotation.y
-                                               - rotation.z * rotation.z
-                                               - rotation.w * rotation.w);
+                                              - rotation.z * rotation.z
+                                              - rotation.w * rotation.w);
                     break;
                 case ComponentType.Y:
                     // x (?) z w
@@ -129,8 +131,8 @@ namespace FishNet.Serializing.Helping
                     rotation.z = b;
                     rotation.w = c;
                     rotation.y = Mathf.Sqrt(1 - rotation.x * rotation.x
-                                               - rotation.z * rotation.z
-                                               - rotation.w * rotation.w);
+                                              - rotation.z * rotation.z
+                                              - rotation.w * rotation.w);
                     break;
                 case ComponentType.Z:
                     // x y (?) w
@@ -138,8 +140,8 @@ namespace FishNet.Serializing.Helping
                     rotation.y = b;
                     rotation.w = c;
                     rotation.z = Mathf.Sqrt(1 - rotation.x * rotation.x
-                                               - rotation.y * rotation.y
-                                               - rotation.w * rotation.w);
+                                              - rotation.y * rotation.y
+                                              - rotation.w * rotation.w);
                     break;
                 case ComponentType.W:
                     // x y z (?)
@@ -147,8 +149,8 @@ namespace FishNet.Serializing.Helping
                     rotation.y = b;
                     rotation.z = c;
                     rotation.w = Mathf.Sqrt(1 - rotation.x * rotation.x
-                                               - rotation.y * rotation.y
-                                               - rotation.z * rotation.z);
+                                              - rotation.y * rotation.y
+                                              - rotation.z * rotation.z);
                     break;
                 default:
                     // Should never happen!
@@ -158,6 +160,5 @@ namespace FishNet.Serializing.Helping
 
             return rotation;
         }
-
     }
 }

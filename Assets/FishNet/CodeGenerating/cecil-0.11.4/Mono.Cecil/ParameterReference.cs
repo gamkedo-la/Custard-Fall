@@ -10,48 +10,49 @@
 
 using System;
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public abstract class ParameterReference : IMetadataTokenProvider
+    {
+        private string name;
+        internal int index = -1;
+        protected TypeReference parameter_type;
+        internal MetadataToken token;
 
-	public abstract class ParameterReference : IMetadataTokenProvider {
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
 
-		string name;
-		internal int index = -1;
-		protected TypeReference parameter_type;
-		internal MetadataToken token;
+        public int Index => index;
 
-		public string Name {
-			get { return name; }
-			set { name = value; }
-		}
+        public TypeReference ParameterType
+        {
+            get => parameter_type;
+            set => parameter_type = value;
+        }
 
-		public int Index {
-			get { return index; }
-		}
+        public MetadataToken MetadataToken
+        {
+            get => token;
+            set => token = value;
+        }
 
-		public TypeReference ParameterType {
-			get { return parameter_type; }
-			set { parameter_type = value; }
-		}
+        internal ParameterReference(string name, TypeReference parameterType)
+        {
+            if (parameterType == null)
+                throw new ArgumentNullException("parameterType");
 
-		public MetadataToken MetadataToken {
-			get { return token; }
-			set { token = value; }
-		}
+            this.name = name ?? string.Empty;
+            parameter_type = parameterType;
+        }
 
-		internal ParameterReference (string name, TypeReference parameterType)
-		{
-			if (parameterType == null)
-				throw new ArgumentNullException ("parameterType");
+        public override string ToString()
+        {
+            return name;
+        }
 
-			this.name = name ?? string.Empty;
-			this.parameter_type = parameterType;
-		}
-
-		public override string ToString ()
-		{
-			return name;
-		}
-
-		public abstract ParameterDefinition Resolve ();
-	}
+        public abstract ParameterDefinition Resolve();
+    }
 }

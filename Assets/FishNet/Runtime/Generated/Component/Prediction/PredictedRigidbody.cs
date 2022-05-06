@@ -6,12 +6,12 @@ using UnityEngine;
 
 namespace FishNet.Component.Prediction
 {
-
     [AddComponentMenu("")]
     [APIExclude]
     public class PredictedRigidbody : PredictedRigidbodyBase
     {
         #region Type.
+
         public struct RigidbodyState
         {
             public Vector3 Position;
@@ -19,42 +19,54 @@ namespace FishNet.Component.Prediction
             public Vector3 Velocity;
             public Vector3 AngularVelocity;
         }
+
         #endregion
 
         #region Serialized.
+
         /// <summary>
         /// Rigidbody to predict.
         /// </summary>
-        [SerializeField, HideInInspector]
-        private Rigidbody _rigidbody;
+        [SerializeField] [HideInInspector] private Rigidbody _rigidbody;
+
         /// <summary>
         /// Sets Rigidbody to value.
         /// </summary>
         /// <param name="value"></param>
-        internal void SetRigidbody(Rigidbody value) => _rigidbody = value;
+        internal void SetRigidbody(Rigidbody value)
+        {
+            _rigidbody = value;
+        }
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Last SpectatorMotorState received from the server.
         /// </summary>
         private RigidbodyState? _receivedRigidbodyState;
+
         /// <summary>
         /// Velocity from previous simulation.
         /// </summary>
         private Vector3 _lastVelocity;
+
         /// <summary>
         /// Angular velocity from previous simulation.
         /// </summary>
         private Vector3 _lastAngularVelocity;
+
         /// <summary>
         /// Baseline for velocity magnitude.
         /// </summary>
         private float? _velocityBaseline;
+
         /// <summary>
         /// Baseline for angular velocity magnitude.
         /// </summary>
         private float? _angularVelocityBaseline;
+
         /// <summary>
         /// PhysicsScene for this object when OnPreReconcile is called.
         /// </summary>
@@ -93,7 +105,7 @@ namespace FishNet.Component.Prediction
             _physicsScene = gameObject.scene.GetPhysicsScene();
             if (_physicsScene == obj.gameObject.scene.GetPhysicsScene())
             {
-                base.SetPreviousStates();
+                SetPreviousStates();
                 ResetRigidbodyToData();
             }
         }
@@ -106,7 +118,7 @@ namespace FishNet.Component.Prediction
         {
             base.TimeManager_OnPostReplicateReplay(ps, ps2d);
 
-            if (base.CanPredict())
+            if (CanPredict())
                 PredictVelocity(ps);
         }
 
@@ -122,8 +134,8 @@ namespace FishNet.Component.Prediction
 
             if (_physicsScene == gameObject.scene.GetPhysicsScene())
             {
-                base.SetTransformMoveRates();
-                base.ResetToTransformPrevious();
+                SetTransformMoveRates();
+                ResetToTransformPrevious();
             }
         }
 
@@ -154,15 +166,16 @@ namespace FishNet.Component.Prediction
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void PredictVelocity(PhysicsScene ps)
         {
-            if (base.PredictionRatio <= 0f)
+            if (PredictionRatio <= 0f)
                 return;
             if (ps != _physicsScene)
                 return;
 
             Vector3 result;
-            if (base.PredictVector3Velocity(ref _velocityBaseline, ref _lastVelocity, _rigidbody.velocity, out result))
+            if (PredictVector3Velocity(ref _velocityBaseline, ref _lastVelocity, _rigidbody.velocity, out result))
                 _rigidbody.velocity = result;
-            if (base.PredictVector3Velocity(ref _angularVelocityBaseline, ref _lastAngularVelocity, _rigidbody.angularVelocity, out result))
+            if (PredictVector3Velocity(ref _angularVelocityBaseline, ref _lastAngularVelocity,
+                    _rigidbody.angularVelocity, out result))
                 _rigidbody.angularVelocity = result;
 
             _lastVelocity = _rigidbody.velocity;
@@ -175,7 +188,7 @@ namespace FishNet.Component.Prediction
         /// </summary>
         protected override void SendRigidbodyState()
         {
-            RigidbodyState state = new RigidbodyState
+            var state = new RigidbodyState
             {
                 Position = _rigidbody.transform.position,
                 Rotation = _rigidbody.transform.rotation,
@@ -196,15 +209,13 @@ namespace FishNet.Component.Prediction
             if (!CanPredict())
                 return;
 
-            base.SetPreviousStates();
+            SetPreviousStates();
 
             _receivedRigidbodyState = state;
             ResetRigidbodyToData();
 
-            base.SetTransformMoveRates();
-            base.ResetToTransformPrevious();
+            SetTransformMoveRates();
+            ResetToTransformPrevious();
         }
-
     }
-
 }

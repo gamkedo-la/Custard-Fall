@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace FishNet.Managing.Client.Editing
 {
-
-
     [CustomEditor(typeof(ClientManager), true)]
     [CanEditMultipleObjects]
     public class ClientManagerEditor : Editor
@@ -24,7 +22,8 @@ namespace FishNet.Managing.Client.Editing
             serializedObject.Update();
 
             GUI.enabled = false;
-            EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour((ClientManager)target), typeof(ClientManager), false);
+            EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour((ClientManager) target),
+                typeof(ClientManager), false);
             GUI.enabled = true;
 
 
@@ -40,7 +39,6 @@ namespace FishNet.Managing.Client.Editing
 
             serializedObject.ApplyModifiedProperties();
         }
-
     }
 }
 #endif

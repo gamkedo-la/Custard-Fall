@@ -1,5 +1,4 @@
-﻿
-using FishNet.Documenting;
+﻿using FishNet.Documenting;
 
 namespace FishNet.Object.Synchronizing
 {
@@ -10,18 +9,20 @@ namespace FishNet.Object.Synchronizing
         /// An item is added to the collection.
         /// </summary>
         Add,
+
         /// <summary>
         /// An item is removed from the collection.
         /// </summary>
         Remove,
+
         /// <summary>
         /// Collection is cleared.
         /// </summary>
         Clear,
+
         /// <summary>
         /// All operations for the tick have been processed. This only occurs on clients as the server is unable to be aware of when the user is done modifying the list.
         /// </summary>
         Complete
     }
-
 }

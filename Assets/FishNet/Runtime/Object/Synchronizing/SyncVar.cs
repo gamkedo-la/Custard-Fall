@@ -17,6 +17,7 @@ namespace FishNet.Object.Synchronizing
     public class SyncVar<T> : SyncBase
     {
         #region Types.
+
         /// <summary>
         /// Information needed to invoke a callback.
         /// </summary>
@@ -31,43 +32,53 @@ namespace FishNet.Object.Synchronizing
                 Next = next;
             }
         }
+
         #endregion
 
         #region Public.
+
         /// <summary>
         /// Called when the SyncDictionary changes.
         /// </summary>
         public event Action<T, T, bool> OnChange;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Server OnChange event waiting for start callbacks.
         /// </summary>
         private CachedOnChange? _serverOnChange;
+
         /// <summary>
         /// Client OnChange event waiting for start callbacks.
         /// </summary>
         private CachedOnChange? _clientOnChange;
+
         /// <summary>
         /// Value before the network is initialized on the containing object.
         /// </summary>
         private T _initialValue;
+
         /// <summary>
         /// Previous value on the client.
         /// </summary>
         private T _previousClientValue;
+
         /// <summary>
         /// Current value on the server, or client.
         /// </summary>
         private T _value;
+
         #endregion
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SyncVar(NetworkBehaviour nb, uint syncIndex, WritePermission writePermission, ReadPermission readPermission, float sendRate, Channel channel, T value)
+        public SyncVar(NetworkBehaviour nb, uint syncIndex, WritePermission writePermission,
+            ReadPermission readPermission, float sendRate, Channel channel, T value)
         {
             SetInitialValues(value);
-            base.InitializeInstance(nb, syncIndex, writePermission, readPermission, sendRate, channel, false);
+            InitializeInstance(nb, syncIndex, writePermission, readPermission, sendRate, channel, false);
         }
 
         /// <summary>
@@ -88,6 +99,7 @@ namespace FishNet.Object.Synchronizing
             _initialValue = next;
             UpdateValues(next);
         }
+
         /// <summary>
         /// Sets current and previous values.
         /// </summary>
@@ -97,6 +109,7 @@ namespace FishNet.Object.Synchronizing
             _previousClientValue = next;
             _value = next;
         }
+
         /// <summary>
         /// Sets current value and marks the SyncVar dirty when able to. Returns if able to set value.
         /// </summary>
@@ -113,20 +126,20 @@ namespace FishNet.Object.Synchronizing
              * even if the owning class of this was just spawned. This is because
              * the unity cycle will fire awake on the object soon as it's spawned, 
              * completing awake, and the user would set the value after. */
-            if (!base.IsRegistered)
+            if (!IsRegistered)
                 return;
 
-            bool isServer = base.NetworkBehaviour.IsServer;
-            bool isClient = base.NetworkBehaviour.IsClient;
+            var isServer = NetworkBehaviour.IsServer;
+            var isClient = NetworkBehaviour.IsClient;
             /* If not client or server then set skipChecks
              * as true. When neither is true it's likely user is changing
              * value before object is initialized. This is allowed
              * but checks cannot be processed because they would otherwise
              * stop setting the value. */
-            bool skipChecks = (!isClient && !isServer);
+            var skipChecks = !isClient && !isServer;
 
             //Object is deinitializing.
-            if (!skipChecks && CodegenHelper.NetworkObject_Deinitializing(this.NetworkBehaviour))
+            if (!skipChecks && CodegenHelper.NetworkObject_Deinitializing(NetworkBehaviour))
                 return;
 
             //If setting as server.
@@ -139,7 +152,7 @@ namespace FishNet.Object.Synchronizing
                 //If skipping checks also update 
                 if (skipChecks)
                 {
-                    T prev = _value;
+                    var prev = _value;
                     UpdateValues(nextValue);
                     InvokeOnChange(prev, _value, calledByUser);
                 }
@@ -147,10 +160,10 @@ namespace FishNet.Object.Synchronizing
                 {
                     /* //writepermission if using owner write permissions
                      * make sure caller is owner. */
-                    if (Comparers.EqualityCompare<T>(this._value, nextValue))
+                    if (Comparers.EqualityCompare<T>(_value, nextValue))
                         return;
 
-                    T prev = _value;
+                    var prev = _value;
                     _value = nextValue;
                     InvokeOnChange(prev, _value, calledByUser);
                 }
@@ -160,13 +173,12 @@ namespace FishNet.Object.Synchronizing
             //Not called by user.
             else
             {
-
                 /* Previously clients were not allowed to set values
                  * but this has been changed because clients may want
                  * to update values locally while occasionally
                  * letting the syncvar adjust their side. */
 
-                T prev = _previousClientValue;
+                var prev = _previousClientValue;
                 UpdateValues(nextValue);
                 InvokeOnChange(prev, _value, calledByUser);
                 TryDirty();
@@ -185,7 +197,7 @@ namespace FishNet.Object.Synchronizing
                     return;
 
                 if (calledByUser)
-                    base.Dirty();
+                    Dirty();
                 //writepermission Once client write permissions are added this needs to be updated.
                 //else if (!asServer && base.Settings.WritePermission == WritePermission.ServerOnly)
                 //    base.Dirty();
@@ -201,19 +213,18 @@ namespace FishNet.Object.Synchronizing
             {
                 if (asServer)
                 {
-                    if (base.NetworkBehaviour.OnStartServerCalled)
+                    if (NetworkBehaviour.OnStartServerCalled)
                         OnChange.Invoke(prev, next, asServer);
                     else
                         _serverOnChange = new CachedOnChange(prev, next);
                 }
                 else
                 {
-                    if (base.NetworkBehaviour.OnStartClientCalled)
+                    if (NetworkBehaviour.OnStartClientCalled)
                         OnChange.Invoke(prev, next, asServer);
                     else
                         _clientOnChange = new CachedOnChange(prev, next);
                 }
-
             }
         }
 
@@ -229,7 +240,7 @@ namespace FishNet.Object.Synchronizing
 
             if (OnChange != null)
             {
-                CachedOnChange? change = (asServer) ? _serverOnChange : _clientOnChange;
+                var change = asServer ? _serverOnChange : _clientOnChange;
                 if (change != null)
                     InvokeOnChange(change.Value.Previous, change.Value.Next, asServer);
             }
@@ -270,7 +281,10 @@ namespace FishNet.Object.Synchronizing
         /// </summary>
         /// <param name="calledByUser"></param>
         /// <returns></returns>
-        public T GetValue(bool calledByUser) => (calledByUser) ? _value : _previousClientValue;
+        public T GetValue(bool calledByUser)
+        {
+            return calledByUser ? _value : _previousClientValue;
+        }
 
         /// <summary>
         /// Resets to initialized values.
@@ -279,9 +293,7 @@ namespace FishNet.Object.Synchronizing
         {
             base.Reset();
             _value = _initialValue;
-            _previousClientValue = _initialValue;            
+            _previousClientValue = _initialValue;
         }
     }
 }
-
-

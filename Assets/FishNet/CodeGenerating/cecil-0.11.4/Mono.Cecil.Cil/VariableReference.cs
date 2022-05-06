@@ -8,35 +8,34 @@
 // Licensed under the MIT/X11 license.
 //
 
-namespace MonoFN.Cecil.Cil {
+namespace MonoFN.Cecil.Cil
+{
+    public abstract class VariableReference
+    {
+        internal int index = -1;
+        protected TypeReference variable_type;
 
-	public abstract class VariableReference {
+        public TypeReference VariableType
+        {
+            get => variable_type;
+            set => variable_type = value;
+        }
 
-		internal int index = -1;
-		protected TypeReference variable_type;
+        public int Index => index;
 
-		public TypeReference VariableType {
-			get { return variable_type; }
-			set { variable_type = value; }
-		}
+        internal VariableReference(TypeReference variable_type)
+        {
+            this.variable_type = variable_type;
+        }
 
-		public int Index {
-			get { return index; }
-		}
+        public abstract VariableDefinition Resolve();
 
-		internal VariableReference (TypeReference variable_type)
-		{
-			this.variable_type = variable_type;
-		}
+        public override string ToString()
+        {
+            if (index >= 0)
+                return "V_" + index;
 
-		public abstract VariableDefinition Resolve ();
-
-		public override string ToString ()
-		{
-			if (index >= 0)
-				return "V_" + index;
-
-			return string.Empty;
-		}
-	}
+            return string.Empty;
+        }
+    }
 }

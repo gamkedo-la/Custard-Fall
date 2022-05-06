@@ -3,7 +3,6 @@ using System;
 
 namespace FishNet.CodeGenerating.Helping.Extension
 {
-
     internal static class ParameterDefinitionExtensions
     {
         /// <summary>
@@ -16,9 +15,5 @@ namespace FishNet.CodeGenerating.Helping.Extension
         {
             return parameterDef.ParameterType.FullName == type.FullName;
         }
-
-
     }
-
-
 }

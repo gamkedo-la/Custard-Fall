@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace FishNet.Utility.Performance
 {
-
     public static class GetNonAlloc
     {
         /// <summary>
         /// 
         /// </summary>
-        private static List<Transform> _transformList = new List<Transform>();
+        private static List<Transform> _transformList = new();
+
         /// <summary>
         /// 
         /// </summary>
-        private static List<NetworkBehaviour> _networkBehavioursList = new List<NetworkBehaviour>();
+        private static List<NetworkBehaviour> _networkBehavioursList = new();
 
         /// <summary>
         /// Gets all NetworkBehaviours on a transform.
@@ -33,7 +33,5 @@ namespace FishNet.Utility.Performance
             t.GetComponentsInChildren<Transform>(includeInactive, _transformList);
             return _transformList;
         }
-
     }
-
 }

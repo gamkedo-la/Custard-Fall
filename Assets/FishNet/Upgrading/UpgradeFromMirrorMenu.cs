@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace FishNet.Upgrading.Mirror.Editing
 {
-
     /* IMPORTANT IMPORTANT IMPORTANT IMPORTANT 
     * If you receive errors about missing Mirror components,
     * such as NetworkIdentity, then remove MIRROR and any other
@@ -18,11 +17,10 @@ namespace FishNet.Upgrading.Mirror.Editing
     [APIExclude]
     public class UpgradeFromMirrorMenu : MonoBehaviour
     {
-
         /// <summary>
         /// Replaces all components.
         /// </summary>
-        [MenuItem("Fish-Networking/Upgrading/From Mirror/Replace Components", false,2)]
+        [MenuItem("Fish-Networking/Upgrading/From Mirror/Replace Components", false, 2)]
         private static void ReplaceComponents()
         {
 #if MIRROR
@@ -43,18 +41,19 @@ namespace FishNet.Upgrading.Mirror.Editing
         [MenuItem("Fish-Networking/Upgrading/From Mirror/Remove Defines", false, 2)]
         private static void RemoveDefines()
         {
-            string currentDefines = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+            var currentDefines =
+                PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
             /* Convert current defines into a hashset. This is so we can
              * determine if any of our defines were added. Only save playersettings
              * when a define is added. */
-            HashSet<string> definesHs = new HashSet<string>();
-            string[] currentArr = currentDefines.Split(';');
+            var definesHs = new HashSet<string>();
+            var currentArr = currentDefines.Split(';');
 
-            bool removed = false;
+            var removed = false;
             //Add any define which doesn't contain MIRROR.
-            foreach (string item in currentArr)
+            foreach (var item in currentArr)
             {
-                string itemLower = item.ToLower();
+                var itemLower = item.ToLower();
                 if (itemLower != "mirror" && !itemLower.StartsWith("mirror_"))
                     definesHs.Add(item);
                 else
@@ -64,12 +63,11 @@ namespace FishNet.Upgrading.Mirror.Editing
             if (removed)
             {
                 Debug.Log("Removed Mirror defines to player settings.");
-                string changedDefines = string.Join(";", definesHs);
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, changedDefines);
+                var changedDefines = string.Join(";", definesHs);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup,
+                    changedDefines);
             }
         }
-
-
     }
 }
 #endif

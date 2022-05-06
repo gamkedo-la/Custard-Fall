@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -122,5 +121,4 @@ namespace FishNet.Serializing.Helping
         Z = 2,
         W = 3
     }
-
 }

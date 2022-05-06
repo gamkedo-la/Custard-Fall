@@ -17,8 +17,8 @@ namespace FishNet.Managing.Scened
         /// <returns></returns>
         public static string[] GetNames(this SceneLookupData[] datas)
         {
-            string[] names = new string[datas.Length];
-            for (int i = 0; i < datas.Length; i++)
+            var names = new string[datas.Length];
+            for (var i = 0; i < datas.Length; i++)
                 names[i] = datas[i].Name;
 
             return names;
@@ -34,22 +34,29 @@ namespace FishNet.Managing.Scened
         /// Handle of the scene. If value is 0, then handle is not used.
         /// </summary>
         public int Handle = 0;
+
         /// <summary>
         /// Name of the scene.
         /// </summary>
         public string Name = string.Empty;
 
         #region Const
+
         /// <summary>
         /// String to display when scene data is invalid.
         /// </summary>
-        private const string INVALID_SCENE = "One or more scene information entries contain invalid data and have been skipped.";
+        private const string INVALID_SCENE =
+            "One or more scene information entries contain invalid data and have been skipped.";
+
         #endregion
 
         /// <summary>
         /// 
         /// </summary>
-        public SceneLookupData() { }
+        public SceneLookupData()
+        {
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -59,6 +66,7 @@ namespace FishNet.Managing.Scened
             Handle = scene.handle;
             Name = scene.name;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -67,6 +75,7 @@ namespace FishNet.Managing.Scened
         {
             Name = name;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -77,10 +86,11 @@ namespace FishNet.Managing.Scened
         }
 
         #region Comparers.
+
         public static bool operator ==(SceneLookupData sldA, SceneLookupData sldB)
         {
             //One is null while the other is not.
-            if ((sldA is null) != (sldB is null))
+            if (sldA is null != sldB is null)
                 return false;
 
             /*If here both are either null or have value. */
@@ -96,7 +106,7 @@ namespace FishNet.Managing.Scened
         public static bool operator !=(SceneLookupData sldA, SceneLookupData sldB)
         {
             //One is null while the other is not.
-            if ((sldA is null) != (sldB is null))
+            if (sldA is null != sldB is null)
                 return true;
 
             /*If here both are either null or have value. */
@@ -116,16 +126,14 @@ namespace FishNet.Managing.Scened
                 return false;
 
             //True if both handles are empty.
-            bool bothHandlesEmpty = (
-                (this.Handle == 0) &&
-                (sld.Handle == 0)
-                );
+            var bothHandlesEmpty = Handle == 0 &&
+                                   sld.Handle == 0;
 
             //If both have handles and they match.
-            if (!bothHandlesEmpty && sld.Handle == this.Handle)
+            if (!bothHandlesEmpty && sld.Handle == Handle)
                 return true;
             //If neither have handles and name matches.
-            else if (bothHandlesEmpty && sld.Name == this.Name)
+            else if (bothHandlesEmpty && sld.Name == Name)
                 return true;
 
             //Fall through.
@@ -134,7 +142,7 @@ namespace FishNet.Managing.Scened
 
         public override int GetHashCode()
         {
-            int hashCode = 2053068273;
+            var hashCode = 2053068273;
             hashCode = hashCode * -1521134295 + Handle.GetHashCode();
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             return hashCode;
@@ -149,45 +157,71 @@ namespace FishNet.Managing.Scened
         {
             return base.ToString();
         }
+
         #endregion
 
         #region CreateData.
+
         /// <summary>
         /// Returns a new SceneLookupData.
         /// </summary>
         /// <param name="scene">Scene to create from.</param>
         /// <returns></returns>
-        public static SceneLookupData CreateData(Scene scene) => new SceneLookupData(scene);
+        public static SceneLookupData CreateData(Scene scene)
+        {
+            return new(scene);
+        }
+
         /// <summary>
         /// Returns a new SceneLookupData.
         /// </summary>
         /// <param name="scene">Scene name to create from.</param>
         /// <returns></returns>
-        public static SceneLookupData CreateData(string name) => new SceneLookupData(name);
+        public static SceneLookupData CreateData(string name)
+        {
+            return new(name);
+        }
+
         /// <summary>
         /// Returns a new SceneLookupData.
         /// </summary>
         /// <param name="scene">Scene handle to create from.</param>
         /// <returns></returns>
-        public static SceneLookupData CreateData(int handle) => new SceneLookupData(handle);
+        public static SceneLookupData CreateData(int handle)
+        {
+            return new(handle);
+        }
+
         /// <summary>
         /// Returns a SceneLookupData collection.
         /// </summary>
         /// <param name="scenes">Scenes to create from.</param>
         /// <returns></returns>
-        public static SceneLookupData[] CreateData(List<Scene> scenes) => CreateData(scenes.ToArray());
+        public static SceneLookupData[] CreateData(List<Scene> scenes)
+        {
+            return CreateData(scenes.ToArray());
+        }
+
         /// <summary>
         /// Returns a SceneLookupData collection.
         /// </summary>
         /// <param name="names">Scene names to create from.</param>
         /// <returns></returns>
-        public static SceneLookupData[] CreateData(List<string> names) => CreateData(names.ToArray());
+        public static SceneLookupData[] CreateData(List<string> names)
+        {
+            return CreateData(names.ToArray());
+        }
+
         /// <summary>
         /// Returns a SceneLookupData collection.
         /// </summary>
         /// <param name="handles">Scene handles to create from.</param>
         /// <returns></returns>
-        public static SceneLookupData[] CreateData(List<int> handles) => CreateData(handles.ToArray());
+        public static SceneLookupData[] CreateData(List<int> handles)
+        {
+            return CreateData(handles.ToArray());
+        }
+
         /// <summary>
         /// Returns a SceneLookupData collection.
         /// </summary>
@@ -195,9 +229,9 @@ namespace FishNet.Managing.Scened
         /// <returns></returns>
         public static SceneLookupData[] CreateData(Scene[] scenes)
         {
-            bool invalidFound = false;
-            List<SceneLookupData> result = new List<SceneLookupData>();
-            foreach (Scene item in scenes)
+            var invalidFound = false;
+            var result = new List<SceneLookupData>();
+            foreach (var item in scenes)
             {
                 if (!item.IsValid())
                 {
@@ -209,12 +243,11 @@ namespace FishNet.Managing.Scened
             }
 
             if (invalidFound)
-            {
                 if (NetworkManager.StaticCanLog(LoggingType.Warning))
                     Debug.LogWarning(INVALID_SCENE);
-            }
             return result.ToArray();
         }
+
         /// <summary>
         /// Returns a SceneLookupData collection.
         /// </summary>
@@ -222,9 +255,9 @@ namespace FishNet.Managing.Scened
         /// <returns></returns>
         public static SceneLookupData[] CreateData(string[] names)
         {
-            bool invalidFound = false;
-            List<SceneLookupData> result = new List<SceneLookupData>();
-            foreach (string item in names)
+            var invalidFound = false;
+            var result = new List<SceneLookupData>();
+            foreach (var item in names)
             {
                 if (string.IsNullOrEmpty(item))
                 {
@@ -236,12 +269,11 @@ namespace FishNet.Managing.Scened
             }
 
             if (invalidFound)
-            {
                 if (NetworkManager.StaticCanLog(LoggingType.Warning))
                     Debug.LogWarning(INVALID_SCENE);
-            }
             return result.ToArray();
         }
+
         /// <summary>
         /// Returns a SceneLookupData collection.
         /// </summary>
@@ -249,9 +281,9 @@ namespace FishNet.Managing.Scened
         /// <returns></returns>
         public static SceneLookupData[] CreateData(int[] handles)
         {
-            bool invalidFound = false;
-            List<SceneLookupData> result = new List<SceneLookupData>();
-            foreach (int item in handles)
+            var invalidFound = false;
+            var result = new List<SceneLookupData>();
+            foreach (var item in handles)
             {
                 if (item == 0)
                 {
@@ -263,12 +295,11 @@ namespace FishNet.Managing.Scened
             }
 
             if (invalidFound)
-            {
                 if (NetworkManager.StaticCanLog(LoggingType.Warning))
                     Debug.LogWarning(INVALID_SCENE);
-            }
             return result.ToArray();
         }
+
         #endregion
 
         /// <summary>
@@ -303,6 +334,5 @@ namespace FishNet.Managing.Scened
 
             return result;
         }
-
     }
 }

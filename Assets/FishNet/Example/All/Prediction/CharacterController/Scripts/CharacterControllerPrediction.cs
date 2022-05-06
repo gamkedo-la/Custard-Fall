@@ -11,35 +11,41 @@ using UnityEngine;
 
 namespace FishNet.Example.Prediction.CharacterControllers
 {
-
     public class CharacterControllerPrediction : NetworkBehaviour
     {
         #region Types.
+
         public struct MoveData
         {
             public float Horizontal;
             public float Vertical;
         }
+
         public struct ReconcileData
         {
             public Vector3 Position;
             public Quaternion Rotation;
+
             public ReconcileData(Vector3 position, Quaternion rotation)
             {
                 Position = position;
                 Rotation = rotation;
             }
         }
+
         #endregion
 
         #region Serialized.
-        [SerializeField]
-        private float _moveRate = 5f;
+
+        [SerializeField] private float _moveRate = 5f;
+
         #endregion
 
         #region Private.
+
         private CharacterController _characterController;
         private MoveData _clientMoveData;
+
         #endregion
 
         private void Awake()
@@ -51,8 +57,8 @@ namespace FishNet.Example.Prediction.CharacterControllers
 
         public override void OnStartClient()
         {
-            base.OnStartClient();            
-            _characterController.enabled = (base.IsServer || base.IsOwner);
+            base.OnStartClient();
+            _characterController.enabled = IsServer || IsOwner;
         }
 
         private void OnDestroy()
@@ -66,16 +72,17 @@ namespace FishNet.Example.Prediction.CharacterControllers
 
         private void TimeManager_OnTick()
         {
-            if (base.IsOwner)
+            if (IsOwner)
             {
                 Reconciliation(default, false);
-                CheckInput(out MoveData md);
+                CheckInput(out var md);
                 Move(md, false);
             }
-            if (base.IsServer)
+
+            if (IsServer)
             {
                 Move(default, true);
-                ReconcileData rd = new ReconcileData(transform.position, transform.rotation);
+                var rd = new ReconcileData(transform.position, transform.rotation);
                 Reconciliation(rd, true);
             }
         }
@@ -83,7 +90,7 @@ namespace FishNet.Example.Prediction.CharacterControllers
 
         private void TimeManager_OnUpdate()
         {
-            if (base.IsOwner)
+            if (IsOwner)
                 MoveWithData(_clientMoveData, Time.deltaTime);
         }
 
@@ -91,8 +98,8 @@ namespace FishNet.Example.Prediction.CharacterControllers
         {
             md = default;
 
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
+            var horizontal = Input.GetAxisRaw("Horizontal");
+            var vertical = Input.GetAxisRaw("Vertical");
 
             if (horizontal == 0f && vertical == 0f)
                 return;
@@ -108,14 +115,14 @@ namespace FishNet.Example.Prediction.CharacterControllers
         private void Move(MoveData md, bool asServer, bool replaying = false)
         {
             if (asServer || replaying)
-                MoveWithData(md, (float)base.TimeManager.TickDelta);
+                MoveWithData(md, (float) TimeManager.TickDelta);
             else if (!asServer)
                 _clientMoveData = md;
         }
 
         private void MoveWithData(MoveData md, float delta)
         {
-            Vector3 move = new Vector3(md.Horizontal, Physics.gravity.y, md.Vertical);
+            var move = new Vector3(md.Horizontal, Physics.gravity.y, md.Vertical);
             _characterController.Move(move * _moveRate * delta);
         }
 
@@ -125,9 +132,5 @@ namespace FishNet.Example.Prediction.CharacterControllers
             transform.position = rd.Position;
             transform.rotation = rd.Rotation;
         }
-
-
     }
-
-
 }

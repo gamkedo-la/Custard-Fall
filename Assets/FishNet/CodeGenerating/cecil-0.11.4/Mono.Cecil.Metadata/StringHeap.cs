@@ -11,49 +11,50 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MonoFN.Cecil.Metadata {
+namespace MonoFN.Cecil.Metadata
+{
+    internal class StringHeap : Heap
+    {
+        private readonly Dictionary<uint, string> strings = new();
 
-	class StringHeap : Heap {
+        public StringHeap(byte[] data)
+            : base(data)
+        {
+        }
 
-		readonly Dictionary<uint, string> strings = new Dictionary<uint, string> ();
+        public string Read(uint index)
+        {
+            if (index == 0)
+                return string.Empty;
 
-		public StringHeap (byte [] data)
-			: base (data)
-		{
-		}
+            string @string;
+            if (strings.TryGetValue(index, out @string))
+                return @string;
 
-		public string Read (uint index)
-		{
-			if (index == 0)
-				return string.Empty;
+            if (index > data.Length - 1)
+                return string.Empty;
 
-			string @string;
-			if (strings.TryGetValue (index, out @string))
-				return @string;
+            @string = ReadStringAt(index);
+            if (@string.Length != 0)
+                strings.Add(index, @string);
 
-			if (index > data.Length - 1)
-				return string.Empty;
+            return @string;
+        }
 
-			@string = ReadStringAt (index);
-			if (@string.Length != 0)
-				strings.Add (index, @string);
+        protected virtual string ReadStringAt(uint index)
+        {
+            var length = 0;
+            var start = (int) index;
 
-			return @string;
-		}
+            for (var i = start;; i++)
+            {
+                if (data[i] == 0)
+                    break;
 
-		protected virtual string ReadStringAt (uint index)
-		{
-			int length = 0;
-			int start = (int)index;
+                length++;
+            }
 
-			for (int i = start; ; i++) {
-				if (data [i] == 0)
-					break;
-
-				length++;
-			}
-
-			return Encoding.UTF8.GetString (data, start, length);
-		}
-	}
+            return Encoding.UTF8.GetString(data, start, length);
+        }
+    }
 }

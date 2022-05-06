@@ -8,64 +8,72 @@
 // Licensed under the MIT/X11 license.
 //
 
-namespace MonoFN.Cecil.Cil {
+namespace MonoFN.Cecil.Cil
+{
+    public enum ExceptionHandlerType
+    {
+        Catch = 0,
+        Filter = 1,
+        Finally = 2,
+        Fault = 4
+    }
 
-	public enum ExceptionHandlerType {
-		Catch = 0,
-		Filter = 1,
-		Finally = 2,
-		Fault = 4,
-	}
+    public sealed class ExceptionHandler
+    {
+        private Instruction try_start;
+        private Instruction try_end;
+        private Instruction filter_start;
+        private Instruction handler_start;
+        private Instruction handler_end;
 
-	public sealed class ExceptionHandler {
+        private TypeReference catch_type;
+        private ExceptionHandlerType handler_type;
 
-		Instruction try_start;
-		Instruction try_end;
-		Instruction filter_start;
-		Instruction handler_start;
-		Instruction handler_end;
+        public Instruction TryStart
+        {
+            get => try_start;
+            set => try_start = value;
+        }
 
-		TypeReference catch_type;
-		ExceptionHandlerType handler_type;
+        public Instruction TryEnd
+        {
+            get => try_end;
+            set => try_end = value;
+        }
 
-		public Instruction TryStart {
-			get { return try_start; }
-			set { try_start = value; }
-		}
+        public Instruction FilterStart
+        {
+            get => filter_start;
+            set => filter_start = value;
+        }
 
-		public Instruction TryEnd {
-			get { return try_end; }
-			set { try_end = value; }
-		}
+        public Instruction HandlerStart
+        {
+            get => handler_start;
+            set => handler_start = value;
+        }
 
-		public Instruction FilterStart {
-			get { return filter_start; }
-			set { filter_start = value; }
-		}
+        public Instruction HandlerEnd
+        {
+            get => handler_end;
+            set => handler_end = value;
+        }
 
-		public Instruction HandlerStart {
-			get { return handler_start; }
-			set { handler_start = value; }
-		}
+        public TypeReference CatchType
+        {
+            get => catch_type;
+            set => catch_type = value;
+        }
 
-		public Instruction HandlerEnd {
-			get { return handler_end; }
-			set { handler_end = value; }
-		}
+        public ExceptionHandlerType HandlerType
+        {
+            get => handler_type;
+            set => handler_type = value;
+        }
 
-		public TypeReference CatchType {
-			get { return catch_type; }
-			set { catch_type = value; }
-		}
-
-		public ExceptionHandlerType HandlerType {
-			get { return handler_type; }
-			set { handler_type = value; }
-		}
-
-		public ExceptionHandler (ExceptionHandlerType handlerType)
-		{
-			this.handler_type = handlerType;
-		}
-	}
+        public ExceptionHandler(ExceptionHandlerType handlerType)
+        {
+            handler_type = handlerType;
+        }
+    }
 }

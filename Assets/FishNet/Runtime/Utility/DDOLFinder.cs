@@ -2,15 +2,15 @@
 
 namespace FishNet.Utility
 {
-
-
     public class DDOLFinder : MonoBehaviour
     {
         #region Public.
+
         /// <summary>
         /// Singleton instance of this class.
         /// </summary>
         public static DDOLFinder Instance { get; private set; }
+
         #endregion
 
         private void Awake()
@@ -44,8 +44,8 @@ namespace FishNet.Utility
             //Not yet made.
             if (Instance == null)
             {
-                GameObject obj = new GameObject();
-                DDOLFinder ddol = obj.AddComponent<DDOLFinder>();
+                var obj = new GameObject();
+                var ddol = obj.AddComponent<DDOLFinder>();
                 return ddol;
             }
             //Already  made.
@@ -55,6 +55,4 @@ namespace FishNet.Utility
             }
         }
     }
-
-
 }

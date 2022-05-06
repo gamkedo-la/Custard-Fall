@@ -14,23 +14,27 @@ namespace FishNet.Utility.Performance
         /// <summary>
         /// Cache for NetworkObjects.
         /// </summary>
-        public static ListCache<NetworkObject> NetworkObjectCache = new ListCache<NetworkObject>();
+        public static ListCache<NetworkObject> NetworkObjectCache = new();
+
         /// <summary>
         /// Cache for NetworkBehaviours.
         /// </summary>
-        public static ListCache<NetworkBehaviour> NetworkBehaviourCache = new ListCache<NetworkBehaviour>();
+        public static ListCache<NetworkBehaviour> NetworkBehaviourCache = new();
+
         /// <summary>
         /// Cache for Transforms.
         /// </summary>
-        public static ListCache<Transform> TransformCache = new ListCache<Transform>();
+        public static ListCache<Transform> TransformCache = new();
+
         /// <summary>
         /// Cache for NetworkConnectios.
         /// </summary>
-        public static ListCache<NetworkConnection> NetworkConnectionCache = new ListCache<NetworkConnection>();
+        public static ListCache<NetworkConnection> NetworkConnectionCache = new();
+
         /// <summary>
         /// Cache for ints.
         /// </summary>
-        public static ListCache<int> IntCache = new ListCache<int>();
+        public static ListCache<int> IntCache = new();
     }
 
     /// <summary>
@@ -39,20 +43,24 @@ namespace FishNet.Utility.Performance
     public class ListCache<T>
     {
         #region Public.
+
         /// <summary>
         /// Collection cache is for.
         /// </summary>
         public List<T> Collection;
+
         /// <summary>
         /// Entries currently written.
         /// </summary>
         public int Written { get; private set; }
+
         #endregion
 
         public ListCache()
         {
             Collection = new List<T>();
         }
+
         public ListCache(int capacity)
         {
             Collection = new List<T>(capacity);
@@ -66,14 +74,14 @@ namespace FishNet.Utility.Performance
         {
             if (Collection.Count <= Written)
             {
-                T next = Activator.CreateInstance<T>();
+                var next = Activator.CreateInstance<T>();
                 Collection.Add(next);
                 Written++;
                 return next;
             }
             else
             {
-                T next = Collection[Written];
+                var next = Collection[Written];
                 Written++;
                 return next;
             }
@@ -100,34 +108,37 @@ namespace FishNet.Utility.Performance
         /// <param name="value"></param>
         public void AddValues(T[] values)
         {
-            for (int i = 0; i < values.Length; i++)
+            for (var i = 0; i < values.Length; i++)
                 AddValue(values[i]);
         }
+
         /// <summary>
         /// Adds values to Collection.
         /// </summary>
         /// <param name="value"></param>
         public void AddValues(List<T> values)
         {
-            for (int i = 0; i < values.Count; i++)
+            for (var i = 0; i < values.Count; i++)
                 AddValue(values[i]);
         }
+
         /// <summary>
         /// Adds values to Collection.
         /// </summary>
         /// <param name="value"></param>
         public void AddValues(HashSet<T> values)
         {
-            foreach (T item in values)
+            foreach (var item in values)
                 AddValue(item);
         }
+
         /// <summary>
         /// Adds values to Collection.
         /// </summary>
         /// <param name="value"></param>
         public void AddValues(ISet<T> values)
         {
-            foreach (T item in values)
+            foreach (var item in values)
                 AddValue(item);
         }
 
@@ -139,6 +150,4 @@ namespace FishNet.Utility.Performance
             Written = 0;
         }
     }
-
-
 }

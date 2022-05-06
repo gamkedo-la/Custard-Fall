@@ -9,21 +9,22 @@ using UnityEngine;
 
 namespace FishNet.Configuring.Editing
 {
-
     [InitializeOnLoad]
     internal class ConfigurationEditor : EditorWindow
     {
-
         #region Private.
+
         /// <summary>
         /// Used to compare if ConfigurationData has changed.
         /// </summary>
-        private static ConfigurationData _comparerConfiguration = new ConfigurationData();
+        private static ConfigurationData _comparerConfiguration = new();
+
         /// <summary>
         /// True to reload the configuration file.
         /// </summary>
         //[System.NonSerialized]
         //private static bool _reloadFile = true;
+
         #endregion
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace FishNet.Configuring.Editing
         /// </summary>
         private void SaveConfiguration()
         {
-            string path = CodeStripping.GetAssetsPath(CodeStripping.CONFIG_FILE_NAME);
+            var path = CodeStripping.GetAssetsPath(CodeStripping.CONFIG_FILE_NAME);
             CodeStripping.ConfigurationData.Write(path, true);
         }
 
@@ -55,7 +56,7 @@ namespace FishNet.Configuring.Editing
             //if (_reloadFile)
             //    Configuration.LoadConfiguration();
 
-            ConfigurationData data = CodeStripping.GetConfigurationData();
+            var data = CodeStripping.GetConfigurationData();
 
             if (data == null)
                 return;
@@ -81,7 +82,9 @@ namespace FishNet.Configuring.Editing
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(40f);
-                GUILayout.Box("NOTICE: development builds will not have code stripped. Additionally, if you plan to run as host disable code stripping.", GUILayout.Width(170f));
+                GUILayout.Box(
+                    "NOTICE: development builds will not have code stripped. Additionally, if you plan to run as host disable code stripping.",
+                    GUILayout.Width(170f));
                 GUILayout.EndHorizontal();
             }
 
@@ -92,7 +95,6 @@ namespace FishNet.Configuring.Editing
             if (data.HasChanged(_comparerConfiguration))
                 SaveConfiguration();
         }
-
     }
 }
 #endif

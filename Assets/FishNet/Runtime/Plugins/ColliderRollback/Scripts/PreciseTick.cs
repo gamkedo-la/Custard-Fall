@@ -1,6 +1,5 @@
 ﻿namespace FishNet.Component.ColliderRollback
 {
-
     public struct PreciseTick
     {
         public uint Tick;
@@ -12,5 +11,4 @@
             Percent = percent;
         }
     }
-
 }

@@ -8,10 +8,12 @@ namespace FishNet.Transporting
     internal class NetworkWriterLoop : MonoBehaviour
     {
         #region Private.
+
         /// <summary>
         /// TimeManager this loop is for.
         /// </summary>
         private TimeManager _timeManager;
+
         #endregion
 
         private void Awake()
@@ -31,8 +33,5 @@ namespace FishNet.Transporting
         {
             _timeManager.TickLateUpdate();
         }
-
     }
-
-
 }

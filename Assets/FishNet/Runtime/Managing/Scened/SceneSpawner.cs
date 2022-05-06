@@ -1,5 +1,4 @@
-﻿
-//using FishNet.Managing.Scened.Data;
+﻿//using FishNet.Managing.Scened.Data;
 //using System;
 //using UnityEngine;
 //using UnityEngine.SceneManagement;
@@ -81,8 +80,6 @@
 //        #endregion
 
 
-
-
 //        #region Prefab, Parent, WorldSpace
 //        /// <summary>
 //        /// Instantiates a prefab and moves it to a scene.
@@ -154,8 +151,6 @@
 //        #endregion
 
 
-
-
 //        #region Prefab, Position, Rotation.
 //        /// <summary>
 //        /// Instantiates a prefab and moves it to a scene.
@@ -225,8 +220,6 @@
 //            return Instantiate<T>(scene, prefab, position, rotation, null, true);
 //        }
 //        #endregion
-
-
 
 
 //        #region Prefab, Position, Rotation, Parent.
@@ -351,6 +344,5 @@
 //    }
 
 
-
-
 //}
+

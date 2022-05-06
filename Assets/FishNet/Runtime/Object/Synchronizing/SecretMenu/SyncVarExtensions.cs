@@ -14,8 +14,8 @@ namespace FishNet.Object.Synchronizing.SecretMenu
         /// </summary>
         /// <param name="obj"></param>
         [APIExclude]
-        public static void Dirty(this object obj) { }
+        public static void Dirty(this object obj)
+        {
+        }
     }
-
-
 }

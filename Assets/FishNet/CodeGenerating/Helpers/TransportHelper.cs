@@ -5,8 +5,10 @@ namespace FishNet.CodeGenerating.Helping
 {
     internal class TransportHelper
     {
-        #region Reflection references.        
+        #region Reflection references.
+
         internal TypeReference Channel_TypeRef;
+
         #endregion
 
         /// <summary>
@@ -31,6 +33,5 @@ namespace FishNet.CodeGenerating.Helping
 
             return true;
         }
-
     }
 }

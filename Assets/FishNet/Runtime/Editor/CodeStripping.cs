@@ -1,5 +1,4 @@
-﻿
-using FishNet.Configuring;
+﻿using FishNet.Configuring;
 using System.IO;
 using UnityEngine;
 using System.Xml.Serialization;
@@ -12,13 +11,13 @@ using UnityEditor.Build;
 #endif
 
 public class CodeStripping
-    
-{
 
+{
     /// <summary>
     /// 
     /// </summary>
     private static ConfigurationData _configurationData;
+
     /// <summary>
     /// ConfigurationData to use.
     /// </summary>
@@ -29,23 +28,25 @@ public class CodeStripping
             if (_configurationData == null)
                 _configurationData = GetConfigurationData();
             if (_configurationData == null)
-                throw new System.Exception("Fish-Networking ConfigurationData could not be loaded. Certain features such as code-stripping may not function.");
+                throw new System.Exception(
+                    "Fish-Networking ConfigurationData could not be loaded. Certain features such as code-stripping may not function.");
             return _configurationData;
         }
-        private set
-        {
-            _configurationData = value;
-        }
+        private set => _configurationData = value;
     }
-     
+
     /// <summary>
     /// True if making a release build for client.
     /// </summary>
-    public static bool ReleasingForClient => (ConfigurationData.IsBuilding && !ConfigurationData.IsHeadless && !ConfigurationData.IsDevelopment);
+    public static bool ReleasingForClient => ConfigurationData.IsBuilding && !ConfigurationData.IsHeadless &&
+                                             !ConfigurationData.IsDevelopment;
+
     /// <summary>
     /// True if making a release build for server.
     /// </summary>
-    public static bool ReleasingForServer => (ConfigurationData.IsBuilding && ConfigurationData.IsHeadless && !ConfigurationData.IsDevelopment);
+    public static bool ReleasingForServer => ConfigurationData.IsBuilding && ConfigurationData.IsHeadless &&
+                                             !ConfigurationData.IsDevelopment;
+
     /// <summary>
     /// Returns if to remove server logic.
     /// </summary>
@@ -54,15 +55,14 @@ public class CodeStripping
     {
         get
         {
-            
-
-        /* This is to protect non pro users from enabling this
-         * without the extra logic code.  */
+            /* This is to protect non pro users from enabling this
+             * without the extra logic code.  */
 #pragma warning disable CS0162 // Unreachable code detected
-        return false;
+            return false;
 #pragma warning restore CS0162 // Unreachable code detected
         }
     }
+
     /// <summary>
     /// True if building and stripping is enabled.
     /// </summary>
@@ -70,8 +70,6 @@ public class CodeStripping
     {
         get
         {
-            
-
             /* This is to protect non pro users from enabling this
              * without the extra logic code.  */
 #pragma warning disable CS0162 // Unreachable code detected
@@ -84,6 +82,7 @@ public class CodeStripping
     /// File name for configuration disk data.
     /// </summary>
     public const string CONFIG_FILE_NAME = "FishNet.Config.XML";
+
     /// <summary>
     /// Old file name for configuration disk data.
     /// </summary>
@@ -96,11 +95,12 @@ public class CodeStripping
     /// <returns></returns>
     internal static string GetAssetsPath(string additional = "")
     {
-        string a = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Assets");
+        var a = Path.Combine(Directory.GetCurrentDirectory(), "Assets");
         if (additional != "")
             a = Path.Combine(a, additional);
         return a;
     }
+
     /// <summary>
     /// Returns FishNetworking ConfigurationData.
     /// </summary>
@@ -111,24 +111,24 @@ public class CodeStripping
         if (_configurationData == null || !_configurationData.Loaded)
         {
             //Check to kill old file.
-            string oldConfigPath = GetAssetsPath(CONFIG_FILE_NAME_OLD); //Remove on 2022/06/01
+            var oldConfigPath = GetAssetsPath(CONFIG_FILE_NAME_OLD); //Remove on 2022/06/01
             if (File.Exists(oldConfigPath))
-            {
                 try
                 {
                     File.Delete(oldConfigPath);
                 }
-                finally { }
-            }
+                finally
+                {
+                }
 
-            string configPath = GetAssetsPath(CONFIG_FILE_NAME);
+            var configPath = GetAssetsPath(CONFIG_FILE_NAME);
             //string configPath = string.Empty;
             //File is on disk.
             if (File.Exists(configPath))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(ConfigurationData));
-                FileStream fs = new FileStream(configPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                _configurationData = (ConfigurationData)serializer.Deserialize(fs);
+                var serializer = new XmlSerializer(typeof(ConfigurationData));
+                var fs = new FileStream(configPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                _configurationData = (ConfigurationData) serializer.Deserialize(fs);
                 fs.Close();
 
                 _configurationData.Loaded = true;
@@ -144,11 +144,5 @@ public class CodeStripping
         }
 
         return _configurationData;
-
     }
-
-
-    
 }
-
-

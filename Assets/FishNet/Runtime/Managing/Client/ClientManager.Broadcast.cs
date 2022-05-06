@@ -16,19 +16,23 @@ namespace FishNet.Managing.Client
     public sealed partial class ClientManager : MonoBehaviour
     {
         #region Private.
+
         /// <summary>
         /// Delegate to read received broadcasts.
         /// </summary>
         /// <param name="reader"></param>
         private delegate void ServerBroadcastDelegate(PooledReader reader);
+
         /// <summary>
         /// Delegates for each key.
         /// </summary>
-        private readonly Dictionary<ushort, HashSet<ServerBroadcastDelegate>> _broadcastHandlers = new Dictionary<ushort, HashSet<ServerBroadcastDelegate>>();
+        private readonly Dictionary<ushort, HashSet<ServerBroadcastDelegate>> _broadcastHandlers = new();
+
         /// <summary>
         /// Delegate targets for each key.
         /// </summary>
-        private Dictionary<ushort, HashSet<(int, ServerBroadcastDelegate)>> _handlerTargets = new Dictionary<ushort, HashSet<(int, ServerBroadcastDelegate)>>();
+        private Dictionary<ushort, HashSet<(int, ServerBroadcastDelegate)>> _handlerTargets = new();
+
         #endregion
 
         /// <summary>
@@ -38,7 +42,7 @@ namespace FishNet.Managing.Client
         /// <param name="handler">Method to call.</param>
         public void RegisterBroadcast<T>(Action<T> handler) where T : struct, IBroadcast
         {
-            ushort key = typeof(T).FullName.GetStableHash16();
+            var key = typeof(T).FullName.GetStableHash16();
             /* Create delegate and add for
              * handler method. */
             HashSet<ServerBroadcastDelegate> handlers;
@@ -47,12 +51,13 @@ namespace FishNet.Managing.Client
                 handlers = new HashSet<ServerBroadcastDelegate>();
                 _broadcastHandlers.Add(key, handlers);
             }
-            ServerBroadcastDelegate del = CreateBroadcastDelegate(handler);
+
+            var del = CreateBroadcastDelegate(handler);
             handlers.Add(del);
 
             /* Add hashcode of target for handler.
              * This is so we can unregister the target later. */
-            int handlerHashCode = handler.GetHashCode();
+            var handlerHashCode = handler.GetHashCode();
             HashSet<(int, ServerBroadcastDelegate)> targetHashCodes;
             if (!_handlerTargets.TryGetValueIL2CPP(key, out targetHashCodes))
             {
@@ -70,24 +75,22 @@ namespace FishNet.Managing.Client
         /// <param name="handler">Method to unregister.</param>
         public void UnregisterBroadcast<T>(Action<T> handler) where T : struct, IBroadcast
         {
-            ushort key = typeof(T).FullName.GetStableHash16();
+            var key = typeof(T).FullName.GetStableHash16();
             /* If key is found for T then look for
              * the appropriate handler to remove. */
-            if (_broadcastHandlers.TryGetValueIL2CPP(key, out HashSet<ServerBroadcastDelegate> handlers))
+            if (_broadcastHandlers.TryGetValueIL2CPP(key, out var handlers))
             {
                 HashSet<(int, ServerBroadcastDelegate)> targetHashCodes;
                 if (_handlerTargets.TryGetValueIL2CPP(key, out targetHashCodes))
                 {
-                    int handlerHashCode = handler.GetHashCode();
+                    var handlerHashCode = handler.GetHashCode();
                     ServerBroadcastDelegate result = null;
-                    foreach ((int targetHashCode, ServerBroadcastDelegate del) in targetHashCodes)
-                    {
+                    foreach ((var targetHashCode, var del) in targetHashCodes)
                         if (targetHashCode == handlerHashCode)
                         {
                             result = del;
                             break;
                         }
-                    }
 
                     if (result != null)
                         handlers.Remove(result);
@@ -106,9 +109,10 @@ namespace FishNet.Managing.Client
         {
             void LogicContainer(PooledReader reader)
             {
-                T broadcast = reader.Read<T>();
+                var broadcast = reader.Read<T>();
                 handler?.Invoke(broadcast);
             }
+
             return LogicContainer;
         }
 
@@ -118,15 +122,15 @@ namespace FishNet.Managing.Client
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ParseBroadcast(PooledReader reader, Channel channel)
         {
-            ushort key = reader.ReadUInt16();
-            int dataLength = Packets.GetPacketLength((ushort)PacketId.Broadcast, reader, channel);
+            var key = reader.ReadUInt16();
+            var dataLength = Packets.GetPacketLength((ushort) PacketId.Broadcast, reader, channel);
             // try to invoke the handler for that message
-            if (_broadcastHandlers.TryGetValueIL2CPP(key, out HashSet<ServerBroadcastDelegate> handlers))
+            if (_broadcastHandlers.TryGetValueIL2CPP(key, out var handlers))
             {
-                int readerStartPosition = reader.Position;
+                var readerStartPosition = reader.Position;
                 /* //muchlater resetting the position could be better by instead reading once and passing in
                  * the object to invoke with. */
-                foreach (ServerBroadcastDelegate handler in handlers)
+                foreach (var handler in handlers)
                 {
                     reader.Position = readerStartPosition;
                     handler.Invoke(reader);
@@ -155,16 +159,13 @@ namespace FishNet.Managing.Client
                 return;
             }
 
-            using (PooledWriter writer = WriterPool.GetWriter())
+            using (var writer = WriterPool.GetWriter())
             {
                 Broadcasts.WriteBroadcast<T>(writer, message, channel);
-                ArraySegment<byte> segment = writer.GetArraySegment();
+                var segment = writer.GetArraySegment();
 
-                NetworkManager.TransportManager.SendToServer((byte)channel, segment);
+                NetworkManager.TransportManager.SendToServer((byte) channel, segment);
             }
         }
-
     }
-
-
 }

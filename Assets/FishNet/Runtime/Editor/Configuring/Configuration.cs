@@ -92,7 +92,7 @@
 //                Debug.LogError("An error occurred while setting configuration path. " + ex.Message);
 //                return false;
 //            }
-            
+
 //        }
 //        /// <summary>
 //        /// Loads ConfigurationData from disk.
@@ -123,3 +123,4 @@
 
 //    }
 //}
+

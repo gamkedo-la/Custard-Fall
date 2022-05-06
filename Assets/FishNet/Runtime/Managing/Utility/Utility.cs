@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FishNet.Managing.Utility
 {
-
     public class Packets
     {
         /// <summary>
@@ -19,19 +18,14 @@ namespace FishNet.Managing.Utility
             * be set, which could be intentional. Because of this
             * length is always sent to skip
             * past the broadcast data. */
-            if ((PacketId)packetId == PacketId.Broadcast)
-            {
+            if ((PacketId) packetId == PacketId.Broadcast)
                 return reader.ReadInt32();
-            }
             //Reliables should never be missing. No length required.
-            else if (channel == Channel.Reliable)
-            {
-                return (int)MissingObjectPacketLength.Reliable;
-            }
+            else if (channel == Channel.Reliable) return (int) MissingObjectPacketLength.Reliable;
             //Unreliable purges remaining.
             if (channel == Channel.Unreliable)
             {
-                return (int)MissingObjectPacketLength.PurgeRemaiming;
+                return (int) MissingObjectPacketLength.PurgeRemaiming;
             }
             /* Unhandled. This shouldn't be possible
              * since both reliable and unreliable is checked.
@@ -39,8 +33,8 @@ namespace FishNet.Managing.Utility
              * for a sanity check. */
             else
             {
-                LogError($"Operation is unhandled for packetId {(PacketId)packetId} on channel {channel}.");
-                return (int)MissingObjectPacketLength.PurgeRemaiming;
+                LogError($"Operation is unhandled for packetId {(PacketId) packetId} on channel {channel}.");
+                return (int) MissingObjectPacketLength.PurgeRemaiming;
             }
 
             //Logs an error message.
@@ -55,10 +49,6 @@ namespace FishNet.Managing.Utility
                 if (canLog)
                     Debug.LogError(message);
             }
-
         }
-
     }
-
-
 }

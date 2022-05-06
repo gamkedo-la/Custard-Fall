@@ -10,57 +10,50 @@
 
 using System;
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public abstract class TypeSpecification : TypeReference
+    {
+        private readonly TypeReference element_type;
 
-	public abstract class TypeSpecification : TypeReference {
+        public TypeReference ElementType => element_type;
 
-		readonly TypeReference element_type;
+        public override string Name
+        {
+            get => element_type.Name;
+            set => throw new InvalidOperationException();
+        }
 
-		public TypeReference ElementType {
-			get { return element_type; }
-		}
+        public override string Namespace
+        {
+            get => element_type.Namespace;
+            set => throw new InvalidOperationException();
+        }
 
-		public override string Name {
-			get { return element_type.Name; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override IMetadataScope Scope
+        {
+            get => element_type.Scope;
+            set => throw new InvalidOperationException();
+        }
 
-		public override string Namespace {
-			get { return element_type.Namespace; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override ModuleDefinition Module => element_type.Module;
 
-		public override IMetadataScope Scope {
-			get { return element_type.Scope; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override string FullName => element_type.FullName;
 
-		public override ModuleDefinition Module {
-			get { return element_type.Module; }
-		}
+        public override bool ContainsGenericParameter => element_type.ContainsGenericParameter;
 
-		public override string FullName {
-			get { return element_type.FullName; }
-		}
+        public override MetadataType MetadataType => (MetadataType) etype;
 
-		public override bool ContainsGenericParameter {
-			get { return element_type.ContainsGenericParameter; }
-		}
+        internal TypeSpecification(TypeReference type)
+            : base(null, null)
+        {
+            element_type = type;
+            token = new MetadataToken(TokenType.TypeSpec);
+        }
 
-		public override MetadataType MetadataType {
-			get { return (MetadataType)etype; }
-		}
-
-		internal TypeSpecification (TypeReference type)
-			: base (null, null)
-		{
-			this.element_type = type;
-			this.token = new MetadataToken (TokenType.TypeSpec);
-		}
-
-		public override TypeReference GetElementType ()
-		{
-			return element_type.GetElementType ();
-		}
-	}
+        public override TypeReference GetElementType()
+        {
+            return element_type.GetElementType();
+        }
+    }
 }

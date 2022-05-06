@@ -1,9 +1,7 @@
-﻿
-using FishNet.Broadcast;
+﻿using FishNet.Broadcast;
 
 namespace FishNet.Example.Authenticating
 {
-
     public struct PasswordBroadcast : IBroadcast
     {
         public string Password;
@@ -13,5 +11,4 @@ namespace FishNet.Example.Authenticating
     {
         public bool Passed;
     }
-
 }

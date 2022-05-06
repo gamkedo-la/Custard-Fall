@@ -11,6 +11,7 @@ namespace FishNet.CodeGenerating.Helping
     public class AttributeHelper
     {
         #region Reflection references.
+
         internal string ReplicateAttribute_FullName;
         internal string ReconcileAttribute_FullName;
         private string ServerAttribute_FullName;
@@ -20,7 +21,8 @@ namespace FishNet.CodeGenerating.Helping
         private string TargetRpcAttribute_FullName;
         private string SyncVarAttribute_FullName;
         private string SyncObjectAttribute_FullName;
-        #endregion   
+
+        #endregion
 
         internal bool ImportReferences()
         {
@@ -78,8 +80,9 @@ namespace FishNet.CodeGenerating.Helping
         /// <returns></returns>
         public bool IsSyncVarAttribute(string attributeFullName)
         {
-            return (attributeFullName == SyncVarAttribute_FullName);
+            return attributeFullName == SyncVarAttribute_FullName;
         }
+
         /// <summary>
         /// Returns if attribute if a SyncObjectAttribute.
         /// </summary>
@@ -87,8 +90,7 @@ namespace FishNet.CodeGenerating.Helping
         /// <returns></returns>
         public bool IsSyncObjectAttribute(string attributeFullName)
         {
-            return (attributeFullName == SyncObjectAttribute_FullName);
+            return attributeFullName == SyncObjectAttribute_FullName;
         }
     }
-
 }

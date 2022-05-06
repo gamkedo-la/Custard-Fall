@@ -1,9 +1,7 @@
 ﻿namespace FishNet.Object.Helping
 {
-
     public static class Hashing
     {
-
         private const uint FNV_offset_basis32 = 2166136261;
         private const uint FNV_prime32 = 16777619;
         private const ulong FNV_offset_basis64 = 14695981039346656037;
@@ -22,9 +20,9 @@
         /// <param name="txt">Text.</param>
         internal static ushort GetStableHash16(this string txt)
         {
-            uint hash32 = txt.GetStableHash32();
+            var hash32 = txt.GetStableHash32();
 
-            return (ushort)((hash32 >> 16) ^ hash32);
+            return (ushort) ((hash32 >> 16) ^ hash32);
         }
 
 
@@ -42,13 +40,14 @@
         {
             unchecked
             {
-                uint hash = FNV_offset_basis32;
-                for (int i = 0; i < txt.Length; i++)
+                var hash = FNV_offset_basis32;
+                for (var i = 0; i < txt.Length; i++)
                 {
                     uint ch = txt[i];
                     hash = hash * FNV_prime32;
                     hash = hash ^ ch;
                 }
+
                 return hash;
             }
         }
@@ -67,13 +66,14 @@
         {
             unchecked
             {
-                ulong hash = FNV_offset_basis64;
-                for (int i = 0; i < txt.Length; i++)
+                var hash = FNV_offset_basis64;
+                for (var i = 0; i < txt.Length; i++)
                 {
                     ulong ch = txt[i];
                     hash = hash * FNV_prime64;
                     hash = hash ^ ch;
                 }
+
                 return hash;
             }
         }
@@ -144,10 +144,5 @@
         //        return hash;
         //    }
         //}
-
-
-
     }
-
-
 }

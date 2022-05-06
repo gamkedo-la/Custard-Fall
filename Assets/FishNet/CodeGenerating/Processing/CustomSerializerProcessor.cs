@@ -1,5 +1,4 @@
-﻿
-using FishNet.CodeGenerating.Helping;
+﻿using FishNet.CodeGenerating.Helping;
 using FishNet.CodeGenerating.Helping.Extension;
 using FishNet.Serializing;
 using MonoFN.Cecil;
@@ -11,8 +10,8 @@ namespace FishNet.CodeGenerating.Processing
 {
     internal class CustomSerializerProcessor
     {
-
         #region Types.
+
         internal enum ExtensionType
         {
             None,
@@ -24,23 +23,24 @@ namespace FishNet.CodeGenerating.Processing
 
         internal bool CreateDelegates(TypeDefinition typeDef)
         {
-            bool modified = false;
+            var modified = false;
 
             /* Find all declared methods and register delegates to them.
              * After they are all registered create any custom writers
              * needed to complete the declared methods. It's important to
              * make generated writers after so that a generated method
              * isn't made for a type when the user has already made a declared one. */
-            foreach (MethodDefinition methodDef in typeDef.Methods)
+            foreach (var methodDef in typeDef.Methods)
             {
-                ExtensionType extensionType = GetExtensionType(methodDef);
+                var extensionType = GetExtensionType(methodDef);
                 if (extensionType == ExtensionType.None)
                     continue;
 
-                MethodReference methodRef = CodegenSession.ImportReference(methodDef);
+                var methodRef = CodegenSession.ImportReference(methodDef);
                 if (extensionType == ExtensionType.Write)
                 {
-                    CodegenSession.WriterHelper.AddWriterMethod(methodRef.Parameters[1].ParameterType, methodRef, false, true);
+                    CodegenSession.WriterHelper.AddWriterMethod(methodRef.Parameters[1].ParameterType, methodRef, false,
+                        true);
                     modified = true;
                 }
                 else if (extensionType == ExtensionType.Read)
@@ -60,24 +60,25 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="moduleDef"></param>
         internal bool CreateSerializers(TypeDefinition typeDef)
         {
-            bool modified = false;
+            var modified = false;
 
-            List<(MethodDefinition, ExtensionType)> declaredMethods = new List<(MethodDefinition, ExtensionType)>();
+            var declaredMethods = new List<(MethodDefinition, ExtensionType)>();
             /* Go through all custom serializers again and see if 
              * they use any types that the user didn't make a serializer for
              * and that there isn't a built-in type for. Create serializers
              * for these types. */
-            foreach (MethodDefinition methodDef in typeDef.Methods)
+            foreach (var methodDef in typeDef.Methods)
             {
-                ExtensionType extensionType = GetExtensionType(methodDef);
+                var extensionType = GetExtensionType(methodDef);
                 if (extensionType == ExtensionType.None)
                     continue;
 
                 declaredMethods.Add((methodDef, extensionType));
                 modified = true;
             }
+
             //Now that all declared are loaded see if any of them need generated serializers.
-            foreach ((MethodDefinition methodDef, ExtensionType extensionType) in declaredMethods)
+            foreach ((var methodDef, var extensionType) in declaredMethods)
                 CreateSerializers(extensionType, methodDef);
 
             return modified;
@@ -93,7 +94,7 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="diagnostics"></param>
         private void CreateSerializers(ExtensionType extensionType, MethodDefinition methodDef)
         {
-            for (int i = 0; i < methodDef.Body.Instructions.Count; i++)
+            for (var i = 0; i < methodDef.Body.Instructions.Count; i++)
                 CheckToModifyInstructions(extensionType, methodDef, ref i);
         }
 
@@ -102,15 +103,17 @@ namespace FishNet.CodeGenerating.Processing
         /// </summary>
         /// <param name="methodDef"></param>
         /// <param name="instructionIndex"></param>
-        private void CheckToModifyInstructions(ExtensionType extensionType, MethodDefinition methodDef, ref int instructionIndex)
+        private void CheckToModifyInstructions(ExtensionType extensionType, MethodDefinition methodDef,
+            ref int instructionIndex)
         {
-            Instruction instruction = methodDef.Body.Instructions[instructionIndex];
+            var instruction = methodDef.Body.Instructions[instructionIndex];
             //Fields.
             if (instruction.OpCode == OpCodes.Ldsfld || instruction.OpCode == OpCodes.Ldfld)
                 CheckFieldReferenceInstruction(extensionType, methodDef, ref instructionIndex);
             //Method calls.
             else if (instruction.OpCode == OpCodes.Call || instruction.OpCode == OpCodes.Callvirt)
-                CheckCallInstruction(extensionType, methodDef, ref instructionIndex, (MethodReference)instruction.Operand);
+                CheckCallInstruction(extensionType, methodDef, ref instructionIndex,
+                    (MethodReference) instruction.Operand);
         }
 
 
@@ -119,16 +122,18 @@ namespace FishNet.CodeGenerating.Processing
         /// </summary>
         /// <param name="methodDef"></param>
         /// <param name="instructionIndex"></param>
-        private void CheckFieldReferenceInstruction(ExtensionType extensionType, MethodDefinition methodDef, ref int instructionIndex)
+        private void CheckFieldReferenceInstruction(ExtensionType extensionType, MethodDefinition methodDef,
+            ref int instructionIndex)
         {
-            Instruction instruction = methodDef.Body.Instructions[instructionIndex];
-            FieldReference field = (FieldReference)instruction.Operand;
-            TypeReference type = field.DeclaringType;
+            var instruction = methodDef.Body.Instructions[instructionIndex];
+            var field = (FieldReference) instruction.Operand;
+            var type = field.DeclaringType;
 
-            if (type.IsType(typeof(GenericWriter<>)) || type.IsType(typeof(GenericReader<>)) && type.IsGenericInstance)
+            if (type.IsType(typeof(GenericWriter<>)) ||
+                (type.IsType(typeof(GenericReader<>)) && type.IsGenericInstance))
             {
-                GenericInstanceType typeGenericInst = (GenericInstanceType)type;
-                TypeReference parameterType = typeGenericInst.GenericArguments[0];
+                var typeGenericInst = (GenericInstanceType) type;
+                var parameterType = typeGenericInst.GenericArguments[0];
                 CreateReaderOrWriter(extensionType, methodDef, ref instructionIndex, parameterType);
             }
         }
@@ -142,21 +147,20 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="methodDef"></param>
         /// <param name="instructionIndex"></param>
         /// <param name="method"></param>
-        private void CheckCallInstruction(ExtensionType extensionType, MethodDefinition methodDef, ref int instructionIndex, MethodReference method)
+        private void CheckCallInstruction(ExtensionType extensionType, MethodDefinition methodDef,
+            ref int instructionIndex, MethodReference method)
         {
             if (!method.IsGenericInstance)
                 return;
 
             //True if call is to read/write.
-            bool canCreate = (
-                method.Is<Writer>(nameof(Writer.Write)) ||
-                method.Is<Reader>(nameof(Reader.Read))
-                );
+            var canCreate = method.Is<Writer>(nameof(Writer.Write)) ||
+                            method.Is<Reader>(nameof(Reader.Read));
 
             if (canCreate)
             {
-                GenericInstanceMethod instanceMethod = (GenericInstanceMethod)method;
-                TypeReference parameterType = instanceMethod.GenericArguments[0];
+                var instanceMethod = (GenericInstanceMethod) method;
+                var parameterType = instanceMethod.GenericArguments[0];
                 if (parameterType.IsGenericParameter)
                     return;
 
@@ -172,42 +176,44 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="methodDef"></param>
         /// <param name="instructionIndex"></param>
         /// <param name="parameterType"></param>
-        private void CreateReaderOrWriter(ExtensionType extensionType, MethodDefinition methodDef, ref int instructionIndex, TypeReference parameterType)
+        private void CreateReaderOrWriter(ExtensionType extensionType, MethodDefinition methodDef,
+            ref int instructionIndex, TypeReference parameterType)
         {
             if (!parameterType.IsGenericParameter && parameterType.CanBeResolved())
             {
-                TypeDefinition typeDefinition = parameterType.CachedResolve();
+                var typeDefinition = parameterType.CachedResolve();
                 //If class and not value type check for accessible constructor.
                 if (typeDefinition.IsClass && !typeDefinition.IsValueType)
                 {
-                    MethodDefinition constructor = typeDefinition.GetMethod(".ctor");
+                    var constructor = typeDefinition.GetMethod(".ctor");
                     //Constructor is inaccessible, cannot create serializer for type.
                     if (!constructor.IsPublic)
                     {
-                        CodegenSession.LogError($"Unable to generator serializers for {typeDefinition.FullName} because it's constructor is not public.");
+                        CodegenSession.LogError(
+                            $"Unable to generator serializers for {typeDefinition.FullName} because it's constructor is not public.");
                         return;
                     }
                 }
 
-                ILProcessor processor = methodDef.Body.GetILProcessor();
+                var processor = methodDef.Body.GetILProcessor();
 
                 //Find already existing read or write method.
-                MethodReference createdMethodRef = (extensionType == ExtensionType.Write) ?
-                    CodegenSession.WriterHelper.GetFavoredWriteMethodReference(parameterType, true) :
-                    CodegenSession.ReaderHelper.GetFavoredReadMethodReference(parameterType, true);
+                var createdMethodRef = extensionType == ExtensionType.Write
+                    ? CodegenSession.WriterHelper.GetFavoredWriteMethodReference(parameterType, true)
+                    : CodegenSession.ReaderHelper.GetFavoredReadMethodReference(parameterType, true);
                 //If a created method already exist nothing further is required.
                 if (createdMethodRef != null)
                 {
                     //Replace call to generic with already made serializer.
-                    Instruction newInstruction = processor.Create(OpCodes.Call, createdMethodRef);
+                    var newInstruction = processor.Create(OpCodes.Call, createdMethodRef);
                     methodDef.Body.Instructions[instructionIndex] = newInstruction;
                     return;
                 }
                 else
                 {
-                    createdMethodRef = (extensionType == ExtensionType.Write) ?
-                        CodegenSession.WriterGenerator.CreateWriter(parameterType) :
-                        CodegenSession.ReaderGenerator.CreateReader(parameterType);
+                    createdMethodRef = extensionType == ExtensionType.Write
+                        ? CodegenSession.WriterGenerator.CreateWriter(parameterType)
+                        : CodegenSession.ReaderGenerator.CreateReader(parameterType);
                 }
 
                 //If method was created.
@@ -217,12 +223,13 @@ namespace FishNet.CodeGenerating.Processing
                      * autopack above the new instruction. */
                     if (CodegenSession.WriterHelper.IsAutoPackedType(parameterType))
                     {
-                        AutoPackType packType = CodegenSession.GeneralHelper.GetDefaultAutoPackType(parameterType);
-                        Instruction autoPack = processor.Create(OpCodes.Ldc_I4, (int)packType);
+                        var packType = CodegenSession.GeneralHelper.GetDefaultAutoPackType(parameterType);
+                        var autoPack = processor.Create(OpCodes.Ldc_I4, (int) packType);
                         methodDef.Body.Instructions.Insert(instructionIndex, autoPack);
                         instructionIndex++;
                     }
-                    Instruction newInstruction = processor.Create(OpCodes.Call, createdMethodRef);
+
+                    var newInstruction = processor.Create(OpCodes.Call, createdMethodRef);
                     methodDef.Body.Instructions[instructionIndex] = newInstruction;
                 }
             }
@@ -236,11 +243,12 @@ namespace FishNet.CodeGenerating.Processing
         /// <returns></returns>
         private ExtensionType GetExtensionType(MethodDefinition methodDef)
         {
-            bool hasExtensionAttribute = methodDef.HasCustomAttribute<System.Runtime.CompilerServices.ExtensionAttribute>();
+            var hasExtensionAttribute =
+                methodDef.HasCustomAttribute<System.Runtime.CompilerServices.ExtensionAttribute>();
             if (!hasExtensionAttribute)
                 return ExtensionType.None;
 
-            bool write = (methodDef.ReturnType == methodDef.Module.TypeSystem.Void);
+            var write = methodDef.ReturnType == methodDef.Module.TypeSystem.Void;
 
             //Return None for Mirror types.
 #if MIRROR
@@ -257,8 +265,7 @@ namespace FishNet.CodeGenerating.Processing
 #endif
 
 
-            string prefix = (write) ?
-                WriterHelper.WRITE_PREFIX : ReaderHelper.READ_PREFIX;
+            var prefix = write ? WriterHelper.WRITE_PREFIX : ReaderHelper.READ_PREFIX;
 
             //Does not contain prefix.
             if (methodDef.Name.Length < prefix.Length || methodDef.Name.Substring(0, prefix.Length) != prefix)
@@ -267,7 +274,7 @@ namespace FishNet.CodeGenerating.Processing
             //Make sure first parameter is right.
             if (methodDef.Parameters.Count >= 1)
             {
-                TypeReference tr = methodDef.Parameters[0].ParameterType;
+                var tr = methodDef.Parameters[0].ParameterType;
                 if (tr.FullName != CodegenSession.WriterHelper.Writer_TypeRef.FullName &&
                     tr.FullName != CodegenSession.ReaderHelper.Reader_TypeRef.FullName)
                     return ExtensionType.None;
@@ -275,18 +282,18 @@ namespace FishNet.CodeGenerating.Processing
 
             if (write && methodDef.Parameters.Count < 2)
             {
-                CodegenSession.LogError($"{methodDef.FullName} must have at least two parameters, the first being PooledWriter, and second value to write.");
+                CodegenSession.LogError(
+                    $"{methodDef.FullName} must have at least two parameters, the first being PooledWriter, and second value to write.");
                 return ExtensionType.None;
             }
             else if (!write && methodDef.Parameters.Count < 1)
             {
-                CodegenSession.LogError($"{methodDef.FullName} must have at least one parameters, the first being PooledReader.");
+                CodegenSession.LogError(
+                    $"{methodDef.FullName} must have at least one parameters, the first being PooledReader.");
                 return ExtensionType.None;
             }
 
-            return (write) ? ExtensionType.Write : ExtensionType.Read;
+            return write ? ExtensionType.Write : ExtensionType.Read;
         }
-
-
     }
 }

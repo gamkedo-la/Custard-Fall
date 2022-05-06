@@ -5,11 +5,8 @@ using UnityEngine;
 
 namespace FishNet.CodeGenerating.Helping.Extension
 {
-
-
     internal static class TypeDefinitionExtensions
     {
-
         /// <summary>
         /// Returns if typeDef or any of it's parents inherit from NetworkBehaviour.
         /// </summary>
@@ -17,9 +14,9 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         internal static bool InheritsNetworkBehaviour(this TypeDefinition typeDef)
         {
-            string nbFullName = CodegenSession.ObjectHelper.NetworkBehaviour_FullName;
+            var nbFullName = CodegenSession.ObjectHelper.NetworkBehaviour_FullName;
 
-            TypeDefinition copyTd = typeDef;
+            var copyTd = typeDef;
             while (copyTd != null)
             {
                 if (copyTd.FullName == nbFullName)
@@ -37,11 +34,9 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// </summary>
         internal static TypeDefinition GetNestedType(this TypeDefinition typeDef, string name)
         {
-            foreach (TypeDefinition nestedTd in typeDef.NestedTypes)
-            {
+            foreach (var nestedTd in typeDef.NestedTypes)
                 if (nestedTd.Name == name)
                     return nestedTd;
-            }
 
             return null;
         }
@@ -53,8 +48,10 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         internal static bool CanProcessBaseType(this TypeDefinition typeDef)
         {
-            return (typeDef.BaseType != null && typeDef.BaseType.FullName != CodegenSession.ObjectHelper.NetworkBehaviour_FullName);
+            return typeDef.BaseType != null &&
+                   typeDef.BaseType.FullName != CodegenSession.ObjectHelper.NetworkBehaviour_FullName;
         }
+
         /// <summary>
         /// Returns if the BaseType for TypeDef exist and is not NetworkBehaviour,
         /// </summary>
@@ -62,7 +59,8 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         internal static TypeDefinition GetNextBaseClassToProcess(this TypeDefinition typeDef)
         {
-            if (typeDef.BaseType != null && typeDef.BaseType.FullName != CodegenSession.ObjectHelper.NetworkBehaviour_FullName)
+            if (typeDef.BaseType != null &&
+                typeDef.BaseType.FullName != CodegenSession.ObjectHelper.NetworkBehaviour_FullName)
                 return typeDef.BaseType.CachedResolve();
             else
                 return null;
@@ -70,7 +68,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
 
         internal static TypeDefinition GetLastBaseClass(this TypeDefinition typeDef)
         {
-            TypeDefinition copyTd = typeDef;
+            var copyTd = typeDef;
             while (copyTd.BaseType != null)
                 copyTd = copyTd.BaseType.CachedResolve();
 
@@ -82,7 +80,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// </summary>
         internal static TypeDefinition GetClassInInheritance(this TypeDefinition typeDef, string typeFullName)
         {
-            TypeDefinition copyTd = typeDef;
+            var copyTd = typeDef;
             do
             {
                 if (copyTd.FullName == typeFullName)
@@ -92,7 +90,6 @@ namespace FishNet.CodeGenerating.Helping.Extension
                     copyTd = copyTd.BaseType.CachedResolve();
                 else
                     copyTd = null;
-
             } while (copyTd != null);
 
             //Not found.
@@ -107,7 +104,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
             if (typeDef == null)
                 return null;
 
-            TypeDefinition copyTd = typeDef;
+            var copyTd = typeDef;
             do
             {
                 if (copyTd == targetTypeDef)
@@ -117,7 +114,6 @@ namespace FishNet.CodeGenerating.Helping.Extension
                     copyTd = copyTd.BaseType.CachedResolve();
                 else
                     copyTd = null;
-
             } while (copyTd != null);
 
             //Not found.
@@ -132,8 +128,9 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         internal static TypeDefinition GetNextBaseClass(this TypeDefinition typeDef)
         {
-            return (typeDef.BaseType == null) ? null : typeDef.BaseType.CachedResolve();
+            return typeDef.BaseType == null ? null : typeDef.BaseType.CachedResolve();
         }
+
         /// <summary>
         /// Returns if typeDef is static (abstract, sealed).
         /// </summary>
@@ -142,7 +139,8 @@ namespace FishNet.CodeGenerating.Helping.Extension
         internal static bool IsStatic(this TypeDefinition typeDef)
         {
             //Combing flags in a single check some reason doesn't work right with HasFlag.
-            return (typeDef.Attributes.HasFlag(TypeAttributes.Abstract) && typeDef.Attributes.HasFlag(TypeAttributes.Sealed));
+            return typeDef.Attributes.HasFlag(TypeAttributes.Abstract) &&
+                   typeDef.Attributes.HasFlag(TypeAttributes.Sealed);
         }
 
         /// <summary>
@@ -152,11 +150,9 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         internal static TypeReference GetEnumUnderlyingTypeReference(this TypeDefinition typeDef)
         {
-            foreach (FieldDefinition field in typeDef.Fields)
-            {
+            foreach (var field in typeDef.Fields)
                 if (!field.IsStatic)
                     return field.FieldType;
-            }
             throw new ArgumentException($"Invalid enum {typeDef.FullName}");
         }
 
@@ -182,7 +178,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
             if (!typeDef.IsClass)
                 return false;
 
-            TypeDefinition copyTd = typeDef;
+            var copyTd = typeDef;
             while (copyTd.BaseType != null)
             {
                 if (copyTd.BaseType.IsType(type))
@@ -202,10 +198,12 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <param name="methodName"></param>
         /// <param name="attributes"></param>
         /// <returns></returns>
-        internal static MethodDefinition AddMethod(this TypeDefinition typDef, string methodName, MethodAttributes attributes)
+        internal static MethodDefinition AddMethod(this TypeDefinition typDef, string methodName,
+            MethodAttributes attributes)
         {
             return AddMethod(typDef, methodName, attributes, typDef.Module.ImportReference(typeof(void)));
         }
+
         /// <summary>
         /// Adds a method to typeDef.
         /// </summary>
@@ -214,7 +212,8 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <param name="attributes"></param>
         /// <param name="typeReference"></param>
         /// <returns></returns>
-        internal static MethodDefinition AddMethod(this TypeDefinition typeDef, string methodName, MethodAttributes attributes, TypeReference typeReference)
+        internal static MethodDefinition AddMethod(this TypeDefinition typeDef, string methodName,
+            MethodAttributes attributes, TypeReference typeReference)
         {
             var method = new MethodDefinition(methodName, attributes, typeReference);
             typeDef.Methods.Add(method);
@@ -254,13 +253,10 @@ namespace FishNet.CodeGenerating.Helping.Extension
         {
             if (!typeDef.IsClass) return false;
 
-            TypeReference baseTypeRef = typeDef.BaseType;
+            var baseTypeRef = typeDef.BaseType;
             while (baseTypeRef != null)
             {
-                if (baseTypeRef.FullName == ClassTypeFullName)
-                {
-                    return true;
-                }
+                if (baseTypeRef.FullName == ClassTypeFullName) return true;
 
                 try
                 {
@@ -284,15 +280,9 @@ namespace FishNet.CodeGenerating.Helping.Extension
         public static FieldReference GetField(this TypeDefinition typeDef, string fieldName)
         {
             if (typeDef.HasFields)
-            {
-                for (int i = 0; i < typeDef.Fields.Count; i++)
-                {
+                for (var i = 0; i < typeDef.Fields.Count; i++)
                     if (typeDef.Fields[i].Name == fieldName)
-                    {
                         return typeDef.Fields[i];
-                    }
-                }
-            }
 
             return null;
         }
@@ -306,11 +296,9 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         public static bool ImplementsInterface<TInterface>(this TypeDefinition typeDef)
         {
-            for (int i = 0; i < typeDef.Interfaces.Count; i++)
-            {
+            for (var i = 0; i < typeDef.Interfaces.Count; i++)
                 if (typeDef.Interfaces[i].InterfaceType.Is<TInterface>())
                     return true;
-            }
 
             return false;
         }
@@ -324,7 +312,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         public static bool ImplementsInterfaceRecursive<TInterface>(this TypeDefinition typeDef)
         {
-            TypeDefinition climbTypeDef = typeDef;
+            var climbTypeDef = typeDef;
 
             while (climbTypeDef != null)
             {
@@ -348,6 +336,4 @@ namespace FishNet.CodeGenerating.Helping.Extension
             return false;
         }
     }
-
-
 }

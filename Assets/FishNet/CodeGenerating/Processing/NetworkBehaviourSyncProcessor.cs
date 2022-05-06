@@ -17,35 +17,43 @@ namespace FishNet.CodeGenerating.Processing
     internal class NetworkBehaviourSyncProcessor
     {
         #region Reflection references.
+
         private TypeDefinition SyncBase_TypeDef;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Last instruction to read a sync type.
         /// </summary>
         private Instruction _lastReadInstruction;
+
         /// <summary>
         /// Sync objects, such as get and set, created during this process. Used to skip modifying created methods.
         /// </summary>
-        private List<object> _createdSyncTypeMethodDefinitions = new List<object>();
+        private List<object> _createdSyncTypeMethodDefinitions = new();
+
         /// <summary>
         /// ReadSyncVar methods which have had their base call already made.
         /// </summary>
-        private HashSet<MethodDefinition> _baseCalledReadSyncVars = new HashSet<MethodDefinition>();
+        private HashSet<MethodDefinition> _baseCalledReadSyncVars = new();
+
         #endregion
 
         #region Const.
+
         private const string SYNCVAR_PREFIX = "syncVar___";
         private const string ACCESSOR_PREFIX = "sync___";
         private const string SETREGISTERED_METHOD_NAME = "SetRegistered";
         private const string INITIALIZEINSTANCE_METHOD_NAME = "InitializeInstance";
         private const string GETSERIALIZEDTYPE_METHOD_NAME = "GetSerializedType";
+
         #endregion
 
         internal bool ImportReferences()
         {
-            System.Type syncBaseType = typeof(SyncBase);
+            var syncBaseType = typeof(SyncBase);
             SyncBase_TypeDef = CodegenSession.ImportReference(syncBaseType).Resolve();
 
             return true;
@@ -56,17 +64,18 @@ namespace FishNet.CodeGenerating.Processing
         /// </summary>
         /// <param name="typeDef"></param>
         /// <param name="diagnostics"></param>
-        internal bool Process(TypeDefinition typeDef, List<(SyncType, ProcessedSync)> allProcessedSyncs, ref uint syncTypeStartCount)
+        internal bool Process(TypeDefinition typeDef, List<(SyncType, ProcessedSync)> allProcessedSyncs,
+            ref uint syncTypeStartCount)
         {
-            bool modified = false;
+            var modified = false;
             _createdSyncTypeMethodDefinitions.Clear();
             _lastReadInstruction = null;
 
-            FieldDefinition[] fieldDefs = typeDef.Fields.ToArray();
-            foreach (FieldDefinition fd in fieldDefs)
+            var fieldDefs = typeDef.Fields.ToArray();
+            foreach (var fd in fieldDefs)
             {
                 CustomAttribute syncAttribute;
-                SyncType st = GetSyncType(fd, true, out syncAttribute);
+                var st = GetSyncType(fd, true, out syncAttribute);
                 //Not a sync type field.
                 if (st == SyncType.Unset)
                     continue;
@@ -78,7 +87,8 @@ namespace FishNet.CodeGenerating.Processing
                 }
                 else if (st == SyncType.List || st == SyncType.HashSet)
                 {
-                    if (TryCreateSyncList_SyncHashSet(syncTypeStartCount, allProcessedSyncs, typeDef, fd, syncAttribute, st))
+                    if (TryCreateSyncList_SyncHashSet(syncTypeStartCount, allProcessedSyncs, typeDef, fd, syncAttribute,
+                            st))
                         syncTypeStartCount++;
                 }
                 else if (st == SyncType.Dictionary)
@@ -107,11 +117,9 @@ namespace FishNet.CodeGenerating.Processing
         internal uint GetSyncTypeCount(TypeDefinition typeDef)
         {
             uint count = 0;
-            foreach (FieldDefinition fd in typeDef.Fields)
-            {
+            foreach (var fd in typeDef.Fields)
                 if (HasSyncTypeAttributeUnchecked(fd))
                     count++;
-            }
 
             return count;
         }
@@ -121,9 +129,9 @@ namespace FishNet.CodeGenerating.Processing
         /// </summary>
         internal bool ReplaceGetSets(TypeDefinition typeDef, List<(SyncType, ProcessedSync)> allProcessedSyncs)
         {
-            bool modified = false;
+            var modified = false;
 
-            List<MethodDefinition> modifiableMethods = GetModifiableMethods(typeDef);
+            var modifiableMethods = GetModifiableMethods(typeDef);
             modified |= ReplaceGetSetDirties(modifiableMethods, allProcessedSyncs);
 
             return modified;
@@ -153,11 +161,10 @@ namespace FishNet.CodeGenerating.Processing
              * without using the attribute. */
             if (!validate)
             {
-                return (syncAttribute == null) ? SyncType.Unset : SyncType.Custom;
+                return syncAttribute == null ? SyncType.Unset : SyncType.Custom;
             }
             else
             {
-
                 /* If no attribute make sure the field does not implement
                  * ISyncType. If it does then a SyncObject or SyncVar attribute
                  * should exist. */
@@ -165,13 +172,14 @@ namespace FishNet.CodeGenerating.Processing
                 {
                     //   if (fieldDef.Name == "_test")
                     //Debug.Log("Checking " + fieldDef.FieldType.CachedResolve().GetLastBaseClass().Name);
-                    TypeDefinition foundSyncBaseTd = fieldDef.FieldType.CachedResolve().GetClassInInheritance(SyncBase_TypeDef);
+                    var foundSyncBaseTd = fieldDef.FieldType.CachedResolve().GetClassInInheritance(SyncBase_TypeDef);
                     if (foundSyncBaseTd != null && foundSyncBaseTd.ImplementsInterface<ISyncType>())
-                        CodegenSession.LogError($"{fieldDef.Name} within {fieldDef.DeclaringType.Name} is a SyncType but is missing the [SyncVar] or [SyncObject] attribute.");
-                        
+                        CodegenSession.LogError(
+                            $"{fieldDef.Name} within {fieldDef.DeclaringType.Name} is a SyncType but is missing the [SyncVar] or [SyncObject] attribute.");
+
                     return SyncType.Unset;
                 }
-                
+
                 /* If the attribute is not [SyncObject] then the attribute
                  * is [SyncVar]. Only checks that need to be made is to make sure
                  * the user is not using a SyncVar attribute when they should be using a SyncObject attribute. */
@@ -180,11 +188,14 @@ namespace FishNet.CodeGenerating.Processing
                     //Make sure syncvar attribute isnt on a sync object.
                     if (GetSyncObjectSyncType(syncAttribute) != SyncType.Unset)
                     {
-                        CodegenSession.LogError($"{fieldDef.Name} within {fieldDef.DeclaringType.Name} uses a [SyncVar] attribute but should be using [SyncObject].");
+                        CodegenSession.LogError(
+                            $"{fieldDef.Name} within {fieldDef.DeclaringType.Name} uses a [SyncVar] attribute but should be using [SyncObject].");
                         return SyncType.Unset;
                     }
                     else
+                    {
                         return SyncType.Variable;
+                    }
                 }
 
                 /* If here could be syncObject
@@ -197,69 +208,59 @@ namespace FishNet.CodeGenerating.Processing
                     //If attribute is null then throw error.
                     if (sa == null)
                     {
-                        CodegenSession.LogError($"{fieldDef.Name} within {fieldDef.DeclaringType.Name} is a SyncType but [SyncObject] attribute was not found.");
+                        CodegenSession.LogError(
+                            $"{fieldDef.Name} within {fieldDef.DeclaringType.Name} is a SyncType but [SyncObject] attribute was not found.");
                         return SyncType.Unset;
                     }
 
                     if (fieldDef.FieldType.Name == CodegenSession.ObjectHelper.SyncList_Name)
-                    {
                         return SyncType.List;
-                    }
                     else if (fieldDef.FieldType.Name == CodegenSession.ObjectHelper.SyncDictionary_Name)
-                    {
                         return SyncType.Dictionary;
-                    }
                     else if (fieldDef.FieldType.Name == CodegenSession.ObjectHelper.SyncHashSet_Name)
-                    {
                         return SyncType.HashSet;
-                    }
                     //Custom types must also implement ICustomSync.
                     else if (fieldDef.FieldType.CachedResolve().ImplementsInterfaceRecursive<ICustomSync>())
-                    {
                         return SyncType.Custom;
-                    }
                     else
-                    {
                         return SyncType.Unset;
-                    }
                 }
 
                 //Fall through.
                 if (syncAttribute != null)
-                    CodegenSession.LogError($"SyncObject attribute found on {fieldDef.Name} within {fieldDef.DeclaringType.Name} but type {fieldDef.FieldType.Name} does not inherit from SyncBase, or if a custom type does not implement ICustomSync.");
+                    CodegenSession.LogError(
+                        $"SyncObject attribute found on {fieldDef.Name} within {fieldDef.DeclaringType.Name} but type {fieldDef.FieldType.Name} does not inherit from SyncBase, or if a custom type does not implement ICustomSync.");
 
                 return SyncType.Unset;
             }
-
         }
 
 
         /// <summary>
         /// Tries to create a SyncList.
         /// </summary>
-        private bool TryCreateCustom(uint syncTypeCount, List<(SyncType, ProcessedSync)> allProcessedSyncs, TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute syncAttribute)
+        private bool TryCreateCustom(uint syncTypeCount, List<(SyncType, ProcessedSync)> allProcessedSyncs,
+            TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute syncAttribute)
         {
             //Get the serialized type.
-            MethodDefinition getSerialziedTypeMd = originalFieldDef.FieldType.CachedResolve().GetMethod(GETSERIALIZEDTYPE_METHOD_NAME);
-            MethodReference getSerialziedTypeMr = CodegenSession.ImportReference(getSerialziedTypeMd);
-            Collection<Instruction> instructions = getSerialziedTypeMr.CachedResolve().Body.Instructions;
+            var getSerialziedTypeMd =
+                originalFieldDef.FieldType.CachedResolve().GetMethod(GETSERIALIZEDTYPE_METHOD_NAME);
+            var getSerialziedTypeMr = CodegenSession.ImportReference(getSerialziedTypeMd);
+            var instructions = getSerialziedTypeMr.CachedResolve().Body.Instructions;
 
-            bool canSerialize = false;
+            var canSerialize = false;
             TypeReference serializedDataTypeRef = null;
             /* If the user is returning null then
              * they are indicating a custom serializer does not
              * have to be implemented. */
-            if (instructions.Count == 2 && instructions[0].OpCode == OpCodes.Ldnull && instructions[1].OpCode == OpCodes.Ret)
-            {
+            if (instructions.Count == 2 && instructions[0].OpCode == OpCodes.Ldnull &&
+                instructions[1].OpCode == OpCodes.Ret)
                 canSerialize = true;
-            }
             //If not returning null then make a serializer for return type.
             else
-            {
-                foreach (Instruction item in instructions)
-                {
+                foreach (var item in instructions)
                     //This token references the type.
-                    if (item.OpCode == OpCodes.Ldtoken)                        
+                    if (item.OpCode == OpCodes.Ldtoken)
                     {
                         TypeReference importedTr = null;
                         if (item.Operand is TypeDefinition td)
@@ -270,20 +271,20 @@ namespace FishNet.CodeGenerating.Processing
                         if (importedTr != null)
                         {
                             serializedDataTypeRef = importedTr;
-                            canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(serializedDataTypeRef, true);
+                            canSerialize =
+                                CodegenSession.GeneralHelper.HasSerializerAndDeserializer(serializedDataTypeRef, true);
                         }
                     }
-                }
-            }
 
             //Wasn't able to determine serialized type, or create it.
             if (!canSerialize)
             {
-                CodegenSession.LogError($"Custom SyncObject {originalFieldDef.Name} data type {serializedDataTypeRef.FullName} does not support serialization. Use a supported type or create a custom serializer.");
+                CodegenSession.LogError(
+                    $"Custom SyncObject {originalFieldDef.Name} data type {serializedDataTypeRef.FullName} does not support serialization. Use a supported type or create a custom serializer.");
                 return false;
             }
 
-            bool result = InitializeCustom(syncTypeCount, typeDef, originalFieldDef, syncAttribute);
+            var result = InitializeCustom(syncTypeCount, typeDef, originalFieldDef, syncAttribute);
             if (result)
                 allProcessedSyncs.Add((SyncType.Custom, null));
             return result;
@@ -293,23 +294,26 @@ namespace FishNet.CodeGenerating.Processing
         /// <summary>
         /// Tries to create a SyncList.
         /// </summary>
-        private bool TryCreateSyncList_SyncHashSet(uint syncTypeCount, List<(SyncType, ProcessedSync)> allProcessedSyncs, TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute syncAttribute, SyncType syncType)
+        private bool TryCreateSyncList_SyncHashSet(uint syncTypeCount,
+            List<(SyncType, ProcessedSync)> allProcessedSyncs, TypeDefinition typeDef, FieldDefinition originalFieldDef,
+            CustomAttribute syncAttribute, SyncType syncType)
         {
             //Import fieldType to module.
-            TypeReference fieldTypeTr = CodegenSession.ImportReference(originalFieldDef.FieldType);
+            var fieldTypeTr = CodegenSession.ImportReference(originalFieldDef.FieldType);
             //Make sure type can be serialized.
-            GenericInstanceType tmpGenerinstanceType = fieldTypeTr as GenericInstanceType;
+            var tmpGenerinstanceType = fieldTypeTr as GenericInstanceType;
             //this returns the correct data type, eg SyncList<int> would return int.
-            TypeReference dataTypeRef = CodegenSession.ImportReference(tmpGenerinstanceType.GenericArguments[0]);
+            var dataTypeRef = CodegenSession.ImportReference(tmpGenerinstanceType.GenericArguments[0]);
 
-            bool canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(dataTypeRef, true);
+            var canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(dataTypeRef, true);
             if (!canSerialize)
             {
-                CodegenSession.LogError($"SyncObject {originalFieldDef.Name} data type {dataTypeRef.FullName} does not support serialization. Use a supported type or create a custom serializer.");
+                CodegenSession.LogError(
+                    $"SyncObject {originalFieldDef.Name} data type {dataTypeRef.FullName} does not support serialization. Use a supported type or create a custom serializer.");
                 return false;
             }
 
-            bool result = InitializeSyncList_SyncHashSet(syncTypeCount, typeDef, originalFieldDef, syncAttribute);
+            var result = InitializeSyncList_SyncHashSet(syncTypeCount, typeDef, originalFieldDef, syncAttribute);
             if (result)
                 allProcessedSyncs.Add((syncType, null));
             return result;
@@ -318,31 +322,35 @@ namespace FishNet.CodeGenerating.Processing
         /// <summary>
         /// Tries to create a SyncDictionary.
         /// </summary>
-        private bool TryCreateSyncDictionary(uint syncTypeCount, List<(SyncType, ProcessedSync)> allProcessedSyncs, TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute syncAttribute)
+        private bool TryCreateSyncDictionary(uint syncTypeCount, List<(SyncType, ProcessedSync)> allProcessedSyncs,
+            TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute syncAttribute)
         {
             //Make sure type can be serialized.
-            GenericInstanceType tmpGenerinstanceType = originalFieldDef.FieldType as GenericInstanceType;
+            var tmpGenerinstanceType = originalFieldDef.FieldType as GenericInstanceType;
             //this returns the correct data type, eg SyncList<int> would return int.
-            TypeReference keyTypeRef = tmpGenerinstanceType.GenericArguments[0];
-            TypeReference valueTypeRef = tmpGenerinstanceType.GenericArguments[1];
+            var keyTypeRef = tmpGenerinstanceType.GenericArguments[0];
+            var valueTypeRef = tmpGenerinstanceType.GenericArguments[1];
 
             bool canSerialize;
             //Check key serializer.
             canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(keyTypeRef, true);
             if (!canSerialize)
             {
-                CodegenSession.LogError($"SyncObject {originalFieldDef.Name} key type {keyTypeRef.FullName} does not support serialization. Use a supported type or create a custom serializer.");
+                CodegenSession.LogError(
+                    $"SyncObject {originalFieldDef.Name} key type {keyTypeRef.FullName} does not support serialization. Use a supported type or create a custom serializer.");
                 return false;
             }
+
             //Check value serializer.
             canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(valueTypeRef, true);
             if (!canSerialize)
             {
-                CodegenSession.LogError($"SyncObject {originalFieldDef.Name} value type {valueTypeRef.FullName} does not support serialization. Use a supported type or create a custom serializer.");
+                CodegenSession.LogError(
+                    $"SyncObject {originalFieldDef.Name} value type {valueTypeRef.FullName} does not support serialization. Use a supported type or create a custom serializer.");
                 return false;
             }
 
-            bool result = InitializeSyncDictionary(syncTypeCount, typeDef, originalFieldDef, syncAttribute);
+            var result = InitializeSyncDictionary(syncTypeCount, typeDef, originalFieldDef, syncAttribute);
             if (result)
                 allProcessedSyncs.Add((SyncType.Dictionary, null));
             return result;
@@ -352,17 +360,19 @@ namespace FishNet.CodeGenerating.Processing
         /// <summary>
         /// Tries to create a SyncVar.
         /// </summary>
-        private bool TryCreateSyncVar(uint syncCount, List<(SyncType, ProcessedSync)> allProcessedSyncs, TypeDefinition typeDef, FieldDefinition fieldDef, CustomAttribute syncAttribute)
+        private bool TryCreateSyncVar(uint syncCount, List<(SyncType, ProcessedSync)> allProcessedSyncs,
+            TypeDefinition typeDef, FieldDefinition fieldDef, CustomAttribute syncAttribute)
         {
-            bool canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(fieldDef.FieldType, true);
+            var canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(fieldDef.FieldType, true);
             if (!canSerialize)
             {
-                CodegenSession.LogError($"SyncVar {fieldDef.FullName} field type {fieldDef.FieldType.FullName} does not support serialization. Use a supported type or create a custom serializer.");
+                CodegenSession.LogError(
+                    $"SyncVar {fieldDef.FullName} field type {fieldDef.FieldType.FullName} does not support serialization. Use a supported type or create a custom serializer.");
                 return false;
             }
 
             if (CodegenSession.Module != typeDef.Module)
-            {                
+            {
                 CodegenSession.DifferentAssemblySyncVars.Add(fieldDef);
                 return false;
             }
@@ -370,16 +380,17 @@ namespace FishNet.CodeGenerating.Processing
             FieldDefinition syncVarFd;
             MethodReference accessorSetValueMr;
             MethodReference accessorGetValueMr;
-            bool created = CreateSyncVar(syncCount, typeDef, fieldDef, syncAttribute, out syncVarFd, out accessorSetValueMr, out accessorGetValueMr);
+            var created = CreateSyncVar(syncCount, typeDef, fieldDef, syncAttribute, out syncVarFd,
+                out accessorSetValueMr, out accessorGetValueMr);
             if (created)
             {
-                FieldReference originalFr = CodegenSession.ImportReference(fieldDef);
-                allProcessedSyncs.Add((SyncType.Variable, new ProcessedSync(originalFr, syncVarFd, accessorSetValueMr, accessorGetValueMr)));
+                var originalFr = CodegenSession.ImportReference(fieldDef);
+                allProcessedSyncs.Add((SyncType.Variable,
+                    new ProcessedSync(originalFr, syncVarFd, accessorSetValueMr, accessorGetValueMr)));
             }
 
             return created;
         }
-
 
 
         /// <summary>
@@ -389,13 +400,11 @@ namespace FishNet.CodeGenerating.Processing
         /// <returns></returns>
         private bool HasSyncTypeAttributeUnchecked(FieldDefinition fieldDef)
         {
-            foreach (CustomAttribute customAttribute in fieldDef.CustomAttributes)
-            {
+            foreach (var customAttribute in fieldDef.CustomAttributes)
                 if (CodegenSession.AttributeHelper.IsSyncVarAttribute(customAttribute.AttributeType.FullName))
                     return true;
                 else if (CodegenSession.AttributeHelper.IsSyncObjectAttribute(customAttribute.AttributeType.FullName))
                     return true;
-            }
 
             return false;
         }
@@ -413,7 +422,7 @@ namespace FishNet.CodeGenerating.Processing
             error = false;
             syncObject = false;
 
-            foreach (CustomAttribute customAttribute in fieldDef.CustomAttributes)
+            foreach (var customAttribute in fieldDef.CustomAttributes)
             {
                 if (CodegenSession.AttributeHelper.IsSyncVarAttribute(customAttribute.AttributeType.FullName))
                     syncObject = false;
@@ -428,18 +437,21 @@ namespace FishNet.CodeGenerating.Processing
                     CodegenSession.LogError($"{fieldDef.Name} cannot have multiple SyncType attributes.");
                     error = true;
                 }
+
                 //Static.
                 if (fieldDef.IsStatic)
                 {
                     CodegenSession.LogError($"{fieldDef.Name} SyncType cannot be static.");
                     error = true;
                 }
+
                 //Generic.
                 if (fieldDef.FieldType.IsGenericParameter)
                 {
                     CodegenSession.LogError($"{fieldDef.Name} SyncType cannot be be generic.");
                     error = true;
                 }
+
                 //SyncObject readonly check.
                 if (syncObject && !fieldDef.Attributes.HasFlag(FieldAttributes.InitOnly))
                 {
@@ -466,7 +478,9 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="originalFieldDef"></param>
         /// <param name="syncTypeAttribute"></param>
         /// <returns></returns>
-        private bool CreateSyncVar(uint syncCount, TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute syncTypeAttribute, out FieldDefinition createdSyncVarFd, out MethodReference accessorSetValueMethodRef, out MethodReference accessorGetValueMethodRef)
+        private bool CreateSyncVar(uint syncCount, TypeDefinition typeDef, FieldDefinition originalFieldDef,
+            CustomAttribute syncTypeAttribute, out FieldDefinition createdSyncVarFd,
+            out MethodReference accessorSetValueMethodRef, out MethodReference accessorGetValueMethodRef)
         {
             accessorGetValueMethodRef = null;
             accessorSetValueMethodRef = null;
@@ -475,20 +489,22 @@ namespace FishNet.CodeGenerating.Processing
 
             if (createdSyncVarFd != null)
             {
-                MethodReference hookMr = GetSyncVarHookMethodReference(typeDef, originalFieldDef, syncTypeAttribute);
+                var hookMr = GetSyncVarHookMethodReference(typeDef, originalFieldDef, syncTypeAttribute);
                 createdSyncVar.HookMr = hookMr;
 
                 //If accessor was made add it's methods to createdSyncTypeObjects.
-                if (CreateSyncVarAccessor(originalFieldDef, createdSyncVarFd, createdSyncVar, out accessorGetValueMethodRef,
-                    out accessorSetValueMethodRef, hookMr) != null)
+                if (CreateSyncVarAccessor(originalFieldDef, createdSyncVarFd, createdSyncVar,
+                        out accessorGetValueMethodRef,
+                        out accessorSetValueMethodRef, hookMr) != null)
                 {
                     _createdSyncTypeMethodDefinitions.Add(accessorGetValueMethodRef.CachedResolve());
                     _createdSyncTypeMethodDefinitions.Add(accessorSetValueMethodRef.CachedResolve());
                 }
 
-                InitializeSyncVar(syncCount, createdSyncVarFd, typeDef, originalFieldDef, syncTypeAttribute, createdSyncVar);
+                InitializeSyncVar(syncCount, createdSyncVarFd, typeDef, originalFieldDef, syncTypeAttribute,
+                    createdSyncVar);
 
-                MethodDefinition syncVarReadMd = CreateSyncVarRead(typeDef, syncCount, originalFieldDef, accessorSetValueMethodRef);
+                var syncVarReadMd = CreateSyncVarRead(typeDef, syncCount, originalFieldDef, accessorSetValueMethodRef);
                 if (syncVarReadMd != null)
                     _createdSyncTypeMethodDefinitions.Add(syncVarReadMd);
 
@@ -498,23 +514,25 @@ namespace FishNet.CodeGenerating.Processing
             {
                 return false;
             }
-
         }
 
         /// <summary>
         /// Creates or gets a SyncType class for originalFieldDef.
         /// </summary>
         /// <returns></returns>  
-        private FieldDefinition CreateSyncVarFieldDefinition(TypeDefinition typeDef, FieldDefinition originalFieldDef, out CreatedSyncVar createdSyncVar)
+        private FieldDefinition CreateSyncVarFieldDefinition(TypeDefinition typeDef, FieldDefinition originalFieldDef,
+            out CreatedSyncVar createdSyncVar)
         {
             createdSyncVar = CodegenSession.CreatedSyncVarGenerator.GetCreatedSyncVar(originalFieldDef, true);
             if (createdSyncVar == null)
                 return null;
 
-            FieldDefinition createdFieldDef = new FieldDefinition($"{SYNCVAR_PREFIX}{originalFieldDef.Name}", originalFieldDef.Attributes, createdSyncVar.SyncVarGit);
+            var createdFieldDef = new FieldDefinition($"{SYNCVAR_PREFIX}{originalFieldDef.Name}",
+                originalFieldDef.Attributes, createdSyncVar.SyncVarGit);
             if (createdFieldDef == null)
             {
-                CodegenSession.LogError($"Could not create field for Sync type {originalFieldDef.FieldType.FullName}, name of {originalFieldDef.Name}.");
+                CodegenSession.LogError(
+                    $"Could not create field for Sync type {originalFieldDef.FieldType.FullName}, name of {originalFieldDef.Name}.");
                 return null;
             }
 
@@ -529,24 +547,27 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="typeDef"></param>
         /// <param name="attribute"></param>
         /// <returns></returns>
-        private MethodReference GetSyncVarHookMethodReference(TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute attribute)
+        private MethodReference GetSyncVarHookMethodReference(TypeDefinition typeDef, FieldDefinition originalFieldDef,
+            CustomAttribute attribute)
         {
-            string hook = attribute.GetField("OnChange", string.Empty);
+            var hook = attribute.GetField("OnChange", string.Empty);
             //No hook is specified.
             if (string.IsNullOrEmpty(hook))
                 return null;
 
-            MethodDefinition md = typeDef.GetMethod(hook);
+            var md = typeDef.GetMethod(hook);
 
             if (md != null)
             {
-                string incorrectParametersMsg = $"OnChange method for {originalFieldDef.FullName} must contain 3 parameters in order of {originalFieldDef.FieldType.Name} oldValue, {originalFieldDef.FieldType.Name} newValue, {CodegenSession.Module.TypeSystem.Boolean} asServer.";
+                var incorrectParametersMsg =
+                    $"OnChange method for {originalFieldDef.FullName} must contain 3 parameters in order of {originalFieldDef.FieldType.Name} oldValue, {originalFieldDef.FieldType.Name} newValue, {CodegenSession.Module.TypeSystem.Boolean} asServer.";
                 //Not correct number of parameters.
                 if (md.Parameters.Count != 3)
                 {
                     CodegenSession.LogError(incorrectParametersMsg);
                     return null;
                 }
+
                 //One or more parameters are wrong.
                 //Not correct number of parameters.
                 if (md.Parameters[0].ParameterType != originalFieldDef.FieldType ||
@@ -572,10 +593,13 @@ namespace FishNet.CodeGenerating.Processing
         /// Creates accessor for a SyncVar.
         /// </summary>
         /// <returns></returns>
-        private FieldDefinition CreateSyncVarAccessor(FieldDefinition originalFd, FieldDefinition createdSyncVarFd, CreatedSyncVar createdSyncVar, out MethodReference accessorGetValueMr, out MethodReference accessorSetValueMr, MethodReference hookMr)
+        private FieldDefinition CreateSyncVarAccessor(FieldDefinition originalFd, FieldDefinition createdSyncVarFd,
+            CreatedSyncVar createdSyncVar, out MethodReference accessorGetValueMr,
+            out MethodReference accessorSetValueMr, MethodReference hookMr)
         {
             /* Create and add property definition. */
-            PropertyDefinition createdPropertyDef = new PropertyDefinition($"SyncAccessor_{originalFd.Name}", PropertyAttributes.None, originalFd.FieldType);
+            var createdPropertyDef = new PropertyDefinition($"SyncAccessor_{originalFd.Name}", PropertyAttributes.None,
+                originalFd.FieldType);
             createdPropertyDef.DeclaringType = originalFd.DeclaringType;
             //add the methods and property to the type.
             originalFd.DeclaringType.Properties.Add(createdPropertyDef);
@@ -583,9 +607,11 @@ namespace FishNet.CodeGenerating.Processing
             ILProcessor processor;
 
             /* Get method for property definition. */
-            MethodDefinition createdGetMethodDef = originalFd.DeclaringType.AddMethod($"{ACCESSOR_PREFIX}get_value_{originalFd.Name}", MethodAttributes.Public |
-                    MethodAttributes.SpecialName | MethodAttributes.HideBySig,
-                    originalFd.FieldType);
+            var createdGetMethodDef = originalFd.DeclaringType.AddMethod(
+                $"{ACCESSOR_PREFIX}get_value_{originalFd.Name}", MethodAttributes.Public |
+                                                                 MethodAttributes.SpecialName |
+                                                                 MethodAttributes.HideBySig,
+                originalFd.FieldType);
             createdGetMethodDef.SemanticsAttributes = MethodSemanticsAttributes.Getter;
 
             processor = createdGetMethodDef.Body.GetILProcessor();
@@ -598,13 +624,16 @@ namespace FishNet.CodeGenerating.Processing
 
             /* Set method. */
             //Create the set method
-            MethodDefinition createdSetMethodDef = originalFd.DeclaringType.AddMethod($"{ACCESSOR_PREFIX}set_value_{originalFd.Name}", MethodAttributes.Public |
-                    MethodAttributes.SpecialName |
-                    MethodAttributes.HideBySig);
+            var createdSetMethodDef = originalFd.DeclaringType.AddMethod(
+                $"{ACCESSOR_PREFIX}set_value_{originalFd.Name}", MethodAttributes.Public |
+                                                                 MethodAttributes.SpecialName |
+                                                                 MethodAttributes.HideBySig);
             createdSetMethodDef.SemanticsAttributes = MethodSemanticsAttributes.Setter;
 
-            ParameterDefinition valueParameterDef = CodegenSession.GeneralHelper.CreateParameter(createdSetMethodDef, originalFd.FieldType, "value");
-            ParameterDefinition calledByUserParameterDef = CodegenSession.GeneralHelper.CreateParameter(createdSetMethodDef, typeof(bool), "asServer");
+            var valueParameterDef =
+                CodegenSession.GeneralHelper.CreateParameter(createdSetMethodDef, originalFd.FieldType, "value");
+            var calledByUserParameterDef =
+                CodegenSession.GeneralHelper.CreateParameter(createdSetMethodDef, typeof(bool), "asServer");
             processor = createdSetMethodDef.Body.GetILProcessor();
 
             /* Assign to new value. Do this first because SyncVar<T> calls hook 
@@ -633,13 +662,14 @@ namespace FishNet.CodeGenerating.Processing
         /// Sets methods used from SyncBase for typeDef.
         /// </summary>
         /// <returns></returns>
-        internal bool SetSyncBaseMethods(TypeDefinition typeDef, out MethodReference setSyncIndexMr, out MethodReference initializeInstanceMr)
+        internal bool SetSyncBaseMethods(TypeDefinition typeDef, out MethodReference setSyncIndexMr,
+            out MethodReference initializeInstanceMr)
         {
             setSyncIndexMr = null;
             initializeInstanceMr = null;
             //Find the SyncBase class.
             TypeDefinition syncBaseTd = null;
-            TypeDefinition copyTd = typeDef;
+            var copyTd = typeDef;
             do
             {
                 if (copyTd.Name == nameof(SyncBase))
@@ -647,6 +677,7 @@ namespace FishNet.CodeGenerating.Processing
                     syncBaseTd = copyTd;
                     break;
                 }
+
                 copyTd = copyTd.GetNextBaseClass();
             } while (copyTd != null);
 
@@ -667,18 +698,18 @@ namespace FishNet.CodeGenerating.Processing
                 setSyncIndexMr = CodegenSession.ImportReference(tmpMd);
                 return true;
             }
-
         }
 
         /// <summary>
         /// Initializes a custom SyncObject.
         /// </summary>
-        internal bool InitializeCustom(uint syncCount, TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute attribute)
+        internal bool InitializeCustom(uint syncCount, TypeDefinition typeDef, FieldDefinition originalFieldDef,
+            CustomAttribute attribute)
         {
-            float sendRate = 0.1f;
-            WritePermission writePermissions = WritePermission.ServerOnly;
-            ReadPermission readPermissions = ReadPermission.Observers;
-            Channel channel = Channel.Reliable;
+            var sendRate = 0.1f;
+            var writePermissions = WritePermission.ServerOnly;
+            var readPermissions = ReadPermission.Observers;
+            var channel = Channel.Reliable;
             //If attribute isn't null then override values.
             if (attribute != null)
             {
@@ -691,14 +722,15 @@ namespace FishNet.CodeGenerating.Processing
             //Set needed methods from syncbase.
             MethodReference setSyncIndexMr;
             MethodReference initializeInstanceMr;
-            if (!SetSyncBaseMethods(originalFieldDef.FieldType.CachedResolve(), out setSyncIndexMr, out initializeInstanceMr))
+            if (!SetSyncBaseMethods(originalFieldDef.FieldType.CachedResolve(), out setSyncIndexMr,
+                    out initializeInstanceMr))
                 return false;
 
             MethodDefinition injectionMethodDef;
             ILProcessor processor;
 
-            uint hash = (uint)syncCount;
-            List<Instruction> insts = new List<Instruction>();
+            var hash = (uint) syncCount;
+            var insts = new List<Instruction>();
 
             /* Initialize with attribute settings. */
             injectionMethodDef = typeDef.GetMethod(NetworkBehaviourProcessor.NETWORKINITIALIZE_EARLY_INTERNAL_NAME);
@@ -708,11 +740,11 @@ namespace FishNet.CodeGenerating.Processing
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this.
             insts.Add(processor.Create(OpCodes.Ldfld, originalFieldDef));
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this again for NetworkBehaviour.
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)hash));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)writePermissions));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)readPermissions));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) hash));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) writePermissions));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) readPermissions));
             insts.Add(processor.Create(OpCodes.Ldc_R4, sendRate));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)channel));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) channel));
             insts.Add(processor.Create(OpCodes.Ldc_I4_1)); //true for syncObject.
             insts.Add(processor.Create(OpCodes.Call, initializeInstanceMr));
             processor.InsertFirst(insts);
@@ -732,16 +764,16 @@ namespace FishNet.CodeGenerating.Processing
         }
 
 
-
         /// <summary>
         /// Initializes a SyncList.
         /// </summary>
-        internal bool InitializeSyncList_SyncHashSet(uint syncCount, TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute attribute)
+        internal bool InitializeSyncList_SyncHashSet(uint syncCount, TypeDefinition typeDef,
+            FieldDefinition originalFieldDef, CustomAttribute attribute)
         {
-            float sendRate = 0.1f;
-            WritePermission writePermissions = WritePermission.ServerOnly;
-            ReadPermission readPermissions = ReadPermission.Observers;
-            Channel channel = Channel.Reliable;
+            var sendRate = 0.1f;
+            var writePermissions = WritePermission.ServerOnly;
+            var readPermissions = ReadPermission.Observers;
+            var channel = Channel.Reliable;
             //If attribute isn't null then override values.
             if (attribute != null)
             {
@@ -757,14 +789,15 @@ namespace FishNet.CodeGenerating.Processing
             //Set needed methods from syncbase.
             MethodReference setSyncIndexMr;
             MethodReference initializeInstanceMr;
-            if (!SetSyncBaseMethods(originalFieldDef.FieldType.CachedResolve(), out setSyncIndexMr, out initializeInstanceMr))
+            if (!SetSyncBaseMethods(originalFieldDef.FieldType.CachedResolve(), out setSyncIndexMr,
+                    out initializeInstanceMr))
                 return false;
 
             MethodDefinition injectionMethodDef;
             ILProcessor processor;
 
-            uint hash = (uint)syncCount;
-            List<Instruction> insts = new List<Instruction>();
+            var hash = (uint) syncCount;
+            var insts = new List<Instruction>();
 
             /* Initialize with attribute settings. */
             injectionMethodDef = typeDef.GetMethod(NetworkBehaviourProcessor.NETWORKINITIALIZE_EARLY_INTERNAL_NAME);
@@ -774,11 +807,11 @@ namespace FishNet.CodeGenerating.Processing
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this.
             insts.Add(processor.Create(OpCodes.Ldfld, originalFieldDef));
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this again for NetworkBehaviour.
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)hash));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)writePermissions));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)readPermissions));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) hash));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) writePermissions));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) readPermissions));
             insts.Add(processor.Create(OpCodes.Ldc_R4, sendRate));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)channel));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) channel));
             insts.Add(processor.Create(OpCodes.Ldc_I4_1)); //true for syncObject.
             insts.Add(processor.Create(OpCodes.Call, initializeInstanceMr));
             processor.InsertFirst(insts);
@@ -798,16 +831,16 @@ namespace FishNet.CodeGenerating.Processing
         }
 
 
-
         /// <summary>
         /// Initializes a SyncDictionary.
         /// </summary>
-        internal bool InitializeSyncDictionary(uint syncCount, TypeDefinition typeDef, FieldDefinition originalFieldDef, CustomAttribute attribute)
+        internal bool InitializeSyncDictionary(uint syncCount, TypeDefinition typeDef, FieldDefinition originalFieldDef,
+            CustomAttribute attribute)
         {
-            float sendRate = 0.1f;
-            WritePermission writePermissions = WritePermission.ServerOnly;
-            ReadPermission readPermissions = ReadPermission.Observers;
-            Channel channel = Channel.Reliable;
+            var sendRate = 0.1f;
+            var writePermissions = WritePermission.ServerOnly;
+            var readPermissions = ReadPermission.Observers;
+            var channel = Channel.Reliable;
             //If attribute isn't null then override values.
             if (attribute != null)
             {
@@ -823,24 +856,25 @@ namespace FishNet.CodeGenerating.Processing
             //Set needed methods from syncbase.
             MethodReference setSyncIndexMr;
             MethodReference initializeInstanceMr;
-            if (!SetSyncBaseMethods(originalFieldDef.FieldType.CachedResolve(), out setSyncIndexMr, out initializeInstanceMr))
+            if (!SetSyncBaseMethods(originalFieldDef.FieldType.CachedResolve(), out setSyncIndexMr,
+                    out initializeInstanceMr))
                 return false;
 
-            MethodDefinition injectionMethodDef = typeDef.GetMethod(NetworkBehaviourProcessor.NETWORKINITIALIZE_EARLY_INTERNAL_NAME);
-            ILProcessor processor = injectionMethodDef.Body.GetILProcessor();
+            var injectionMethodDef = typeDef.GetMethod(NetworkBehaviourProcessor.NETWORKINITIALIZE_EARLY_INTERNAL_NAME);
+            var processor = injectionMethodDef.Body.GetILProcessor();
 
-            uint hash = (uint)syncCount;
-            List<Instruction> insts = new List<Instruction>();
+            var hash = (uint) syncCount;
+            var insts = new List<Instruction>();
 
             /* Initialize with attribute settings. */
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this.
             insts.Add(processor.Create(OpCodes.Ldfld, originalFieldDef));
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this again for NetworkBehaviour.
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)hash));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)writePermissions));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)readPermissions));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) hash));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) writePermissions));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) readPermissions));
             insts.Add(processor.Create(OpCodes.Ldc_R4, sendRate));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)channel));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) channel));
             insts.Add(processor.Create(OpCodes.Ldc_I4_1)); //true for syncObject.
             insts.Add(processor.Create(OpCodes.Call, initializeInstanceMr));
             processor.InsertFirst(insts);
@@ -863,27 +897,28 @@ namespace FishNet.CodeGenerating.Processing
         /// <summary>
         /// Initializes a SyncVar<>.
         /// </summary>
-        internal void InitializeSyncVar(uint syncCount, FieldDefinition createdFd, TypeDefinition typeDef, FieldDefinition originalFd, CustomAttribute attribute, CreatedSyncVar createdSyncVar)
+        internal void InitializeSyncVar(uint syncCount, FieldDefinition createdFd, TypeDefinition typeDef,
+            FieldDefinition originalFd, CustomAttribute attribute, CreatedSyncVar createdSyncVar)
         {
             //Get all possible attributes.
-            float sendRate = attribute.GetField("SendRate", 0.1f);
-            WritePermission writePermissions = WritePermission.ServerOnly;
-            ReadPermission readPermissions = attribute.GetField("ReadPermissions", ReadPermission.Observers);
-            Channel channel = attribute.GetField("Channel", Channel.Reliable);
+            var sendRate = attribute.GetField("SendRate", 0.1f);
+            var writePermissions = WritePermission.ServerOnly;
+            var readPermissions = attribute.GetField("ReadPermissions", ReadPermission.Observers);
+            var channel = attribute.GetField("Channel", Channel.Reliable);
 
-            MethodDefinition injectionMethodDef = typeDef.GetMethod(NetworkBehaviourProcessor.NETWORKINITIALIZE_EARLY_INTERNAL_NAME);
-            ILProcessor processor = injectionMethodDef.Body.GetILProcessor();
+            var injectionMethodDef = typeDef.GetMethod(NetworkBehaviourProcessor.NETWORKINITIALIZE_EARLY_INTERNAL_NAME);
+            var processor = injectionMethodDef.Body.GetILProcessor();
 
-            uint hash = (uint)syncCount;
-            List<Instruction> insts = new List<Instruction>();
+            var hash = (uint) syncCount;
+            var insts = new List<Instruction>();
             //Initialize fieldDef with values from attribute.
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this.
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this again for NetworkBehaviour.
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)hash));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)writePermissions));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)readPermissions));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) hash));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) writePermissions));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) readPermissions));
             insts.Add(processor.Create(OpCodes.Ldc_R4, sendRate));
-            insts.Add(processor.Create(OpCodes.Ldc_I4, (int)channel));
+            insts.Add(processor.Create(OpCodes.Ldc_I4, (int) channel));
             insts.Add(processor.Create(OpCodes.Ldarg_0)); //this.
             insts.Add(processor.Create(OpCodes.Ldfld, originalFd)); //initial value.
             insts.Add(processor.Create(OpCodes.Newobj, createdSyncVar.ConstructorMr));
@@ -893,16 +928,17 @@ namespace FishNet.CodeGenerating.Processing
             if (createdSyncVar.HookMr != null)
             {
                 //SyncVar<dataType>.add_OnChanged (event).
-                TypeDefinition svTd = CodegenSession.CreatedSyncVarGenerator.SyncVar_TypeRef.CachedResolve();
-                GenericInstanceType svGit = svTd.MakeGenericInstanceType(new TypeReference[] { originalFd.FieldType });
-                MethodDefinition addMd = svTd.GetMethod("add_OnChange");
-                MethodReference genericAddMr = addMd.MakeHostInstanceGeneric(svGit);
+                var svTd = CodegenSession.CreatedSyncVarGenerator.SyncVar_TypeRef.CachedResolve();
+                var svGit = svTd.MakeGenericInstanceType(new TypeReference[] {originalFd.FieldType});
+                var addMd = svTd.GetMethod("add_OnChange");
+                var genericAddMr = addMd.MakeHostInstanceGeneric(svGit);
 
                 //Action<dataType, dataType, bool> constructor.
-                GenericInstanceType actionGit = CodegenSession.GenericWriterHelper.ActionT3TypeRef.MakeGenericInstanceType(
+                var actionGit = CodegenSession.GenericWriterHelper.ActionT3TypeRef.MakeGenericInstanceType(
                     originalFd.FieldType, originalFd.FieldType,
                     CodegenSession.GeneralHelper.GetTypeReference(typeof(bool)));
-                MethodReference gitActionCtorMr = CodegenSession.GenericWriterHelper.ActionT3ConstructorMethodRef.MakeHostInstanceGeneric(actionGit);
+                var gitActionCtorMr =
+                    CodegenSession.GenericWriterHelper.ActionT3ConstructorMethodRef.MakeHostInstanceGeneric(actionGit);
 
                 //      syncVar___field.OnChanged += UserHookMethod;
                 insts.Add(processor.Create(OpCodes.Ldarg_0));
@@ -912,6 +948,7 @@ namespace FishNet.CodeGenerating.Processing
                 insts.Add(processor.Create(OpCodes.Newobj, gitActionCtorMr));
                 insts.Add(processor.Create(OpCodes.Callvirt, genericAddMr));
             }
+
             processor.InsertFirst(insts);
 
             insts.Clear();
@@ -933,11 +970,12 @@ namespace FishNet.CodeGenerating.Processing
         /// </summary>
         /// <param name="modifiableMethods"></param>
         /// <param name="processedSyncs"></param>
-        internal bool ReplaceGetSetDirties(List<MethodDefinition> modifiableMethods, List<(SyncType, ProcessedSync)> processedSyncs)
+        internal bool ReplaceGetSetDirties(List<MethodDefinition> modifiableMethods,
+            List<(SyncType, ProcessedSync)> processedSyncs)
         {
             //Build processed syncs into dictionary for quicker loookups.
-            Dictionary<FieldReference, List<ProcessedSync>> processedLookup = new Dictionary<FieldReference, List<ProcessedSync>>();
-            foreach ((SyncType st, ProcessedSync ps) in processedSyncs)
+            var processedLookup = new Dictionary<FieldReference, List<ProcessedSync>>();
+            foreach ((var st, var ps) in processedSyncs)
             {
                 if (st != SyncType.Variable)
                     continue;
@@ -945,15 +983,15 @@ namespace FishNet.CodeGenerating.Processing
                 List<ProcessedSync> result;
                 if (!processedLookup.TryGetValue(ps.OriginalFieldRef, out result))
                 {
-                    result = new List<ProcessedSync>() { ps };
+                    result = new List<ProcessedSync>() {ps};
                     processedLookup.Add(ps.OriginalFieldRef, result);
                 }
 
                 result.Add(ps);
             }
 
-            bool modified = false;
-            foreach (MethodDefinition methodDef in modifiableMethods)
+            var modified = false;
+            foreach (var methodDef in modifiableMethods)
                 modified |= ReplaceGetSetDirty(methodDef, processedLookup);
 
             return modified;
@@ -964,13 +1002,15 @@ namespace FishNet.CodeGenerating.Processing
         /// </summary>
         /// <param name="methodDef"></param>
         /// <param name="processedLookup"></param>
-        private bool ReplaceGetSetDirty(MethodDefinition methodDef, Dictionary<FieldReference, List<ProcessedSync>> processedLookup)
+        private bool ReplaceGetSetDirty(MethodDefinition methodDef,
+            Dictionary<FieldReference, List<ProcessedSync>> processedLookup)
         {
             if (methodDef == null)
             {
                 CodegenSession.LogError($"An object expecting value was null. Please try saving your script again.");
                 return false;
             }
+
             if (methodDef.IsAbstract)
                 return false;
             if (_createdSyncTypeMethodDefinitions.Contains(methodDef))
@@ -979,7 +1019,7 @@ namespace FishNet.CodeGenerating.Processing
                 return false;
 
 
-            bool modified = false;
+            var modified = false;
 
             /* //codegen this needs to account for calling SecretDirty on syncvars from outside classes.
              * also need to run this before converting to syncaccessor or store syncbase for syncaccessors. */
@@ -1058,9 +1098,9 @@ namespace FishNet.CodeGenerating.Processing
             //    }
             //}
 
-            for (int i = 0; i < methodDef.Body.Instructions.Count; i++)
+            for (var i = 0; i < methodDef.Body.Instructions.Count; i++)
             {
-                Instruction inst = methodDef.Body.Instructions[i];
+                var inst = methodDef.Body.Instructions[i];
 
                 /* Loading a field. (Getter) */
                 if (inst.OpCode == OpCodes.Ldfld && inst.Operand is FieldReference opFieldld)
@@ -1089,7 +1129,6 @@ namespace FishNet.CodeGenerating.Processing
 
                     modified |= ProcessSetField(methodDef, i, resolvedOpField, processedLookup);
                 }
-
             }
 
             return modified;
@@ -1102,14 +1141,15 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="instructionIndex"></param>
         /// <param name="resolvedOpField"></param>
         /// <param name="processedLookup"></param>
-        private bool ProcessGetField(MethodDefinition methodDef, int instructionIndex, FieldReference resolvedOpField, Dictionary<FieldReference, List<ProcessedSync>> processedLookup)
+        private bool ProcessGetField(MethodDefinition methodDef, int instructionIndex, FieldReference resolvedOpField,
+            Dictionary<FieldReference, List<ProcessedSync>> processedLookup)
         {
-            Instruction inst = methodDef.Body.Instructions[instructionIndex];
+            var inst = methodDef.Body.Instructions[instructionIndex];
 
             //If was a replaced field.
-            if (processedLookup.TryGetValue(resolvedOpField, out List<ProcessedSync> psLst))
+            if (processedLookup.TryGetValue(resolvedOpField, out var psLst))
             {
-                ProcessedSync ps = GetProcessedSync(resolvedOpField, psLst);
+                var ps = GetProcessedSync(resolvedOpField, psLst);
                 if (ps == null)
                     return false;
                 //Don't modify the accessor method.
@@ -1117,10 +1157,11 @@ namespace FishNet.CodeGenerating.Processing
                     return false;
 
                 //Generic type.
-                if (resolvedOpField.DeclaringType.IsGenericInstance || resolvedOpField.DeclaringType.HasGenericParameters)
+                if (resolvedOpField.DeclaringType.IsGenericInstance ||
+                    resolvedOpField.DeclaringType.HasGenericParameters)
                 {
-                    FieldReference newField = inst.Operand as FieldReference;
-                    GenericInstanceType genericType = (GenericInstanceType)newField.DeclaringType;
+                    var newField = inst.Operand as FieldReference;
+                    var genericType = (GenericInstanceType) newField.DeclaringType;
                     inst.OpCode = OpCodes.Callvirt;
                     inst.Operand = ps.GetMethodRef.MakeHostInstanceGeneric(genericType);
                 }
@@ -1147,16 +1188,19 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="instructionIndex"></param>
         /// <param name="resolvedOpField"></param>
         /// <param name="processedLookup"></param>
-        private bool ProcessSetField(MethodDefinition methodDef, int instructionIndex, FieldReference resolvedOpField, Dictionary<FieldReference, List<ProcessedSync>> processedLookup)
+        private bool ProcessSetField(MethodDefinition methodDef, int instructionIndex, FieldReference resolvedOpField,
+            Dictionary<FieldReference, List<ProcessedSync>> processedLookup)
         {
-            Instruction inst = methodDef.Body.Instructions[instructionIndex];
+            var inst = methodDef.Body.Instructions[instructionIndex];
 
             /* Find any instructions that are jmp/breaking to the one we are modifying.
              * These need to be modified to call changed instruction. */
-            HashSet<Instruction> brInstructions = new HashSet<Instruction>();
-            foreach (Instruction item in methodDef.Body.Instructions)
+            var brInstructions = new HashSet<Instruction>();
+            foreach (var item in methodDef.Body.Instructions)
             {
-                bool canJmp = (item.OpCode == OpCodes.Br || item.OpCode == OpCodes.Brfalse || item.OpCode == OpCodes.Brfalse_S || item.OpCode == OpCodes.Brtrue || item.OpCode == OpCodes.Brtrue_S || item.OpCode == OpCodes.Br_S);
+                var canJmp = item.OpCode == OpCodes.Br || item.OpCode == OpCodes.Brfalse ||
+                             item.OpCode == OpCodes.Brfalse_S || item.OpCode == OpCodes.Brtrue ||
+                             item.OpCode == OpCodes.Brtrue_S || item.OpCode == OpCodes.Br_S;
                 if (!canJmp)
                     continue;
                 if (item.Operand == null)
@@ -1166,24 +1210,25 @@ namespace FishNet.CodeGenerating.Processing
             }
 
             //If was a replaced field.
-            if (processedLookup.TryGetValue(resolvedOpField, out List<ProcessedSync> psLst))
+            if (processedLookup.TryGetValue(resolvedOpField, out var psLst))
             {
-                ProcessedSync ps = GetProcessedSync(resolvedOpField, psLst);
+                var ps = GetProcessedSync(resolvedOpField, psLst);
                 if (ps == null)
                     return false;
                 //Don't modify the accessor method.
                 if (ps.SetMethodRef.CachedResolve() == methodDef)
                     return false;
-                ILProcessor processor = methodDef.Body.GetILProcessor();
+                var processor = methodDef.Body.GetILProcessor();
                 //Generic type.
-                if (resolvedOpField.DeclaringType.IsGenericInstance || resolvedOpField.DeclaringType.HasGenericParameters)
+                if (resolvedOpField.DeclaringType.IsGenericInstance ||
+                    resolvedOpField.DeclaringType.HasGenericParameters)
                 {
                     //Pass in true for as server.
-                    Instruction boolTrueInst = processor.Create(OpCodes.Ldc_I4_1);
+                    var boolTrueInst = processor.Create(OpCodes.Ldc_I4_1);
                     methodDef.Body.Instructions.Insert(instructionIndex, boolTrueInst);
 
                     var newField = inst.Operand as FieldReference;
-                    var genericType = (GenericInstanceType)newField.DeclaringType;
+                    var genericType = (GenericInstanceType) newField.DeclaringType;
                     inst.OpCode = OpCodes.Callvirt;
                     inst.Operand = ps.SetMethodRef.MakeHostInstanceGeneric(genericType);
                 }
@@ -1191,7 +1236,7 @@ namespace FishNet.CodeGenerating.Processing
                 else
                 {
                     //Pass in true for as server.
-                    Instruction boolTrueInst = processor.Create(OpCodes.Ldc_I4_1);
+                    var boolTrueInst = processor.Create(OpCodes.Ldc_I4_1);
                     methodDef.Body.Instructions.Insert(instructionIndex, boolTrueInst);
 
                     inst.OpCode = OpCodes.Call;
@@ -1203,15 +1248,13 @@ namespace FishNet.CodeGenerating.Processing
                  * redirected to the instruction right above it.
                  * This is because the boolTrueInst, to indicate
                  * value is being set as server. */
-                foreach (Instruction item in brInstructions)
-                {
+                foreach (var item in brInstructions)
                     if (item.Operand is Instruction jmpInst && jmpInst == inst)
                     {
                         //Use the same index that was passed in, which is now one before modified instruction.
-                        Instruction newInst = methodDef.Body.Instructions[instructionIndex];
+                        var newInst = methodDef.Body.Instructions[instructionIndex];
                         item.Operand = newInst;
                     }
-                }
 
                 return true;
             }
@@ -1228,36 +1271,37 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="instructionIndex"></param>
         /// <param name="resolvedOpField"></param>
         /// <param name="processedLookup"></param>
-        private bool ProcessAddressField(MethodDefinition methodDef, int instructionIndex, FieldReference resolvedOpField, Dictionary<FieldReference, List<ProcessedSync>> processedLookup)
+        private bool ProcessAddressField(MethodDefinition methodDef, int instructionIndex,
+            FieldReference resolvedOpField, Dictionary<FieldReference, List<ProcessedSync>> processedLookup)
         {
-            Instruction inst = methodDef.Body.Instructions[instructionIndex];
+            var inst = methodDef.Body.Instructions[instructionIndex];
             //Check if next instruction is Initobj, which would be setting a new instance.
-            Instruction nextInstr = inst.Next;
+            var nextInstr = inst.Next;
             if (nextInstr.OpCode != OpCodes.Initobj)
                 return false;
 
             //If was a replaced field.
-            if (processedLookup.TryGetValue(resolvedOpField, out List<ProcessedSync> psLst))
+            if (processedLookup.TryGetValue(resolvedOpField, out var psLst))
             {
-                ProcessedSync ps = GetProcessedSync(resolvedOpField, psLst);
+                var ps = GetProcessedSync(resolvedOpField, psLst);
                 if (ps == null)
                     return false;
                 //Don't modify the accessor method.
                 if (ps.GetMethodRef.CachedResolve() == methodDef || ps.SetMethodRef.CachedResolve() == methodDef)
                     return false;
 
-                ILProcessor processor = methodDef.Body.GetILProcessor();
+                var processor = methodDef.Body.GetILProcessor();
 
-                VariableDefinition tmpVariableDef = CodegenSession.GeneralHelper.CreateVariable(methodDef, resolvedOpField.FieldType);
+                var tmpVariableDef = CodegenSession.GeneralHelper.CreateVariable(methodDef, resolvedOpField.FieldType);
                 processor.InsertBefore(inst, processor.Create(OpCodes.Ldloca, tmpVariableDef));
                 processor.InsertBefore(inst, processor.Create(OpCodes.Initobj, resolvedOpField.FieldType));
                 processor.InsertBefore(inst, processor.Create(OpCodes.Ldloc, tmpVariableDef));
-                Instruction newInstr = processor.Create(OpCodes.Call, ps.SetMethodRef);
+                var newInstr = processor.Create(OpCodes.Call, ps.SetMethodRef);
                 processor.InsertBefore(inst, newInstr);
 
                 /* Pass in true for as server.
                  * The instruction index is 3 past ld. */
-                Instruction boolTrueInst = processor.Create(OpCodes.Ldc_I4_1);
+                var boolTrueInst = processor.Create(OpCodes.Ldc_I4_1);
                 methodDef.Body.Instructions.Insert(instructionIndex + 3, boolTrueInst);
 
                 processor.Remove(inst);
@@ -1310,7 +1354,7 @@ namespace FishNet.CodeGenerating.Processing
         {
             //TypeDef which needs to make the base call.
             MethodDefinition callerMd = null;
-            TypeDefinition copyTd = firstTypeDef;
+            var copyTd = firstTypeDef;
             do
             {
                 MethodDefinition readMd;
@@ -1321,19 +1365,21 @@ namespace FishNet.CodeGenerating.Processing
 
                 /* If baseType exist and it's not networkbehaviour
                  * look into calling the ReadSyncVar method. */
-                if (copyTd.BaseType != null && copyTd.BaseType.FullName != CodegenSession.ObjectHelper.NetworkBehaviour_FullName)
+                if (copyTd.BaseType != null &&
+                    copyTd.BaseType.FullName != CodegenSession.ObjectHelper.NetworkBehaviour_FullName)
                 {
-                    readMd = copyTd.BaseType.CachedResolve().GetMethod(CodegenSession.ObjectHelper.NetworkBehaviour_ReadSyncVar_MethodRef.Name);
+                    readMd = copyTd.BaseType.CachedResolve()
+                        .GetMethod(CodegenSession.ObjectHelper.NetworkBehaviour_ReadSyncVar_MethodRef.Name);
                     //Not all classes will have syncvars to read.
                     if (!_baseCalledReadSyncVars.Contains(callerMd) && readMd != null && callerMd != null)
                     {
-                        MethodReference baseReadMr = CodegenSession.ImportReference(readMd);
-                        ILProcessor processor = callerMd.Body.GetILProcessor();
+                        var baseReadMr = CodegenSession.ImportReference(readMd);
+                        var processor = callerMd.Body.GetILProcessor();
                         /* Calls base.ReadSyncVar and if result is true
                          * then exit methods. This is because a true return means the base
                          * was able to process the syncvar. */
-                        List<Instruction> baseCallInsts = new List<Instruction>();
-                        Instruction skipBaseReturn = processor.Create(OpCodes.Nop);
+                        var baseCallInsts = new List<Instruction>();
+                        var skipBaseReturn = processor.Create(OpCodes.Nop);
                         baseCallInsts.Add(processor.Create(OpCodes.Ldarg_0));
                         baseCallInsts.Add(processor.Create(OpCodes.Ldarg_1));
                         baseCallInsts.Add(processor.Create(OpCodes.Ldarg_2));
@@ -1349,10 +1395,7 @@ namespace FishNet.CodeGenerating.Processing
                 }
 
                 copyTd = TypeDefinitionExtensions.GetNextBaseClassToProcess(copyTd);
-
             } while (copyTd != null);
-
-
         }
 
         /// <summary>
@@ -1361,17 +1404,20 @@ namespace FishNet.CodeGenerating.Processing
         /// <param name="typeDef"></param>
         /// <param name="syncIndex"></param>
         /// <param name="originalFieldDef"></param>
-        private MethodDefinition CreateSyncVarRead(TypeDefinition typeDef, uint syncIndex, FieldDefinition originalFieldDef, MethodReference accessorSetMethodRef)
+        private MethodDefinition CreateSyncVarRead(TypeDefinition typeDef, uint syncIndex,
+            FieldDefinition originalFieldDef, MethodReference accessorSetMethodRef)
         {
             Instruction jmpGoalInst;
             ILProcessor processor;
 
             //Get the read sync method, or create it if not present.
-            MethodDefinition readSyncMethodDef = typeDef.GetMethod(CodegenSession.ObjectHelper.NetworkBehaviour_ReadSyncVar_MethodRef.Name);
+            var readSyncMethodDef =
+                typeDef.GetMethod(CodegenSession.ObjectHelper.NetworkBehaviour_ReadSyncVar_MethodRef.Name);
             if (readSyncMethodDef == null)
             {
-                readSyncMethodDef = new MethodDefinition(CodegenSession.ObjectHelper.NetworkBehaviour_ReadSyncVar_MethodRef.Name,
-                (MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual),
+                readSyncMethodDef = new MethodDefinition(
+                    CodegenSession.ObjectHelper.NetworkBehaviour_ReadSyncVar_MethodRef.Name,
+                    MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual,
                     typeDef.Module.TypeSystem.Void);
                 readSyncMethodDef.ReturnType = CodegenSession.GeneralHelper.GetTypeReference(typeof(bool));
 
@@ -1392,8 +1438,8 @@ namespace FishNet.CodeGenerating.Processing
                 processor = readSyncMethodDef.Body.GetILProcessor();
             }
 
-            ParameterDefinition pooledReaderParameterDef = readSyncMethodDef.Parameters[0];
-            ParameterDefinition indexParameterDef = readSyncMethodDef.Parameters[1];
+            var pooledReaderParameterDef = readSyncMethodDef.Parameters[0];
+            var indexParameterDef = readSyncMethodDef.Parameters[1];
             VariableDefinition nextValueVariableDef;
             List<Instruction> readInsts;
 
@@ -1402,7 +1448,7 @@ namespace FishNet.CodeGenerating.Processing
              * removed afterwards. This ensures the newer instructions will
              * be above the previous. This let's the IL jump to a previously
              * created read instruction when the latest one fails conditions. */
-            Instruction nopPlaceHolderInst = processor.Create(OpCodes.Nop);
+            var nopPlaceHolderInst = processor.Create(OpCodes.Nop);
 
             readSyncMethodDef.Body.Instructions.Insert(0, nopPlaceHolderInst);
 
@@ -1410,25 +1456,26 @@ namespace FishNet.CodeGenerating.Processing
              * condition for it. Otherwise set it to the last instruction, which would
              * be a ret. Keep in mind if ret has a value we must go back 2 index
              * rather than one. */
-            jmpGoalInst = (_lastReadInstruction != null) ? _lastReadInstruction :
-                readSyncMethodDef.Body.Instructions[readSyncMethodDef.Body.Instructions.Count - 2];
+            jmpGoalInst = _lastReadInstruction != null
+                ? _lastReadInstruction
+                : readSyncMethodDef.Body.Instructions[readSyncMethodDef.Body.Instructions.Count - 2];
 
             //Check index first. if (index != syncIndex) return
-            Instruction nextLastReadInstruction = processor.Create(OpCodes.Ldarg, indexParameterDef);
+            var nextLastReadInstruction = processor.Create(OpCodes.Ldarg, indexParameterDef);
             processor.InsertBefore(jmpGoalInst, nextLastReadInstruction);
 
-            uint hash = (uint)syncIndex;
+            var hash = (uint) syncIndex;
             //uint hash = originalFieldDef.FullName.GetStableHash32();
-            processor.InsertBefore(jmpGoalInst, processor.Create(OpCodes.Ldc_I4, (int)hash));
+            processor.InsertBefore(jmpGoalInst, processor.Create(OpCodes.Ldc_I4, (int) hash));
             //processor.InsertBefore(jmpGoalInst, processor.Create(OpCodes.Ldc_I4, syncIndex));
             processor.InsertBefore(jmpGoalInst, processor.Create(OpCodes.Bne_Un, jmpGoalInst));
             //PooledReader.ReadXXXX()
             readInsts = CodegenSession.ReaderHelper.CreateRead(readSyncMethodDef, pooledReaderParameterDef,
-                 originalFieldDef.FieldType, out nextValueVariableDef);
+                originalFieldDef.FieldType, out nextValueVariableDef);
             if (readInsts == null)
                 return null;
             //Add each instruction from CreateRead.
-            foreach (Instruction i in readInsts)
+            foreach (var i in readInsts)
                 processor.InsertBefore(jmpGoalInst, i);
 
             //Call accessor with new value and false for asServer
@@ -1453,16 +1500,16 @@ namespace FishNet.CodeGenerating.Processing
         /// <returns></returns>
         private List<MethodDefinition> GetModifiableMethods(TypeDefinition typeDef)
         {
-            List<MethodDefinition> results = new List<MethodDefinition>();
+            var results = new List<MethodDefinition>();
 
             CheckTypeDefinition(typeDef);
             //Have to add nested types because this are where courotines are stored.
-            foreach (TypeDefinition nestedTd in typeDef.NestedTypes)
+            foreach (var nestedTd in typeDef.NestedTypes)
                 CheckTypeDefinition(nestedTd);
 
             void CheckTypeDefinition(TypeDefinition td)
             {
-                foreach (MethodDefinition methodDef in td.Methods)
+                foreach (var methodDef in td.Methods)
                 {
                     if (methodDef.Name == ".cctor")
                         continue;
@@ -1474,7 +1521,7 @@ namespace FishNet.CodeGenerating.Processing
                     results.Add(methodDef);
                 }
 
-                foreach (PropertyDefinition propertyDef in td.Properties)
+                foreach (var propertyDef in td.Properties)
                 {
                     if (propertyDef.GetMethod != null)
                         results.Add(propertyDef.GetMethod);
@@ -1494,11 +1541,9 @@ namespace FishNet.CodeGenerating.Processing
         /// <returns></returns>
         private ProcessedSync GetProcessedSync(FieldReference resolvedOpField, List<ProcessedSync> psLst)
         {
-            for (int i = 0; i < psLst.Count; i++)
-            {
+            for (var i = 0; i < psLst.Count; i++)
                 if (psLst[i].OriginalFieldRef == resolvedOpField)
                     return psLst[i];
-            }
 
             /* Fall through, not found. */
             CodegenSession.LogError($"Unable to find user referenced field for {resolvedOpField.Name}.");

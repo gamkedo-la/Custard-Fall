@@ -5,12 +5,13 @@ namespace FishNet.Object
 {
     public sealed partial class NetworkObject : MonoBehaviour
     {
-
         #region Private.
+
         /// <summary>
         /// RpcLinks being used within this NetworkObject.
         /// </summary>
         private List<ushort> _rpcLinkIndexes;
+
         #endregion
 
         /// <summary>
@@ -29,6 +30,4 @@ namespace FishNet.Object
             NetworkManager.ClientManager.Objects.RemoveLinkIndexes(_rpcLinkIndexes);
         }
     }
-
 }
-

@@ -19,7 +19,7 @@ namespace LiteNetLib.Utils
         // Cache encoding instead of creating it with BinaryWriter each time
         // 1000 readers before: 1MB GC, 30ms
         // 1000 readers after: .8MB GC, 18ms
-        private static readonly UTF8Encoding _uTF8Encoding = new UTF8Encoding(false, true);
+        private static readonly UTF8Encoding _uTF8Encoding = new(false, true);
         public const int StringBufferMaxLength = 1024 * 32; // <- short.MaxValue + 1
         private static readonly byte[] _stringBuffer = new byte[StringBufferMaxLength];
 
@@ -50,6 +50,7 @@ namespace LiteNetLib.Utils
                 netDataWriter.Put(bytes);
                 return netDataWriter;
             }
+
             return new NetDataWriter(true, 0) {_data = bytes, _position = bytes.Length};
         }
 
@@ -76,10 +77,7 @@ namespace LiteNetLib.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ResizeIfNeed(int newSize)
         {
-            if (_data.Length < newSize)
-            {
-                Array.Resize(ref _data, Math.Max(newSize, _data.Length * 2));
-            }
+            if (_data.Length < newSize) Array.Resize(ref _data, Math.Max(newSize, _data.Length * 2));
         }
 
         public void Reset(int size)
@@ -95,7 +93,7 @@ namespace LiteNetLib.Utils
 
         public byte[] CopyData()
         {
-            byte[] resultData = new byte[_position];
+            var resultData = new byte[_position];
             Buffer.BlockCopy(_data, 0, resultData, 0, _position);
             return resultData;
         }
@@ -107,7 +105,7 @@ namespace LiteNetLib.Utils
         /// <returns>previous position of data writer</returns>
         public int SetPosition(int position)
         {
-            int prevPosition = _position;
+            var prevPosition = _position;
             _position = position;
             return prevPosition;
         }
@@ -162,7 +160,7 @@ namespace LiteNetLib.Utils
 
         public void Put(char value)
         {
-            Put((ushort)value);
+            Put((ushort) value);
         }
 
         public void Put(ushort value)
@@ -185,7 +183,7 @@ namespace LiteNetLib.Utils
         {
             if (_autoResize)
                 ResizeIfNeed(_position + 1);
-            _data[_position] = (byte)value;
+            _data[_position] = (byte) value;
             _position++;
         }
 
@@ -251,12 +249,12 @@ namespace LiteNetLib.Utils
 
         public void Put(bool value)
         {
-            Put((byte)(value ? 1 : 0));
+            Put((byte) (value ? 1 : 0));
         }
 
         private void PutArray(Array arr, int sz)
         {
-            ushort length = arr == null ? (ushort) 0 : (ushort)arr.Length;
+            var length = arr == null ? (ushort) 0 : (ushort) arr.Length;
             sz *= length;
             if (_autoResize)
                 ResizeIfNeed(_position + sz + 2);
@@ -313,17 +311,17 @@ namespace LiteNetLib.Utils
 
         public void PutArray(string[] value)
         {
-            ushort strArrayLength = value == null ? (ushort)0 : (ushort)value.Length;
+            var strArrayLength = value == null ? (ushort) 0 : (ushort) value.Length;
             Put(strArrayLength);
-            for (int i = 0; i < strArrayLength; i++)
+            for (var i = 0; i < strArrayLength; i++)
                 Put(value[i]);
         }
 
         public void PutArray(string[] value, int strMaxLength)
         {
-            ushort strArrayLength = value == null ? (ushort)0 : (ushort)value.Length;
+            var strArrayLength = value == null ? (ushort) 0 : (ushort) value.Length;
             Put(strArrayLength);
-            for (int i = 0; i < strArrayLength; i++)
+            for (var i = 0; i < strArrayLength; i++)
                 Put(value[i], strMaxLength);
         }
 
@@ -345,20 +343,20 @@ namespace LiteNetLib.Utils
         {
             if (value == null)
             {
-                Put((ushort)0);
+                Put((ushort) 0);
                 return;
             }
 
-            int length = maxLength > 0 && value.Length > maxLength ? maxLength : value.Length;
-            int size = _uTF8Encoding.GetBytes(value, 0, length, _stringBuffer, 0);
+            var length = maxLength > 0 && value.Length > maxLength ? maxLength : value.Length;
+            var size = _uTF8Encoding.GetBytes(value, 0, length, _stringBuffer, 0);
 
             if (size >= StringBufferMaxLength)
             {
-                Put((ushort)0);
+                Put((ushort) 0);
                 return;
             }
 
-            Put(checked((ushort)(size + 1)));
+            Put(checked((ushort) (size + 1)));
             Put(_stringBuffer, 0, size);
         }
 

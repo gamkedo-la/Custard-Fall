@@ -10,23 +10,21 @@
 
 using System;
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public sealed class AssemblyNameDefinition : AssemblyNameReference
+    {
+        public override byte[] Hash => Empty<byte>.Array;
 
-	public sealed class AssemblyNameDefinition : AssemblyNameReference {
+        internal AssemblyNameDefinition()
+        {
+            token = new MetadataToken(TokenType.Assembly, 1);
+        }
 
-		public override byte [] Hash {
-			get { return Empty<byte>.Array; }
-		}
-
-		internal AssemblyNameDefinition ()
-		{
-			this.token = new MetadataToken (TokenType.Assembly, 1);
-		}
-
-		public AssemblyNameDefinition (string name, Version version)
-			: base (name, version)
-		{
-			this.token = new MetadataToken (TokenType.Assembly, 1);
-		}
-	}
+        public AssemblyNameDefinition(string name, Version version)
+            : base(name, version)
+        {
+            token = new MetadataToken(TokenType.Assembly, 1);
+        }
+    }
 }

@@ -8,17 +8,17 @@
 // Licensed under the MIT/X11 license.
 //
 
-namespace MonoFN.Cecil.Metadata {
+namespace MonoFN.Cecil.Metadata
+{
+    internal abstract class Heap
+    {
+        public int IndexSize;
 
-	abstract class Heap {
+        internal readonly byte[] data;
 
-		public int IndexSize;
-
-		readonly internal byte [] data;
-
-		protected Heap (byte [] data)
-		{
-			this.data = data;
-		}
-	}
+        protected Heap(byte[] data)
+        {
+            this.data = data;
+        }
+    }
 }

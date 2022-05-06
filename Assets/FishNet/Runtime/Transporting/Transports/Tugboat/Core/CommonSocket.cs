@@ -6,15 +6,15 @@ using System.Collections.Generic;
 
 namespace FishNet.Transporting.Tugboat
 {
-
     public abstract class CommonSocket
     {
-
         #region Public.
+
         /// <summary>
         /// Current ConnectionState.
         /// </summary>
         private LocalConnectionStates _connectionState = LocalConnectionStates.Stopped;
+
         /// <summary>
         /// Returns the current ConnectionState.
         /// </summary>
@@ -23,6 +23,7 @@ namespace FishNet.Transporting.Tugboat
         {
             return _connectionState;
         }
+
         /// <summary>
         /// Sets a new connection state.
         /// </summary>
@@ -39,26 +40,30 @@ namespace FishNet.Transporting.Tugboat
             else
                 Transport.HandleClientConnectionState(new ClientConnectionStateArgs(connectionState, Transport.Index));
         }
+
         #endregion
 
         #region Protected.
+
         /// <summary>
         /// Transport controlling this socket.
         /// </summary>
         protected Transport Transport = null;
+
         #endregion
 
 
         /// <summary>
         /// Sends data to connectionId.
         /// </summary>
-        internal void Send(ref Queue<Packet> queue, byte channelId, ArraySegment<byte> segment, int connectionId, int mtu)
+        internal void Send(ref Queue<Packet> queue, byte channelId, ArraySegment<byte> segment, int connectionId,
+            int mtu)
         {
             if (GetConnectionState() != LocalConnectionStates.Started)
                 return;
 
             //ConnectionId isn't used from client to server.
-            Packet outgoing = new Packet(connectionId, segment, channelId, mtu);
+            var outgoing = new Packet(connectionId, segment, channelId, mtu);
             queue.Enqueue(outgoing);
         }
 
@@ -69,17 +74,18 @@ namespace FishNet.Transporting.Tugboat
         {
             if (netManager == null)
                 return;
-            
-            timeout = (timeout == 0) ? int.MaxValue : Math.Min(int.MaxValue, (timeout * 1000));
+
+            timeout = timeout == 0 ? int.MaxValue : Math.Min(int.MaxValue, timeout * 1000);
             netManager.DisconnectTimeout = timeout;
         }
+
         /// <summary>
         /// Clears a queue using Packet type.
         /// </summary>
         /// <param name="queue"></param>
         internal void ClearPacketQueue(ref ConcurrentQueue<Packet> queue)
         {
-            while (queue.TryDequeue(out Packet p))
+            while (queue.TryDequeue(out var p))
                 p.Dispose();
         }
 
@@ -89,10 +95,10 @@ namespace FishNet.Transporting.Tugboat
         /// <param name="queue"></param>
         internal void ClearPacketQueue(ref Queue<Packet> queue)
         {
-            int count = queue.Count;
-            for (int i = 0; i < count; i++)
+            var count = queue.Count;
+            for (var i = 0; i < count; i++)
             {
-                Packet p = queue.Dequeue();
+                var p = queue.Dequeue();
                 p.Dispose();
             }
         }
@@ -100,26 +106,26 @@ namespace FishNet.Transporting.Tugboat
         /// <summary>
         /// Called when data is received.
         /// </summary>
-        internal virtual void Listener_NetworkReceiveEvent(Queue<Packet> queue,  NetPeer fromPeer, NetPacketReader reader, DeliveryMethod deliveryMethod, int mtu)
+        internal virtual void Listener_NetworkReceiveEvent(Queue<Packet> queue, NetPeer fromPeer,
+            NetPacketReader reader, DeliveryMethod deliveryMethod, int mtu)
         {
             //Set buffer.
-            int dataLen = reader.AvailableBytes;
+            var dataLen = reader.AvailableBytes;
             //Prefer to max out returned array to mtu to reduce chance of resizing.
-            int arraySize = Math.Max(dataLen, mtu);
-            byte[] data = ByteArrayPool.Retrieve(arraySize);
+            var arraySize = Math.Max(dataLen, mtu);
+            var data = ByteArrayPool.Retrieve(arraySize);
             reader.GetBytes(data, dataLen);
             //Id.
-            int id = fromPeer.Id;
+            var id = fromPeer.Id;
             //Channel.
-            byte channel = (deliveryMethod == DeliveryMethod.Unreliable) ?
-                (byte)Channel.Unreliable : (byte)Channel.Reliable;
+            var channel = deliveryMethod == DeliveryMethod.Unreliable
+                ? (byte) Channel.Unreliable
+                : (byte) Channel.Reliable;
             //Add to packets.
-            Packet packet = new Packet(id, data, dataLen, channel);
+            var packet = new Packet(id, data, dataLen, channel);
             queue.Enqueue(packet);
             //Recycle reader.
             reader.Recycle();
         }
-
     }
-
 }

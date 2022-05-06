@@ -11,73 +11,69 @@
 using MonoFN.Collections.Generic;
 using System;
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public abstract class MethodSpecification : MethodReference
+    {
+        private readonly MethodReference method;
 
-	public abstract class MethodSpecification : MethodReference {
+        public MethodReference ElementMethod => method;
 
-		readonly MethodReference method;
+        public override string Name
+        {
+            get => method.Name;
+            set => throw new InvalidOperationException();
+        }
 
-		public MethodReference ElementMethod {
-			get { return method; }
-		}
+        public override MethodCallingConvention CallingConvention
+        {
+            get => method.CallingConvention;
+            set => throw new InvalidOperationException();
+        }
 
-		public override string Name {
-			get { return method.Name; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override bool HasThis
+        {
+            get => method.HasThis;
+            set => throw new InvalidOperationException();
+        }
 
-		public override MethodCallingConvention CallingConvention {
-			get { return method.CallingConvention; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override bool ExplicitThis
+        {
+            get => method.ExplicitThis;
+            set => throw new InvalidOperationException();
+        }
 
-		public override bool HasThis {
-			get { return method.HasThis; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override MethodReturnType MethodReturnType
+        {
+            get => method.MethodReturnType;
+            set => throw new InvalidOperationException();
+        }
 
-		public override bool ExplicitThis {
-			get { return method.ExplicitThis; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override TypeReference DeclaringType
+        {
+            get => method.DeclaringType;
+            set => throw new InvalidOperationException();
+        }
 
-		public override MethodReturnType MethodReturnType {
-			get { return method.MethodReturnType; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override ModuleDefinition Module => method.Module;
 
-		public override TypeReference DeclaringType {
-			get { return method.DeclaringType; }
-			set { throw new InvalidOperationException (); }
-		}
+        public override bool HasParameters => method.HasParameters;
 
-		public override ModuleDefinition Module {
-			get { return method.Module; }
-		}
+        public override Collection<ParameterDefinition> Parameters => method.Parameters;
 
-		public override bool HasParameters {
-			get { return method.HasParameters; }
-		}
+        public override bool ContainsGenericParameter => method.ContainsGenericParameter;
 
-		public override Collection<ParameterDefinition> Parameters {
-			get { return method.Parameters; }
-		}
+        internal MethodSpecification(MethodReference method)
+        {
+            Mixin.CheckMethod(method);
 
-		public override bool ContainsGenericParameter {
-			get { return method.ContainsGenericParameter; }
-		}
+            this.method = method;
+            token = new MetadataToken(TokenType.MethodSpec);
+        }
 
-		internal MethodSpecification (MethodReference method)
-		{
-			Mixin.CheckMethod (method);
-
-			this.method = method;
-			this.token = new MetadataToken (TokenType.MethodSpec);
-		}
-
-		public sealed override MethodReference GetElementMethod ()
-		{
-			return method.GetElementMethod ();
-		}
-	}
+        public sealed override MethodReference GetElementMethod()
+        {
+            return method.GetElementMethod();
+        }
+    }
 }

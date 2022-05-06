@@ -39,6 +39,7 @@ namespace FishNet.Example.Prediction.Transforms
         {
             public Vector3 Position;
             public Quaternion Rotation;
+
             public ReconcileData(Vector3 position, Quaternion rotation)
             {
                 Position = position;
@@ -47,19 +48,22 @@ namespace FishNet.Example.Prediction.Transforms
         }
 
         #region Serialized.
+
         /// <summary>
         /// How many units to move per second.
         /// </summary>
-        [Tooltip("How many units to move per second.")]
-        [SerializeField]
+        [Tooltip("How many units to move per second.")] [SerializeField]
         private float _moveRate = 5f;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// The last MoveData client sent.
         /// </summary>
         private MoveData _clientMoveData;
+
         #endregion
 
         private void Awake()
@@ -88,7 +92,7 @@ namespace FishNet.Example.Prediction.Transforms
 
         private void TimeManager_OnTick()
         {
-            if (base.IsOwner)
+            if (IsOwner)
             {
                 /* Call reconcile using default, and false for
                  * asServer. This will reset the client to the latest
@@ -98,7 +102,7 @@ namespace FishNet.Example.Prediction.Transforms
                  * is no input CheckInput returns default. You can handle this
                  * however you like but Move should be called when default if
                  * there is no input which needs to be sent to the server. */
-                CheckInput(out MoveData md);
+                CheckInput(out var md);
                 /* Move using the input, and false for asServer.
                  * Inputs are automatically sent with redundancy. How many past
                  * inputs will be configurable at a later time.
@@ -108,7 +112,8 @@ namespace FishNet.Example.Prediction.Transforms
                  * automatically determine how to send the data, and run the logic. */
                 Move(md, false);
             }
-            if (base.IsServer)
+
+            if (IsServer)
             {
                 /* Move using default data with true for asServer.
                  * The server will use stored data from the client automatically.
@@ -123,7 +128,7 @@ namespace FishNet.Example.Prediction.Transforms
                  * Replicate method (Move) this will send with redundancy a certain
                  * amount of times. If there is no input to process from the client this
                  * will not continue to send data. */
-                ReconcileData rd = new ReconcileData(transform.position, transform.rotation);
+                var rd = new ReconcileData(transform.position, transform.rotation);
                 Reconciliation(rd, true);
             }
         }
@@ -135,7 +140,7 @@ namespace FishNet.Example.Prediction.Transforms
              * movedata and the frames delta. This will move
              * the client smoothly while only sending data
              * every tick. */
-            if (base.IsOwner)
+            if (IsOwner)
                 MoveWithData(_clientMoveData, Time.deltaTime);
         }
 
@@ -147,8 +152,8 @@ namespace FishNet.Example.Prediction.Transforms
         {
             md = default;
 
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
+            var horizontal = Input.GetAxisRaw("Horizontal");
+            var vertical = Input.GetAxisRaw("Vertical");
 
             //No input to send.
             if (horizontal == 0f && vertical == 0f)
@@ -180,6 +185,7 @@ namespace FishNet.Example.Prediction.Transforms
             {
                 //Sanity check!
             }
+
             /* You may also use replaying to know
              * if a client is replaying inputs rather
              * than running them for the first time. This can
@@ -195,7 +201,7 @@ namespace FishNet.Example.Prediction.Transforms
             * It's important to use TickDelta as your deltaTime
             * when running in the simulation tick. */
             if (asServer || replaying)
-                MoveWithData(md, (float)base.TimeManager.TickDelta);
+                MoveWithData(md, (float) TimeManager.TickDelta);
             /* When running as client and not
              * replaying set the clientMoveData to what
              * was passed in. This will be used in OnUpdate
@@ -215,8 +221,8 @@ namespace FishNet.Example.Prediction.Transforms
 
         private void MoveWithData(MoveData md, float delta)
         {
-            Vector3 move = new Vector3(md.Horizontal, 0f, md.Vertical);
-            transform.position += (move * _moveRate * delta);
+            var move = new Vector3(md.Horizontal, 0f, md.Vertical);
+            transform.position += move * _moveRate * delta;
         }
 
         /// <summary>
@@ -233,9 +239,5 @@ namespace FishNet.Example.Prediction.Transforms
             transform.position = rd.Position;
             transform.rotation = rd.Rotation;
         }
-
-
     }
-
-
 }

@@ -8,33 +8,32 @@
 // Licensed under the MIT/X11 license.
 //
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public abstract class EventReference : MemberReference
+    {
+        private TypeReference event_type;
 
-	public abstract class EventReference : MemberReference {
+        public TypeReference EventType
+        {
+            get => event_type;
+            set => event_type = value;
+        }
 
-		TypeReference event_type;
+        public override string FullName => event_type.FullName + " " + MemberFullName();
 
-		public TypeReference EventType {
-			get { return event_type; }
-			set { event_type = value; }
-		}
+        protected EventReference(string name, TypeReference eventType)
+            : base(name)
+        {
+            Mixin.CheckType(eventType, Mixin.Argument.eventType);
+            event_type = eventType;
+        }
 
-		public override string FullName {
-			get { return event_type.FullName + " " + MemberFullName (); }
-		}
+        protected override IMemberDefinition ResolveDefinition()
+        {
+            return Resolve();
+        }
 
-		protected EventReference (string name, TypeReference eventType)
-			: base (name)
-		{
-			Mixin.CheckType (eventType, Mixin.Argument.eventType);
-			event_type = eventType;
-		}
-
-		protected override IMemberDefinition ResolveDefinition ()
-		{
-			return this.Resolve ();
-		}
-
-		public new abstract EventDefinition Resolve ();
-	}
+        public new abstract EventDefinition Resolve();
+    }
 }

@@ -10,17 +10,22 @@ namespace FishNet.CodeGenerating.Helping
 {
     internal class CreatedSyncVarGenerator
     {
-        private readonly Dictionary<TypeDefinition, CreatedSyncVar> _createdSyncVars = new Dictionary<TypeDefinition, CreatedSyncVar>(new TypeDefinitionComparer());
+        private readonly Dictionary<TypeDefinition, CreatedSyncVar>
+            _createdSyncVars = new(new TypeDefinitionComparer());
 
         #region Relfection references.
+
         private TypeReference _syncBase_TypeRef;
         internal TypeReference SyncVar_TypeRef;
         private MethodReference _syncVar_Constructor_MethodRef;
+
         #endregion
 
         #region Const.
+
         private const string GETVALUE_NAME = "GetValue";
         private const string SETVALUE_NAME = "SetValue";
+
         #endregion
 
         /* //feature add and test the dirty boolean changes
@@ -35,11 +40,11 @@ namespace FishNet.CodeGenerating.Helping
         /// <returns></returns>
         internal bool ImportReferences()
         {
-            SyncVar_TypeRef = CodegenSession.ImportReference(typeof(SyncVar<>)); 
-            MethodDefinition svConstructor = SyncVar_TypeRef.GetFirstConstructor(true);
+            SyncVar_TypeRef = CodegenSession.ImportReference(typeof(SyncVar<>));
+            var svConstructor = SyncVar_TypeRef.GetFirstConstructor(true);
             _syncVar_Constructor_MethodRef = CodegenSession.ImportReference(svConstructor);
 
-            Type syncBaseType = typeof(SyncBase);
+            var syncBaseType = typeof(SyncBase);
             _syncBase_TypeRef = CodegenSession.ImportReference(syncBaseType);
 
             return true;
@@ -52,10 +57,10 @@ namespace FishNet.CodeGenerating.Helping
         /// <returns></returns>
         internal CreatedSyncVar GetCreatedSyncVar(FieldDefinition originalFd, bool createMissing)
         {
-            TypeReference dataTr = originalFd.FieldType;
-            TypeDefinition dataTd = dataTr.CachedResolve();
+            var dataTr = originalFd.FieldType;
+            var dataTd = dataTr.CachedResolve();
 
-            if (_createdSyncVars.TryGetValue(dataTd, out CreatedSyncVar createdSyncVar))
+            if (_createdSyncVars.TryGetValue(dataTd, out var createdSyncVar))
             {
                 return createdSyncVar;
             }
@@ -66,54 +71,50 @@ namespace FishNet.CodeGenerating.Helping
 
                 CodegenSession.ImportReference(dataTd);
 
-                GenericInstanceType syncVarGit = SyncVar_TypeRef.MakeGenericInstanceType(new TypeReference[] { dataTr });
-                TypeReference genericDataTr = syncVarGit.GenericArguments[0];
+                var syncVarGit = SyncVar_TypeRef.MakeGenericInstanceType(new TypeReference[] {dataTr});
+                var genericDataTr = syncVarGit.GenericArguments[0];
 
                 //Make sure can serialize.
-                bool canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(genericDataTr, true);
+                var canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(genericDataTr, true);
                 if (!canSerialize)
                 {
-                    CodegenSession.LogError($"SyncVar {originalFd.Name} data type {genericDataTr.FullName} does not support serialization. Use a supported type or create a custom serializer.");
+                    CodegenSession.LogError(
+                        $"SyncVar {originalFd.Name} data type {genericDataTr.FullName} does not support serialization. Use a supported type or create a custom serializer.");
                     return null;
                 }
 
                 //Set needed methods from syncbase.
                 MethodReference setSyncIndexMr;
-                MethodReference genericSyncVarCtor = _syncVar_Constructor_MethodRef.MakeHostInstanceGeneric(syncVarGit);
+                var genericSyncVarCtor = _syncVar_Constructor_MethodRef.MakeHostInstanceGeneric(syncVarGit);
 
-                if (!CodegenSession.NetworkBehaviourSyncProcessor.SetSyncBaseMethods(_syncBase_TypeRef.CachedResolve(), out setSyncIndexMr, out _))
+                if (!CodegenSession.NetworkBehaviourSyncProcessor.SetSyncBaseMethods(_syncBase_TypeRef.CachedResolve(),
+                        out setSyncIndexMr, out _))
                     return null;
 
                 MethodReference setValueMr = null;
                 MethodReference getValueMr = null;
-                foreach (MethodDefinition md in SyncVar_TypeRef.CachedResolve().Methods)
-                {
+                foreach (var md in SyncVar_TypeRef.CachedResolve().Methods)
                     //GetValue.
                     if (md.Name == GETVALUE_NAME)
                     {
-                        MethodReference mr = CodegenSession.ImportReference(md);
+                        var mr = CodegenSession.ImportReference(md);
                         getValueMr = mr.MakeHostInstanceGeneric(syncVarGit);
                     }
                     //SetValue.
                     else if (md.Name == SETVALUE_NAME)
                     {
-                        MethodReference mr = CodegenSession.ImportReference(md);
+                        var mr = CodegenSession.ImportReference(md);
                         setValueMr = mr.MakeHostInstanceGeneric(syncVarGit);
                     }
-
-                }
 
                 if (setValueMr == null || getValueMr == null)
                     return null;
 
-                CreatedSyncVar csv = new CreatedSyncVar(syncVarGit, dataTd, getValueMr, setValueMr, setSyncIndexMr, null, genericSyncVarCtor);
+                var csv = new CreatedSyncVar(syncVarGit, dataTd, getValueMr, setValueMr, setSyncIndexMr, null,
+                    genericSyncVarCtor);
                 _createdSyncVars.Add(dataTd, csv);
                 return csv;
             }
         }
-
-
     }
-
-
 }

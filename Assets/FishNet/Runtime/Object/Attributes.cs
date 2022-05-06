@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FishNet.Object
 {
-
     /// <summary>
     /// ServerRpc methods will send messages to the server.
     /// </summary>
@@ -16,6 +15,7 @@ namespace FishNet.Object
         /// True to only allow the owning client to call this RPC.
         /// </summary>
         public bool RequireOwnership = true;
+
         /// <summary>
         /// True to also run the RPC logic locally.
         /// </summary>
@@ -32,11 +32,13 @@ namespace FishNet.Object
         /// True to also send data to the owner of object.
         /// </summary>
         public bool IncludeOwner = true;
+
         /// <summary>
         /// True to buffer the last value and send it to new players when the object is spawned for them.
         /// RPC will be sent on the same channel as the original RPC, and immediately before the OnSpawnServer override.
         /// </summary>
         public bool BufferLast = false;
+
         /// <summary>
         /// True to also run the RPC logic locally.
         /// </summary>
@@ -47,7 +49,7 @@ namespace FishNet.Object
     /// TargetRpc methods will send messages to a single client.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
-    public class TargetRpcAttribute : Attribute 
+    public class TargetRpcAttribute : Attribute
     {
         /// <summary>
         /// True to also run the RPC logic locally.
@@ -78,6 +80,7 @@ namespace FishNet.Object
         /// Type of logging to use when the IsClient check fails.
         /// </summary>
         public LoggingType Logging = LoggingType.Warning;
+
         /// <summary>
         /// True to only allow a client to run the method if they are owner of the object.
         /// </summary>
@@ -88,7 +91,6 @@ namespace FishNet.Object
 
 namespace FishNet.Object.Synchronizing
 {
-
     /// <summary>
     /// Synchronizes collections or objects from the server to clients. Can be used with custom SyncObjects.
     /// Value must be changed on server.
@@ -100,6 +102,7 @@ namespace FishNet.Object.Synchronizing
         /// How often values may update over the network.
         /// </summary>
         public float SendRate = 0.1f;
+
         /// <summary>
         /// Clients which may receive value updates.
         /// </summary>
@@ -117,18 +120,20 @@ namespace FishNet.Object.Synchronizing
         /// How often values may update over the network.
         /// </summary>
         public float SendRate = 0.1f;
+
         /// <summary>
         /// Clients which may receive value updates.
         /// </summary>
         public ReadPermission ReadPermissions = ReadPermission.Observers;
+
         /// <summary>
         /// Channel to use. Unreliable SyncVars will use eventual consistency.
         /// </summary>
         public Channel Channel;
+
         ///<summary>
         /// Method which will be called on the server and clients when the value changes.
         ///</summary>
         public string OnChange;
     }
-
 }

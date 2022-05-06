@@ -25,8 +25,8 @@ namespace LiteNetLib
         {
             if (_reliable && OutgoingQueue.Count == 0)
             {
-                long currentTime = DateTime.UtcNow.Ticks;
-                long packetHoldTime = currentTime - _lastPacketSendTime;
+                var currentTime = DateTime.UtcNow.Ticks;
+                var packetHoldTime = currentTime - _lastPacketSendTime;
                 if (packetHoldTime >= Peer.ResendDelay * TimeSpan.TicksPerMillisecond)
                 {
                     var packet = _lastPacket;
@@ -42,7 +42,7 @@ namespace LiteNetLib
                 while (OutgoingQueue.TryDequeue(out var packet))
                 {
                     _localSequence = (_localSequence + 1) % NetConstants.MaxSequence;
-                    packet.Sequence = (ushort)_localSequence;
+                    packet.Sequence = (ushort) _localSequence;
                     packet.ChannelId = _id;
                     Peer.SendUserData(packet);
 
@@ -78,8 +78,9 @@ namespace LiteNetLib
                     _lastPacket = null;
                 return false;
             }
-            int relative = NetUtils.RelativeSequenceNumber(packet.Sequence, _remoteSequence);
-            bool packetProcessed = false;
+
+            var relative = NetUtils.RelativeSequenceNumber(packet.Sequence, _remoteSequence);
+            var packetProcessed = false;
             if (packet.Sequence < NetConstants.MaxSequence && relative > 0)
             {
                 if (Peer.NetManager.EnableStatistics)
@@ -92,7 +93,7 @@ namespace LiteNetLib
                 Peer.NetManager.CreateReceiveEvent(
                     packet,
                     _reliable ? DeliveryMethod.ReliableSequenced : DeliveryMethod.Sequenced,
-                    (byte)(packet.ChannelId / NetConstants.ChannelTypeCount),
+                    (byte) (packet.ChannelId / NetConstants.ChannelTypeCount),
                     NetConstants.ChanneledHeaderSize,
                     Peer);
                 packetProcessed = true;

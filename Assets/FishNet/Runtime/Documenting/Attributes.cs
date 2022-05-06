@@ -1,8 +1,8 @@
-﻿
-using System;
+﻿using System;
 
 namespace FishNet.Documenting
 {
-    public class APIExcludeAttribute : Attribute { }
-
+    public class APIExcludeAttribute : Attribute
+    {
+    }
 }

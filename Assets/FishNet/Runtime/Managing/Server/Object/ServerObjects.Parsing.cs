@@ -10,20 +10,19 @@ namespace FishNet.Managing.Server
 {
     public partial class ServerObjects : ManagedObjects
     {
-
         /// <summary>
         /// Parses a ReplicateRpc.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void ParseReplicateRpc(PooledReader reader, NetworkConnection conn, Channel channel)
         {
-            NetworkBehaviour nb = reader.ReadNetworkBehaviour();
-            int dataLength = Packets.GetPacketLength((ushort)PacketId.ServerRpc, reader, channel);
+            var nb = reader.ReadNetworkBehaviour();
+            var dataLength = Packets.GetPacketLength((ushort) PacketId.ServerRpc, reader, channel);
 
             if (nb != null)
                 nb.OnReplicateRpc(null, reader, conn, channel);
             else
-                SkipDataLength((ushort)PacketId.ServerRpc, reader, dataLength);
+                SkipDataLength((ushort) PacketId.ServerRpc, reader, dataLength);
         }
 
         /// <summary>
@@ -32,14 +31,13 @@ namespace FishNet.Managing.Server
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void ParseServerRpc(PooledReader reader, NetworkConnection conn, Channel channel)
         {
-            NetworkBehaviour nb = reader.ReadNetworkBehaviour();
-            int dataLength = Packets.GetPacketLength((ushort)PacketId.ServerRpc, reader, channel);
+            var nb = reader.ReadNetworkBehaviour();
+            var dataLength = Packets.GetPacketLength((ushort) PacketId.ServerRpc, reader, channel);
 
             if (nb != null)
                 nb.OnServerRpc(reader, conn, channel);
             else
-                SkipDataLength((ushort)PacketId.ServerRpc, reader, dataLength);
+                SkipDataLength((ushort) PacketId.ServerRpc, reader, dataLength);
         }
     }
-
 }

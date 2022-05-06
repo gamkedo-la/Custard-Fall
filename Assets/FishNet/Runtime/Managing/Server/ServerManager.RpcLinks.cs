@@ -8,17 +8,18 @@ namespace FishNet.Managing.Server
 {
     public sealed partial class ServerManager : MonoBehaviour
     {
-
-
         #region Internal
+
         /// <summary>
         /// Current RPCLinks.
         /// </summary>
-        internal Dictionary<ushort, RpcLink> RpcLinks = new Dictionary<ushort, RpcLink>();
+        internal Dictionary<ushort, RpcLink> RpcLinks = new();
+
         /// <summary>
         /// RPCLink indexes which can be used.
         /// </summary>
-        private Stack<ushort> _availableRpcLinkIndexes = new Stack<ushort>();
+        private Stack<ushort> _availableRpcLinkIndexes = new();
+
         #endregion
 
         /// <summary>
@@ -29,12 +30,12 @@ namespace FishNet.Managing.Server
             /* Brute force enum values. 
              * Linq Last/Max lookup throws for IL2CPP. */
             ushort highestValue = 0;
-            Array pidValues = Enum.GetValues(typeof(PacketId));
+            var pidValues = Enum.GetValues(typeof(PacketId));
             foreach (PacketId pid in pidValues)
-                highestValue = Math.Max(highestValue, (ushort)pid);
+                highestValue = Math.Max(highestValue, (ushort) pid);
 
             highestValue += 1;
-            for (ushort i = highestValue; i < ushort.MaxValue; i++)
+            for (var i = highestValue; i < ushort.MaxValue; i++)
                 _availableRpcLinkIndexes.Push(i);
         }
 
@@ -69,8 +70,6 @@ namespace FishNet.Managing.Server
         /// </summary>
         internal void ReturnRpcLinks()
         {
-
         }
     }
-
 }

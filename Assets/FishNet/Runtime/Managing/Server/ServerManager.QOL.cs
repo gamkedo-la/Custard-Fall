@@ -17,18 +17,15 @@ namespace FishNet.Managing.Server
         /// <returns></returns>
         internal bool OneServerStarted()
         {
-            int startedCount = 0;
-            TransportManager tm = NetworkManager.TransportManager;
+            var startedCount = 0;
+            var tm = NetworkManager.TransportManager;
             //If using multipass check all transports.
             if (tm.Transport is Multipass mp)
             {
-                
-                foreach (Transport t in mp.Transports)
-                {
+                foreach (var t in mp.Transports)
                     //Another transport is started, no need to load start scenes again.
                     if (t.GetConnectionState(true) == LocalConnectionStates.Started)
                         startedCount++;
-                }
             }
             //Not using multipass.
             else
@@ -37,7 +34,7 @@ namespace FishNet.Managing.Server
                     startedCount = 1;
             }
 
-            return (startedCount == 1);
+            return startedCount == 1;
         }
 
         /// <summary>
@@ -47,14 +44,14 @@ namespace FishNet.Managing.Server
         /// <returns></returns>
         internal bool AnyServerStarted(int? excludedIndex = null)
         {
-            TransportManager tm = NetworkManager.TransportManager;
+            var tm = NetworkManager.TransportManager;
             //If using multipass check all transports.
             if (tm.Transport is Multipass mp)
             {
                 //Get transport which had state changed.
-                Transport excludedTransport = (excludedIndex == null) ? null : mp.GetTransport(excludedIndex.Value);
+                var excludedTransport = excludedIndex == null ? null : mp.GetTransport(excludedIndex.Value);
 
-                foreach (Transport t in mp.Transports)
+                foreach (var t in mp.Transports)
                 {
                     /* Skip t if is the transport that had it's state changed.
                      * We are looking for other transports already in started. */
@@ -68,7 +65,7 @@ namespace FishNet.Managing.Server
             //Not using multipass.
             else
             {
-                return (tm.Transport.GetConnectionState(true) == LocalConnectionStates.Started);
+                return tm.Transport.GetConnectionState(true) == LocalConnectionStates.Started;
             }
 
             //Fall through, none started.
@@ -90,7 +87,7 @@ namespace FishNet.Managing.Server
                 return;
             }
 
-            NetworkObject nob = go.GetComponent<NetworkObject>();
+            var nob = go.GetComponent<NetworkObject>();
             Spawn(nob, ownerConnection);
         }
 
@@ -126,7 +123,7 @@ namespace FishNet.Managing.Server
                 return;
             }
 
-            NetworkObject nob = go.GetComponent<NetworkObject>();
+            var nob = go.GetComponent<NetworkObject>();
             Despawn(nob);
         }
 
@@ -142,9 +139,8 @@ namespace FishNet.Managing.Server
                     Debug.LogWarning($"NetworkObject cannot be despawned because it is null.");
                 return;
             }
+
             Objects.Despawn(networkObject, true);
         }
     }
-
-
 }

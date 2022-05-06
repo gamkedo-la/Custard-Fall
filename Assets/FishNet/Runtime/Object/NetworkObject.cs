@@ -17,28 +17,33 @@ namespace FishNet.Object
     public sealed partial class NetworkObject : MonoBehaviour
     {
         #region Public.
+
         /// <summary>
         /// True if this NetworkObject was active during edit. Will be true if placed in scene during edit, and was in active state on run.
         /// </summary>
         internal bool ActiveDuringEdit;
+
         /// <summary>
         /// Returns if this object was placed in the scene during edit-time.
         /// </summary>
         /// <returns></returns>
-        public bool SceneObject => (SceneId > 0);
+        public bool SceneObject => SceneId > 0;
+
         /// <summary>
         /// Unique Id for this NetworkObject. This does not represent the object owner.
         /// </summary>
         public int ObjectId { get; private set; }
+
         /// <summary>
         /// True if this NetworkObject is deinitializing. Will also be true until Initialize is called. May be false until the object is cleaned up if object is destroyed without using Despawn.
         /// </summary>
         internal bool Deinitializing { get; private set; } = true;
+
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField, HideInInspector]
-        private NetworkBehaviour[] _networkBehaviours;
+        [SerializeField] [HideInInspector] private NetworkBehaviour[] _networkBehaviours;
+
         /// <summary>
         /// NetworkBehaviours within the root and children of this object.
         /// </summary>
@@ -47,20 +52,24 @@ namespace FishNet.Object
             get => _networkBehaviours;
             private set => _networkBehaviours = value;
         }
+
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField, HideInInspector]
-        internal SceneTransformProperties SceneTransformProperties = new SceneTransformProperties();
+        [SerializeField] [HideInInspector] internal SceneTransformProperties SceneTransformProperties = new();
+
         #endregion
 
         #region Serialized.
+
         /// <summary>
         /// Default value for IsNetworked. True if this object is acting as a NetworkedObject. Using network Spawn() will always set this object as networked.
         /// </summary>
-        [Tooltip("Default value for IsNetworked. True if this object is acting as a NetworkedObject. Using network Spawn() will always set this object as networked.")]
+        [Tooltip(
+            "Default value for IsNetworked. True if this object is acting as a NetworkedObject. Using network Spawn() will always set this object as networked.")]
         [SerializeField]
         private bool _isNetworked = true;
+
         /// <summary>
         /// Default value for IsNetworked.True if this object is acting as a NetworkedObject.Using network Spawn() will always set this object as networked.
         /// </summary>
@@ -69,6 +78,7 @@ namespace FishNet.Object
             get => _isNetworked;
             private set => _isNetworked = value;
         }
+
         /// <summary>
         /// Sets IsNetworked value.
         /// </summary>
@@ -76,14 +86,15 @@ namespace FishNet.Object
         internal void SetIsNetworked(bool isNetworked)
         {
             IsNetworked = isNetworked;
-            for (int i = 0; i < ChildNetworkObjects.Count; i++)
+            for (var i = 0; i < ChildNetworkObjects.Count; i++)
                 ChildNetworkObjects[i].SetIsNetworked(isNetworked);
         }
+
         /// <summary>
         /// NetworkObjects which are children of this one.
         /// </summary>
-        [SerializeField, HideInInspector]
-        internal List<NetworkObject> ChildNetworkObjects = new List<NetworkObject>();
+        [SerializeField] [HideInInspector] internal List<NetworkObject> ChildNetworkObjects = new();
+
         #endregion
 
         private void Awake()
@@ -93,15 +104,16 @@ namespace FishNet.Object
             if (ApplicationState.IsPlaying())
             {
                 //If this has a parent check for higher up network objects.
-                Transform start = transform.root;
+                var start = transform.root;
                 if (start != null && start != transform)
                 {
-                    NetworkObject parentNob = start.GetComponentInParent<NetworkObject>();
+                    var parentNob = start.GetComponentInParent<NetworkObject>();
                     //Disallow child network objects for now.
                     if (parentNob != null)
                     {
                         if (IsNetworked && InstanceFinder.NetworkManager.CanLog(LoggingType.Common))
-                            Debug.Log($"NetworkObject removed from object {gameObject.name}, child of {start.name}. This message is informative only and may be ignored.");
+                            Debug.Log(
+                                $"NetworkObject removed from object {gameObject.name}, child of {start.name}. This message is informative only and may be ignored.");
                         DestroyImmediate(this);
                     }
                 }
@@ -183,12 +195,14 @@ namespace FishNet.Object
             else
                 IsClient = isActive;
         }
+
         /// <summary>
         /// Initializes this script. This is only called once even when as host.
         /// </summary>
         /// <param name="networkManager"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void InitializeOnceInternal(NetworkManager networkManager, int objectId, NetworkConnection owner, bool asServer)
+        internal void InitializeOnceInternal(NetworkManager networkManager, int objectId, NetworkConnection owner,
+            bool asServer)
         {
             Deinitializing = false;
             //QOL references.
@@ -209,7 +223,7 @@ namespace FishNet.Object
              * The method called is dependent on NetworkManager being set. */
             AddDefaultNetworkObserverConditions();
 
-            for (int i = 0; i < NetworkBehaviours.Length; i++)
+            for (var i = 0; i < NetworkBehaviours.Length; i++)
                 NetworkBehaviours[i].InitializeOnceInternal();
 
             /* NetworkObserver uses some information from
@@ -304,12 +318,13 @@ namespace FishNet.Object
             if (NetworkBehaviours.Length > byte.MaxValue)
             {
                 if (NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"Currently only {byte.MaxValue} NetworkBehaviour scripts per object are allowed. Object {gameObject.name} will not initialized.");
+                    Debug.LogError(
+                        $"Currently only {byte.MaxValue} NetworkBehaviour scripts per object are allowed. Object {gameObject.name} will not initialized.");
             }
             else
             {
-                for (int i = 0; i < NetworkBehaviours.Length; i++)
-                    NetworkBehaviours[i].SerializeComponents(this, (byte)i);
+                for (var i = 0; i < NetworkBehaviours.Length; i++)
+                    NetworkBehaviours[i].SerializeComponents(this, (byte) i);
             }
         }
 
@@ -368,6 +383,7 @@ namespace FishNet.Object
         {
             GiveOwnership(null, true);
         }
+
         /// <summary>
         /// Gives ownership to newOwner.
         /// </summary>
@@ -376,6 +392,7 @@ namespace FishNet.Object
         {
             GiveOwnership(newOwner, true);
         }
+
         /// <summary>
         /// Gives ownership to newOwner.
         /// </summary>
@@ -389,7 +406,8 @@ namespace FishNet.Object
                 if (!NetworkManager.IsServer)
                 {
                     if (NetworkManager.CanLog(LoggingType.Warning))
-                        Debug.LogWarning($"Ownership cannot be given for object {gameObject.name}. Only server may give ownership.");
+                        Debug.LogWarning(
+                            $"Ownership cannot be given for object {gameObject.name}. Only server may give ownership.");
                     return;
                 }
 
@@ -398,16 +416,15 @@ namespace FishNet.Object
                     return;
 
                 if (newOwner != null && newOwner.IsActive && !newOwner.LoadedStartScenes)
-                {
                     if (NetworkManager.CanLog(LoggingType.Warning))
-                        Debug.LogWarning($"Ownership has been transfered to ConnectionId {newOwner.ClientId} but this is not recommended until after they have loaded start scenes. You can be notified when a connection loads start scenes by using connection.OnLoadedStartScenes on the connection, or SceneManager.OnClientLoadStartScenes.");
-                }
+                        Debug.LogWarning(
+                            $"Ownership has been transfered to ConnectionId {newOwner.ClientId} but this is not recommended until after they have loaded start scenes. You can be notified when a connection loads start scenes by using connection.OnLoadedStartScenes on the connection, or SceneManager.OnClientLoadStartScenes.");
             }
 
-            bool activeNewOwner = (newOwner != null && newOwner.IsActive);
+            var activeNewOwner = newOwner != null && newOwner.IsActive;
 
             //Set prevOwner, disallowing null.
-            NetworkConnection prevOwner = Owner;
+            var prevOwner = Owner;
             if (prevOwner == null)
                 prevOwner = NetworkManager.EmptyConnection;
 
@@ -424,6 +441,7 @@ namespace FishNet.Object
                 if (prevOwner.IsValid)
                     prevOwner.RemoveObject(this);
             }
+
             //After changing owners invoke callbacks.
             InvokeOwnership(prevOwner, asServer);
 
@@ -433,7 +451,7 @@ namespace FishNet.Object
                 if (activeNewOwner)
                     NetworkManager.ServerManager.Objects.RebuildObservers(this, newOwner);
 
-                using (PooledWriter writer = WriterPool.GetWriter())
+                using (var writer = WriterPool.GetWriter())
                 {
                     writer.WritePacketId(PacketId.OwnershipChange);
                     writer.WriteNetworkObject(this);
@@ -441,15 +459,18 @@ namespace FishNet.Object
                     //If sharing then send to all observers.
                     if (NetworkManager.ServerManager.ShareIds)
                     {
-                        NetworkManager.TransportManager.SendToClients((byte)Channel.Reliable, writer.GetArraySegment(), this);
+                        NetworkManager.TransportManager.SendToClients((byte) Channel.Reliable, writer.GetArraySegment(),
+                            this);
                     }
                     //Only sending to old / new.
                     else
                     {
                         if (prevOwner.IsActive)
-                            NetworkManager.TransportManager.SendToClient((byte)Channel.Reliable, writer.GetArraySegment(), prevOwner);
+                            NetworkManager.TransportManager.SendToClient((byte) Channel.Reliable,
+                                writer.GetArraySegment(), prevOwner);
                         if (activeNewOwner)
-                            NetworkManager.TransportManager.SendToClient((byte)Channel.Reliable, writer.GetArraySegment(), newOwner);
+                            NetworkManager.TransportManager.SendToClient((byte) Channel.Reliable,
+                                writer.GetArraySegment(), newOwner);
                     }
                 }
 
@@ -474,7 +495,7 @@ namespace FishNet.Object
         /// <returns></returns>
         internal ChangedTransformProperties GetChangedSceneTransformProperties()
         {
-            ChangedTransformProperties ctp = ChangedTransformProperties.Unset;
+            var ctp = ChangedTransformProperties.Unset;
             if (transform.position != SceneTransformProperties.Position)
                 ctp |= ChangedTransformProperties.Position;
             if (transform.rotation != SceneTransformProperties.Rotation)
@@ -502,6 +523,7 @@ namespace FishNet.Object
         //}
 
         #region Editor.
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -513,13 +535,16 @@ namespace FishNet.Object
             //    ChildNetworkObjects.Add(nobs[i]);
             PartialOnValidate();
         }
+
         partial void PartialOnValidate();
+
         private void Reset()
         {
             SerializeSceneTransformProperties();
             UpdateNetworkBehaviours();
             PartialReset();
         }
+
         partial void PartialReset();
 
 
@@ -537,14 +562,11 @@ namespace FishNet.Object
             * the editor and because its updated regularly while selected. */
             //If a scene object.
             if (!EditorApplication.isPlaying && !string.IsNullOrEmpty(gameObject.scene.name))
-            {
                 SceneTransformProperties = new SceneTransformProperties(
                     transform.position, transform.rotation, transform.localScale);
-            }
         }
 #endif
+
         #endregion
     }
-
 }
-

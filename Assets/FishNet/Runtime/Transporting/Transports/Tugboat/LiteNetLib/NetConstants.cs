@@ -56,13 +56,13 @@
 
         internal static readonly int[] PossibleMtu =
         {
-            576  - MaxUdpHeaderSize, //minimal (RFC 1191)
-            1024,                    //most games standard
+            576 - MaxUdpHeaderSize, //minimal (RFC 1191)
+            1024, //most games standard
             1232 - MaxUdpHeaderSize,
             1460 - MaxUdpHeaderSize, //google cloud
             1472 - MaxUdpHeaderSize, //VPN
             1492 - MaxUdpHeaderSize, //Ethernet with LLC and SNAP, PPPoE (RFC 1042)
-            1500 - MaxUdpHeaderSize  //Ethernet II (RFC 1191)
+            1500 - MaxUdpHeaderSize //Ethernet II (RFC 1191)
         };
 
         internal static readonly int MaxPacketSize = PossibleMtu[PossibleMtu.Length - 1];

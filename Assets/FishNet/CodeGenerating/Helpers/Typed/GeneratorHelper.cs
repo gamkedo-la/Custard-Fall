@@ -6,8 +6,6 @@ using UnityEngine;
 
 namespace FishNet.CodeGenerating.Helping
 {
-
-
     internal static class GeneratorHelper
     {
         /// <summary>
@@ -18,9 +16,10 @@ namespace FishNet.CodeGenerating.Helping
         /// <param name="objectTd"></param>
         /// <param name="diagnostics"></param>
         /// <returns></returns>
-        internal static SerializerType GetSerializerType(TypeReference objectTr, bool writer, out TypeDefinition objectTd)
+        internal static SerializerType GetSerializerType(TypeReference objectTr, bool writer,
+            out TypeDefinition objectTd)
         {
-            string errorPrefix = (writer) ? "CreateWrite: " : "CreateRead: ";
+            var errorPrefix = writer ? "CreateWrite: " : "CreateRead: ";
             objectTd = null;
 
             /* Check if already has a serializer. */
@@ -48,6 +47,7 @@ namespace FishNet.CodeGenerating.Helping
                 CodegenSession.LogError($"{errorPrefix}{objectTd.FullName} could not be resolved.");
                 return SerializerType.Invalid;
             }
+
             //By reference.            
             if (objectTr.IsByReference)
             {
@@ -60,7 +60,8 @@ namespace FishNet.CodeGenerating.Helping
             {
                 if (objectTr.IsMultidimensionalArray())
                 {
-                    CodegenSession.LogError($"{errorPrefix}{objectTr.Name} is an unsupported type. Multidimensional arrays are not supported");
+                    CodegenSession.LogError(
+                        $"{errorPrefix}{objectTr.Name} is an unsupported type. Multidimensional arrays are not supported");
                     return SerializerType.Invalid;
                 }
                 else
@@ -87,14 +88,14 @@ namespace FishNet.CodeGenerating.Helping
             }
             else if (objectTr.Name == typeof(System.Nullable<>).Name)
             {
-                GenericInstanceType git = objectTr as GenericInstanceType;
+                var git = objectTr as GenericInstanceType;
                 if (git.GenericArguments.Count != 1)
                     return SerializerType.Invalid;
                 else
                     return SerializerType.Nullable;
             }
             //Invalid type. This must be called after trying to generate everything but class.
-            else if (!GeneratorHelper.IsValidSerializeType(objectTd))
+            else if (!IsValidSerializeType(objectTd))
             {
                 return SerializerType.Invalid;
             }
@@ -106,7 +107,8 @@ namespace FishNet.CodeGenerating.Helping
             //Unknown type.
             else
             {
-                CodegenSession.LogError($"{errorPrefix}{objectTr.Name} is an unsupported type. Mostly because we don't know what the heck it is. Please let us know so we can fix this.");
+                CodegenSession.LogError(
+                    $"{errorPrefix}{objectTr.Name} is an unsupported type. Mostly because we don't know what the heck it is. Please let us know so we can fix this.");
                 return SerializerType.Invalid;
             }
         }
@@ -119,43 +121,50 @@ namespace FishNet.CodeGenerating.Helping
         /// <returns></returns> 
         private static bool IsValidSerializeType(TypeDefinition objectTd)
         {
-            string errorText = $"{objectTd.Name} is not a supported type. Use a supported type or provide a custom serializer";
+            var errorText =
+                $"{objectTd.Name} is not a supported type. Use a supported type or provide a custom serializer";
             //Unable to determine type, cannot generate for.
             if (objectTd == null)
             {
                 CodegenSession.LogError(errorText);
                 return false;
             }
+
             //Component.
             if (objectTd.InheritsFrom<UnityEngine.Component>())
             {
                 CodegenSession.LogError(errorText);
                 return false;
             }
+
             //Unity Object.
             if (objectTd.Is(typeof(UnityEngine.Object)))
             {
                 CodegenSession.LogError(errorText);
                 return false;
             }
+
             //ScriptableObject.
-            if (objectTd.Is(typeof(UnityEngine.ScriptableObject)))
+            if (objectTd.Is(typeof(ScriptableObject)))
             {
                 CodegenSession.LogError(errorText);
                 return false;
             }
+
             //Has generic parameters.
             if (objectTd.HasGenericParameters)
             {
                 CodegenSession.LogError(errorText);
                 return false;
             }
+
             //Is an interface.
             if (objectTd.IsInterface)
             {
                 CodegenSession.LogError(errorText);
                 return false;
             }
+
             //Is abstract.
             if (objectTd.IsAbstract)
             {
@@ -166,9 +175,5 @@ namespace FishNet.CodeGenerating.Helping
             //If here type is valid.
             return true;
         }
-
-
     }
-
-
 }

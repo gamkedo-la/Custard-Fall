@@ -26,7 +26,7 @@ namespace LiteNetLib.Utils
     /// </remarks>
     public class NtpPacket
     {
-        private static readonly DateTime Epoch = new DateTime(1900, 1, 1);
+        private static readonly DateTime Epoch = new(1900, 1, 1);
 
         /// <summary>
         /// Gets RFC4330-encoded SNTP packet.
@@ -51,7 +51,7 @@ namespace LiteNetLib.Utils
         /// <remarks>
         /// Only servers fill in this property. Clients can consult this property for possible leap second warning.
         /// </remarks>
-        public NtpLeapIndicator LeapIndicator => (NtpLeapIndicator)((Bytes[0] & 0xC0) >> 6);
+        public NtpLeapIndicator LeapIndicator => (NtpLeapIndicator) ((Bytes[0] & 0xC0) >> 6);
 
         /// <summary>
         /// Gets or sets protocol version number.
@@ -66,7 +66,7 @@ namespace LiteNetLib.Utils
         public int VersionNumber
         {
             get => (Bytes[0] & 0x38) >> 3;
-            private set => Bytes[0] = (byte)((Bytes[0] & ~0x38) | value << 3);
+            private set => Bytes[0] = (byte) ((Bytes[0] & ~0x38) | (value << 3));
         }
 
         /// <summary>
@@ -78,8 +78,8 @@ namespace LiteNetLib.Utils
         /// </value>
         public NtpMode Mode
         {
-            get => (NtpMode)(Bytes[0] & 0x07);
-            private set => Bytes[0] = (byte)((Bytes[0] & ~0x07) | (int)value);
+            get => (NtpMode) (Bytes[0] & 0x07);
+            private set => Bytes[0] = (byte) ((Bytes[0] & ~0x07) | (int) value);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace LiteNetLib.Utils
         /// <value>
         /// Clock precision in log2 seconds, e.g. -20 for microsecond precision.
         /// </value>
-        public int Precision => (sbyte)Bytes[3];
+        public int Precision => (sbyte) Bytes[3];
 
         /// <summary>
         /// Gets the total round-trip delay from the server to the reference clock.
@@ -200,7 +200,11 @@ namespace LiteNetLib.Utils
         /// </remarks>
         /// <seealso cref="NtpPacket.CorrectionOffset" />
         /// <seealso cref="NtpPacket.RoundTripTime" />
-        public DateTime? TransmitTimestamp { get { return GetDateTime64(40); } private set { SetDateTime64(40, value); } }
+        public DateTime? TransmitTimestamp
+        {
+            get => GetDateTime64(40);
+            private set => SetDateTime64(40, value);
+        }
 
         /// <summary>
         /// Gets or sets the time of reception of response SNTP packet on the client.
@@ -232,7 +236,8 @@ namespace LiteNetLib.Utils
             get
             {
                 CheckTimestamps();
-                return (ReceiveTimestamp.Value - OriginTimestamp.Value) + (DestinationTimestamp.Value - TransmitTimestamp.Value);
+                return ReceiveTimestamp.Value - OriginTimestamp.Value +
+                       (DestinationTimestamp.Value - TransmitTimestamp.Value);
             }
         }
 
@@ -253,7 +258,8 @@ namespace LiteNetLib.Utils
             get
             {
                 CheckTimestamps();
-                return TimeSpan.FromTicks(((ReceiveTimestamp.Value - OriginTimestamp.Value) - (DestinationTimestamp.Value - TransmitTimestamp.Value)).Ticks / 2);
+                return TimeSpan.FromTicks((ReceiveTimestamp.Value - OriginTimestamp.Value -
+                                           (DestinationTimestamp.Value - TransmitTimestamp.Value)).Ticks / 2);
             }
         }
 
@@ -290,7 +296,7 @@ namespace LiteNetLib.Utils
         /// <returns></returns>
         public static NtpPacket FromServerResponse(byte[] bytes, DateTime destinationTimestamp)
         {
-            return new NtpPacket(bytes) { DestinationTimestamp = destinationTimestamp };
+            return new NtpPacket(bytes) {DestinationTimestamp = destinationTimestamp};
         }
 
         internal void ValidateRequest()
@@ -310,7 +316,8 @@ namespace LiteNetLib.Utils
             if (VersionNumber == 0)
                 throw new InvalidOperationException("Protocol version of the reply is not specified.");
             if (Stratum == 0)
-                throw new InvalidOperationException(string.Format("Received Kiss-o'-Death SNTP packet with code 0x{0:x}.", ReferenceId));
+                throw new InvalidOperationException(
+                    string.Format("Received Kiss-o'-Death SNTP packet with code 0x{0:x}.", ReferenceId));
             if (LeapIndicator == NtpLeapIndicator.AlarmCondition)
                 throw new InvalidOperationException("SNTP server has unsynchronized clock.");
             CheckTimestamps();
@@ -338,12 +345,13 @@ namespace LiteNetLib.Utils
 
         private void SetDateTime64(int offset, DateTime? value)
         {
-            SetUInt64BE(offset, value == null ? 0 : Convert.ToUInt64((value.Value.Ticks - Epoch.Ticks) * (0.0000001 * (1L << 32))));
+            SetUInt64BE(offset,
+                value == null ? 0 : Convert.ToUInt64((value.Value.Ticks - Epoch.Ticks) * (0.0000001 * (1L << 32))));
         }
 
         private TimeSpan GetTimeSpan32(int offset)
         {
-            return TimeSpan.FromSeconds(GetInt32BE(offset) / (double)(1 << 16));
+            return TimeSpan.FromSeconds(GetInt32BE(offset) / (double) (1 << 16));
         }
 
         private ulong GetUInt64BE(int offset)
@@ -358,7 +366,7 @@ namespace LiteNetLib.Utils
 
         private int GetInt32BE(int offset)
         {
-            return (int)GetUInt32BE(offset);
+            return (int) GetUInt32BE(offset);
         }
 
         private uint GetUInt32BE(int offset)
@@ -373,7 +381,7 @@ namespace LiteNetLib.Utils
 
         private static ulong SwapEndianness(ulong x)
         {
-            return ((ulong)SwapEndianness((uint)x) << 32) | SwapEndianness((uint)(x >> 32));
+            return ((ulong) SwapEndianness((uint) x) << 32) | SwapEndianness((uint) (x >> 32));
         }
     }
 
@@ -418,6 +426,6 @@ namespace LiteNetLib.Utils
         /// <summary>
         /// Identifies server-to-client SNTP packet.
         /// </summary>
-        Server = 4,
+        Server = 4
     }
 }

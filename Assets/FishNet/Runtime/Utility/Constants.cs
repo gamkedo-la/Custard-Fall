@@ -7,5 +7,4 @@
         public const string TEST_ASSEMBLY_NAME = "FishNet.Test";
         public const string RUNTIME_ASSEMBLY_NAME = "FishNet.Runtime";
     }
-
 }

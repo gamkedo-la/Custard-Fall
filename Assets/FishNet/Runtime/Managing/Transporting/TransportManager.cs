@@ -10,7 +10,6 @@ using UnityEngine;
 
 namespace FishNet.Managing.Transporting
 {
-
     /// <summary>
     /// Communicates with the Transport to send and receive data.
     /// </summary>
@@ -18,73 +17,91 @@ namespace FishNet.Managing.Transporting
     public sealed partial class TransportManager : MonoBehaviour
     {
         #region Public.
+
         /// <summary>
         /// Called before IterateOutgoing has started.
         /// </summary>
         internal event Action OnIterateOutgoingStart;
+
         /// <summary>
         /// Called after IterateOutgoing has completed.
         /// </summary>
         internal event Action OnIterateOutgoingEnd;
+
         /// <summary>
         /// Called before IterateIncoming has started. True for on server, false for on client.
         /// </summary>
         internal event Action<bool> OnIterateIncomingStart;
+
         /// <summary>
         /// Called after IterateIncoming has completed. True for on server, false for on client.
         /// </summary>
         internal event Action<bool> OnIterateIncomingEnd;
+
         /// <summary>
         /// The current Transport being used.
         /// </summary>
         [Tooltip("The current Transport being used.")]
         public Transport Transport;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// NetworkConnections on the server which have to send data to clients.
         /// </summary>
-        private List<NetworkConnection> _dirtyToClients = new List<NetworkConnection>();
+        private List<NetworkConnection> _dirtyToClients = new();
+
         /// <summary>
         /// PacketBundles to send to the server.
         /// </summary>
-        private List<PacketBundle> _toServerBundles = new List<PacketBundle>();
+        private List<PacketBundle> _toServerBundles = new();
+
         /// <summary>
         /// NetworkManager handling this TransportManager.
         /// </summary>
         private NetworkManager _networkManager;
+
         #endregion
 
         #region Consts.
+
         /// <summary>
         /// Number of bytes sent for PacketId.
         /// </summary>
         public const byte PACKET_ID_BYTES = 2;
+
         /// <summary>
         /// Number of bytes sent for ObjectId.
         /// </summary>
         public const byte OBJECT_ID_BYTES = 2;
+
         /// <summary>
         /// Number of bytes sent for ComponentIndex.
         /// </summary>
         public const byte COMPONENT_INDEX_BYTES = 1;
+
         /// <summary>
         /// Number of bytes sent for Tick.
         /// </summary>
         public const byte TICK_BYTES = 4;
+
         /// <summary>
         /// Number of bytes sent to indicate split count.
         /// </summary>
         private const byte SPLIT_COUNT_BYTES = 4;
+
         /// <summary>
         /// Number of bytes required for split data. 
         /// </summary>
-        public const byte SPLIT_INDICATOR_SIZE = (PACKET_ID_BYTES + SPLIT_COUNT_BYTES);
+        public const byte SPLIT_INDICATOR_SIZE = PACKET_ID_BYTES + SPLIT_COUNT_BYTES;
+
         /// <summary>
         /// Number of channels supported.
         /// </summary>
         public const byte CHANNEL_COUNT = 2;
+
         #endregion
 
         /// <summary>
@@ -122,7 +139,7 @@ namespace FishNet.Managing.Transporting
              * also setup for unreliable. */
             for (byte i = 0; i < CHANNEL_COUNT; i++)
             {
-                int mtu = Transport.GetMTU(i);
+                var mtu = Transport.GetMTU(i);
                 _toServerBundles.Add(new PacketBundle(_networkManager, mtu));
             }
         }
@@ -135,13 +152,15 @@ namespace FishNet.Managing.Transporting
         /// <param name="connection">Connection to send to. Use null for all clients.</param>
         /// <param name="splitLargeMessages">True to split large packets which exceed MTU and send them in order on the reliable channel.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void SendToClient(byte channelId, ArraySegment<byte> segment, NetworkConnection connection, bool splitLargeMessages = true)
+        internal void SendToClient(byte channelId, ArraySegment<byte> segment, NetworkConnection connection,
+            bool splitLargeMessages = true)
         {
             if (connection == null)
                 return;
 
             //Split is needed.
-            if (splitLargeMessages && SplitRequired(channelId, segment.Count, out int requiredMessages, out int maxMessageSize))
+            if (splitLargeMessages &&
+                SplitRequired(channelId, segment.Count, out var requiredMessages, out var maxMessageSize))
                 SendSplitData(connection, ref segment, requiredMessages, maxMessageSize);
             //Split not needed.
             else
@@ -155,9 +174,10 @@ namespace FishNet.Managing.Transporting
         /// <param name="segment"></param>
         /// <param name="observers"></param>
         /// <param name="splitLargeIntoReliable">True to split large packets which exceed MTU and send them in order on the reliable channel.</param>
-        internal void SendToClients(byte channelId, ArraySegment<byte> segment, HashSet<NetworkConnection> observers, bool splitLargeIntoReliable = true)
+        internal void SendToClients(byte channelId, ArraySegment<byte> segment, HashSet<NetworkConnection> observers,
+            bool splitLargeIntoReliable = true)
         {
-            foreach (NetworkConnection conn in observers)
+            foreach (var conn in observers)
                 SendToClient(channelId, segment, conn, splitLargeIntoReliable);
         }
 
@@ -168,20 +188,15 @@ namespace FishNet.Managing.Transporting
         /// <param name="segment">Data to send.</param>
         /// <param name="nob">NetworkObject being used to send data.</param>
         /// <param name="splitLargeMessages">True to split large packets which exceed MTU and send them in order on the reliable channel.</param>
-        internal void SendToClients(byte channelId, ArraySegment<byte> segment, NetworkObject networkObject, bool excludeOwner = false, bool splitLargeMessages = true)
+        internal void SendToClients(byte channelId, ArraySegment<byte> segment, NetworkObject networkObject,
+            bool excludeOwner = false, bool splitLargeMessages = true)
         {
             if (!excludeOwner)
-            {
                 SendToClients(channelId, segment, networkObject.Observers, splitLargeMessages);
-            }
             else
-            {
-                foreach (NetworkConnection conn in networkObject.Observers)
-                {
+                foreach (var conn in networkObject.Observers)
                     if (conn != networkObject.Owner)
                         SendToClient(channelId, segment, conn, splitLargeMessages);
-                }
-            }
         }
 
         /// <summary>
@@ -197,7 +212,7 @@ namespace FishNet.Managing.Transporting
              * is no way to know if batch send must iterate before or
              * after connection sends. By sending to each connection order
              * is maintained. */
-            foreach (NetworkConnection conn in _networkManager.ServerManager.Clients.Values)
+            foreach (var conn in _networkManager.ServerManager.Clients.Values)
                 SendToClient(channelId, segment, conn, splitLargeMessages);
         }
 
@@ -211,11 +226,11 @@ namespace FishNet.Managing.Transporting
         internal void SendToServer(byte channelId, ArraySegment<byte> segment, bool splitMessages = true)
         {
             if (channelId >= _toServerBundles.Count)
-                channelId = (byte)Channel.Reliable;
+                channelId = (byte) Channel.Reliable;
 
             //Split is needed.
-            if (splitMessages && SplitRequired(channelId, segment.Count, out int requiredMessages, out int maxMessageSize))
-            {
+            if (splitMessages &&
+                SplitRequired(channelId, segment.Count, out var requiredMessages, out var maxMessageSize))
                 //Client is not allowed to send data sizes beyond MTU.
                 //if (_networkManager.ServerManager.LimitClientMTU) //todo uncomment and finish
                 //{
@@ -228,15 +243,13 @@ namespace FishNet.Managing.Transporting
 
                 //If here split can be sent.
                 SendSplitData(null, ref segment, requiredMessages, maxMessageSize);
-            }
             //Split not needed.
             else
-            {
                 _toServerBundles[channelId].Write(segment);
-            }
         }
 
-        #region Splitting.     
+        #region Splitting.
+
         /// <summary>
         /// True if data must be split.
         /// </summary>
@@ -245,10 +258,10 @@ namespace FishNet.Managing.Transporting
         /// <returns></returns>
         private bool SplitRequired(byte channelId, int segmentSize, out int requiredMessages, out int maxMessageSize)
         {
-            maxMessageSize = Transport.GetMTU(channelId) - (TransportManager.TICK_BYTES + SPLIT_INDICATOR_SIZE);
-            requiredMessages = Mathf.CeilToInt((float)segmentSize / maxMessageSize);
+            maxMessageSize = Transport.GetMTU(channelId) - (TICK_BYTES + SPLIT_INDICATOR_SIZE);
+            requiredMessages = Mathf.CeilToInt((float) segmentSize / maxMessageSize);
 
-            return (requiredMessages > 1);
+            return requiredMessages > 1;
         }
 
         /// <summary>
@@ -256,36 +269,39 @@ namespace FishNet.Managing.Transporting
         /// </summary>
         /// <param name="conn">Connection to send to. If null data will be sent to the server.</param>
         /// <returns>True if data was sent split.</returns>
-        private void SendSplitData(NetworkConnection conn, ref ArraySegment<byte> segment, int requiredMessages, int maxMessageSize)
+        private void SendSplitData(NetworkConnection conn, ref ArraySegment<byte> segment, int requiredMessages,
+            int maxMessageSize)
         {
             if (requiredMessages <= 1)
             {
                 if (_networkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"SendSplitData was called with {requiredMessages} required messages. This method should only be called if messages must be split into 2 pieces or more.");
+                    Debug.LogError(
+                        $"SendSplitData was called with {requiredMessages} required messages. This method should only be called if messages must be split into 2 pieces or more.");
                 return;
             }
 
-            byte channelId = (byte)Channel.Reliable;
-            PooledWriter headerWriter = WriterPool.GetWriter();
+            var channelId = (byte) Channel.Reliable;
+            var headerWriter = WriterPool.GetWriter();
             headerWriter.WritePacketId(PacketId.Split);
             headerWriter.WriteInt32(requiredMessages);
-            ArraySegment<byte> headerSegment = headerWriter.GetArraySegment();
+            var headerSegment = headerWriter.GetArraySegment();
 
-            int writeIndex = 0;
-            bool firstWrite = true;
+            var writeIndex = 0;
+            var firstWrite = true;
             //Send to connection until everything is written.
             while (writeIndex < segment.Count)
             {
-                bool wasFirst = firstWrite;
-                int headerReduction = 0;
+                var wasFirst = firstWrite;
+                var headerReduction = 0;
                 if (firstWrite)
                 {
                     headerReduction = headerSegment.Count;
                     firstWrite = false;
                 }
-                int chunkSize = Mathf.Min(segment.Count - writeIndex - headerReduction, maxMessageSize);
+
+                var chunkSize = Mathf.Min(segment.Count - writeIndex - headerReduction, maxMessageSize);
                 //Make a new array segment for the chunk that is getting split.
-                ArraySegment<byte> splitSegment = new ArraySegment<byte>(
+                var splitSegment = new ArraySegment<byte>(
                     segment.Array, segment.Offset + writeIndex, chunkSize);
 
                 //If connection is specified then it's going to a client.
@@ -306,8 +322,8 @@ namespace FishNet.Managing.Transporting
 
             headerWriter.Dispose();
         }
-        #endregion
 
+        #endregion
 
 
         /// <summary>
@@ -337,31 +353,27 @@ namespace FishNet.Managing.Transporting
                 _networkManager.ServerManager.Objects.WriteDirtySyncTypes();
 
                 //Run through all dirty connections to send data to.
-                for (int z = 0; z < _dirtyToClients.Count; z++)
+                for (var z = 0; z < _dirtyToClients.Count; z++)
                 {
-                    NetworkConnection conn = _dirtyToClients[z];
+                    var conn = _dirtyToClients[z];
                     if (conn == null || !conn.IsValid)
                         continue;
 
                     //Get packets for every channel.
                     for (byte channel = 0; channel < channelCount; channel++)
-                    {
-                        if (conn.GetPacketBundle(channel, out PacketBundle pb))
+                        if (conn.GetPacketBundle(channel, out var pb))
                         {
-                            for (int i = 0; i < pb.WrittenBuffers; i++)
-                            {
+                            for (var i = 0; i < pb.WrittenBuffers; i++)
                                 //Length should always be more than 0 but check to be safe.
-                                if (pb.GetBuffer(i, out ByteBuffer bb))
+                                if (pb.GetBuffer(i, out var bb))
                                 {
-                                    ArraySegment<byte> segment = new ArraySegment<byte>(bb.Data, 0, bb.Length);
+                                    var segment = new ArraySegment<byte>(bb.Data, 0, bb.Length);
                                     Transport.SendToClient(channel, segment, conn.ClientId);
                                     //sentBytes += (uint)segment.Count;
                                 }
-                            }
 
                             pb.Reset();
                         }
-                    }
 
                     /* A disconnection can be queued which will
                      * run through the outgoing process from server.
@@ -382,21 +394,17 @@ namespace FishNet.Managing.Transporting
             else
             {
                 for (byte channel = 0; channel < channelCount; channel++)
-                {
-                    if (PacketBundle.GetPacketBundle(channel, _toServerBundles, out PacketBundle pb))
+                    if (PacketBundle.GetPacketBundle(channel, _toServerBundles, out var pb))
                     {
-                        for (int i = 0; i < pb.WrittenBuffers; i++)
-                        {
-                            if (pb.GetBuffer(i, out ByteBuffer bb))
+                        for (var i = 0; i < pb.WrittenBuffers; i++)
+                            if (pb.GetBuffer(i, out var bb))
                             {
-                                ArraySegment<byte> segment = new ArraySegment<byte>(bb.Data, 0, bb.Length);
+                                var segment = new ArraySegment<byte>(bb.Data, 0, bb.Length);
                                 Transport.SendToServer(channel, segment);
                             }
-                        }
 
                         pb.Reset();
                     }
-                }
             }
 
             Transport.IterateOutgoing(server);
@@ -404,6 +412,7 @@ namespace FishNet.Managing.Transporting
         }
 
         #region Editor.
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
@@ -411,9 +420,7 @@ namespace FishNet.Managing.Transporting
                 Transport = GetComponent<Transport>();
         }
 #endif
+
         #endregion
-
     }
-
-
 }

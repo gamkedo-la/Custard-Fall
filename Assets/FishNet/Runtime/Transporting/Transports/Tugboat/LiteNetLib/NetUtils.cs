@@ -29,7 +29,7 @@ namespace LiteNetLib
 
         public static IPAddress ResolveAddress(string hostStr)
         {
-            if(hostStr == "localhost")
+            if (hostStr == "localhost")
                 return IPAddress.Loopback;
 
             if (!IPAddress.TryParse(hostStr, out var ipAddress))
@@ -39,6 +39,7 @@ namespace LiteNetLib
                 if (ipAddress == null)
                     ipAddress = ResolveAddress(hostStr, AddressFamily.InterNetwork);
             }
+
             if (ipAddress == null)
                 throw new ArgumentException("Invalid address: " + hostStr);
 
@@ -47,14 +48,10 @@ namespace LiteNetLib
 
         public static IPAddress ResolveAddress(string hostStr, AddressFamily addressFamily)
         {
-            IPAddress[] addresses = Dns.GetHostEntry(hostStr).AddressList;
-            foreach (IPAddress ip in addresses)
-            {
+            var addresses = Dns.GetHostEntry(hostStr).AddressList;
+            foreach (var ip in addresses)
                 if (ip.AddressFamily == addressFamily)
-                {
                     return ip;
-                }
-            }
             return null;
         }
 
@@ -65,7 +62,7 @@ namespace LiteNetLib
         /// <returns>List with all local ip addresses</returns>
         public static List<string> GetLocalIpList(LocalAddrType addrType)
         {
-            List<string> targetList = new List<string>();
+            var targetList = new List<string>();
             GetLocalIpList(targetList, addrType);
             return targetList;
         }
@@ -77,11 +74,11 @@ namespace LiteNetLib
         /// <param name="addrType">type of address (IPv4, IPv6 or both)</param>
         public static void GetLocalIpList(IList<string> targetList, LocalAddrType addrType)
         {
-            bool ipv4 = (addrType & LocalAddrType.IPv4) == LocalAddrType.IPv4;
-            bool ipv6 = (addrType & LocalAddrType.IPv6) == LocalAddrType.IPv6;
+            var ipv4 = (addrType & LocalAddrType.IPv4) == LocalAddrType.IPv4;
+            var ipv6 = (addrType & LocalAddrType.IPv6) == LocalAddrType.IPv6;
             try
             {
-                foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
+                foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
                 {
                     //Skip loopback and disabled network interfaces
                     if (ni.NetworkInterfaceType == NetworkInterfaceType.Loopback ||
@@ -94,7 +91,7 @@ namespace LiteNetLib
                     if (ipProps.GatewayAddresses.Count == 0)
                         continue;
 
-                    foreach (UnicastIPAddressInformation ip in ipProps.UnicastAddresses)
+                    foreach (var ip in ipProps.UnicastAddresses)
                     {
                         var address = ip.Address;
                         if ((ipv4 && address.AddressFamily == AddressFamily.InterNetwork) ||
@@ -111,24 +108,24 @@ namespace LiteNetLib
             //Fallback mode (unity android)
             if (targetList.Count == 0)
             {
-                IPAddress[] addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
-                foreach (IPAddress ip in addresses)
-                {
-                    if((ipv4 && ip.AddressFamily == AddressFamily.InterNetwork) ||
-                       (ipv6 && ip.AddressFamily == AddressFamily.InterNetworkV6))
+                var addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+                foreach (var ip in addresses)
+                    if ((ipv4 && ip.AddressFamily == AddressFamily.InterNetwork) ||
+                        (ipv6 && ip.AddressFamily == AddressFamily.InterNetworkV6))
                         targetList.Add(ip.ToString());
-                }
             }
+
             if (targetList.Count == 0)
             {
-                if(ipv4)
+                if (ipv4)
                     targetList.Add("127.0.0.1");
-                if(ipv6)
+                if (ipv6)
                     targetList.Add("::1");
             }
         }
 
-        private static readonly List<string> IpList = new List<string>();
+        private static readonly List<string> IpList = new();
+
         /// <summary>
         /// Get first detected local ip address
         /// </summary>
@@ -152,23 +149,17 @@ namespace LiteNetLib
             NetDebug.WriteForce(NetLogLevel.Info, "IPv6Support: {0}", NetSocket.IPv6Support);
             try
             {
-                foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
-                {
-                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
-                    {
-                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork ||
-                            ip.Address.AddressFamily == AddressFamily.InterNetworkV6)
-                        {
-                            NetDebug.WriteForce(
-                                NetLogLevel.Info,
-                                "Interface: {0}, Type: {1}, Ip: {2}, OpStatus: {3}",
-                                ni.Name,
-                                ni.NetworkInterfaceType.ToString(),
-                                ip.Address.ToString(),
-                                ni.OperationalStatus.ToString());
-                        }
-                    }
-                }
+                foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
+                foreach (var ip in ni.GetIPProperties().UnicastAddresses)
+                    if (ip.Address.AddressFamily == AddressFamily.InterNetwork ||
+                        ip.Address.AddressFamily == AddressFamily.InterNetworkV6)
+                        NetDebug.WriteForce(
+                            NetLogLevel.Info,
+                            "Interface: {0}, Type: {1}, Ip: {2}, OpStatus: {3}",
+                            ni.Name,
+                            ni.NetworkInterfaceType.ToString(),
+                            ip.Address.ToString(),
+                            ni.OperationalStatus.ToString());
             }
             catch (Exception e)
             {
@@ -178,7 +169,8 @@ namespace LiteNetLib
 
         internal static int RelativeSequenceNumber(int number, int expected)
         {
-            return (number - expected + NetConstants.MaxSequence + NetConstants.HalfMaxSequence) % NetConstants.MaxSequence - NetConstants.HalfMaxSequence;
+            return (number - expected + NetConstants.MaxSequence + NetConstants.HalfMaxSequence) %
+                NetConstants.MaxSequence - NetConstants.HalfMaxSequence;
         }
 
         internal static T[] AllocatePinnedUninitializedArray<T>(int count) where T : unmanaged

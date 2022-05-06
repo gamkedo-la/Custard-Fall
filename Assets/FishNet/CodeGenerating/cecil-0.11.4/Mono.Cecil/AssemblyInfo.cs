@@ -12,11 +12,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle (Consts.AssemblyName)]
+[assembly: AssemblyTitle(Consts.AssemblyName)]
 
-[assembly: Guid ("fd225bb4-fa53-44b2-a6db-85f5e48dcb54")]
+[assembly: Guid("fd225bb4-fa53-44b2-a6db-85f5e48dcb54")]
 
-[assembly: InternalsVisibleTo ("MonoFN.Cecil.Tests, PublicKey=" + Consts.PublicKey)]
-[assembly: InternalsVisibleTo ("MonoFN.Cecil.Pdb, PublicKey=" + Consts.PublicKey)]
-[assembly: InternalsVisibleTo ("MonoFN.Cecil.Mdb, PublicKey=" + Consts.PublicKey)]
-[assembly: InternalsVisibleTo ("MonoFN.Cecil.Rocks, PublicKey=" + Consts.PublicKey)]
+[assembly: InternalsVisibleTo("MonoFN.Cecil.Tests, PublicKey=" + Consts.PublicKey)]
+[assembly: InternalsVisibleTo("MonoFN.Cecil.Pdb, PublicKey=" + Consts.PublicKey)]
+[assembly: InternalsVisibleTo("MonoFN.Cecil.Mdb, PublicKey=" + Consts.PublicKey)]
+[assembly: InternalsVisibleTo("MonoFN.Cecil.Rocks, PublicKey=" + Consts.PublicKey)]

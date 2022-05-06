@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace FishNet.Component.Animating.Editing
 {
-
     [CustomEditor(typeof(NetworkAnimator), true)]
     [CanEditMultipleObjects]
     public class NetworkAnimatorEditor : Editor
@@ -34,42 +33,50 @@ namespace FishNet.Component.Animating.Editing
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            NetworkAnimator na = (NetworkAnimator)target;
+            var na = (NetworkAnimator) target;
 
             GUI.enabled = false;
             EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour(na), typeof(NetworkAnimator), false);
             GUI.enabled = true;
 
-            
+
 #pragma warning disable CS0162 // Unreachable code detected
-                EditorGUILayout.HelpBox(EditingConstants.PRO_ASSETS_LOCKED_TEXT, MessageType.Warning);
+            EditorGUILayout.HelpBox(EditingConstants.PRO_ASSETS_LOCKED_TEXT, MessageType.Warning);
 #pragma warning restore CS0162 // Unreachable code detected
 
             //Animator
             EditorGUILayout.LabelField("Animator", EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(_animator, new GUIContent("Animator", "The animator component to synchronize."));
+            EditorGUILayout.PropertyField(_animator,
+                new GUIContent("Animator", "The animator component to synchronize."));
             EditorGUI.indentLevel--;
             EditorGUILayout.Space();
 
             //Synchronization Processing.
             EditorGUILayout.LabelField("Synchronization Processing", EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(_synchronizeInterval, new GUIContent("Synchronize Interval", "How often to synchronize this animator."));
-            EditorGUILayout.PropertyField(_smoothFloats, new GUIContent("Smooth Floats", "True to smooth floats on spectators rather than snap to their values immediately. Commonly set to true for smooth blend tree animations."));
+            EditorGUILayout.PropertyField(_synchronizeInterval,
+                new GUIContent("Synchronize Interval", "How often to synchronize this animator."));
+            EditorGUILayout.PropertyField(_smoothFloats,
+                new GUIContent("Smooth Floats",
+                    "True to smooth floats on spectators rather than snap to their values immediately. Commonly set to true for smooth blend tree animations."));
             EditorGUI.indentLevel--;
             EditorGUILayout.Space();
 
             //Authority.
             EditorGUILayout.LabelField("Authority", EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(_clientAuthoritative, new GUIContent("Client Authoritative", "True if using client authoritative movement."));
+            EditorGUILayout.PropertyField(_clientAuthoritative,
+                new GUIContent("Client Authoritative", "True if using client authoritative movement."));
             if (_clientAuthoritative.boolValue == false)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_sendToOwner, new GUIContent("Synchronize To Owner", "True to synchronize server results back to owner. Typically used when you are sending inputs to the server and are relying on the server response to move the transform."));
+                EditorGUILayout.PropertyField(_sendToOwner,
+                    new GUIContent("Synchronize To Owner",
+                        "True to synchronize server results back to owner. Typically used when you are sending inputs to the server and are relying on the server response to move the transform."));
                 EditorGUI.indentLevel--;
             }
+
             EditorGUI.indentLevel--;
             EditorGUILayout.Space();
 
@@ -85,16 +92,20 @@ namespace FishNet.Component.Animating.Editing
 
             if (Application.isPlaying)
             {
-                EditorGUILayout.HelpBox("This feature can only be configured while out of play mode.", MessageType.Info);
+                EditorGUILayout.HelpBox("This feature can only be configured while out of play mode.",
+                    MessageType.Info);
                 return;
             }
+
             if (na == null)
                 return;
-            Animator animator = na.Animator;
+            var animator = na.Animator;
             if (animator == null)
                 return;
 
-            RuntimeAnimatorController runtimeController = (animator.runtimeAnimatorController is AnimatorOverrideController aoc) ? aoc.runtimeAnimatorController : animator.runtimeAnimatorController;
+            var runtimeController = animator.runtimeAnimatorController is AnimatorOverrideController aoc
+                ? aoc.runtimeAnimatorController
+                : animator.runtimeAnimatorController;
             if (runtimeController == null)
             {
                 na.IgnoredParameters.Clear();
@@ -105,22 +116,24 @@ namespace FishNet.Component.Animating.Editing
              * or editor controller is null
              * then get new editor controller. */
             if (runtimeController != _lastRuntimeAnimatorController || _lastAnimatorController == null)
-                _lastAnimatorController = (AnimatorController)AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(runtimeController), typeof(AnimatorController));
+                _lastAnimatorController =
+                    (AnimatorController) AssetDatabase.LoadAssetAtPath(AssetDatabase.GetAssetPath(runtimeController),
+                        typeof(AnimatorController));
             _lastRuntimeAnimatorController = runtimeController;
 
-            Color defaultColor = GUI.backgroundColor;
+            var defaultColor = GUI.backgroundColor;
             float width = Screen.width;
-            float spacePerEntry = 125f;
+            var spacePerEntry = 125f;
             //Buttons seem to be longer than spacePerEntry. Why, because who knows...
             float extraSpaceJustBecause = 60;
-            float spacer = 20f;
+            var spacer = 20f;
             width -= spacer;
-            int entriesPerWidth = Mathf.Max(1, Mathf.FloorToInt(width / (spacePerEntry + extraSpaceJustBecause)));
+            var entriesPerWidth = Mathf.Max(1, Mathf.FloorToInt(width / (spacePerEntry + extraSpaceJustBecause)));
 
-            List<AnimatorControllerParameter> aps = new List<AnimatorControllerParameter>();
+            var aps = new List<AnimatorControllerParameter>();
             //Create a parameter detail for each parameter that can be synchronized.
-            int count = 0;
-            foreach (AnimatorControllerParameter item in _lastAnimatorController.parameters)
+            var count = 0;
+            foreach (var item in _lastAnimatorController.parameters)
             {
                 count++;
                 //Over 240 parameters; who would do this!?
@@ -130,24 +143,24 @@ namespace FishNet.Component.Animating.Editing
                 aps.Add(item);
             }
 
-            int apsCount = aps.Count;
-            for (int i = 0; i < apsCount; i++)
+            var apsCount = aps.Count;
+            for (var i = 0; i < apsCount; i++)
             {
-                using (GUILayout.HorizontalScope hs = new GUILayout.HorizontalScope())
+                using (var hs = new GUILayout.HorizontalScope())
                 {
                     GUILayout.Space(spacer);
-                    int z = 0;
-                    while (z < entriesPerWidth && (z + i < apsCount))
+                    var z = 0;
+                    while (z < entriesPerWidth && z + i < apsCount)
                     {
                         //If this z+i would exceed entries then break.
                         if (z + i >= apsCount)
                             break;
 
-                        AnimatorControllerParameter item = aps[i + z];
-                        string parameterName = item.name;
-                        bool ignored = na.IgnoredParameters.Contains(parameterName);
+                        var item = aps[i + z];
+                        var parameterName = item.name;
+                        var ignored = na.IgnoredParameters.Contains(parameterName);
 
-                        Color c = (ignored) ? Color.gray : Color.green;
+                        var c = ignored ? Color.gray : Color.green;
                         GUI.backgroundColor = c;
                         if (GUILayout.Button(item.name, GUILayout.Width(spacePerEntry)))
                         {
@@ -167,17 +180,13 @@ namespace FishNet.Component.Animating.Editing
                         z++;
                     }
 
-                    i += (z - 1);
+                    i += z - 1;
                 }
 
                 GUI.backgroundColor = defaultColor;
             }
         }
-
-
-
     }
-
 }
 
 

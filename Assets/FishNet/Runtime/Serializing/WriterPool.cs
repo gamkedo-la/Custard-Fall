@@ -10,7 +10,10 @@ namespace FishNet.Serializing
     /// </summary>
     public sealed class PooledWriter : Writer, IDisposable
     {
-        public void Dispose() => WriterPool.Recycle(this);
+        public void Dispose()
+        {
+            WriterPool.Recycle(this);
+        }
     }
 
     /// <summary>
@@ -19,10 +22,12 @@ namespace FishNet.Serializing
     public static class WriterPool
     {
         #region Private.
+
         /// <summary>
         /// Pool of writers.
         /// </summary>
-        private static readonly Stack<PooledWriter> _pool = new Stack<PooledWriter>();
+        private static readonly Stack<PooledWriter> _pool = new();
+
         #endregion
 
         /// <summary>
@@ -31,10 +36,11 @@ namespace FishNet.Serializing
         /// </summary>
         public static PooledWriter GetWriter(NetworkManager networkManager)
         {
-            PooledWriter result = (_pool.Count > 0) ? _pool.Pop() : new PooledWriter();
+            var result = _pool.Count > 0 ? _pool.Pop() : new PooledWriter();
             result.Reset(networkManager);
             return result;
         }
+
         /// <summary>
         /// Get the next writer in the pool.
         /// </summary>

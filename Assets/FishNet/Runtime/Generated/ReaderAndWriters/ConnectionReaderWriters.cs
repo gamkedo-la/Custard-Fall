@@ -10,10 +10,11 @@ namespace FishNet.Runtime
     [StructLayout(LayoutKind.Auto, CharSet = CharSet.Auto)]
     public static class ConnectionReadersAndWriters
     {
-        public static void WriteClientConnectionChangeBroadcast(this Writer writer, ClientConnectionChangeBroadcast value)
+        public static void WriteClientConnectionChangeBroadcast(this Writer writer,
+            ClientConnectionChangeBroadcast value)
         {
             writer.WriteBoolean(value.Connected);
-            writer.WriteNetworkConnectionId((short)value.Id);
+            writer.WriteNetworkConnectionId((short) value.Id);
         }
 
         public static ClientConnectionChangeBroadcast ReadClientConnectionChangeBroadcast(this Reader reader)
@@ -27,24 +28,24 @@ namespace FishNet.Runtime
 
         public static void WriteConnectedClientsBroadcast(this Writer writer, ConnectedClientsBroadcast value)
         {
-            ushort count = (ushort)value.ListCache.Written;
+            var count = (ushort) value.ListCache.Written;
             writer.WriteUInt16(count);
 
-            List<int> collection = value.ListCache.Collection;
-            for (int i = 0; i < count; i++)
-                writer.WriteNetworkConnectionId((short)collection[i]);
+            var collection = value.ListCache.Collection;
+            for (var i = 0; i < count; i++)
+                writer.WriteNetworkConnectionId((short) collection[i]);
         }
 
         public static ConnectedClientsBroadcast ReadConnectedClientsBroadcast(this Reader reader)
         {
             int count = reader.ReadUInt16();
-            List<int> collection = new List<int>(count);
-            ConnectedClientsBroadcast result = new ConnectedClientsBroadcast()
+            var collection = new List<int>(count);
+            var result = new ConnectedClientsBroadcast()
             {
-                Ids = collection 
+                Ids = collection
             };
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
                 collection.Add(reader.ReadNetworkConnectionId());
 
             return result;

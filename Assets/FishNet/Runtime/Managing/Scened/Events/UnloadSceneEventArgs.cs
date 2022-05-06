@@ -1,6 +1,5 @@
 ﻿namespace FishNet.Managing.Scened
 {
-
     /// <summary>
     /// Data container about a scene unload start.
     /// </summary>
@@ -26,6 +25,7 @@
         /// Queue data used by the current scene action.
         /// </summary>
         public readonly UnloadQueueData QueueData;
+
         /// <summary>
         /// Handles of scenes which were successfully unloaded.
         /// </summary>
@@ -37,6 +37,4 @@
             UnloadedSceneHandles = unloadedHandles;
         }
     }
-
-
 }

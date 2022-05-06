@@ -13,6 +13,7 @@ using System.Text;
 using UnityEngine;
 
 [assembly: InternalsVisibleTo(UtilityConstants.GENERATED_ASSEMBLY_NAME)]
+
 namespace FishNet.Serializing
 {
     /// <summary>
@@ -32,33 +33,41 @@ namespace FishNet.Serializing
     public class Writer
     {
         #region Public.
+
         /// <summary>
         /// Current write position.
         /// </summary>
         public int Position;
+
         /// <summary>
         /// Number of bytes writen to the buffer.
         /// </summary>
         public int Length;
+
         /// <summary>
         /// NetworkManager associated with this writer. May be null.
         /// </summary>
         public NetworkManager NetworkManager;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Buffer to prevent new allocations. This will grow as needed.
         /// </summary>
         private byte[] _buffer = new byte[64];
+
         /// <summary>
         /// Encoder for strings.
         /// </summary>
-        private readonly UTF8Encoding _encoding = new UTF8Encoding(false, true);
+        private readonly UTF8Encoding _encoding = new(false, true);
+
         /// <summary>
         /// StringBuffer to use with encoding.
         /// </summary>
         private byte[] _stringBuffer = new byte[64];
+
         #endregion
 
         /// <summary>
@@ -88,7 +97,7 @@ namespace FishNet.Serializing
             }
 
             WriteInt32(dict.Count);
-            foreach (KeyValuePair<TKey, TValue> item in dict)
+            foreach (var item in dict)
             {
                 Write(item.Key);
                 Write(item.Value);
@@ -104,7 +113,7 @@ namespace FishNet.Serializing
         {
             if (Position + count > _buffer.Length)
             {
-                int nextSize = (_buffer.Length * 2) + count;
+                var nextSize = _buffer.Length * 2 + count;
                 Array.Resize(ref _buffer, nextSize);
             }
         }
@@ -147,7 +156,7 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void WritePacketId(PacketId pid)
         {
-            WriteUInt16((ushort)pid);
+            WriteUInt16((ushort) pid);
         }
 
         /// <summary>
@@ -219,7 +228,7 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteBytesAndSize(byte[] value)
         {
-            int size = (value == null) ? 0 : value.Length;
+            var size = value == null ? 0 : value.Length;
             // buffer might be null, so we can't use .Length in that case
             WriteBytesAndSize(value, 0, size);
         }
@@ -232,8 +241,8 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteSByte(sbyte value)
         {
-            EnsureBufferLength(1);            
-            _buffer[Position++] = (byte)value;
+            EnsureBufferLength(1);
+            _buffer[Position++] = (byte) value;
             Length = Math.Max(Length, Position);
         }
 
@@ -245,8 +254,8 @@ namespace FishNet.Serializing
         public void WriteChar(char value)
         {
             EnsureBufferLength(2);
-            _buffer[Position++] = (byte)value;
-            _buffer[Position++] = (byte)(value >> 8);
+            _buffer[Position++] = (byte) value;
+            _buffer[Position++] = (byte) (value >> 8);
             Length = Math.Max(Length, Position);
         }
 
@@ -258,7 +267,7 @@ namespace FishNet.Serializing
         public void WriteBoolean(bool value)
         {
             EnsureBufferLength(1);
-            _buffer[Position++] = (value) ? (byte)1 : (byte)0;
+            _buffer[Position++] = value ? (byte) 1 : (byte) 0;
             Length = Math.Max(Length, Position);
         }
 
@@ -270,8 +279,8 @@ namespace FishNet.Serializing
         public void WriteUInt16(ushort value)
         {
             EnsureBufferLength(2);
-            _buffer[Position++] = (byte)value;
-            _buffer[Position++] = (byte)(value >> 8);
+            _buffer[Position++] = (byte) value;
+            _buffer[Position++] = (byte) (value >> 8);
             Length = Math.Max(Length, Position);
         }
 
@@ -283,8 +292,8 @@ namespace FishNet.Serializing
         public void WriteInt16(short value)
         {
             EnsureBufferLength(2);
-            _buffer[Position++] = (byte)value;
-            _buffer[Position++] = (byte)(value >> 8);
+            _buffer[Position++] = (byte) value;
+            _buffer[Position++] = (byte) (value >> 8);
             Length = Math.Max(Length, Position);
         }
 
@@ -296,10 +305,11 @@ namespace FishNet.Serializing
         public void WriteInt32(int value, AutoPackType packType = AutoPackType.Packed)
         {
             if (packType == AutoPackType.Packed)
-                WritePackedWhole(ZigZagEncode((ulong)value));
+                WritePackedWhole(ZigZagEncode((ulong) value));
             else
-                WriteUInt32((uint)value, packType);
+                WriteUInt32((uint) value, packType);
         }
+
         /// <summary>
         /// Writes a uint32.
         /// </summary>
@@ -327,10 +337,11 @@ namespace FishNet.Serializing
         public void WriteInt64(long value, AutoPackType packType = AutoPackType.Packed)
         {
             if (packType == AutoPackType.Packed)
-                WritePackedWhole(ZigZagEncode((ulong)value));
+                WritePackedWhole(ZigZagEncode((ulong) value));
             else
-                WriteUInt64((ulong)value, packType);
+                WriteUInt64((ulong) value, packType);
         }
+
         /// <summary>
         /// Writes a uint64.
         /// </summary>
@@ -341,14 +352,14 @@ namespace FishNet.Serializing
             if (packType == AutoPackType.Unpacked)
             {
                 EnsureBufferLength(8);
-                _buffer[Position++] = (byte)value;
-                _buffer[Position++] = (byte)(value >> 8);
-                _buffer[Position++] = (byte)(value >> 16);
-                _buffer[Position++] = (byte)(value >> 24);
-                _buffer[Position++] = (byte)(value >> 32);
-                _buffer[Position++] = (byte)(value >> 40);
-                _buffer[Position++] = (byte)(value >> 48);
-                _buffer[Position++] = (byte)(value >> 56);
+                _buffer[Position++] = (byte) value;
+                _buffer[Position++] = (byte) (value >> 8);
+                _buffer[Position++] = (byte) (value >> 16);
+                _buffer[Position++] = (byte) (value >> 24);
+                _buffer[Position++] = (byte) (value >> 32);
+                _buffer[Position++] = (byte) (value >> 40);
+                _buffer[Position++] = (byte) (value >> 48);
+                _buffer[Position++] = (byte) (value >> 56);
 
                 Length = Math.Max(Position, Length);
             }
@@ -367,13 +378,13 @@ namespace FishNet.Serializing
         {
             if (packType == AutoPackType.Unpacked)
             {
-                UIntFloat converter = new UIntFloat { FloatValue = value };
+                var converter = new UIntFloat {FloatValue = value};
                 WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
             }
             else
             {
-                long converter = (long)(value * 100f);
-                WritePackedWhole((ulong)converter);
+                var converter = (long) (value * 100f);
+                WritePackedWhole((ulong) converter);
             }
         }
 
@@ -384,7 +395,7 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteDouble(double value)
         {
-            UIntDouble converter = new UIntDouble { DoubleValue = value };
+            var converter = new UIntDouble {DoubleValue = value};
             WriteUInt64(converter.LongValue, AutoPackType.Unpacked);
         }
 
@@ -395,7 +406,7 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteDecimal(decimal value)
         {
-            UIntDecimal converter = new UIntDecimal { DecimalValue = value };
+            var converter = new UIntDecimal {DecimalValue = value};
             WriteUInt64(converter.LongValue1, AutoPackType.Unpacked);
             WriteUInt64(converter.LongValue2, AutoPackType.Unpacked);
         }
@@ -425,11 +436,11 @@ namespace FishNet.Serializing
              * packet size. */
             if (value.Length >= _stringBuffer.Length)
             {
-                int nextSize = (_stringBuffer.Length * 2) + value.Length;
+                var nextSize = _stringBuffer.Length * 2 + value.Length;
                 Array.Resize(ref _stringBuffer, nextSize);
             }
 
-            int size = _encoding.GetBytes(value, 0, value.Length, _stringBuffer, 0);
+            var size = _encoding.GetBytes(value, 0, value.Length, _stringBuffer, 0);
             WriteInt32(size);
             WriteBytes(_stringBuffer, 0, size);
         }
@@ -463,9 +474,9 @@ namespace FishNet.Serializing
         public void WriteVector2(Vector2 value)
         {
             UIntFloat converter;
-            converter = new UIntFloat { FloatValue = value.x };
+            converter = new UIntFloat {FloatValue = value.x};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
-            converter = new UIntFloat { FloatValue = value.y };
+            converter = new UIntFloat {FloatValue = value.y};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
         }
 
@@ -477,11 +488,11 @@ namespace FishNet.Serializing
         public void WriteVector3(Vector3 value)
         {
             UIntFloat converter;
-            converter = new UIntFloat { FloatValue = value.x };
+            converter = new UIntFloat {FloatValue = value.x};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
-            converter = new UIntFloat { FloatValue = value.y };
+            converter = new UIntFloat {FloatValue = value.y};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
-            converter = new UIntFloat { FloatValue = value.z };
+            converter = new UIntFloat {FloatValue = value.z};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
         }
 
@@ -493,13 +504,13 @@ namespace FishNet.Serializing
         public void WriteVector4(Vector4 value)
         {
             UIntFloat converter;
-            converter = new UIntFloat { FloatValue = value.x };
+            converter = new UIntFloat {FloatValue = value.x};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
-            converter = new UIntFloat { FloatValue = value.y };
+            converter = new UIntFloat {FloatValue = value.y};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
-            converter = new UIntFloat { FloatValue = value.z };
+            converter = new UIntFloat {FloatValue = value.z};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
-            converter = new UIntFloat { FloatValue = value.w };
+            converter = new UIntFloat {FloatValue = value.w};
             WriteUInt32(converter.UIntValue, AutoPackType.Unpacked);
         }
 
@@ -543,10 +554,10 @@ namespace FishNet.Serializing
             else
             {
                 EnsureBufferLength(4);
-                _buffer[Position++] = (byte)(value.r * 100f);
-                _buffer[Position++] = (byte)(value.g * 100f);
-                _buffer[Position++] = (byte)(value.b * 100f);
-                _buffer[Position++] = (byte)(value.a * 100f);
+                _buffer[Position++] = (byte) (value.r * 100f);
+                _buffer[Position++] = (byte) (value.g * 100f);
+                _buffer[Position++] = (byte) (value.b * 100f);
+                _buffer[Position++] = (byte) (value.a * 100f);
 
                 Length = Math.Max(Length, Position);
             }
@@ -578,14 +589,14 @@ namespace FishNet.Serializing
             if (packType == AutoPackType.Packed)
             {
                 EnsureBufferLength(4);
-                uint result = Quaternion32Compression.Compress(value);
+                var result = Quaternion32Compression.Compress(value);
                 WriterExtensions.WriteUInt32(_buffer, result, ref Position);
                 Length = Math.Max(Length, Position);
             }
-            else if (packType == AutoPackType.PackedLess) 
+            else if (packType == AutoPackType.PackedLess)
             {
                 EnsureBufferLength(8);
-                ulong result = Quaternion64Compression.Compress(value);
+                var result = Quaternion64Compression.Compress(value);
                 WriterExtensions.WriteUInt64(_buffer, result, ref Position);
                 Length = Math.Max(Length, Position);
             }
@@ -676,9 +687,9 @@ namespace FishNet.Serializing
         /// </summary>
         /// <param name="value"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteGuidAllocated(System.Guid value)
+        public void WriteGuidAllocated(Guid value)
         {
-            byte[] data = value.ToByteArray();
+            var data = value.ToByteArray();
             WriteBytes(data, 0, data.Length);
         }
 
@@ -695,7 +706,7 @@ namespace FishNet.Serializing
             }
             else
             {
-                NetworkObject nob = go.GetComponent<NetworkObject>();
+                var nob = go.GetComponent<NetworkObject>();
                 WriteNetworkObject(nob);
             }
         }
@@ -708,12 +719,12 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteNetworkObject(NetworkObject nob)
         {
-            bool isSpawned = (nob != null && nob.IsSpawned);
+            var isSpawned = nob != null && nob.IsSpawned;
             WriteBoolean(isSpawned);
 
             if (isSpawned)
             {
-                WriteInt16((short)nob.ObjectId);
+                WriteInt16((short) nob.ObjectId);
             }
             else
             {
@@ -750,7 +761,7 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteChannel(Channel channel)
         {
-            WriteByte((byte)channel);
+            WriteByte((byte) channel);
         }
 
         /// <summary>
@@ -760,8 +771,8 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteNetworkConnection(NetworkConnection connection)
         {
-            int value = (connection == null) ? -1 : connection.ClientId;
-            WriteInt16((short)value);
+            var value = connection == null ? -1 : connection.ClientId;
+            WriteInt16((short) value);
         }
 
         /// <summary>
@@ -776,6 +787,7 @@ namespace FishNet.Serializing
         }
 
         #region Packed writers.
+
         /// <summary>
         /// ZigZag encode an integer. Move the sign bit to the right.
         /// </summary>
@@ -786,6 +798,7 @@ namespace FishNet.Serializing
                 return ~(value << 1) | 1;
             return value << 1;
         }
+
         /// <summary>
         /// Writes a packed whole number.
         /// </summary>
@@ -797,90 +810,92 @@ namespace FishNet.Serializing
             if (value < 0x80UL)
             {
                 EnsureBufferLength(1);
-                _buffer[Position++] = (byte)(value & 0x7F);
+                _buffer[Position++] = (byte) (value & 0x7F);
             }
             else if (value < 0x4000UL)
             {
                 EnsureBufferLength(2);
-                _buffer[Position++] = (byte)(0x80 | (value & 0x7F));
-                _buffer[Position++] = (byte)((value >> 7) & 0x7F);
+                _buffer[Position++] = (byte) (0x80 | (value & 0x7F));
+                _buffer[Position++] = (byte) ((value >> 7) & 0x7F);
             }
             else if (value < 0x200000UL)
             {
                 EnsureBufferLength(3);
-                _buffer[Position++] = (byte)(0x80 | (value & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 7) & 0x7F));
-                _buffer[Position++] = (byte)((value >> 14) & 0x7F);
+                _buffer[Position++] = (byte) (0x80 | (value & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 7) & 0x7F));
+                _buffer[Position++] = (byte) ((value >> 14) & 0x7F);
             }
             else if (value < 0x10000000UL)
             {
                 EnsureBufferLength(4);
-                _buffer[Position++] = (byte)(0x80 | (value & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 7) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 14) & 0x7F));
-                _buffer[Position++] = (byte)((value >> 21) & 0x7F);
+                _buffer[Position++] = (byte) (0x80 | (value & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 7) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 14) & 0x7F));
+                _buffer[Position++] = (byte) ((value >> 21) & 0x7F);
             }
             else if (value < 0x100000000UL)
             {
                 EnsureBufferLength(5);
-                _buffer[Position++] = (byte)(0x80 | (value & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 7) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 14) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 21) & 0x7F));
-                _buffer[Position++] = (byte)((value >> 28) & 0x0F);
+                _buffer[Position++] = (byte) (0x80 | (value & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 7) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 14) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 21) & 0x7F));
+                _buffer[Position++] = (byte) ((value >> 28) & 0x0F);
             }
             else if (value < 0x10000000000UL)
             {
                 EnsureBufferLength(6);
-                _buffer[Position++] = (byte)(0x80 | (value & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 7) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 14) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 21) & 0x7F));
-                _buffer[Position++] = (byte)(0x10 | ((value >> 28) & 0x0F));
-                _buffer[Position++] = (byte)((value >> 32) & 0xFF);
+                _buffer[Position++] = (byte) (0x80 | (value & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 7) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 14) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 21) & 0x7F));
+                _buffer[Position++] = (byte) (0x10 | ((value >> 28) & 0x0F));
+                _buffer[Position++] = (byte) ((value >> 32) & 0xFF);
             }
             else if (value < 0x1000000000000UL)
             {
                 EnsureBufferLength(7);
-                _buffer[Position++] = (byte)(0x80 | (value & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 7) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 14) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 21) & 0x7F));
-                _buffer[Position++] = (byte)(0x20 | ((value >> 28) & 0x0F));
-                _buffer[Position++] = (byte)((value >> 32) & 0xFF);
-                _buffer[Position++] = (byte)((value >> 40) & 0xFF);
+                _buffer[Position++] = (byte) (0x80 | (value & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 7) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 14) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 21) & 0x7F));
+                _buffer[Position++] = (byte) (0x20 | ((value >> 28) & 0x0F));
+                _buffer[Position++] = (byte) ((value >> 32) & 0xFF);
+                _buffer[Position++] = (byte) ((value >> 40) & 0xFF);
             }
             else if (value < 0x100000000000000UL)
             {
                 EnsureBufferLength(8);
-                _buffer[Position++] = (byte)(0x80 | (value & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 7) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 14) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 21) & 0x7F));
-                _buffer[Position++] = (byte)(0x30 | ((value >> 28) & 0x0F));
-                _buffer[Position++] = (byte)((value >> 32) & 0xFF);
-                _buffer[Position++] = (byte)((value >> 40) & 0xFF);
-                _buffer[Position++] = (byte)((value >> 48) & 0xFF);
+                _buffer[Position++] = (byte) (0x80 | (value & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 7) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 14) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 21) & 0x7F));
+                _buffer[Position++] = (byte) (0x30 | ((value >> 28) & 0x0F));
+                _buffer[Position++] = (byte) ((value >> 32) & 0xFF);
+                _buffer[Position++] = (byte) ((value >> 40) & 0xFF);
+                _buffer[Position++] = (byte) ((value >> 48) & 0xFF);
             }
             else
             {
                 EnsureBufferLength(9);
-                _buffer[Position++] = (byte)(0x80 | (value & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 7) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 14) & 0x7F));
-                _buffer[Position++] = (byte)(0x80 | ((value >> 21) & 0x7F));
-                _buffer[Position++] = (byte)(0x40 | ((value >> 28) & 0x0F));
-                _buffer[Position++] = (byte)((value >> 32) & 0xFF);
-                _buffer[Position++] = (byte)((value >> 40) & 0xFF);
-                _buffer[Position++] = (byte)((value >> 48) & 0xFF);
-                _buffer[Position++] = (byte)((value >> 56) & 0xFF);
+                _buffer[Position++] = (byte) (0x80 | (value & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 7) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 14) & 0x7F));
+                _buffer[Position++] = (byte) (0x80 | ((value >> 21) & 0x7F));
+                _buffer[Position++] = (byte) (0x40 | ((value >> 28) & 0x0F));
+                _buffer[Position++] = (byte) ((value >> 32) & 0xFF);
+                _buffer[Position++] = (byte) ((value >> 40) & 0xFF);
+                _buffer[Position++] = (byte) ((value >> 48) & 0xFF);
+                _buffer[Position++] = (byte) ((value >> 56) & 0xFF);
             }
 
             Length = Math.Max(Length, Position);
         }
+
         #endregion
 
         #region Generators.
+
         /// <summary>
         /// Writes to the end of value starting at offset.
         /// </summary>
@@ -888,19 +903,19 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteToEnd<T>(List<T> value, int offset)
         {
-            int count = value.Count;
+            var count = value.Count;
             if (value == null || offset >= count)
             {
                 WriteInt32(-1);
             }
             else
             {
-
                 WriteInt32(count - offset);
-                for (int i = offset; i < count; i++)
+                for (var i = offset; i < count; i++)
                     Write<T>(value[i]);
             }
         }
+
         /// <summary>
         /// Writes to the end of value starting at offset.
         /// </summary>
@@ -908,16 +923,15 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteToEnd<T>(T[] value, int offset)
         {
-            int length = value.Length;
+            var length = value.Length;
             if (value == null || offset >= length)
             {
                 WriteInt32(-1);
             }
             else
             {
-
                 WriteInt32(length - offset);
-                for (int i = offset; i < length; i++)
+                for (var i = offset; i < length; i++)
                     Write<T>(value[i]);
             }
         }
@@ -930,13 +944,14 @@ namespace FishNet.Serializing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write<T>(T value)
         {
-            if (IsAutoPackType<T>(out AutoPackType packType))
+            if (IsAutoPackType<T>(out var packType))
             {
-                Action<Writer, T, AutoPackType> del = GenericWriter<T>.WriteAutoPack;
+                var del = GenericWriter<T>.WriteAutoPack;
                 if (del == null)
                 {
                     if (NetworkManager.StaticCanLog(LoggingType.Error))
-                        Debug.LogError($"Write method not found for {typeof(T).Name}. Use a supported type or create a custom serializer.");
+                        Debug.LogError(
+                            $"Write method not found for {typeof(T).Name}. Use a supported type or create a custom serializer.");
                 }
                 else
                 {
@@ -945,11 +960,12 @@ namespace FishNet.Serializing
             }
             else
             {
-                Action<Writer, T> del = GenericWriter<T>.Write;
+                var del = GenericWriter<T>.Write;
                 if (del == null)
                 {
                     if (NetworkManager.StaticCanLog(LoggingType.Error))
-                        Debug.LogError($"Write method not found for {typeof(T).Name}. Use a supported type or create a custom serializer.");
+                        Debug.LogError(
+                            $"Write method not found for {typeof(T).Name}. Use a supported type or create a custom serializer.");
                 }
                 else
                 {
@@ -967,7 +983,7 @@ namespace FishNet.Serializing
         internal static bool IsAutoPackType<T>(out AutoPackType packType)
         {
             //performance bench this against using a hash lookup.
-            System.Type type = typeof(T);
+            var type = typeof(T);
             if (WriterExtensions.DefaultPackedTypes.Contains(type))
             {
                 packType = AutoPackType.Packed;
@@ -984,7 +1000,7 @@ namespace FishNet.Serializing
                 return false;
             }
         }
-        #endregion
 
+        #endregion
     }
 }

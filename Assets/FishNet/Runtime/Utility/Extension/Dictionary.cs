@@ -6,12 +6,12 @@ namespace FishNet.Utility.Extension
     [APIExclude]
     public static class DictionaryFN
     {
-
         /// <summary>
         /// Uses a hacky way to TryGetValue on a dictionary when using IL2CPP and on mobile.
         /// This is to support older devices that don't properly handle IL2CPP builds.
         /// </summary>
-        public static bool TryGetValueIL2CPP<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, out TValue value)
+        public static bool TryGetValueIL2CPP<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key,
+            out TValue value)
         {
 #if ENABLE_IL2CPP && UNITY_IOS || UNITY_ANDROID
             if (dict.ContainsKey(key))
@@ -28,8 +28,5 @@ namespace FishNet.Utility.Extension
             return dict.TryGetValue(key, out value);
 #endif
         }
-
-
     }
-
 }

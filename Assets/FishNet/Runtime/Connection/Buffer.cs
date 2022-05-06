@@ -17,23 +17,28 @@ namespace FishNet.Connection
         /// <summary>
         /// How many more bytes may fit into the buffer.
         /// </summary>
-        internal int Remaining => (Size - Length);
+        internal int Remaining => Size - Length;
+
         /// <summary>
         /// Buffer data.
         /// </summary>
         internal byte[] Data { get; private set; }
+
         /// <summary>
         /// How many bytes currently into Data. This will include the reserve.
         /// </summary>
         internal int Length { get; private set; }
+
         /// <summary>
         /// Size of the buffer. Data.Length may exceed this value as it uses a pooled array.
         /// </summary>
         internal int Size { get; private set; }
+
         /// <summary>
         /// True if data has been written.
         /// </summary>
         internal bool HasData { get; private set; }
+
         /// <summary>
         /// Bytes to reserve when resetting.
         /// </summary>
@@ -72,7 +77,7 @@ namespace FishNet.Connection
             * then write tick to the start. */
             if (!HasData)
             {
-                int pos = 0;
+                var pos = 0;
                 WriterExtensions.WriteUInt32(Data, tick, ref pos);
             }
 
@@ -88,26 +93,32 @@ namespace FishNet.Connection
         /// True if data has been written.
         /// </summary>
         internal bool HasData => _buffers[0].HasData;
+
         /// <summary>
         /// All buffers written. Collection is not cleared when reset but rather the index in which to write is.
         /// </summary>
-        private List<ByteBuffer> _buffers = new List<ByteBuffer>();
+        private List<ByteBuffer> _buffers = new();
+
         /// <summary>
         /// Buffer which is being written to.
         /// </summary>
         private int _bufferIndex;
+
         /// <summary>
         /// Maximum size packet the transport can handle.
         /// </summary>
         private int _maximumTransportUnit;
+
         /// <summary>
         /// Number of buffers written to. Will return 0 if nothing has been written.
         /// </summary>
-        public int WrittenBuffers => (!HasData) ? 0 : (_bufferIndex + 1);
+        public int WrittenBuffers => !HasData ? 0 : _bufferIndex + 1;
+
         /// <summary>
         /// Number of bytes to reserve at the beginning of each buffer.
         /// </summary>
         private int _reserve;
+
         /// <summary>
         /// NetworkManager this is for.
         /// </summary>
@@ -131,7 +142,7 @@ namespace FishNet.Connection
         /// </summary>
         private ByteBuffer AddBuffer()
         {
-            ByteBuffer ba = new ByteBuffer(_maximumTransportUnit, _reserve);
+            var ba = new ByteBuffer(_maximumTransportUnit, _reserve);
             _buffers.Add(ba);
             return ba;
         }
@@ -143,7 +154,7 @@ namespace FishNet.Connection
         {
             _bufferIndex = 0;
 
-            for (int i = 0; i < _buffers.Count; i++)
+            for (var i = 0; i < _buffers.Count; i++)
                 _buffers[i].Reset();
         }
 
@@ -164,17 +175,18 @@ namespace FishNet.Connection
             if (segment.Count > _maximumTransportUnit)
             {
                 if (_networkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"Segment is length of {segment.Count} while MTU is {_maximumTransportUnit}. Packet was not split properly and will not be sent.");
+                    Debug.LogError(
+                        $"Segment is length of {segment.Count} while MTU is {_maximumTransportUnit}. Packet was not split properly and will not be sent.");
                 return;
             }
 
-            ByteBuffer ba = _buffers[_bufferIndex];
+            var ba = _buffers[_bufferIndex];
             /* Make a new buffer if...
              * forcing a new buffer and data has already been written to the current.
              * or---
              * segment.Count is more than what is remaining in the buffer. */
-            bool useNewBuffer = (forceNewBuffer && ba.Length > _reserve) ||
-                (segment.Count > ba.Remaining);
+            var useNewBuffer = (forceNewBuffer && ba.Length > _reserve) ||
+                               segment.Count > ba.Remaining;
             if (useNewBuffer)
             {
                 _bufferIndex++;
@@ -190,7 +202,7 @@ namespace FishNet.Connection
                 }
             }
 
-            uint tick = _networkManager.TimeManager.LocalTick;
+            var tick = _networkManager.TimeManager.LocalTick;
             ba.CopySegment(tick, segment);
         }
 
@@ -209,10 +221,12 @@ namespace FishNet.Connection
                     Debug.LogError($"Index of {index} is out of bounds. There are {_buffers.Count} available.");
                 return false;
             }
+
             if (index > _bufferIndex)
             {
                 if (_networkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"Index of {index} exceeds the number of written buffers. There are {WrittenBuffers} written buffers.");
+                    Debug.LogError(
+                        $"Index of {index} exceeds the number of written buffers. There are {WrittenBuffers} written buffers.");
                 return false;
             }
 
@@ -238,7 +252,4 @@ namespace FishNet.Connection
             return mtuBuffer.HasData;
         }
     }
-
-
-
 }

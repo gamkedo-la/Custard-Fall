@@ -11,10 +11,12 @@ namespace FishNet.Authenticating
     public abstract class Authenticator : MonoBehaviour
     {
         #region Protected.
+
         /// <summary>
         /// NetworkManager for this Authenticator.
         /// </summary>
         protected NetworkManager NetworkManager { get; private set; }
+
         #endregion
 
 
@@ -37,8 +39,8 @@ namespace FishNet.Authenticating
         /// Called on the server immediately after a client connects. Can be used to send data to the client for authentication.
         /// </summary>
         /// <param name="connection">Connection which is not yet authenticated.</param>
-        public virtual void OnRemoteConnection(NetworkConnection connection) { }
+        public virtual void OnRemoteConnection(NetworkConnection connection)
+        {
+        }
     }
-
-
 }

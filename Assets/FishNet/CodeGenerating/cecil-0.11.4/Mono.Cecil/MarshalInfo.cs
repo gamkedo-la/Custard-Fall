@@ -10,144 +10,157 @@
 
 using System;
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public class MarshalInfo
+    {
+        internal NativeType native;
 
-	public class MarshalInfo {
+        public NativeType NativeType
+        {
+            get => native;
+            set => native = value;
+        }
 
-		internal NativeType native;
+        public MarshalInfo(NativeType native)
+        {
+            this.native = native;
+        }
+    }
 
-		public NativeType NativeType {
-			get { return native; }
-			set { native = value; }
-		}
+    public sealed class ArrayMarshalInfo : MarshalInfo
+    {
+        internal NativeType element_type;
+        internal int size_parameter_index;
+        internal int size;
+        internal int size_parameter_multiplier;
 
-		public MarshalInfo (NativeType native)
-		{
-			this.native = native;
-		}
-	}
+        public NativeType ElementType
+        {
+            get => element_type;
+            set => element_type = value;
+        }
 
-	public sealed class ArrayMarshalInfo : MarshalInfo {
+        public int SizeParameterIndex
+        {
+            get => size_parameter_index;
+            set => size_parameter_index = value;
+        }
 
-		internal NativeType element_type;
-		internal int size_parameter_index;
-		internal int size;
-		internal int size_parameter_multiplier;
+        public int Size
+        {
+            get => size;
+            set => size = value;
+        }
 
-		public NativeType ElementType {
-			get { return element_type; }
-			set { element_type = value; }
-		}
+        public int SizeParameterMultiplier
+        {
+            get => size_parameter_multiplier;
+            set => size_parameter_multiplier = value;
+        }
 
-		public int SizeParameterIndex {
-			get { return size_parameter_index; }
-			set { size_parameter_index = value; }
-		}
+        public ArrayMarshalInfo()
+            : base(NativeType.Array)
+        {
+            element_type = NativeType.None;
+            size_parameter_index = -1;
+            size = -1;
+            size_parameter_multiplier = -1;
+        }
+    }
 
-		public int Size {
-			get { return size; }
-			set { size = value; }
-		}
+    public sealed class CustomMarshalInfo : MarshalInfo
+    {
+        internal Guid guid;
+        internal string unmanaged_type;
+        internal TypeReference managed_type;
+        internal string cookie;
 
-		public int SizeParameterMultiplier {
-			get { return size_parameter_multiplier; }
-			set { size_parameter_multiplier = value; }
-		}
+        public Guid Guid
+        {
+            get => guid;
+            set => guid = value;
+        }
 
-		public ArrayMarshalInfo ()
-			: base (NativeType.Array)
-		{
-			element_type = NativeType.None;
-			size_parameter_index = -1;
-			size = -1;
-			size_parameter_multiplier = -1;
-		}
-	}
+        public string UnmanagedType
+        {
+            get => unmanaged_type;
+            set => unmanaged_type = value;
+        }
 
-	public sealed class CustomMarshalInfo : MarshalInfo {
+        public TypeReference ManagedType
+        {
+            get => managed_type;
+            set => managed_type = value;
+        }
 
-		internal Guid guid;
-		internal string unmanaged_type;
-		internal TypeReference managed_type;
-		internal string cookie;
+        public string Cookie
+        {
+            get => cookie;
+            set => cookie = value;
+        }
 
-		public Guid Guid {
-			get { return guid; }
-			set { guid = value; }
-		}
+        public CustomMarshalInfo()
+            : base(NativeType.CustomMarshaler)
+        {
+        }
+    }
 
-		public string UnmanagedType {
-			get { return unmanaged_type; }
-			set { unmanaged_type = value; }
-		}
+    public sealed class SafeArrayMarshalInfo : MarshalInfo
+    {
+        internal VariantType element_type;
 
-		public TypeReference ManagedType {
-			get { return managed_type; }
-			set { managed_type = value; }
-		}
+        public VariantType ElementType
+        {
+            get => element_type;
+            set => element_type = value;
+        }
 
-		public string Cookie {
-			get { return cookie; }
-			set { cookie = value; }
-		}
+        public SafeArrayMarshalInfo()
+            : base(NativeType.SafeArray)
+        {
+            element_type = VariantType.None;
+        }
+    }
 
-		public CustomMarshalInfo ()
-			: base (NativeType.CustomMarshaler)
-		{
-		}
-	}
+    public sealed class FixedArrayMarshalInfo : MarshalInfo
+    {
+        internal NativeType element_type;
+        internal int size;
 
-	public sealed class SafeArrayMarshalInfo : MarshalInfo {
+        public NativeType ElementType
+        {
+            get => element_type;
+            set => element_type = value;
+        }
 
-		internal VariantType element_type;
+        public int Size
+        {
+            get => size;
+            set => size = value;
+        }
 
-		public VariantType ElementType {
-			get { return element_type; }
-			set { element_type = value; }
-		}
+        public FixedArrayMarshalInfo()
+            : base(NativeType.FixedArray)
+        {
+            element_type = NativeType.None;
+        }
+    }
 
-		public SafeArrayMarshalInfo ()
-			: base (NativeType.SafeArray)
-		{
-			element_type = VariantType.None;
-		}
-	}
+    public sealed class FixedSysStringMarshalInfo : MarshalInfo
+    {
+        internal int size;
 
-	public sealed class FixedArrayMarshalInfo : MarshalInfo {
+        public int Size
+        {
+            get => size;
+            set => size = value;
+        }
 
-		internal NativeType element_type;
-		internal int size;
-
-		public NativeType ElementType {
-			get { return element_type; }
-			set { element_type = value; }
-		}
-
-		public int Size {
-			get { return size; }
-			set { size = value; }
-		}
-
-		public FixedArrayMarshalInfo ()
-			: base (NativeType.FixedArray)
-		{
-			element_type = NativeType.None;
-		}
-	}
-
-	public sealed class FixedSysStringMarshalInfo : MarshalInfo {
-
-		internal int size;
-
-		public int Size {
-			get { return size; }
-			set { size = value; }
-		}
-
-		public FixedSysStringMarshalInfo ()
-			: base (NativeType.FixedSysString)
-		{
-			size = -1;
-		}
-	}
+        public FixedSysStringMarshalInfo()
+            : base(NativeType.FixedSysString)
+        {
+            size = -1;
+        }
+    }
 }

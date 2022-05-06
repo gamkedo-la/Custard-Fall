@@ -6,7 +6,6 @@ using UnityEditor;
 #endif
 
 
-
 namespace FishNet.Utility
 {
 #if UNITY_EDITOR
@@ -14,7 +13,6 @@ namespace FishNet.Utility
 #endif
     public static class ApplicationState
     {
-
 #if !UNITY_EDITOR
         /// <summary>
         /// True if application is quitting.
@@ -57,8 +55,5 @@ namespace FishNet.Utility
             return Application.isPlaying;
 #endif
         }
-
     }
-
-
 }

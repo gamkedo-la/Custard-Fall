@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 namespace FishNet.Component.Observing
 {
-
     /// <summary>
     /// When this observer condition is placed on an object, a client must be within the same scene to view the object.
     /// </summary>
@@ -13,12 +12,14 @@ namespace FishNet.Component.Observing
     public class SceneCondition : ObserverCondition
     {
         #region Serialized.
+
         ///// <summary>
         ///// True to synchronize which scene the object was spawned in to clients. When true this object will be moved to the clients equivelant of the scene it was spawned in on the server. This setting does not continously move this object to the same scene.
         ///// </summary>
         //[Tooltip("True to synchronize which scene the object was spawned in to clients. When true this object will be moved to the clients equivelant of the scene it was spawned in on the server. This setting does not continously move this object to the same scene.")]
         //[SerializeField]
         //private bool _synchronizeScene;
+
         #endregion
 
         public void ConditionConstructor()
@@ -40,14 +41,12 @@ namespace FishNet.Component.Observing
              * Don't check if the object resides in the same scene
              * because thats not reliable as server might be moving
              * objects. */
-            if (base.NetworkObject.Owner.IsValid)
+            if (NetworkObject.Owner.IsValid)
             {
-                foreach (Scene s in base.NetworkObject.Owner.Scenes)
-                {
+                foreach (var s in NetworkObject.Owner.Scenes)
                     //Scenes match.
                     if (connection.Scenes.Contains(s))
                         return true;
-                }
 
                 //Fall through, no scenes shared.
                 return false;
@@ -58,7 +57,7 @@ namespace FishNet.Component.Observing
             {
                 /* When there is no owner only then is the gameobject
                  * scene checked. That's the only way to know at this point. */
-                return connection.Scenes.Contains(base.NetworkObject.gameObject.scene);
+                return connection.Scenes.Contains(NetworkObject.gameObject.scene);
             }
         }
 
@@ -78,11 +77,10 @@ namespace FishNet.Component.Observing
         /// <returns></returns>
         public override ObserverCondition Clone()
         {
-            SceneCondition copy = ScriptableObject.CreateInstance<SceneCondition>();
+            var copy = CreateInstance<SceneCondition>();
             //copy.ConditionConstructor(_synchronizeScene);
             copy.ConditionConstructor();
             return copy;
         }
-
     }
 }

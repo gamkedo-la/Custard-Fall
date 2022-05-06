@@ -1,7 +1,5 @@
-﻿
-namespace FishNet.Object.Helping
+﻿namespace FishNet.Object.Helping
 {
-
     public static class CodegenHelper
     {
         /// <summary>
@@ -42,8 +40,5 @@ namespace FishNet.Object.Helping
 
             return nb.IsClient;
         }
-
     }
-
-
 }

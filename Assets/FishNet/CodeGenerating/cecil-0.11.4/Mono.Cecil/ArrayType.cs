@@ -14,132 +14,133 @@ using System.Text;
 using System.Threading;
 using MD = MonoFN.Cecil.Metadata;
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public struct ArrayDimension
+    {
+        private int? lower_bound;
+        private int? upper_bound;
 
-	public struct ArrayDimension {
+        public int? LowerBound
+        {
+            get => lower_bound;
+            set => lower_bound = value;
+        }
 
-		int? lower_bound;
-		int? upper_bound;
+        public int? UpperBound
+        {
+            get => upper_bound;
+            set => upper_bound = value;
+        }
 
-		public int? LowerBound {
-			get { return lower_bound; }
-			set { lower_bound = value; }
-		}
+        public bool IsSized => lower_bound.HasValue || upper_bound.HasValue;
 
-		public int? UpperBound {
-			get { return upper_bound; }
-			set { upper_bound = value; }
-		}
+        public ArrayDimension(int? lowerBound, int? upperBound)
+        {
+            lower_bound = lowerBound;
+            upper_bound = upperBound;
+        }
 
-		public bool IsSized {
-			get { return lower_bound.HasValue || upper_bound.HasValue; }
-		}
+        public override string ToString()
+        {
+            return !IsSized
+                ? string.Empty
+                : lower_bound + "..." + upper_bound;
+        }
+    }
 
-		public ArrayDimension (int? lowerBound, int? upperBound)
-		{
-			this.lower_bound = lowerBound;
-			this.upper_bound = upperBound;
-		}
+    public sealed class ArrayType : TypeSpecification
+    {
+        private Collection<ArrayDimension> dimensions;
 
-		public override string ToString ()
-		{
-			return !IsSized
-				? string.Empty
-				: lower_bound + "..." + upper_bound;
-		}
-	}
+        public Collection<ArrayDimension> Dimensions
+        {
+            get
+            {
+                if (dimensions != null)
+                    return dimensions;
 
-	public sealed class ArrayType : TypeSpecification {
+                var empty_dimensions = new Collection<ArrayDimension>();
+                empty_dimensions.Add(new ArrayDimension());
 
-		Collection<ArrayDimension> dimensions;
+                Interlocked.CompareExchange(ref dimensions, empty_dimensions, null);
 
-		public Collection<ArrayDimension> Dimensions {
-			get {
-				if (dimensions != null)
-					return dimensions;
+                return dimensions;
+            }
+        }
 
-				var empty_dimensions = new Collection<ArrayDimension> ();
-				empty_dimensions.Add (new ArrayDimension ());
+        public int Rank => dimensions == null ? 1 : dimensions.Count;
 
-				Interlocked.CompareExchange (ref dimensions, empty_dimensions, null);
+        public bool IsVector
+        {
+            get
+            {
+                if (dimensions == null)
+                    return true;
 
-				return dimensions;
-			}
-		}
+                if (dimensions.Count > 1)
+                    return false;
 
-		public int Rank {
-			get { return dimensions == null ? 1 : dimensions.Count; }
-		}
+                var dimension = dimensions[0];
 
-		public bool IsVector {
-			get {
-				if (dimensions == null)
-					return true;
+                return !dimension.IsSized;
+            }
+        }
 
-				if (dimensions.Count > 1)
-					return false;
+        public override bool IsValueType
+        {
+            get => false;
+            set => throw new InvalidOperationException();
+        }
 
-				var dimension = dimensions [0];
+        public override string Name => base.Name + Suffix;
 
-				return !dimension.IsSized;
-			}
-		}
+        public override string FullName => base.FullName + Suffix;
 
-		public override bool IsValueType {
-			get { return false; }
-			set { throw new InvalidOperationException (); }
-		}
+        private string Suffix
+        {
+            get
+            {
+                if (IsVector)
+                    return "[]";
 
-		public override string Name {
-			get { return base.Name + Suffix; }
-		}
+                var suffix = new StringBuilder();
+                suffix.Append("[");
+                for (var i = 0; i < dimensions.Count; i++)
+                {
+                    if (i > 0)
+                        suffix.Append(",");
 
-		public override string FullName {
-			get { return base.FullName + Suffix; }
-		}
+                    suffix.Append(dimensions[i].ToString());
+                }
 
-		string Suffix {
-			get {
-				if (IsVector)
-					return "[]";
+                suffix.Append("]");
 
-				var suffix = new StringBuilder ();
-				suffix.Append ("[");
-				for (int i = 0; i < dimensions.Count; i++) {
-					if (i > 0)
-						suffix.Append (",");
+                return suffix.ToString();
+            }
+        }
 
-					suffix.Append (dimensions [i].ToString ());
-				}
-				suffix.Append ("]");
+        public override bool IsArray => true;
 
-				return suffix.ToString ();
-			}
-		}
+        public ArrayType(TypeReference type)
+            : base(type)
+        {
+            Mixin.CheckType(type);
+            etype = MD.ElementType.Array;
+        }
 
-		public override bool IsArray {
-			get { return true; }
-		}
+        public ArrayType(TypeReference type, int rank)
+            : this(type)
+        {
+            Mixin.CheckType(type);
 
-		public ArrayType (TypeReference type)
-			: base (type)
-		{
-			Mixin.CheckType (type);
-			this.etype = MD.ElementType.Array;
-		}
+            if (rank == 1)
+                return;
 
-		public ArrayType (TypeReference type, int rank)
-			: this (type)
-		{
-			Mixin.CheckType (type);
-
-			if (rank == 1)
-				return;
-
-			dimensions = new Collection<ArrayDimension> (rank);
-			for (int i = 0; i < rank; i++)
-				dimensions.Add (new ArrayDimension ());
-			this.etype = MD.ElementType.Array;
-		}
-	}
+            dimensions = new Collection<ArrayDimension>(rank);
+            for (var i = 0; i < rank; i++)
+                dimensions.Add(new ArrayDimension());
+            etype = MD.ElementType.Array;
+        }
+    }
 }

@@ -12,87 +12,108 @@ namespace FishNet.Transporting.Tugboat.Server
 {
     public class ServerSocket : CommonSocket
     {
-
         #region Public.
+
         /// <summary>
         /// Gets the current ConnectionState of a remote client on the server.
         /// </summary>
         /// <param name="connectionId">ConnectionId to get ConnectionState for.</param>
         internal RemoteConnectionStates GetConnectionState(int connectionId)
         {
-            NetPeer peer = GetNetPeer(connectionId, false);
+            var peer = GetNetPeer(connectionId, false);
             if (peer == null || peer.ConnectionState != ConnectionState.Connected)
                 return RemoteConnectionStates.Stopped;
             else
                 return RemoteConnectionStates.Started;
         }
+
         #endregion
 
         #region Private.
+
         #region Configuration.
+
         /// <summary>
         /// Port used by server.
         /// </summary>
         private ushort _port;
+
         /// <summary>
         /// Maximum number of allowed clients.
         /// </summary>
         private int _maximumClients;
+
         /// <summary>
         /// MTU size per packet.
         /// </summary>
         private int _mtu;
+
         #endregion
+
         #region Queues.
+
         /// <summary>
         /// Changes to the sockets local connection state.
         /// </summary>
-        private Queue<LocalConnectionStates> _localConnectionStates = new Queue<LocalConnectionStates>();
+        private Queue<LocalConnectionStates> _localConnectionStates = new();
+
         /// <summary>
         /// Inbound messages which need to be handled.
         /// </summary>
-        private Queue<Packet> _incoming = new Queue<Packet>();
+        private Queue<Packet> _incoming = new();
+
         /// <summary>
         /// Outbound messages which need to be handled.
         /// </summary>
-        private Queue<Packet> _outgoing = new Queue<Packet>();
+        private Queue<Packet> _outgoing = new();
+
         /// <summary>
         /// Ids to disconnect next iteration. This ensures data goes through to disconnecting remote connections. This may be removed in a later release.
         /// </summary>
-        private ListCache<int> _disconnectingNext = new ListCache<int>();
+        private ListCache<int> _disconnectingNext = new();
+
         /// <summary>
         /// Ids to disconnect immediately.
         /// </summary>
-        private ListCache<int> _disconnectingNow = new ListCache<int>();
+        private ListCache<int> _disconnectingNow = new();
+
         /// <summary>
         /// PossibleAttackEvents which need to be handled.
         /// </summary>
-        private ConcurrentQueue<int> _possibleAttackEvents = new ConcurrentQueue<int>();
+        private ConcurrentQueue<int> _possibleAttackEvents = new();
+
         /// <summary>
         /// ConnectionEvents which need to be handled.
         /// </summary>
-        private Queue<RemoteConnectionEvent> _remoteConnectionEvents = new Queue<RemoteConnectionEvent>();
+        private Queue<RemoteConnectionEvent> _remoteConnectionEvents = new();
+
         #endregion
+
         /// <summary>
         /// Key required to connect.
         /// </summary>
         private string _key = string.Empty;
+
         /// <summary>
         /// How long in seconds until client times from server.
         /// </summary>
         private int _timeout;
+
         /// <summary>
         /// Server socket manager.
         /// </summary>
         private NetManager _server;
+
         /// <summary>
         /// Locks the NetManager to stop it.
         /// </summary>
-        private readonly object _stopLock = new object();
+        private readonly object _stopLock = new();
+
         /// <summary>
         /// Attack response type to use.
         /// </summary>
         private AttackResponseType _attackResponseType;
+
         #endregion
 
         ~ServerSocket()
@@ -106,7 +127,7 @@ namespace FishNet.Transporting.Tugboat.Server
         /// <param name="t"></param>
         internal void Initialize(Transport t, int unreliableMTU)
         {
-            base.Transport = t;
+            Transport = t;
             _mtu = unreliableMTU;
         }
 
@@ -126,7 +147,7 @@ namespace FishNet.Transporting.Tugboat.Server
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ThreadedSocket()
         {
-            EventBasedNetListener listener = new EventBasedNetListener();
+            var listener = new EventBasedNetListener();
             listener.ConnectionRequestEvent += Listener_ConnectionRequestEvent;
             if (_attackResponseType != AttackResponseType.Disabled)
                 listener.PossibleAttackEvent += Listener_PossibleAttackEvent;
@@ -135,11 +156,11 @@ namespace FishNet.Transporting.Tugboat.Server
             listener.PeerDisconnectedEvent += Listener_PeerDisconnectedEvent;
 
             _server = new NetManager(listener, null, _attackResponseType);
-            _server.MtuOverride = (_mtu + NetConstants.FragmentedHeaderTotalSize);
+            _server.MtuOverride = _mtu + NetConstants.FragmentedHeaderTotalSize;
 
             UpdateTimeout(_timeout);
 
-            bool startResult = _server.Start(_port);
+            var startResult = _server.Start(_port);
 
             //If started succcessfully.
             if (startResult)
@@ -149,8 +170,9 @@ namespace FishNet.Transporting.Tugboat.Server
             //Failed to start.
             else
             {
-                if (base.Transport.NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"Server failed to start. This usually occurs when the specified port is unavailable, be it closed or already in use.");
+                if (Transport.NetworkManager.CanLog(LoggingType.Error))
+                    Debug.LogError(
+                        $"Server failed to start. This usually occurs when the specified port is unavailable, be it closed or already in use.");
 
                 StopConnection();
             }
@@ -173,7 +195,7 @@ namespace FishNet.Transporting.Tugboat.Server
             if (_server == null)
                 return;
 
-            Task t = Task.Run(() =>
+            var t = Task.Run(() =>
             {
                 lock (_stopLock)
                 {
@@ -194,7 +216,7 @@ namespace FishNet.Transporting.Tugboat.Server
         /// <returns>Returns string.empty if Id is not found.</returns>
         internal string GetConnectionAddress(int connectionId)
         {
-            NetPeer peer = GetNetPeer(connectionId, false);
+            var peer = GetNetPeer(connectionId, false);
             return peer.EndPoint.Address.ToString();
         }
 
@@ -225,7 +247,7 @@ namespace FishNet.Transporting.Tugboat.Server
             if (base.GetConnectionState() != LocalConnectionStates.Stopped)
                 return false;
 
-            base.SetConnectionState(LocalConnectionStates.Starting, true);
+            SetConnectionState(LocalConnectionStates.Starting, true);
 
             //Assign properties.
             _port = port;
@@ -233,7 +255,7 @@ namespace FishNet.Transporting.Tugboat.Server
             _attackResponseType = attackResponseType;
             ResetQueues();
 
-            Task t = Task.Run(() => ThreadedSocket());
+            var t = Task.Run(() => ThreadedSocket());
 
             return true;
         }
@@ -243,7 +265,8 @@ namespace FishNet.Transporting.Tugboat.Server
         /// </summary>
         internal bool StopConnection()
         {
-            if (_server == null || base.GetConnectionState() == LocalConnectionStates.Stopped || base.GetConnectionState() == LocalConnectionStates.Stopping)
+            if (_server == null || base.GetConnectionState() == LocalConnectionStates.Stopped ||
+                base.GetConnectionState() == LocalConnectionStates.Stopping)
                 return false;
 
             _localConnectionStates.Enqueue(LocalConnectionStates.Stopping);
@@ -261,29 +284,25 @@ namespace FishNet.Transporting.Tugboat.Server
             if (_server == null || base.GetConnectionState() != LocalConnectionStates.Started)
                 return false;
 
-            NetPeer peer = GetNetPeer(connectionId, false);
+            var peer = GetNetPeer(connectionId, false);
             if (peer == null)
                 return false;
 
             //Don't disconnect immediately, wait until next command iteration.
             if (!immediately)
-            {
                 _disconnectingNext.AddValue(connectionId);
-
-            }
             //Disconnect immediately.
             else
-            {
                 try
                 {
                     peer.Disconnect();
-                    base.Transport.HandleRemoteConnectionState(new RemoteConnectionStateArgs(RemoteConnectionStates.Stopped, connectionId, base.Transport.Index));
+                    Transport.HandleRemoteConnectionState(new RemoteConnectionStateArgs(RemoteConnectionStates.Stopped,
+                        connectionId, Transport.Index));
                 }
                 catch
                 {
                     return false;
                 }
-            }
 
             return true;
         }
@@ -294,8 +313,8 @@ namespace FishNet.Transporting.Tugboat.Server
         private void ResetQueues()
         {
             _localConnectionStates.Clear();
-            base.ClearPacketQueue(ref _incoming);
-            base.ClearPacketQueue(ref _outgoing);
+            ClearPacketQueue(ref _incoming);
+            ClearPacketQueue(ref _outgoing);
             _disconnectingNext.Reset();
             _disconnectingNow.Reset();
             while (_possibleAttackEvents.TryDequeue(out _)) ;
@@ -323,7 +342,8 @@ namespace FishNet.Transporting.Tugboat.Server
         /// Called when data is received from a peer.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Listener_NetworkReceiveEvent(NetPeer fromPeer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
+        private void Listener_NetworkReceiveEvent(NetPeer fromPeer, NetPacketReader reader, byte channel,
+            DeliveryMethod deliveryMethod)
         {
             //If over the MTU.
             if (reader.AvailableBytes > _mtu)
@@ -368,8 +388,8 @@ namespace FishNet.Transporting.Tugboat.Server
             //If there are disconnect nows.
             if (count > 0)
             {
-                List<int> collection = _disconnectingNow.Collection;
-                for (int i = 0; i < count; i++)
+                var collection = _disconnectingNow.Collection;
+                for (var i = 0; i < count; i++)
                     StopConnection(collection[i], true);
 
                 _disconnectingNow.Reset();
@@ -379,8 +399,8 @@ namespace FishNet.Transporting.Tugboat.Server
             //If there are disconnect next.
             if (count > 0)
             {
-                List<int> collection = _disconnectingNext.Collection;
-                for (int i = 0; i < count; i++)
+                var collection = _disconnectingNext.Collection;
+                for (var i = 0; i < count; i++)
                     _disconnectingNow.AddValue(collection[i]);
 
                 _disconnectingNext.Reset();
@@ -397,25 +417,27 @@ namespace FishNet.Transporting.Tugboat.Server
             if (base.GetConnectionState() != LocalConnectionStates.Started || _server == null)
             {
                 //Not started, clear outgoing.
-                base.ClearPacketQueue(ref _outgoing);
+                ClearPacketQueue(ref _outgoing);
             }
             else
             {
-                int count = _outgoing.Count;
-                for (int i = 0; i < count; i++)
+                var count = _outgoing.Count;
+                for (var i = 0; i < count; i++)
                 {
-                    Packet outgoing = _outgoing.Dequeue();
-                    int connectionId = outgoing.ConnectionId;
+                    var outgoing = _outgoing.Dequeue();
+                    var connectionId = outgoing.ConnectionId;
 
-                    ArraySegment<byte> segment = outgoing.GetArraySegment();
-                    DeliveryMethod dm = (outgoing.Channel == (byte)Channel.Reliable) ?
-                         DeliveryMethod.ReliableOrdered : DeliveryMethod.Unreliable;
+                    var segment = outgoing.GetArraySegment();
+                    var dm = outgoing.Channel == (byte) Channel.Reliable
+                        ? DeliveryMethod.ReliableOrdered
+                        : DeliveryMethod.Unreliable;
 
                     //If over the MTU.
-                    if (outgoing.Channel == (byte)Channel.Unreliable && segment.Count > _mtu)
+                    if (outgoing.Channel == (byte) Channel.Unreliable && segment.Count > _mtu)
                     {
-                        if (base.Transport.NetworkManager.CanLog(LoggingType.Warning))
-                            Debug.LogWarning($"Server is sending of {segment.Count} length on the unreliable channel, while the MTU is only {_mtu}. The channel has been changed to reliable for this send.");
+                        if (Transport.NetworkManager.CanLog(LoggingType.Warning))
+                            Debug.LogWarning(
+                                $"Server is sending of {segment.Count} length on the unreliable channel, while the MTU is only {_mtu}. The channel has been changed to reliable for this send.");
                         dm = DeliveryMethod.ReliableOrdered;
                     }
 
@@ -427,7 +449,7 @@ namespace FishNet.Transporting.Tugboat.Server
                     //Send to one client.
                     else
                     {
-                        NetPeer peer = GetNetPeer(connectionId, true);
+                        var peer = GetNetPeer(connectionId, true);
                         //If peer is found.
                         if (peer != null)
                             peer.Send(segment.Array, segment.Offset, segment.Count, dm);
@@ -453,16 +475,16 @@ namespace FishNet.Transporting.Tugboat.Server
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void IterateIncoming()
         {
-            _server?.PollEvents(base.Transport.NetworkManager.TimeManager.Tick);
+            _server?.PollEvents(Transport.NetworkManager.TimeManager.Tick);
 
             /* Run local connection states first so we can begin
              * to read for data at the start of the frame, as that's
              * where incoming is read. */
             while (_localConnectionStates.Count > 0)
-                base.SetConnectionState(_localConnectionStates.Dequeue(), true);
+                SetConnectionState(_localConnectionStates.Dequeue(), true);
 
             //Not yet started.
-            LocalConnectionStates localState = base.GetConnectionState();
+            var localState = base.GetConnectionState();
             if (localState != LocalConnectionStates.Started)
             {
                 ResetQueues();
@@ -474,48 +496,46 @@ namespace FishNet.Transporting.Tugboat.Server
                 }
             }
 
-            bool canLogWarning = base.Transport.NetworkManager.CanLog(LoggingType.Warning);
+            var canLogWarning = Transport.NetworkManager.CanLog(LoggingType.Warning);
             //Go through attack events first.
-            while (_possibleAttackEvents.TryDequeue(out int connectionId))
-            {
+            while (_possibleAttackEvents.TryDequeue(out var connectionId))
                 if (canLogWarning)
                 {
-                    string msg = string.Empty;
+                    var msg = string.Empty;
                     if (_attackResponseType == AttackResponseType.WarnAndKick)
                         msg = " Client will be kicked.";
 
                     Debug.LogWarning($"ConnectionId {connectionId} may be performing an attack.{msg}");
                 }
-            }
 
             //Handle connection and disconnection events.
             while (_remoteConnectionEvents.Count > 0)
             {
-                RemoteConnectionEvent connectionEvent = _remoteConnectionEvents.Dequeue();
-                RemoteConnectionStates state = (connectionEvent.Connected) ? RemoteConnectionStates.Started : RemoteConnectionStates.Stopped;
-                base.Transport.HandleRemoteConnectionState(new RemoteConnectionStateArgs(state, connectionEvent.ConnectionId, base.Transport.Index));
+                var connectionEvent = _remoteConnectionEvents.Dequeue();
+                var state = connectionEvent.Connected ? RemoteConnectionStates.Started : RemoteConnectionStates.Stopped;
+                Transport.HandleRemoteConnectionState(new RemoteConnectionStateArgs(state, connectionEvent.ConnectionId,
+                    Transport.Index));
             }
-            
+
             //Handle packets.
             while (_incoming.Count > 0)
             {
-                Packet incoming = _incoming.Dequeue();
+                var incoming = _incoming.Dequeue();
                 //Make sure peer is still connected.
-                NetPeer peer = GetNetPeer(incoming.ConnectionId, true);
+                var peer = GetNetPeer(incoming.ConnectionId, true);
                 if (peer != null)
                 {
-                    ServerReceivedDataArgs  dataArgs = new ServerReceivedDataArgs(
+                    var dataArgs = new ServerReceivedDataArgs(
                         incoming.GetArraySegment(),
-                        (Channel)incoming.Channel,
+                        (Channel) incoming.Channel,
                         incoming.ConnectionId,
-                        base.Transport.Index);
+                        Transport.Index);
 
-                    base.Transport.HandleServerReceivedDataArgs(dataArgs);
+                    Transport.HandleServerReceivedDataArgs(dataArgs);
                 }
 
                 incoming.Dispose();
             }
-
         }
 
         /// <summary>

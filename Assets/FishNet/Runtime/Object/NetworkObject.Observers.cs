@@ -10,26 +10,31 @@ namespace FishNet.Object
     public sealed partial class NetworkObject : MonoBehaviour
     {
         #region Public.
+
         /// <summary>
         /// Called when this NetworkObject losses all observers or gains observers while previously having none.
         /// </summary>
         public event Action<NetworkObject> OnObserversActive;
+
         /// <summary>
         /// NetworkObserver on this object. May be null if not using observers.
         /// </summary>
-        [HideInInspector]
-        public NetworkObserver NetworkObserver = null;
+        [HideInInspector] public NetworkObserver NetworkObserver = null;
+
         /// <summary>
         /// Clients which can see and get messages from this NetworkObject.
         /// </summary>
-        public HashSet<NetworkConnection> Observers = new HashSet<NetworkConnection>();
+        public HashSet<NetworkConnection> Observers = new();
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// True if NetworkObserver has been initialized.
         /// </summary>
         private bool _networkObserverInitiliazed = false;
+
         #endregion
 
         /// <summary>
@@ -43,6 +48,7 @@ namespace FishNet.Object
             NetworkObserver = GetComponent<NetworkObserver>();
             NetworkManager.ObserverManager.AddDefaultConditions(this, ref NetworkObserver);
         }
+
         /// <summary>
         /// Initializes NetworkObserver. This will only call once even as host.
         /// </summary>
@@ -63,8 +69,8 @@ namespace FishNet.Object
         /// <param name="connection"></param>
         internal bool RemoveObserver(NetworkConnection connection)
         {
-            int startCount = Observers.Count;
-            bool removed = Observers.Remove(connection);
+            var startCount = Observers.Count;
+            var removed = Observers.Remove(connection);
             if (removed)
                 TryInvokeOnObserversActive(startCount);
 
@@ -95,19 +101,19 @@ namespace FishNet.Object
                 return ObserverStateChange.Unchanged;
             }
 
-            int startCount = Observers.Count;
+            var startCount = Observers.Count;
             //Not using observer system, this object is seen by everything.
             if (NetworkObserver == null)
             {
-                bool added = Observers.Add(connection);
+                var added = Observers.Add(connection);
                 if (added)
                     TryInvokeOnObserversActive(startCount);
 
-                return (added) ? ObserverStateChange.Added : ObserverStateChange.Unchanged;
+                return added ? ObserverStateChange.Added : ObserverStateChange.Unchanged;
             }
             else
             {
-                ObserverStateChange osc = NetworkObserver.RebuildObservers(connection, timedOnly);
+                var osc = NetworkObserver.RebuildObservers(connection, timedOnly);
                 if (osc == ObserverStateChange.Added)
                     Observers.Add(connection);
                 else if (osc == ObserverStateChange.Removed)
@@ -118,7 +124,6 @@ namespace FishNet.Object
 
                 return osc;
             }
-
         }
 
         /// <summary>
@@ -128,11 +133,8 @@ namespace FishNet.Object
         private void TryInvokeOnObserversActive(int startCount)
         {
             if ((Observers.Count > 0 && startCount == 0) ||
-                Observers.Count == 0 && startCount > 0)
+                (Observers.Count == 0 && startCount > 0))
                 OnObserversActive?.Invoke(this);
         }
-
     }
-
 }
-

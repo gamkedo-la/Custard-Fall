@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -9,12 +8,10 @@ using UnityEditor;
 
 namespace FishNet.Configuring
 {
-
     public class ConfigurationData
     {
         //Non serialized doesn't really do anything, its just for me.
-        [System.NonSerialized]
-        public bool Loaded;
+        [NonSerialized] public bool Loaded;
 
         public bool IsBuilding;
         public bool IsDevelopment;
@@ -25,14 +22,14 @@ namespace FishNet.Configuring
 
     public static class ConfigurationDataExtension
     {
-
         /// <summary>
         /// Returns if a differs from b.
         /// </summary>
         public static bool HasChanged(this ConfigurationData a, ConfigurationData b)
         {
-            return (a.StripReleaseBuilds != b.StripReleaseBuilds);
+            return a.StripReleaseBuilds != b.StripReleaseBuilds;
         }
+
         /// <summary>
         /// Copies all values from source to target.
         /// </summary>
@@ -55,7 +52,7 @@ namespace FishNet.Configuring
              * will occur once per script save, and once per assembly when building. */
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(ConfigurationData));
+                var serializer = new XmlSerializer(typeof(ConfigurationData));
                 TextWriter writer = new StreamWriter(path);
                 serializer.Serialize(writer, cd);
                 writer.Close();
@@ -71,10 +68,6 @@ namespace FishNet.Configuring
             {
                 throw new Exception($"An error occurred while writing ConfigurationData. Message: {ex.Message}");
             }
-
         }
-
     }
-
-
 }

@@ -4,27 +4,31 @@ using UnityEngine;
 
 namespace FishNet.Managing.Transporting
 {
-
     internal class SplitReader
     {
         #region Private.
+
         /// <summary>
         /// Tick split is for.
         /// Tick must be a negative value so that it's impossible for the first tick to align.
         /// </summary>
         private long _tick = -1;
+
         /// <summary>
         /// Expected number of splits.
         /// </summary>
         private int _expectedMessages;
+
         /// <summary>
         /// Number of splits received so far.
         /// </summary>
         private ushort _receivedMessages;
+
         /// <summary>
         /// Writer containing split packet combined.
         /// </summary>
         private PooledWriter _writer = WriterPool.GetWriter();
+
         #endregion
 
         /// <summary>
@@ -50,7 +54,7 @@ namespace FishNet.Managing.Transporting
              * once the split is fully combined the data
              * is parsed as though it came in as one message,
              * which is how data is normally read. */
-            ArraySegment<byte> data = reader.ReadArraySegment(reader.Remaining);
+            var data = reader.ReadArraySegment(reader.Remaining);
             _writer.WriteArraySegment(data);
             _receivedMessages++;
         }
@@ -63,11 +67,11 @@ namespace FishNet.Managing.Transporting
         {
             if (_receivedMessages < _expectedMessages)
             {
-                return default(ArraySegment<byte>);
+                return default;
             }
             else
             {
-                ArraySegment<byte> segment = _writer.GetArraySegment();
+                var segment = _writer.GetArraySegment();
                 Reset();
                 return segment;
             }
@@ -80,8 +84,5 @@ namespace FishNet.Managing.Transporting
             _expectedMessages = expectedMessages;
             _writer.Reset();
         }
-
     }
-
-
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace FishNet.Editing
 {
-
     [InitializeOnLoad]
     public class PlayModeTracker
     {
@@ -32,19 +31,18 @@ namespace FishNet.Editing
         internal static bool QuitRecently(float past)
         {
             past *= 1000;
-            return ((DateTime.Now - _quitTime).TotalMilliseconds < past);
+            return (DateTime.Now - _quitTime).TotalMilliseconds < past;
         }
 
         private static void OnPlayModeStateChanged(PlayModeStateChange stateChange)
         {
             switch (stateChange)
             {
-                case (PlayModeStateChange.ExitingPlayMode):
+                case PlayModeStateChange.ExitingPlayMode:
                     _quitTime = DateTime.Now;
                     break;
             }
         }
-
     }
 }
 

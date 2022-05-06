@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 namespace FishNet.Serializing.Helping
 {
-
     public class Comparers
     {
         /// <summary>
@@ -15,14 +14,13 @@ namespace FishNet.Serializing.Helping
         /// <returns></returns>
         public static bool EqualityCompare<T>(T a, T b)
         {
-            return (EqualityComparer<T>.Default.Equals(a, b));
+            return EqualityComparer<T>.Default.Equals(a, b);
         }
 
         public static bool IsDefault<T>(T t)
         {
             return t.Equals(default(T));
         }
-
     }
 
 
@@ -34,9 +32,9 @@ namespace FishNet.Serializing.Helping
                 return false;
 
             if (a.handle != 0 || b.handle != 0)
-                return (a.handle == b.handle);
+                return a.handle == b.handle;
 
-            return (a.name == b.name);
+            return a.name == b.name;
         }
 
         public int GetHashCode(Scene obj)
@@ -44,5 +42,4 @@ namespace FishNet.Serializing.Helping
             return obj.GetHashCode();
         }
     }
-
 }

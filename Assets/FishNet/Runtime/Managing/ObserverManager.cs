@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace FishNet.Managing.Observing
 {
-
     /// <summary>
     /// Additional options for managing the observer system.
     /// </summary>
@@ -14,12 +13,13 @@ namespace FishNet.Managing.Observing
     public sealed class ObserverManager : MonoBehaviour
     {
         #region Serialized.
+
         /// <summary>
         /// 
         /// </summary>
-        [Tooltip("Default observer conditions for networked objects.")]
-        [SerializeField]
-        private List<ObserverCondition> _defaultConditions = new List<ObserverCondition>();
+        [Tooltip("Default observer conditions for networked objects.")] [SerializeField]
+        private List<ObserverCondition> _defaultConditions = new();
+
         #endregion
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace FishNet.Managing.Observing
         /// </summary>
         internal NetworkObserver AddDefaultConditions(NetworkObject nob, ref NetworkObserver obs)
         {
-            bool nullObs = (obs == null);
+            var nullObs = obs == null;
             /* NetworkObserver is null and there are no
              * conditions to add. Nothing will change by adding
              * the NetworkObserver component so exit early. */
@@ -49,10 +49,10 @@ namespace FishNet.Managing.Observing
             //Adding only new.
             else
             {
-                int count = _defaultConditions.Count;
-                for (int i = 0; i < count; i++)
+                var count = _defaultConditions.Count;
+                for (var i = 0; i < count; i++)
                 {
-                    ObserverCondition oc = _defaultConditions[i];
+                    var oc = _defaultConditions[i];
                     if (!obs.ObserverConditionsInternal.Contains(oc))
                         obs.ObserverConditionsInternal.Add(oc);
                 }
@@ -61,5 +61,4 @@ namespace FishNet.Managing.Observing
             return obs;
         }
     }
-
 }

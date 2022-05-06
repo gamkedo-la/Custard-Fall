@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace FishNet.CodeGenerating.Helping.Extension
 {
-
     internal static class CustomAttributeExtensions
     {
         /// <summary>
@@ -16,13 +15,9 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         internal static T GetField<T>(this CustomAttribute customAttr, string field, T defaultValue)
         {
-            foreach (CustomAttributeNamedArgument customField in customAttr.Fields)
-            {
+            foreach (var customField in customAttr.Fields)
                 if (customField.Name == field)
-                {
-                    return (T)customField.Argument.Value;
-                }
-            }
+                    return (T) customField.Argument.Value;
 
             return defaultValue;
         }
@@ -49,6 +44,4 @@ namespace FishNet.CodeGenerating.Helping.Extension
             return ca.AttributeType.FullName == targetFullName;
         }
     }
-
-
 }

@@ -26,14 +26,12 @@ namespace LiteNetLib
         protected void AddToPeerChannelSendQueue()
         {
             if (Interlocked.CompareExchange(ref _isAddedToPeerChannelSendQueue, 1, 0) == 0)
-            {
                 Peer.AddToReliableChannelSendQueue(this);
-            }
         }
 
         public bool SendAndCheckQueue()
         {
-            bool hasPacketsToSend = SendNextPackets();
+            var hasPacketsToSend = SendNextPackets();
             if (!hasPacketsToSend)
                 Interlocked.Exchange(ref _isAddedToPeerChannelSendQueue, 0);
 

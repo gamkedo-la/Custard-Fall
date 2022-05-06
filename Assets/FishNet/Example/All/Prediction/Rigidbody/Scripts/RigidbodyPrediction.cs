@@ -11,15 +11,16 @@ using UnityEngine;
 
 namespace FishNet.Example.Prediction.Rigidbodies
 {
-
     public class RigidbodyPrediction : NetworkBehaviour
     {
         #region Types.
+
         public struct MoveData
         {
             public bool Jump;
             public float Horizontal;
             public float Vertical;
+
             public MoveData(bool jump, float horizontal, float vertical)
             {
                 Jump = jump;
@@ -27,12 +28,14 @@ namespace FishNet.Example.Prediction.Rigidbodies
                 Vertical = vertical;
             }
         }
+
         public struct ReconcileData
         {
             public Vector3 Position;
             public Quaternion Rotation;
             public Vector3 Velocity;
             public Vector3 AngularVelocity;
+
             public ReconcileData(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity)
             {
                 Position = position;
@@ -41,35 +44,38 @@ namespace FishNet.Example.Prediction.Rigidbodies
                 AngularVelocity = angularVelocity;
             }
         }
+
         #endregion
 
         #region Serialized.
-        [SerializeField]
-        private float _jumpForce = 15f;
-        [SerializeField]
-        private float _moveRate = 15f;
+
+        [SerializeField] private float _jumpForce = 15f;
+        [SerializeField] private float _moveRate = 15f;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Rigidbody on this object.
         /// </summary>
         private Rigidbody _rigidbody;
+
         /// <summary>
         /// Next time a jump is allowed.
         /// </summary>
         private float _nextJumpTime;
+
         /// <summary>
         /// True to jump next frame.
         /// </summary>
         private bool _jump;
-        #endregion
 
+        #endregion
 
 
         private void Awake()
         {
-
             _rigidbody = GetComponent<Rigidbody>();
             InstanceFinder.TimeManager.OnTick += TimeManager_OnTick;
             InstanceFinder.TimeManager.OnPostTick += TimeManager_OnPostTick;
@@ -86,36 +92,33 @@ namespace FishNet.Example.Prediction.Rigidbodies
 
         private void Update()
         {
-            if (base.IsOwner)
-            {
+            if (IsOwner)
                 if (Input.GetKeyDown(KeyCode.Space) && Time.time > _nextJumpTime)
                 {
                     _nextJumpTime = Time.time + 1f;
                     _jump = true;
                 }
-            }
         }
 
         private void TimeManager_OnTick()
         {
-            if (base.IsOwner)
+            if (IsOwner)
             {
                 Reconciliation(default, false);
-                CheckInput(out MoveData md);
+                CheckInput(out var md);
                 Move(md, false);
             }
-            if (base.IsServer)
-            {
-                Move(default, true);
-            }
+
+            if (IsServer) Move(default, true);
         }
 
 
         private void TimeManager_OnPostTick()
         {
-            if (base.IsServer)
+            if (IsServer)
             {
-                ReconcileData rd = new ReconcileData(transform.position, transform.rotation, _rigidbody.velocity, _rigidbody.angularVelocity);
+                var rd = new ReconcileData(transform.position, transform.rotation, _rigidbody.velocity,
+                    _rigidbody.angularVelocity);
                 Reconciliation(rd, true);
             }
         }
@@ -124,8 +127,8 @@ namespace FishNet.Example.Prediction.Rigidbodies
         {
             md = default;
 
-            float horizontal = Input.GetAxisRaw("Horizontal");
-            float vertical = Input.GetAxisRaw("Vertical");
+            var horizontal = Input.GetAxisRaw("Horizontal");
+            var vertical = Input.GetAxisRaw("Vertical");
 
             if (horizontal == 0f && vertical == 0f && !_jump)
                 return;
@@ -138,7 +141,7 @@ namespace FishNet.Example.Prediction.Rigidbodies
         private void Move(MoveData md, bool asServer, bool replaying = false)
         {
             //Add extra gravity for faster falls.
-            Vector3 forces = new Vector3(md.Horizontal, Physics.gravity.y, md.Vertical) * _moveRate;
+            var forces = new Vector3(md.Horizontal, Physics.gravity.y, md.Vertical) * _moveRate;
             _rigidbody.AddForce(forces);
 
             if (md.Jump)
@@ -153,9 +156,5 @@ namespace FishNet.Example.Prediction.Rigidbodies
             _rigidbody.velocity = rd.Velocity;
             _rigidbody.angularVelocity = rd.AngularVelocity;
         }
-
-
     }
-
-
 }

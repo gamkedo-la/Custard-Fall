@@ -7,16 +7,22 @@ namespace FishNet.Managing
     public partial class NetworkManager : MonoBehaviour
     {
         #region Serialized.
+
         /// <summary>
         /// 
         /// </summary>
-        [Tooltip("Collection to use for spawnable objects.")]
-        [SerializeField]
+        [Tooltip("Collection to use for spawnable objects.")] [SerializeField]
         private PrefabObjects _spawnablePrefabs;
+
         /// <summary>
         /// Collection to use for spawnable objects.
         /// </summary>
-        public PrefabObjects SpawnablePrefabs { get => _spawnablePrefabs; set => _spawnablePrefabs = value; }
+        public PrefabObjects SpawnablePrefabs
+        {
+            get => _spawnablePrefabs;
+            set => _spawnablePrefabs = value;
+        }
+
         #endregion
 
 
@@ -28,10 +34,10 @@ namespace FishNet.Managing
         /// <returns>Returns index if found, and -1 if not found.</returns>
         public int GetPrefabIndex(GameObject prefab, bool asServer)
         {
-            int count = SpawnablePrefabs.GetObjectCount();
-            for (int i = 0; i < count; i++)
+            var count = SpawnablePrefabs.GetObjectCount();
+            for (var i = 0; i < count; i++)
             {
-                GameObject go = SpawnablePrefabs.GetObject(asServer, i).gameObject;
+                var go = SpawnablePrefabs.GetObject(asServer, i).gameObject;
                 if (go == prefab)
                     return i;
             }
@@ -51,5 +57,4 @@ namespace FishNet.Managing
             return SpawnablePrefabs.GetObject(asServer, index);
         }
     }
-
 }

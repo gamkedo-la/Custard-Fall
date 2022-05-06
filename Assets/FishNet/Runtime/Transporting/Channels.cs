@@ -9,11 +9,10 @@
         /// Data will be sent ordered reliable.
         /// </summary>
         Reliable = 0,
+
         /// <summary>
         /// Data will be sent unreliable.
         /// </summary>
         Unreliable = 1
     }
-
-
 }

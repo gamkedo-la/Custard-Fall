@@ -21,39 +21,47 @@ namespace FishNet.Managing.Server
     public partial class ServerObjects : ManagedObjects
     {
         #region Public.
+
         /// <summary>
         /// Called right before client objects are destroyed when a client disconnects.
         /// </summary>
         public event Action<NetworkConnection> OnPreDestroyClientObjects;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Cached ObjectIds which may be used when exceeding available ObjectIds.
         /// </summary>
-        private Queue<int> _objectIdCache = new Queue<int>();
+        private Queue<int> _objectIdCache = new();
+
         /// <summary>
         /// NetworkBehaviours which have dirty SyncVars.
         /// </summary>
-        private List<NetworkBehaviour> _dirtySyncVarBehaviours = new List<NetworkBehaviour>(20);
+        private List<NetworkBehaviour> _dirtySyncVarBehaviours = new(20);
+
         /// <summary>
         /// NetworkBehaviours which have dirty SyncObjects.
         /// </summary>
-        private List<NetworkBehaviour> _dirtySyncObjectBehaviours = new List<NetworkBehaviour>(20);
+        private List<NetworkBehaviour> _dirtySyncObjectBehaviours = new(20);
+
         /// <summary>
         /// Objects which need to be destroyed next tick.
         /// This is needed when running as host so host client will get any final messages for the object before they're destroyed.
         /// </summary>
-        private Dictionary<int, NetworkObject> _pendingDestroy = new Dictionary<int, NetworkObject>();
+        private Dictionary<int, NetworkObject> _pendingDestroy = new();
+
         /// <summary>
         /// Scenes which were loaded that need to be setup.
         /// </summary>
         private List<(int, Scene)> _loadedScenes = new List<(int frame, Scene scene)>();
+
         #endregion
 
         internal ServerObjects(NetworkManager networkManager)
         {
-            base.NetworkManager = networkManager;
+            NetworkManager = networkManager;
             networkManager.SceneManager.OnActiveSceneSet += SceneManager_OnActiveSceneSet;
             networkManager.TimeManager.OnUpdate += TimeManager_OnUpdate;
         }
@@ -66,9 +74,11 @@ namespace FishNet.Managing.Server
             IterateLoadedScenes(false);
             PartialOnUpdate();
         }
+
         partial void PartialOnUpdate();
 
         #region Checking dirty SyncTypes.
+
         /// <summary>
         /// Iterates NetworkBehaviours with dirty SyncTypes.
         /// </summary>
@@ -81,9 +91,9 @@ namespace FishNet.Managing.Server
 
             void IterateCollection(List<NetworkBehaviour> collection, bool isSyncObject)
             {
-                for (int i = 0; i < collection.Count; i++)
+                for (var i = 0; i < collection.Count; i++)
                 {
-                    bool dirtyCleared = collection[i].WriteDirtySyncTypes(isSyncObject);
+                    var dirtyCleared = collection[i].WriteDirtySyncTypes(isSyncObject);
                     if (dirtyCleared)
                     {
                         collection.RemoveAt(i);
@@ -92,6 +102,7 @@ namespace FishNet.Managing.Server
                 }
             }
         }
+
         /// <summary>
         /// Sets that a NetworkBehaviour has a dirty syncVars.
         /// </summary>
@@ -103,22 +114,23 @@ namespace FishNet.Managing.Server
             else
                 _dirtySyncVarBehaviours.Add(nb);
         }
+
         #endregion
 
         #region Connection Handling.
+
         /// <summary>
         /// Called when the connection state changes for the local server.
         /// </summary>
         /// <param name="args"></param>
         internal void OnServerConnectionState(ServerConnectionStateArgs args)
         {
-
             //If server just connected.
             if (args.ConnectionState == LocalConnectionStates.Started)
             {
                 /* If there's no servers started besides the one
                  * that just started then build Ids and setup scene objects. */
-                if (base.NetworkManager.ServerManager.OneServerStarted())
+                if (NetworkManager.ServerManager.OneServerStarted())
                 {
                     BuildObjectIdCache();
                     SetupSceneObjects();
@@ -128,12 +140,12 @@ namespace FishNet.Managing.Server
             else
             {
                 //If no servers are started then reset.
-                if (!base.NetworkManager.ServerManager.AnyServerStarted())
+                if (!NetworkManager.ServerManager.AnyServerStarted())
                 {
                     base.DespawnSpawnedWithoutSynchronization(true);
-                    base.SceneObjects.Clear();
+                    SceneObjects.Clear();
                     _objectIdCache.Clear();
-                    base.NetworkManager.ServerManager.Clients.Clear();
+                    NetworkManager.ServerManager.Clients.Clear();
                 }
             }
         }
@@ -151,19 +163,21 @@ namespace FishNet.Managing.Server
             /* A cache is made because the Objects
              * collection would end up modified during
              * iteration from removing ownership and despawning. */
-            ListCache<NetworkObject> cache = ListCaches.NetworkObjectCache;
+            var cache = ListCaches.NetworkObjectCache;
             cache.Reset();
-            foreach (NetworkObject nob in connection.Objects)
+            foreach (var nob in connection.Objects)
                 cache.AddValue(nob);
 
-            int written = cache.Written;
-            List<NetworkObject> collection = cache.Collection;
-            for (int i = 0; i < written; i++)
+            var written = cache.Written;
+            var collection = cache.Collection;
+            for (var i = 0; i < written; i++)
                 collection[i].Despawn();
         }
+
         #endregion
 
         #region ObjectIds.
+
         /// <summary>
         /// Builds the ObjectId cache with all possible Ids.
         /// </summary>
@@ -174,8 +188,8 @@ namespace FishNet.Managing.Server
             /* Shuffle Ids to make it more difficult
              * for clients to track spawned object
              * count. */
-            List<int> shuffledCache = new List<int>();
-            for (int i = 0; i < short.MaxValue; i++)
+            var shuffledCache = new List<int>();
+            for (var i = 0; i < short.MaxValue; i++)
                 shuffledCache.Add(i);
             /* Only shuffle when NOT in editor and not
              * development build.
@@ -185,10 +199,11 @@ namespace FishNet.Managing.Server
 #endif
             //Add shuffled to objectIdCache.
             //Build Id cache.
-            int cacheCount = shuffledCache.Count;
-            for (int i = 0; i < cacheCount; i++)
+            var cacheCount = shuffledCache.Count;
+            for (var i = 0; i < cacheCount; i++)
                 _objectIdCache.Enqueue(shuffledCache[i]);
         }
+
         /// <summary>
         /// Caches a NetworkObject ObjectId.
         /// </summary>
@@ -208,8 +223,9 @@ namespace FishNet.Managing.Server
             //Either something went wrong or user actually managed to spawn ~32K networked objects.
             if (_objectIdCache.Count == 0)
             {
-                if (base.NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"No more available ObjectIds. How the heck did you manage to have {short.MaxValue} objects spawned at once?");
+                if (NetworkManager.CanLog(LoggingType.Error))
+                    Debug.LogError(
+                        $"No more available ObjectIds. How the heck did you manage to have {short.MaxValue} objects spawned at once?");
                 return -1;
             }
             else
@@ -217,9 +233,11 @@ namespace FishNet.Managing.Server
                 return _objectIdCache.Dequeue();
             }
         }
+
         #endregion
 
         #region Initializing Objects In Scenes.
+
         /// <summary>
         /// Called after the active scene has been scene, immediately after scene loads.
         /// </summary>
@@ -227,6 +245,7 @@ namespace FishNet.Managing.Server
         {
             IterateLoadedScenes(true);
         }
+
         /// <summary>
         /// Iterates loaded scenes and sets them up.
         /// </summary>
@@ -237,10 +256,10 @@ namespace FishNet.Managing.Server
             if (!NetworkManager.ServerManager.Started)
                 _loadedScenes.Clear();
 
-            for (int i = 0; i < _loadedScenes.Count; i++)
+            for (var i = 0; i < _loadedScenes.Count; i++)
             {
                 (int frame, Scene scene) value = _loadedScenes[i];
-                if (ignoreFrameRestriction || (Time.frameCount > value.frame))
+                if (ignoreFrameRestriction || Time.frameCount > value.frame)
                 {
                     SetupSceneObjects(value.scene);
                     _loadedScenes.RemoveAt(i);
@@ -269,10 +288,10 @@ namespace FishNet.Managing.Server
         /// </summary>
         protected internal void SetupSceneObjects()
         {
-            for (int i = 0; i < SceneManager.sceneCount; i++)
+            for (var i = 0; i < SceneManager.sceneCount; i++)
                 SetupSceneObjects(SceneManager.GetSceneAt(i));
 
-            Scene ddolScene = DDOLFinder.GetDDOL().gameObject.scene;
+            var ddolScene = DDOLFinder.GetDDOL().gameObject.scene;
             if (ddolScene.isLoaded)
                 SetupSceneObjects(ddolScene);
         }
@@ -284,17 +303,17 @@ namespace FishNet.Managing.Server
         private void SetupSceneObjects(Scene s)
         {
             int nobCount;
-            List<NetworkObject> networkObjects = SceneFN.GetSceneNetworkObjects(s, out nobCount);
-            bool isHost = base.NetworkManager.IsHost;
+            var networkObjects = SceneFN.GetSceneNetworkObjects(s, out nobCount);
+            var isHost = NetworkManager.IsHost;
 
-            for (int i = 0; i < nobCount; i++)
+            for (var i = 0; i < nobCount; i++)
             {
-                NetworkObject nob = networkObjects[i];
+                var nob = networkObjects[i];
                 //Only setup if a scene object and not initialzied.
                 if (nob.SceneObject && nob.Deinitializing)
                 {
-                    base.UpdateNetworkBehaviours(nob, true);
-                    base.AddToSceneObjects(nob);
+                    UpdateNetworkBehaviours(nob, true);
+                    AddToSceneObjects(nob);
                     /* If was active in the editor (before hitting play), or currently active
                      * then PreInitialize without synchronizing to clients. There is no reason
                      * to synchronize to clients because the scene just loaded on server,
@@ -320,16 +339,18 @@ namespace FishNet.Managing.Server
         {
             if (nob.IsNetworked)
             {
-                int objectId = GetNextNetworkObjectId();
+                var objectId = GetNextNetworkObjectId();
                 nob.InitializeOnceInternal(NetworkManager, objectId, ownerConnection, true);
-                base.AddToSpawned(nob);
+                AddToSpawned(nob);
                 nob.gameObject.SetActive(true);
                 nob.Initialize(true);
             }
         }
+
         #endregion
 
         #region Spawning.
+
         /// <summary>
         /// Spawns an object over the network.
         /// </summary>
@@ -338,30 +359,33 @@ namespace FishNet.Managing.Server
         {
             if (!NetworkManager.ServerManager.Started)
             {
-                if (base.NetworkManager.CanLog(LoggingType.Warning))
+                if (NetworkManager.CanLog(LoggingType.Warning))
                     Debug.LogWarning("Cannot spawn object because the server is not active.");
                 return;
             }
+
             if (networkObject == null)
             {
-                if (base.NetworkManager.CanLog(LoggingType.Error))
+                if (NetworkManager.CanLog(LoggingType.Error))
                     Debug.LogError($"Specified networkObject is null.");
                 return;
             }
+
             if (!networkObject.gameObject.scene.IsValid())
             {
-                if (base.NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"{networkObject.name} is a prefab. You must instantiate the prefab first, then use Spawn on the instantiated copy.");
+                if (NetworkManager.CanLog(LoggingType.Error))
+                    Debug.LogError(
+                        $"{networkObject.name} is a prefab. You must instantiate the prefab first, then use Spawn on the instantiated copy.");
                 return;
             }
+
             if (ownerConnection != null && ownerConnection.IsActive && !ownerConnection.LoadedStartScenes)
-            {
-                if (base.NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"{networkObject.name} was spawned but it's recommended to not spawn objects for connections until they have loaded start scenes. You can be notified when a connection loads start scenes by using connection.OnLoadedStartScenes on the connection, or SceneManager.OnClientLoadStartScenes.");
-            }
+                if (NetworkManager.CanLog(LoggingType.Warning))
+                    Debug.LogWarning(
+                        $"{networkObject.name} was spawned but it's recommended to not spawn objects for connections until they have loaded start scenes. You can be notified when a connection loads start scenes by using connection.OnLoadedStartScenes on the connection, or SceneManager.OnClientLoadStartScenes.");
             if (networkObject.IsSpawned)
             {
-                if (base.NetworkManager.CanLog(LoggingType.Warning))
+                if (NetworkManager.CanLog(LoggingType.Warning))
                     Debug.LogWarning($"{networkObject.name} is already spawned.");
                 return;
             }
@@ -391,7 +415,8 @@ namespace FishNet.Managing.Server
         /// <param name="connection">Connection spawn is being written for.</param>
         /// <param name="everyoneWriter"></param>
         /// <param name="ownerWriter"></param>
-        private void WriteSpawn(NetworkObject nob, NetworkConnection connection, ref PooledWriter everyoneWriter, ref PooledWriter ownerWriter)
+        private void WriteSpawn(NetworkObject nob, NetworkConnection connection, ref PooledWriter everyoneWriter,
+            ref PooledWriter ownerWriter)
         {
             /* Using a number of writers to prevent rebuilding the
              * packets excessively for values that are owner only
@@ -409,17 +434,17 @@ namespace FishNet.Managing.Server
              * for every connection it's going to and filling a single
              * writer with values based on if owner or not. This would
              * result in significantly more iterations. */
-            PooledWriter headerWriter = WriterPool.GetWriter();
+            var headerWriter = WriterPool.GetWriter();
             headerWriter.WritePacketId(PacketId.ObjectSpawn);
             headerWriter.WriteNetworkObject(nob);
-            if (base.NetworkManager.ServerManager.ShareIds || connection == nob.Owner)
+            if (NetworkManager.ServerManager.ShareIds || connection == nob.Owner)
                 headerWriter.WriteNetworkConnection(nob.Owner);
             else
                 headerWriter.WriteInt16(-1);
 
             /* Write if a scene object or not, and also
              * store sceneObjectId if is a scene object. */
-            bool sceneObject = nob.SceneObject;
+            var sceneObject = nob.SceneObject;
             headerWriter.WriteBoolean(sceneObject);
             /* Writing a scene object. */
             if (sceneObject)
@@ -427,8 +452,8 @@ namespace FishNet.Managing.Server
                 //Write Guid.
                 headerWriter.WriteUInt64(nob.SceneId, AutoPackType.Unpacked);
                 //Write changed properties.
-                ChangedTransformProperties ctp = nob.GetChangedSceneTransformProperties();
-                headerWriter.WriteByte((byte)ctp);
+                var ctp = nob.GetChangedSceneTransformProperties();
+                headerWriter.WriteByte((byte) ctp);
                 //If properties have changed.
                 if (ctp != ChangedTransformProperties.Unset)
                 {
@@ -436,7 +461,8 @@ namespace FishNet.Managing.Server
                     if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.Position))
                         headerWriter.WriteVector3(nob.transform.position);
                     if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.Rotation))
-                        headerWriter.WriteQuaternion(nob.transform.rotation, base.NetworkManager.ServerManager.SpawnPacking.Rotation);
+                        headerWriter.WriteQuaternion(nob.transform.rotation,
+                            NetworkManager.ServerManager.SpawnPacking.Rotation);
                     if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.LocalScale))
                         headerWriter.WriteVector3(nob.transform.localScale);
                 }
@@ -449,7 +475,8 @@ namespace FishNet.Managing.Server
                  * from the prefab. Odds are position will be changed,
                  * and possibly rotation, but not too likely scale. */
                 headerWriter.WriteVector3(nob.transform.position);
-                headerWriter.WriteQuaternion(nob.transform.rotation, base.NetworkManager.ServerManager.SpawnPacking.Rotation);
+                headerWriter.WriteQuaternion(nob.transform.rotation,
+                    NetworkManager.ServerManager.SpawnPacking.Rotation);
                 headerWriter.WriteVector3(nob.transform.localScale);
             }
 
@@ -460,9 +487,9 @@ namespace FishNet.Managing.Server
 
             /* Used to write latest data which must be sent to
              * clients, such as SyncTypes and RpcLinks. */
-            PooledWriter tempWriter = WriterPool.GetWriter();
+            var tempWriter = WriterPool.GetWriter();
             //Send RpcLinks first.
-            foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
+            foreach (var nb in nob.NetworkBehaviours)
                 nb.WriteRpcLinks(tempWriter);
             //Add to everyone/owner.
             everyoneWriter.WriteBytesAndSize(tempWriter.GetBuffer(), 0, tempWriter.Length);
@@ -474,14 +501,14 @@ namespace FishNet.Managing.Server
             * The data may be unique for owner if synctypes are set
             * to only go to owner. */
             tempWriter.Reset();
-            foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
+            foreach (var nb in nob.NetworkBehaviours)
                 nb.WriteSyncTypesForSpawn(tempWriter, false);
             everyoneWriter.WriteBytesAndSize(tempWriter.GetBuffer(), 0, tempWriter.Length);
             //If owner is valid then populate owner writer as well.
             if (nob.Owner.IsValid)
             {
                 tempWriter.Reset();
-                foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
+                foreach (var nb in nob.NetworkBehaviours)
                     nb.WriteSyncTypesForSpawn(tempWriter, true);
                 ownerWriter.WriteBytesAndSize(tempWriter.GetBuffer(), 0, tempWriter.Length);
             }
@@ -490,13 +517,16 @@ namespace FishNet.Managing.Server
             headerWriter.Dispose();
             tempWriter.Dispose();
         }
+
         #endregion
 
         #region Despawning.
+
         internal void AddToPending(NetworkObject nob)
         {
             _pendingDestroy[nob.ObjectId] = nob;
         }
+
         /// <summary>
         /// Tries to removes objectId from PendingDestroy and returns if successful.
         /// </summary>
@@ -505,16 +535,15 @@ namespace FishNet.Managing.Server
         {
             return _pendingDestroy.Remove(objectId);
         }
+
         /// <summary>
         /// Destroys NetworkObjects pending for destruction.
         /// </summary>
         internal void DestroyPending()
         {
-            foreach (NetworkObject item in _pendingDestroy.Values)
-            {
+            foreach (var item in _pendingDestroy.Values)
                 if (item != null)
-                    MonoBehaviour.Destroy(item.gameObject);
-            }
+                    UnityEngine.Object.Destroy(item.gameObject);
 
             _pendingDestroy.Clear();
         }
@@ -561,28 +590,29 @@ namespace FishNet.Managing.Server
         /// <param name="nob"></param>
         private void WriteDespawnAndSend(NetworkObject nob)
         {
-            PooledWriter everyoneWriter = WriterPool.GetWriter();
+            var everyoneWriter = WriterPool.GetWriter();
             WriteDespawn(nob, ref everyoneWriter);
 
-            ArraySegment<byte> despawnSegment = everyoneWriter.GetArraySegment();
+            var despawnSegment = everyoneWriter.GetArraySegment();
 
             //Add observers to a list cache.
-            ListCache<NetworkConnection> cache = ListCaches.NetworkConnectionCache;
+            var cache = ListCaches.NetworkConnectionCache;
             cache.Reset();
             cache.AddValues(nob.Observers);
-            int written = cache.Written;
-            for (int i = 0; i < written; i++)
+            var written = cache.Written;
+            for (var i = 0; i < written; i++)
             {
                 //Invoke ondespawn and send despawn.
-                NetworkConnection conn = cache.Collection[i];
+                var conn = cache.Collection[i];
                 nob.InvokeOnServerDespawn(conn);
-                NetworkManager.TransportManager.SendToClient((byte)Channel.Reliable, despawnSegment, conn);
+                NetworkManager.TransportManager.SendToClient((byte) Channel.Reliable, despawnSegment, conn);
                 //Remove from observers.
                 //nob.Observers.Remove(conn);
             }
 
             everyoneWriter.Dispose();
         }
+
         /// <summary>
         /// Writes a despawn.
         /// </summary>
@@ -592,12 +622,7 @@ namespace FishNet.Managing.Server
             everyoneWriter.WritePacketId(PacketId.ObjectDespawn);
             everyoneWriter.WriteNetworkObject(nob);
         }
-
-
-
     }
+
     #endregion
-
-
-
 }

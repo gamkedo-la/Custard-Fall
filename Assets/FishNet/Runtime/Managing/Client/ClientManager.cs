@@ -19,68 +19,82 @@ namespace FishNet.Managing.Client
     public sealed partial class ClientManager : MonoBehaviour
     {
         #region Public.
+
         /// <summary>
         /// Called after local client has authenticated.
         /// </summary>
         public event Action OnAuthenticated;
+
         /// <summary>
         /// Called after the local client connection state changes.
         /// </summary>
         public event Action<ClientConnectionStateArgs> OnClientConnectionState;
+
         /// <summary>
         /// True if the client connection is connected to the server.
         /// </summary>
         public bool Started { get; private set; }
+
         /// <summary>
         /// NetworkConnection the local client is using to send data to the server.
         /// </summary>
         public NetworkConnection Connection = NetworkManager.EmptyConnection;
+
         /// <summary>
         /// Handling and information for objects known to the local client.
         /// </summary>
         public ClientObjects Objects { get; private set; }
+
         /// <summary>
         /// All currently connected clients. This field only contains data while ServerManager.ShareIds is enabled.
         /// </summary>
-        public Dictionary<int, NetworkConnection> Clients = new Dictionary<int, NetworkConnection>();
+        public Dictionary<int, NetworkConnection> Clients = new();
+
         /// <summary>
         /// NetworkManager for client.
         /// </summary>
         [HideInInspector]
         public NetworkManager NetworkManager { get; private set; }
+
         #endregion
 
         #region Serialized.
+
         /// <summary>
         /// True to automatically set the frame rate when the client connects.
         /// </summary>
-        [Tooltip("True to automatically set the frame rate when the client connects.")]
-        [SerializeField]
+        [Tooltip("True to automatically set the frame rate when the client connects.")] [SerializeField]
         private bool _changeFrameRate = true;
+
         /// <summary>
         /// 
         /// </summary>
-        [Tooltip("Maximum frame rate the client may run at. When as host this value runs at whichever is higher between client and server.")]
+        [Tooltip(
+            "Maximum frame rate the client may run at. When as host this value runs at whichever is higher between client and server.")]
         [Range(1, NetworkManager.MAXIMUM_FRAMERATE)]
         [SerializeField]
         private ushort _frameRate = NetworkManager.MAXIMUM_FRAMERATE;
+
         /// <summary>
         /// Maximum frame rate the client may run at. When as host this value runs at whichever is higher between client and server.
         /// </summary>
-        internal ushort FrameRate => (_changeFrameRate) ? _frameRate : (ushort)0;
+        internal ushort FrameRate => _changeFrameRate ? _frameRate : (ushort) 0;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Used to read splits.
         /// </summary>
-        private SplitReader _splitReader = new SplitReader();
+        private SplitReader _splitReader = new();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         /// <summary>
         /// Logs data about parser to help debug.
         /// </summary>
-        private ParseLogger _parseLogger = new ParseLogger();
+        private ParseLogger _parseLogger = new();
 #endif
+
         #endregion
 
         private void OnDestroy()
@@ -128,11 +142,11 @@ namespace FishNet.Managing.Client
         {
             Clients.Clear();
 
-            List<int> collection = args.Ids;
-            int count = collection.Count;
-            for (int i = 0; i < count; i++)
+            var collection = args.Ids;
+            var count = collection.Count;
+            for (var i = 0; i < count; i++)
             {
-                int id = collection[i];
+                var id = collection[i];
                 Clients[id] = new NetworkConnection(NetworkManager, id);
             }
         }
@@ -144,7 +158,8 @@ namespace FishNet.Managing.Client
         /// <param name="subscribe"></param>
         private void SubscribeToEvents(bool subscribe)
         {
-            if (NetworkManager == null || NetworkManager.TransportManager == null || NetworkManager.TransportManager.Transport == null)
+            if (NetworkManager == null || NetworkManager.TransportManager == null ||
+                NetworkManager.TransportManager.Transport == null)
                 return;
 
             if (!subscribe)
@@ -184,6 +199,7 @@ namespace FishNet.Managing.Client
         {
             StartConnection(address, NetworkManager.TransportManager.Transport.GetPort());
         }
+
         /// <summary>
         /// Sets the transport address and port, and starts the local client connection.
         /// </summary>
@@ -200,8 +216,8 @@ namespace FishNet.Managing.Client
         /// <param name="args"></param>
         private void Transport_OnClientConnectionState(ClientConnectionStateArgs args)
         {
-            LocalConnectionStates state = args.ConnectionState;
-            Started = (state == LocalConnectionStates.Started);
+            var state = args.ConnectionState;
+            Started = state == LocalConnectionStates.Started;
             Objects.OnClientConnectionState(args);
 
             //Clear connection after so objects can update using current Connection value.
@@ -213,8 +229,8 @@ namespace FishNet.Managing.Client
 
             if (NetworkManager.CanLog(LoggingType.Common))
             {
-                Transport t = NetworkManager.TransportManager.GetTransport(args.TransportIndex);
-                string tName = (t == null) ? "Unknown" : t.GetType().Name;
+                var t = NetworkManager.TransportManager.GetTransport(args.TransportIndex);
+                var tName = t == null ? "Unknown" : t.GetType().Name;
                 Debug.Log($"Local client is {state.ToString().ToLower()} for {tName}.");
             }
 
@@ -251,16 +267,16 @@ namespace FishNet.Managing.Client
         /// </summary>
         private void ParseReceived(ClientReceivedDataArgs args)
         {
-            ArraySegment<byte> segment = args.Data;
+            var segment = args.Data;
             if (segment.Count <= TransportManager.TICK_BYTES)
                 return;
 
-            PacketId packetId = PacketId.Unset;
+            var packetId = PacketId.Unset;
 #if !UNITY_EDITOR && !DEVELOPMENT_BUILD
             try
             {
 #endif
-            using (PooledReader reader = ReaderPool.GetReader(segment, NetworkManager))
+            using (var reader = ReaderPool.GetReader(segment, NetworkManager))
             {
                 NetworkManager.TimeManager.LastPacketTick = reader.ReadUInt32(AutoPackType.Unpacked);
                 /* This is a special condition where a message may arrive split.
@@ -277,7 +293,7 @@ namespace FishNet.Managing.Client
                      * has not written fully yet. Otherwise, if there is
                      * data within then reinitialize reader with the
                      * full message. */
-                    ArraySegment<byte> fullMessage = _splitReader.GetFullMessage();
+                    var fullMessage = _splitReader.GetFullMessage();
                     if (fullMessage.Count == 0)
                         return;
 
@@ -291,7 +307,7 @@ namespace FishNet.Managing.Client
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
                     _parseLogger.AddPacket(packetId);
 #endif
-                    bool spawnOrDespawn = (packetId == PacketId.ObjectSpawn || packetId == PacketId.ObjectDespawn);
+                    var spawnOrDespawn = packetId == PacketId.ObjectSpawn || packetId == PacketId.ObjectDespawn;
                     /* Length of data. Only available if using unreliable. Unreliable packets
                      * can arrive out of order which means object orientated messages such as RPCs may
                      * arrive after the object for which they target has already been destroyed. When this happens
@@ -318,9 +334,9 @@ namespace FishNet.Managing.Client
                          * that use them. */
                         Objects.IterateObjectCache();
                         //Then process packet normally.
-                        if ((ushort)packetId >= NetworkManager.StartingRpcLinkIndex)
+                        if ((ushort) packetId >= NetworkManager.StartingRpcLinkIndex)
                         {
-                            Objects.ParseRpcLink(reader, (ushort)packetId, args.Channel);
+                            Objects.ParseRpcLink(reader, (ushort) packetId, args.Channel);
                         }
                         else if (packetId == PacketId.Reconcile)
                         {
@@ -371,11 +387,13 @@ namespace FishNet.Managing.Client
                         {
                             if (NetworkManager.CanLog(LoggingType.Error))
                             {
-                                Debug.LogError($"Client received an unhandled PacketId of {(ushort)packetId}. Remaining data has been purged.");
+                                Debug.LogError(
+                                    $"Client received an unhandled PacketId of {(ushort) packetId}. Remaining data has been purged.");
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
                                 _parseLogger.Print(NetworkManager);
 #endif
                             }
+
                             return;
                         }
                     }
@@ -405,7 +423,7 @@ namespace FishNet.Managing.Client
         /// <param name="reader"></param>
         private void ParsePingPong(PooledReader reader)
         {
-            uint clientTick = reader.ReadUInt32(AutoPackType.Unpacked);
+            var clientTick = reader.ReadUInt32(AutoPackType.Unpacked);
             NetworkManager.TimeManager.ModifyPing(clientTick);
         }
 
@@ -415,8 +433,8 @@ namespace FishNet.Managing.Client
         /// <param name="reader"></param>
         private void ParseAuthenticated(PooledReader reader)
         {
-            NetworkManager networkManager = NetworkManager;
-            int connectionId = reader.ReadNetworkConnectionId();
+            var networkManager = NetworkManager;
+            var connectionId = reader.ReadNetworkConnectionId();
             //If only a client then make a new connection.
             if (!networkManager.IsServer)
             {
@@ -428,7 +446,7 @@ namespace FishNet.Managing.Client
              * reference, which results in different field values. */
             else
             {
-                if (networkManager.ServerManager.Clients.TryGetValueIL2CPP(connectionId, out NetworkConnection conn))
+                if (networkManager.ServerManager.Clients.TryGetValueIL2CPP(connectionId, out var conn))
                 {
                     Connection = conn;
                 }
@@ -460,7 +478,5 @@ namespace FishNet.Managing.Client
             * at the connection start phase objects won't be added. */
             Objects.RegisterAndDespawnSceneObjects();
         }
-
     }
-
 }

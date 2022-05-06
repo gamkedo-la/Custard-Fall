@@ -2,8 +2,8 @@
 
 namespace FishNet.Object
 {
-
     #region Types.
+
     /// <summary>
     /// Lookup data for a RPC Link.
     /// </summary>
@@ -13,14 +13,17 @@ namespace FishNet.Object
         /// ObjectId for link.
         /// </summary>
         public int ObjectId;
+
         /// <summary>
         /// NetworkBehaviour component index on ObjectId.
         /// </summary>
         public byte ComponentIndex;
+
         /// <summary>
         /// RpcHash for link.
         /// </summary>
         public uint RpcHash;
+
         /// <summary>
         /// Type of Rpc link is for.
         /// </summary>
@@ -34,6 +37,6 @@ namespace FishNet.Object
             RpcType = rpcType;
         }
     }
-    #endregion
 
+    #endregion
 }

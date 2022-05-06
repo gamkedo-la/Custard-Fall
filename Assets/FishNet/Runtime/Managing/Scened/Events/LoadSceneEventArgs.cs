@@ -28,6 +28,7 @@ namespace FishNet.Managing.Scened
         /// Queue data used by the current scene action.
         /// </summary>
         public readonly LoadQueueData QueueData;
+
         /// <summary>
         /// Percentage of change completion. 1f is equal to 100% complete.
         /// </summary>
@@ -50,10 +51,12 @@ namespace FishNet.Managing.Scened
         /// Queue data used by the current scene action.
         /// </summary>
         public readonly LoadQueueData QueueData;
+
         /// <summary>
         /// Scenes which were loaded.
         /// </summary>
         public readonly Scene[] LoadedScenes;
+
         /// <summary>
         /// Scenes which were skipped because they were already loaded.
         /// </summary>
@@ -66,5 +69,4 @@ namespace FishNet.Managing.Scened
             SkippedSceneNames = skipped;
         }
     }
-
 }

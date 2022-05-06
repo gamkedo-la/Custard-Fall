@@ -13,18 +13,15 @@ namespace FishNet.Utility.Editing
         {
             if (property.propertyType == SerializedPropertyType.String)
             {
-                SceneAsset sceneObject = AssetDatabase.LoadAssetAtPath<SceneAsset>(property.stringValue);
+                var sceneObject = AssetDatabase.LoadAssetAtPath<SceneAsset>(property.stringValue);
 
                 if (sceneObject == null && !string.IsNullOrEmpty(property.stringValue))
-                {
                     // try to load it from the build settings for legacy compatibility
                     sceneObject = GetBuildSettingsSceneObject(property.stringValue);
-                }
                 if (sceneObject == null && !string.IsNullOrEmpty(property.stringValue))
-                {
-                    Debug.Log($"Could not find scene {property.stringValue} in {property.propertyPath}, assign the proper scenes in your NetworkManager");
-                }
-                SceneAsset scene = (SceneAsset)EditorGUI.ObjectField(position, label, sceneObject, typeof(SceneAsset), true);
+                    Debug.Log(
+                        $"Could not find scene {property.stringValue} in {property.propertyPath}, assign the proper scenes in your NetworkManager");
+                var scene = (SceneAsset) EditorGUI.ObjectField(position, label, sceneObject, typeof(SceneAsset), true);
 
                 property.stringValue = AssetDatabase.GetAssetPath(scene);
             }
@@ -36,14 +33,12 @@ namespace FishNet.Utility.Editing
 
         protected SceneAsset GetBuildSettingsSceneObject(string sceneName)
         {
-            foreach (EditorBuildSettingsScene buildScene in EditorBuildSettings.scenes)
+            foreach (var buildScene in EditorBuildSettings.scenes)
             {
-                SceneAsset sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(buildScene.path);
-                if (sceneAsset != null && sceneAsset.name == sceneName)
-                {
-                    return sceneAsset;
-                }
+                var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(buildScene.path);
+                if (sceneAsset != null && sceneAsset.name == sceneName) return sceneAsset;
             }
+
             return null;
         }
     }

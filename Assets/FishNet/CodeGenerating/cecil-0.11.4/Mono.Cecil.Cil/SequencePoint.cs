@@ -10,67 +10,68 @@
 
 using System;
 
-namespace MonoFN.Cecil.Cil {
+namespace MonoFN.Cecil.Cil
+{
+    public sealed class SequencePoint
+    {
+        internal InstructionOffset offset;
+        private Document document;
 
-	public sealed class SequencePoint {
+        private int start_line;
+        private int start_column;
+        private int end_line;
+        private int end_column;
 
-		internal InstructionOffset offset;
-		Document document;
+        public int Offset => offset.Offset;
 
-		int start_line;
-		int start_column;
-		int end_line;
-		int end_column;
+        public int StartLine
+        {
+            get => start_line;
+            set => start_line = value;
+        }
 
-		public int Offset {
-			get { return offset.Offset; }
-		}
+        public int StartColumn
+        {
+            get => start_column;
+            set => start_column = value;
+        }
 
-		public int StartLine {
-			get { return start_line; }
-			set { start_line = value; }
-		}
+        public int EndLine
+        {
+            get => end_line;
+            set => end_line = value;
+        }
 
-		public int StartColumn {
-			get { return start_column; }
-			set { start_column = value; }
-		}
+        public int EndColumn
+        {
+            get => end_column;
+            set => end_column = value;
+        }
 
-		public int EndLine {
-			get { return end_line; }
-			set { end_line = value; }
-		}
+        public bool IsHidden => start_line == 0xfeefee && start_line == end_line;
 
-		public int EndColumn {
-			get { return end_column; }
-			set { end_column = value; }
-		}
+        public Document Document
+        {
+            get => document;
+            set => document = value;
+        }
 
-		public bool IsHidden {
-			get { return start_line == 0xfeefee && start_line == end_line; }
-		}
+        internal SequencePoint(int offset, Document document)
+        {
+            if (document == null)
+                throw new ArgumentNullException("document");
 
-		public Document Document {
-			get { return document; }
-			set { document = value; }
-		}
+            this.offset = new InstructionOffset(offset);
+            this.document = document;
+        }
 
-		internal SequencePoint (int offset, Document document)
-		{
-			if (document == null)
-				throw new ArgumentNullException ("document");
+        public SequencePoint(Instruction instruction, Document document)
+        {
+            if (document == null)
+                throw new ArgumentNullException("document");
 
-			this.offset = new InstructionOffset (offset);
-			this.document = document;
-		}
-
-		public SequencePoint (Instruction instruction, Document document)
-		{
-			if (document == null)
-				throw new ArgumentNullException ("document");
-
-			this.offset = new InstructionOffset (instruction);
-			this.document = document;
-		}
-	}
+            offset = new InstructionOffset(instruction);
+            this.document = document;
+        }
+    }
 }

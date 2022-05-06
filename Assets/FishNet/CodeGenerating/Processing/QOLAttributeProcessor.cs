@@ -12,22 +12,20 @@ namespace FishNet.CodeGenerating.Processing
 {
     internal class QolAttributeProcessor
     {
-
         internal bool Process(TypeDefinition typeDef)
         {
-            bool modified = false;
-            List<MethodDefinition> methods = typeDef.Methods.ToList();
+            var modified = false;
+            var methods = typeDef.Methods.ToList();
 
-            
 
-            foreach (MethodDefinition md in methods)
+            foreach (var md in methods)
             {
                 //Has RPC attribute, doesn't quality for a quality of life attribute.
                 if (CodegenSession.RpcProcessor.Attributes.HasRpcAttributes(md))
                     continue;
 
                 QolAttributeType qolType;
-                CustomAttribute qolAttribute = GetQOLAttribute(md, out qolType);
+                var qolAttribute = GetQOLAttribute(md, out qolType);
                 if (qolAttribute == null)
                     continue;
 
@@ -59,22 +57,25 @@ namespace FishNet.CodeGenerating.Processing
             CustomAttribute foundAttribute = null;
             qolType = QolAttributeType.None;
             //Becomes true if an error occurred during this process.
-            bool error = false;
+            var error = false;
             //Nothing to check.
             if (methodDef == null || methodDef.CustomAttributes == null)
                 return null;
 
-            foreach (CustomAttribute customAttribute in methodDef.CustomAttributes)
+            foreach (var customAttribute in methodDef.CustomAttributes)
             {
-                QolAttributeType thisQolType = CodegenSession.AttributeHelper.GetQolAttributeType(customAttribute.AttributeType.FullName);
+                var thisQolType =
+                    CodegenSession.AttributeHelper.GetQolAttributeType(customAttribute.AttributeType.FullName);
                 if (thisQolType != QolAttributeType.None)
                 {
                     //A qol attribute already exist.
                     if (foundAttribute != null)
                     {
-                        CodegenSession.LogError($"{methodDef.Name} {thisQolType.ToString()} method cannot have multiple quality of life attributes.");
+                        CodegenSession.LogError(
+                            $"{methodDef.Name} {thisQolType.ToString()} method cannot have multiple quality of life attributes.");
                         error = true;
                     }
+
                     ////Static method.
                     //if (methodDef.IsStatic)
                     //{
@@ -84,7 +85,8 @@ namespace FishNet.CodeGenerating.Processing
                     //Abstract method.
                     if (methodDef.IsAbstract)
                     {
-                        CodegenSession.LogError($"{methodDef.Name} {thisQolType.ToString()} method cannot be abstract.");
+                        CodegenSession.LogError(
+                            $"{methodDef.Name} {thisQolType.ToString()} method cannot be abstract.");
                         error = true;
                     }
 
@@ -110,33 +112,37 @@ namespace FishNet.CodeGenerating.Processing
         /// <summary>
         /// Modifies the specified method to use QolType.
         /// </summary>
-        private void CreateAttributeMethod(MethodDefinition methodDef, CustomAttribute qolAttribute, QolAttributeType qolType)
+        private void CreateAttributeMethod(MethodDefinition methodDef, CustomAttribute qolAttribute,
+            QolAttributeType qolType)
         {
-            bool inheritsNetworkBehaviour = methodDef.DeclaringType.InheritsNetworkBehaviour();
+            var inheritsNetworkBehaviour = methodDef.DeclaringType.InheritsNetworkBehaviour();
 
             //True to use InstanceFInder.
-            bool useStatic = (methodDef.IsStatic || !inheritsNetworkBehaviour);
+            var useStatic = methodDef.IsStatic || !inheritsNetworkBehaviour;
 
             if (qolType == QolAttributeType.Client)
             {
-                bool removeLogic = (CodeStripping.StripBuild && CodeStripping.ReleasingForServer);
-                
+                var removeLogic = CodeStripping.StripBuild && CodeStripping.ReleasingForServer;
+
                 if (!removeLogic && !CodeStripping.StripBuild)
                 {
-                    LoggingType logging = qolAttribute.GetField("Logging", LoggingType.Warning);
+                    var logging = qolAttribute.GetField("Logging", LoggingType.Warning);
                     /* Since isClient also uses insert first
                      * it will be put ahead of the IsOwner check, since the
                      * codegen processes it after IsOwner. EG... 
                      * IsOwner will be added first, then IsClient will be added first over IsOwner. */
-                    bool requireOwnership = qolAttribute.GetField("RequireOwnership", false);
+                    var requireOwnership = qolAttribute.GetField("RequireOwnership", false);
                     if (requireOwnership && useStatic)
                     {
-                        CodegenSession.LogError($"Method {methodDef.Name} has a [Client] attribute which requires ownership but the method may not use this attribute. Either the method is static, or the script does not inherit from NetworkBehaviour.");
+                        CodegenSession.LogError(
+                            $"Method {methodDef.Name} has a [Client] attribute which requires ownership but the method may not use this attribute. Either the method is static, or the script does not inherit from NetworkBehaviour.");
                         return;
                     }
+
                     //If (!base.IsOwner);
                     if (requireOwnership)
-                        CodegenSession.ObjectHelper.CreateLocalClientIsOwnerCheck(methodDef, logging, true, false, true);
+                        CodegenSession.ObjectHelper.CreateLocalClientIsOwnerCheck(methodDef, logging, true, false,
+                            true);
                     //Otherwise normal IsClient check.
                     else
                         CodegenSession.ObjectHelper.CreateIsClientCheck(methodDef, logging, useStatic, true);
@@ -144,17 +150,14 @@ namespace FishNet.CodeGenerating.Processing
             }
             else if (qolType == QolAttributeType.Server)
             {
-                bool removeLogic = (CodeStripping.StripBuild && CodeStripping.ReleasingForClient);
-                
+                var removeLogic = CodeStripping.StripBuild && CodeStripping.ReleasingForClient;
+
                 if (!removeLogic && !CodeStripping.StripBuild)
                 {
-                    LoggingType logging = qolAttribute.GetField("Logging", LoggingType.Warning);
+                    var logging = qolAttribute.GetField("Logging", LoggingType.Warning);
                     CodegenSession.ObjectHelper.CreateIsServerCheck(methodDef, logging, useStatic, true);
                 }
             }
         }
-
-        
     }
-
 }

@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 namespace FishNet.Utility.Extension
 {
-
     public static class SceneFN
     {
         #region Private.
@@ -14,11 +13,13 @@ namespace FishNet.Utility.Extension
         /// <summary>
         /// Used for performance gains when getting objects.
         /// </summary>
-        private static List<GameObject> _gameObjectList = new List<GameObject>();
+        private static List<GameObject> _gameObjectList = new();
+
         /// <summary>
         /// List for NetworkObjects.
         /// </summary>
-        private static List<NetworkObject> _networkObjectList = new List<NetworkObject>();
+        private static List<NetworkObject> _networkObjectList = new();
+
         #endregion
 
         /// <summary>
@@ -29,12 +30,12 @@ namespace FishNet.Utility.Extension
         /// <returns></returns>
         public static List<NetworkObject> GetSceneNetworkObjects(Scene s, out int count)
         {
-            ListCache<NetworkObject> cache = ListCaches.NetworkObjectCache;
+            var cache = ListCaches.NetworkObjectCache;
             cache.Reset();
 
             //Iterate all root objects for the scene.
             s.GetRootGameObjects(_gameObjectList);
-            for (int i = 0; i < _gameObjectList.Count; i++)
+            for (var i = 0; i < _gameObjectList.Count; i++)
             {
                 /* Get NetworkObjects within children of each
                  * root object then add them to the cache. */
@@ -46,7 +47,5 @@ namespace FishNet.Utility.Extension
             count = cache.Written;
             return cache.Collection;
         }
-
     }
-
 }

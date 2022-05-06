@@ -3,7 +3,6 @@ using MonoFN.Cecil.Cil;
 
 namespace FishNet.CodeGenerating.Helping.Extension
 {
-
     internal static class MethodDefinitionExtensions
     {
         /// <summary>
@@ -12,7 +11,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
         internal static void ClearMethodWithRet(this MethodDefinition md, ModuleDefinition importReturnModule = null)
         {
             md.Body.Instructions.Clear();
-            ILProcessor processor = md.Body.GetILProcessor();
+            var processor = md.Body.GetILProcessor();
             processor.Add(CodegenSession.ObjectHelper.CreateRetDefault(md, importReturnModule));
         }
 
@@ -25,7 +24,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
         internal static ParameterDefinition GetEndParameter(this MethodDefinition md, int index)
         {
             //Not enough parameters.
-            if (md.Parameters.Count < (index + 1))
+            if (md.Parameters.Count < index + 1)
                 return null;
 
             return md.Parameters[md.Parameters.Count - (index + 1)];
@@ -35,9 +34,10 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <summary>
         /// Creates a variable type within the body and returns it's VariableDef.
         /// </summary>
-        internal static VariableDefinition CreateVariable(this MethodDefinition methodDef, TypeReference variableTypeRef)
+        internal static VariableDefinition CreateVariable(this MethodDefinition methodDef,
+            TypeReference variableTypeRef)
         {
-            VariableDefinition variableDef = new VariableDefinition(variableTypeRef);
+            var variableDef = new VariableDefinition(variableTypeRef);
             methodDef.Body.Variables.Add(variableDef);
             return variableDef;
         }
@@ -50,6 +50,4 @@ namespace FishNet.CodeGenerating.Helping.Extension
             return CreateVariable(methodDef, CodegenSession.GeneralHelper.GetTypeReference(variableType));
         }
     }
-
-
 }

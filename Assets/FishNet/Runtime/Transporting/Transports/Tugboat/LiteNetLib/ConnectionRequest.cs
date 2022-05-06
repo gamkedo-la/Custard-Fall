@@ -42,7 +42,8 @@ namespace LiteNetLib
             return Interlocked.CompareExchange(ref _used, 1, 0) == 0;
         }
 
-        internal ConnectionRequest(IPEndPoint remoteEndPoint, NetConnectRequestPacket requestPacket, NetManager listener)
+        internal ConnectionRequest(IPEndPoint remoteEndPoint, NetConnectRequestPacket requestPacket,
+            NetManager listener)
         {
             InternalPacket = requestPacket;
             RemoteEndPoint = remoteEndPoint;
@@ -62,6 +63,7 @@ namespace LiteNetLib
             {
                 NetDebug.WriteError("[AC] Invalid incoming data");
             }
+
             if (Result == ConnectionRequestResult.Accept)
                 return _listener.OnConnectionSolved(this, null, 0, 0);
 

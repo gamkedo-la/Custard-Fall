@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace FishNet.CodeGenerating.Processing.Rpc
 {
-
     internal class CreatedRpc
     {
         public MethodDefinition OriginalMethodDef;
@@ -31,11 +30,9 @@ namespace FishNet.CodeGenerating.Processing.Rpc
         /// <returns></returns>
         public static CreatedRpc GetCreatedRpc(this List<CreatedRpc> lst, RpcType rpcType)
         {
-            for (int i = 0; i < lst.Count; i++)
-            {
+            for (var i = 0; i < lst.Count; i++)
                 if (lst[i].RpcType == rpcType)
                     return lst[i];
-            }
             //Fall through.
             return null;
         }
@@ -46,13 +43,11 @@ namespace FishNet.CodeGenerating.Processing.Rpc
         /// <returns></returns>
         public static RpcType GetCombinedRpcType(this List<CreatedRpc> lst)
         {
-            RpcType result = RpcType.None;
-            for (int i = 0; i < lst.Count; i++)
+            var result = RpcType.None;
+            for (var i = 0; i < lst.Count; i++)
                 result |= lst[i].RpcType;
 
             return result;
         }
     }
-
-
 }

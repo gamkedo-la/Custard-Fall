@@ -9,11 +9,10 @@ using UnityEngine;
 
 namespace FishNet.CodeGenerating.Helping
 {
-
     internal class GenericWriterHelper
     {
-
         #region Reflection references.
+
         private TypeReference _genericWriterTypeRef;
         private TypeReference _writerTypeRef;
         private MethodReference _writeGetSetMethodRef;
@@ -25,18 +24,23 @@ namespace FishNet.CodeGenerating.Helping
         private TypeDefinition _generatedReaderWriterClassTypeDef;
         private MethodDefinition _generatedReaderWriterOnLoadMethodDef;
         private TypeReference _autoPackTypeRef;
+
         #endregion
 
         #region Misc.
+
         /// <summary>
         /// TypeReferences which have already had delegates made for.
         /// </summary>
-        private HashSet<TypeReference> _delegatedTypes = new HashSet<TypeReference>();
+        private HashSet<TypeReference> _delegatedTypes = new();
+
         #endregion
 
         #region Const.
+
         internal const string INITIALIZEONCE_METHOD_NAME = "InitializeOnce";
         internal const MethodAttributes INITIALIZEONCE_METHOD_ATTRIBUTES = MethodAttributes.Static;
+
         #endregion
 
         /// <summary>
@@ -73,35 +77,41 @@ namespace FishNet.CodeGenerating.Helping
         internal void CreateInstancedStaticWrite(MethodReference writeMethodRef)
         {
             if (_generatedReaderWriterClassTypeDef == null)
-                _generatedReaderWriterClassTypeDef = CodegenSession.GeneralHelper.GetOrCreateClass(out _, WriterGenerator.GENERATED_TYPE_ATTRIBUTES, WriterGenerator.GENERATED_WRITERS_CLASS_NAME, null);
+                _generatedReaderWriterClassTypeDef = CodegenSession.GeneralHelper.GetOrCreateClass(out _,
+                    WriterGenerator.GENERATED_TYPE_ATTRIBUTES, WriterGenerator.GENERATED_WRITERS_CLASS_NAME, null);
 
-            MethodDefinition writeMethodDef = writeMethodRef.CachedResolve();
-            MethodDefinition createdMethodDef = new MethodDefinition($"Static___{writeMethodRef.Name}",
-                (MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig),
+            var writeMethodDef = writeMethodRef.CachedResolve();
+            var createdMethodDef = new MethodDefinition($"Static___{writeMethodRef.Name}",
+                MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig,
                 _generatedReaderWriterClassTypeDef.Module.TypeSystem.Void);
             _generatedReaderWriterClassTypeDef.Methods.Add(createdMethodDef);
 
-            TypeReference extensionAttributeTypeRef = CodegenSession.ImportReference(typeof(System.Runtime.CompilerServices.ExtensionAttribute));
-            MethodDefinition constructor = extensionAttributeTypeRef.GetConstructor();
+            var extensionAttributeTypeRef =
+                CodegenSession.ImportReference(typeof(System.Runtime.CompilerServices.ExtensionAttribute));
+            var constructor = extensionAttributeTypeRef.GetConstructor();
 
-            MethodReference extensionAttributeConstructorMethodRef = CodegenSession.ImportReference(constructor);
-            CustomAttribute extensionCustomAttribute = new CustomAttribute(extensionAttributeConstructorMethodRef);
+            var extensionAttributeConstructorMethodRef = CodegenSession.ImportReference(constructor);
+            var extensionCustomAttribute = new CustomAttribute(extensionAttributeConstructorMethodRef);
             createdMethodDef.CustomAttributes.Add(extensionCustomAttribute);
 
             /* Add parameters to new method. */
             //First add extension.
-            ParameterDefinition extensionParameterDef = CodegenSession.GeneralHelper.CreateParameter(createdMethodDef, typeof(PooledWriter), "pooledWriter", ParameterAttributes.None);
+            var extensionParameterDef = CodegenSession.GeneralHelper.CreateParameter(createdMethodDef,
+                typeof(PooledWriter), "pooledWriter", ParameterAttributes.None);
             //Then other types.
-            ParameterDefinition[] remainingParameterDefs = new ParameterDefinition[writeMethodDef.Parameters.Count];
-            for (int i = 0; i < writeMethodDef.Parameters.Count; i++)
+            var remainingParameterDefs = new ParameterDefinition[writeMethodDef.Parameters.Count];
+            for (var i = 0; i < writeMethodDef.Parameters.Count; i++)
             {
-                remainingParameterDefs[i] = CodegenSession.GeneralHelper.CreateParameter(createdMethodDef, writeMethodDef.Parameters[i].ParameterType);
-                _generatedReaderWriterClassTypeDef.Module.ImportReference(remainingParameterDefs[i].ParameterType.CachedResolve());
+                remainingParameterDefs[i] =
+                    CodegenSession.GeneralHelper.CreateParameter(createdMethodDef,
+                        writeMethodDef.Parameters[i].ParameterType);
+                _generatedReaderWriterClassTypeDef.Module.ImportReference(remainingParameterDefs[i].ParameterType
+                    .CachedResolve());
             }
 
-            ILProcessor processor = createdMethodDef.Body.GetILProcessor();
+            var processor = createdMethodDef.Body.GetILProcessor();
             //Load all parameters.
-            foreach (ParameterDefinition pd in remainingParameterDefs)
+            foreach (var pd in remainingParameterDefs)
                 processor.Emit(OpCodes.Ldarg, pd);
             //Call instanced method.
             processor.Emit(OpCodes.Ldarg, extensionParameterDef);
@@ -123,24 +133,29 @@ namespace FishNet.CodeGenerating.Helping
             bool created;
 
             if (_generatedReaderWriterClassTypeDef == null)
-                _generatedReaderWriterClassTypeDef = CodegenSession.GeneralHelper.GetOrCreateClass(out created, WriterGenerator.GENERATED_TYPE_ATTRIBUTES, WriterGenerator.GENERATED_WRITERS_CLASS_NAME, null);
+                _generatedReaderWriterClassTypeDef = CodegenSession.GeneralHelper.GetOrCreateClass(out created,
+                    WriterGenerator.GENERATED_TYPE_ATTRIBUTES, WriterGenerator.GENERATED_WRITERS_CLASS_NAME, null);
             /* If constructor isn't set then try to get or create it
              * and also add it to methods if were created. */
             if (_generatedReaderWriterOnLoadMethodDef == null)
             {
-                _generatedReaderWriterOnLoadMethodDef = CodegenSession.GeneralHelper.GetOrCreateMethod(_generatedReaderWriterClassTypeDef, out created, INITIALIZEONCE_METHOD_ATTRIBUTES, INITIALIZEONCE_METHOD_NAME, CodegenSession.Module.TypeSystem.Void);
+                _generatedReaderWriterOnLoadMethodDef = CodegenSession.GeneralHelper.GetOrCreateMethod(
+                    _generatedReaderWriterClassTypeDef, out created, INITIALIZEONCE_METHOD_ATTRIBUTES,
+                    INITIALIZEONCE_METHOD_NAME, CodegenSession.Module.TypeSystem.Void);
                 if (created)
-                    CodegenSession.GeneralHelper.CreateRuntimeInitializeOnLoadMethodAttribute(_generatedReaderWriterOnLoadMethodDef);
+                    CodegenSession.GeneralHelper.CreateRuntimeInitializeOnLoadMethodAttribute(
+                        _generatedReaderWriterOnLoadMethodDef);
             }
+
             //Check if ret already exist, if so remove it; ret will be added on again in this method.
             if (_generatedReaderWriterOnLoadMethodDef.Body.Instructions.Count != 0)
             {
-                int lastIndex = (_generatedReaderWriterOnLoadMethodDef.Body.Instructions.Count - 1);
+                var lastIndex = _generatedReaderWriterOnLoadMethodDef.Body.Instructions.Count - 1;
                 if (_generatedReaderWriterOnLoadMethodDef.Body.Instructions[lastIndex].OpCode == OpCodes.Ret)
                     _generatedReaderWriterOnLoadMethodDef.Body.Instructions.RemoveAt(lastIndex);
             }
 
-            ILProcessor processor = _generatedReaderWriterOnLoadMethodDef.Body.GetILProcessor();
+            var processor = _generatedReaderWriterOnLoadMethodDef.Body.GetILProcessor();
             TypeReference dataTypeRef;
             //Static methods will have the data type as the second parameter (1). 
             if (isStatic)
@@ -166,32 +181,33 @@ namespace FishNet.CodeGenerating.Helping
 
             GenericInstanceType actionGenericInstance;
             MethodReference actionConstructorInstanceMethodRef;
-            bool isAutoPacked = CodegenSession.WriterHelper.IsAutoPackedType(dataTypeRef);
+            var isAutoPacked = CodegenSession.WriterHelper.IsAutoPackedType(dataTypeRef);
 
             //Generate for auto pack type.
             if (isAutoPacked)
             {
-                actionGenericInstance = ActionT3TypeRef.MakeGenericInstanceType(_writerTypeRef, dataTypeRef, _autoPackTypeRef);
-                actionConstructorInstanceMethodRef = ActionT3ConstructorMethodRef.MakeHostInstanceGeneric(actionGenericInstance);
+                actionGenericInstance =
+                    ActionT3TypeRef.MakeGenericInstanceType(_writerTypeRef, dataTypeRef, _autoPackTypeRef);
+                actionConstructorInstanceMethodRef =
+                    ActionT3ConstructorMethodRef.MakeHostInstanceGeneric(actionGenericInstance);
             }
             //Generate for normal type.
             else
             {
                 actionGenericInstance = ActionT2TypeRef.MakeGenericInstanceType(_writerTypeRef, dataTypeRef);
-                actionConstructorInstanceMethodRef = ActionT2ConstructorMethodRef.MakeHostInstanceGeneric(actionGenericInstance);
+                actionConstructorInstanceMethodRef =
+                    ActionT2ConstructorMethodRef.MakeHostInstanceGeneric(actionGenericInstance);
             }
 
             processor.Emit(OpCodes.Newobj, actionConstructorInstanceMethodRef);
             //Call delegate to GenericWriter<T>.Write
-            GenericInstanceType genericInstance = _genericWriterTypeRef.MakeGenericInstanceType(dataTypeRef);
-            MethodReference genericrWriteMethodRef = (isAutoPacked) ?
-                _writeAutoPackGetSetMethodRef.MakeHostInstanceGeneric(genericInstance) :
-                _writeGetSetMethodRef.MakeHostInstanceGeneric(genericInstance);
+            var genericInstance = _genericWriterTypeRef.MakeGenericInstanceType(dataTypeRef);
+            var genericrWriteMethodRef = isAutoPacked
+                ? _writeAutoPackGetSetMethodRef.MakeHostInstanceGeneric(genericInstance)
+                : _writeGetSetMethodRef.MakeHostInstanceGeneric(genericInstance);
             processor.Emit(OpCodes.Call, genericrWriteMethodRef);
 
             processor.Emit(OpCodes.Ret);
         }
-
-
     }
 }

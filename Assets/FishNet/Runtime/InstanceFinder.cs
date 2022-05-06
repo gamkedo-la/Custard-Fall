@@ -12,14 +12,13 @@ using UnityEngine;
 
 namespace FishNet
 {
-
     /// <summary>
     /// Used to globally get information from the first found instance of NetworkManager.
     /// </summary>
     public static class InstanceFinder
     {
-
         #region Public.
+
         /// <summary>
         /// Returns the first found NetworkManager instance.
         /// </summary>
@@ -29,16 +28,15 @@ namespace FishNet
             {
                 if (_networkManager == null)
                 {
-                    int managersCount = NetworkManager.Instances.Count;
+                    var managersCount = NetworkManager.Instances.Count;
                     //At least one manager.
                     if (managersCount > 0)
                     {
                         _networkManager = NetworkManager.Instances.First();
                         if (managersCount > 1)
-                        {
                             if (_networkManager.CanLog(LoggingType.Warning))
-                                Debug.LogWarning($"Multiple NetworkManagers found, the first result will be returned. If you only wish to have one NetworkManager then uncheck 'Allow Multiple' within your NetworkManagers.");
-                        }
+                                Debug.LogWarning(
+                                    $"Multiple NetworkManagers found, the first result will be returned. If you only wish to have one NetworkManager then uncheck 'Allow Multiple' within your NetworkManagers.");
                     }
                     //No managers.
                     else
@@ -62,8 +60,8 @@ namespace FishNet
         {
             get
             {
-                NetworkManager nm = NetworkManager;
-                return (nm == null) ? null : nm.ServerManager;
+                var nm = NetworkManager;
+                return nm == null ? null : nm.ServerManager;
             }
         }
 
@@ -74,8 +72,8 @@ namespace FishNet
         {
             get
             {
-                NetworkManager nm = NetworkManager;
-                return (nm == null) ? null : nm.ClientManager;
+                var nm = NetworkManager;
+                return nm == null ? null : nm.ClientManager;
             }
         }
 
@@ -86,8 +84,8 @@ namespace FishNet
         {
             get
             {
-                NetworkManager nm = NetworkManager;
-                return (nm == null) ? null : nm.TransportManager;
+                var nm = NetworkManager;
+                return nm == null ? null : nm.TransportManager;
             }
         }
 
@@ -98,8 +96,8 @@ namespace FishNet
         {
             get
             {
-                NetworkManager nm = NetworkManager;
-                return (nm == null) ? null : nm.TimeManager;
+                var nm = NetworkManager;
+                return nm == null ? null : nm.TimeManager;
             }
         }
 
@@ -110,10 +108,11 @@ namespace FishNet
         {
             get
             {
-                NetworkManager nm = NetworkManager;
-                return (nm == null) ? null : nm.SceneManager;
+                var nm = NetworkManager;
+                return nm == null ? null : nm.SceneManager;
             }
         }
+
         /// <summary>
         /// Returns the first instance of RollbackManager.
         /// </summary>
@@ -121,46 +120,51 @@ namespace FishNet
         {
             get
             {
-                NetworkManager nm = NetworkManager;
-                return (nm == null) ? null : nm.RollbackManager;
+                var nm = NetworkManager;
+                return nm == null ? null : nm.RollbackManager;
             }
         }
 
         /// <summary>
         /// True if the server is active.
         /// </summary>
-        public static bool IsServer => (NetworkManager == null) ? false : NetworkManager.IsServer;
+        public static bool IsServer => NetworkManager == null ? false : NetworkManager.IsServer;
+
         /// <summary>
         /// True if only the server is active.
         /// </summary>
-        public static bool IsServerOnly => (NetworkManager == null) ? false : NetworkManager.IsServerOnly;
+        public static bool IsServerOnly => NetworkManager == null ? false : NetworkManager.IsServerOnly;
+
         /// <summary>
         /// True if the client is active and authenticated.
         /// </summary>
-        public static bool IsClient => (NetworkManager == null) ? false : NetworkManager.IsClient;
+        public static bool IsClient => NetworkManager == null ? false : NetworkManager.IsClient;
+
         /// <summary>
         /// True if only the client is active and authenticated.
         /// </summary>
-        public static bool IsClientOnly => (NetworkManager == null) ? false : NetworkManager.IsClientOnly;
+        public static bool IsClientOnly => NetworkManager == null ? false : NetworkManager.IsClientOnly;
+
         /// <summary>
         /// True if client and server are active.
         /// </summary>
-        public static bool IsHost => (NetworkManager == null) ? false : NetworkManager.IsHost;
+        public static bool IsHost => NetworkManager == null ? false : NetworkManager.IsHost;
+
         /// <summary>
         /// True if client nor server are active.
         /// </summary>
-        public static bool IsOffline => (NetworkManager == null) ? true : (!NetworkManager.IsServer && !NetworkManager.IsClient);
+        public static bool IsOffline =>
+            NetworkManager == null ? true : !NetworkManager.IsServer && !NetworkManager.IsClient;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// NetworkManager instance.
         /// </summary>
         private static NetworkManager _networkManager;
+
         #endregion
-
-
     }
-
-
 }

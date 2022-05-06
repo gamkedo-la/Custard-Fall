@@ -10,7 +10,6 @@ using FishNet.Object;
 
 namespace FishNet.Managing.Object
 {
-
     [APIExclude]
     //[CreateAssetMenu(fileName = "New DefaultPrefabObjects", menuName = "FishNet/Spawnable Prefabs/Default Prefab Objects")]
     public class DefaultPrefabObjects : SinglePrefabObjects
@@ -23,8 +22,7 @@ namespace FishNet.Managing.Object
         /// <summary>
         /// True if this refreshed while playing.
         /// </summary>
-        [System.NonSerialized]
-        private bool _refreshedWhilePlaying = false;
+        [System.NonSerialized] private bool _refreshedWhilePlaying = false;
 
         /// <summary>
         /// Sorts prefabs by name and path hashcode.
@@ -35,13 +33,13 @@ namespace FishNet.Managing.Object
             if (base.GetObjectCount() == 0)
                 return;
 
-            Dictionary<ulong, NetworkObject> hashcodesAndNobs = new Dictionary<ulong, NetworkObject>();
-            List<ulong> hashcodes = new List<ulong>();
+            var hashcodesAndNobs = new Dictionary<ulong, NetworkObject>();
+            var hashcodes = new List<ulong>();
 
-            foreach (NetworkObject n in base.Prefabs)
+            foreach (var n in Prefabs)
             {
-                string pathAndName = $"{AssetDatabase.GetAssetPath(n.gameObject)}{n.gameObject.name}";
-                ulong hashcode = Hashing.GetStableHash64(pathAndName);
+                var pathAndName = $"{AssetDatabase.GetAssetPath(n.gameObject)}{n.gameObject.name}";
+                var hashcode = Hashing.GetStableHash64(pathAndName);
                 hashcodesAndNobs[hashcode] = n;
                 hashcodes.Add(hashcode);
             }
@@ -49,8 +47,8 @@ namespace FishNet.Managing.Object
             //Once all hashes have been made re-add them to prefabs sorted.
             hashcodes.Sort();
             //Build to a new list using sorted hashcodes.
-            List<NetworkObject> sortedNobs = new List<NetworkObject>();
-            foreach (ulong hc in hashcodes)
+            var sortedNobs = new List<NetworkObject>();
+            foreach (var hc in hashcodes)
                 sortedNobs.Add(hashcodesAndNobs[hc]);
 
             base.Clear();
@@ -81,14 +79,15 @@ namespace FishNet.Managing.Object
             DefaultPrefabsFinder.PopulateDefaultPrefabs(log, clear);
 #endif
         }
+
         /* Try to recover invalid/null prefab errors in editor.
          * This can occur when simlinking or when the asset processor
          * doesn't function properly. */
         public override NetworkObject GetObject(bool asServer, int id)
         {
             //Only error check cases where the collection may be wrong.
-            bool error = (id >= base.Prefabs.Count ||
-                base.Prefabs[id] == null);
+            var error = id >= Prefabs.Count ||
+                        Prefabs[id] == null;
 
             if (error && !_refreshedWhilePlaying)
             {
@@ -99,9 +98,5 @@ namespace FishNet.Managing.Object
 
             return base.GetObject(asServer, id);
         }
-
-
-
     }
-
 }

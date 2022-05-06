@@ -8,55 +8,34 @@ using SR = System.Reflection;
 
 namespace FishNet.CodeGenerating.Helping
 {
-
     internal static class CodegenSession
     {
-        [System.ThreadStatic]
-        internal static ModuleDefinition Module;
-        [System.ThreadStatic]
-        internal static List<DiagnosticMessage> Diagnostics;
+        [System.ThreadStatic] internal static ModuleDefinition Module;
+        [System.ThreadStatic] internal static List<DiagnosticMessage> Diagnostics;
 
-        [System.ThreadStatic]
-        internal static TimeManagerHelper TimeManagerHelper;
-        [System.ThreadStatic]
-        internal static AttributeHelper AttributeHelper;
-        [System.ThreadStatic]
-        internal static GeneralHelper GeneralHelper;
-        [System.ThreadStatic]
-        internal static GenericReaderHelper GenericReaderHelper;
-        [System.ThreadStatic]
-        internal static GenericWriterHelper GenericWriterHelper;
-        [System.ThreadStatic]
-        internal static ObjectHelper ObjectHelper;
-        [System.ThreadStatic]
-        internal static ReaderGenerator ReaderGenerator;
-        [System.ThreadStatic]
-        internal static ReaderHelper ReaderHelper;
-        [System.ThreadStatic]
-        internal static CreatedSyncVarGenerator CreatedSyncVarGenerator;
-        [System.ThreadStatic]
-        internal static TransportHelper TransportHelper;
-        [System.ThreadStatic]
-        internal static WriterGenerator WriterGenerator;
-        [System.ThreadStatic]
-        internal static WriterHelper WriterHelper;
-        [System.ThreadStatic]
-        internal static CustomSerializerProcessor CustomSerializerProcessor;
-        [System.ThreadStatic]
-        internal static NetworkBehaviourProcessor NetworkBehaviourProcessor;
-        [System.ThreadStatic]
-        internal static QolAttributeProcessor QolAttributeProcessor;
-        [System.ThreadStatic]
-        internal static RpcProcessor RpcProcessor;
-        [System.ThreadStatic]
-        internal static NetworkBehaviourSyncProcessor NetworkBehaviourSyncProcessor;
-        [System.ThreadStatic]
-        internal static NetworkBehaviourPredictionProcessor NetworkBehaviourPredictionProcessor;
+        [System.ThreadStatic] internal static TimeManagerHelper TimeManagerHelper;
+        [System.ThreadStatic] internal static AttributeHelper AttributeHelper;
+        [System.ThreadStatic] internal static GeneralHelper GeneralHelper;
+        [System.ThreadStatic] internal static GenericReaderHelper GenericReaderHelper;
+        [System.ThreadStatic] internal static GenericWriterHelper GenericWriterHelper;
+        [System.ThreadStatic] internal static ObjectHelper ObjectHelper;
+        [System.ThreadStatic] internal static ReaderGenerator ReaderGenerator;
+        [System.ThreadStatic] internal static ReaderHelper ReaderHelper;
+        [System.ThreadStatic] internal static CreatedSyncVarGenerator CreatedSyncVarGenerator;
+        [System.ThreadStatic] internal static TransportHelper TransportHelper;
+        [System.ThreadStatic] internal static WriterGenerator WriterGenerator;
+        [System.ThreadStatic] internal static WriterHelper WriterHelper;
+        [System.ThreadStatic] internal static CustomSerializerProcessor CustomSerializerProcessor;
+        [System.ThreadStatic] internal static NetworkBehaviourProcessor NetworkBehaviourProcessor;
+        [System.ThreadStatic] internal static QolAttributeProcessor QolAttributeProcessor;
+        [System.ThreadStatic] internal static RpcProcessor RpcProcessor;
+        [System.ThreadStatic] internal static NetworkBehaviourSyncProcessor NetworkBehaviourSyncProcessor;
+        [System.ThreadStatic] internal static NetworkBehaviourPredictionProcessor NetworkBehaviourPredictionProcessor;
+
         /// <summary>
         /// SyncVars that are being accessed from an assembly other than the currently being processed one.
         /// </summary>
-        [System.ThreadStatic]
-        internal static List<FieldDefinition> DifferentAssemblySyncVars;
+        [System.ThreadStatic] internal static List<FieldDefinition> DifferentAssemblySyncVars;
 
         /// <summary>
         /// Logs a warning.
@@ -70,6 +49,7 @@ namespace FishNet.CodeGenerating.Helping
             Debug.LogWarning(msg);
 #endif
         }
+
         /// <summary>
         /// Logs an error.
         /// </summary>
@@ -82,6 +62,7 @@ namespace FishNet.CodeGenerating.Helping
             Debug.LogError(msg);
 #endif
         }
+
         /// <summary>
         /// Resets all helpers while importing any information needed by them.
         /// </summary>
@@ -146,7 +127,6 @@ namespace FishNet.CodeGenerating.Helping
         }
 
 
-
         #region ImportReference.
 
         public static MethodReference ImportReference(SR.MethodBase method)
@@ -178,6 +158,7 @@ namespace FishNet.CodeGenerating.Helping
         {
             return Module.ImportReference(field, context);
         }
+
         public static MethodReference ImportReference(MethodReference method)
         {
             return Module.ImportReference(method);
@@ -187,6 +168,7 @@ namespace FishNet.CodeGenerating.Helping
         {
             return Module.ImportReference(method, context);
         }
+
         public static TypeReference ImportReference(System.Type type)
         {
             return ImportReference(type, null);
@@ -211,6 +193,4 @@ namespace FishNet.CodeGenerating.Helping
 
         #endregion
     }
-
-
 }

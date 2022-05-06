@@ -18,45 +18,57 @@ namespace FishNet.Component.Observing
     public class MatchCondition : ObserverCondition
     {
         #region Private.
+
         /// <summary>
         /// 
         /// </summary>
-        private static Dictionary<int, HashSet<NetworkConnection>> _matchConnections = new Dictionary<int, HashSet<NetworkConnection>>();
+        private static Dictionary<int, HashSet<NetworkConnection>> _matchConnections = new();
+
         /// <summary>
         /// Matches and connections in each match.
         /// </summary>
         public static IReadOnlyDictionary<int, HashSet<NetworkConnection>> MatchConnections => _matchConnections;
+
         /// <summary>
         /// 
         /// </summary>
         /// //todo this needs to hold hashset so conns can be in multiple matches.
-        private static Dictionary<NetworkConnection, int> _connectionMatch = new Dictionary<NetworkConnection, int>();
+        private static Dictionary<NetworkConnection, int> _connectionMatch = new();
+
         /// <summary>
         /// Match a connection is in.
         /// </summary>
         public static IReadOnlyDictionary<NetworkConnection, int> ConnectionMatch => _connectionMatch;
+
         /// <summary>
         /// 
         /// </summary>
-        private static Dictionary<int, HashSet<NetworkObject>> _matchObjects = new Dictionary<int, HashSet<NetworkObject>>();
+        private static Dictionary<int, HashSet<NetworkObject>> _matchObjects = new();
+
         /// <summary>
         /// Matches and connections in each match.
         /// </summary>
         public static IReadOnlyDictionary<int, HashSet<NetworkObject>> MatchObjects => _matchObjects;
+
         /// <summary>
         /// 
         /// </summary>
         /// //todo this needs to hold hashset so conns can be in multiple matches.
-        private static Dictionary<NetworkObject, int> _objectMatch = new Dictionary<NetworkObject, int>();
+        private static Dictionary<NetworkObject, int> _objectMatch = new();
+
         /// <summary>
         /// Match a connection is in.
         /// </summary>
         public static IReadOnlyDictionary<NetworkObject, int> ObjectMatch => _objectMatch;
+
         #endregion
 
-        public void ConditionConstructor() { }
+        public void ConditionConstructor()
+        {
+        }
 
         #region Add to match NetworkConnection.
+
         /// <summary>
         /// Adds conn to match.
         /// </summary>
@@ -72,11 +84,12 @@ namespace FishNet.Component.Observing
                 _matchConnections.Add(match, results);
             }
 
-            bool r = results.Add(conn);
+            var r = results.Add(conn);
             _connectionMatch[conn] = match;
             if (r) //todo this needs to add to conns matches and do same for removing.
                 FinalizeChange(match, results, conn, manager);
         }
+
         /// <summary>
         /// Adds conns to match.
         /// </summary>
@@ -92,10 +105,10 @@ namespace FishNet.Component.Observing
                 _matchConnections.Add(match, results);
             }
 
-            bool r = false;
-            for (int i = 0; i < conns.Length; i++)
+            var r = false;
+            for (var i = 0; i < conns.Length; i++)
             {
-                NetworkConnection c = conns[i];
+                var c = conns[i];
                 r |= results.Add(c);
                 _connectionMatch[c] = match;
             }
@@ -103,6 +116,7 @@ namespace FishNet.Component.Observing
             if (r)
                 FinalizeChange(match, results, conns, manager);
         }
+
         /// <summary>
         /// Adds conns to match.
         /// </summary>
@@ -118,10 +132,10 @@ namespace FishNet.Component.Observing
                 _matchConnections.Add(match, results);
             }
 
-            bool r = false;
-            for (int i = 0; i < conns.Count; i++)
+            var r = false;
+            for (var i = 0; i < conns.Count; i++)
             {
-                NetworkConnection c = conns[i];
+                var c = conns[i];
                 r |= results.Add(c);
                 _connectionMatch[c] = match;
             }
@@ -129,9 +143,11 @@ namespace FishNet.Component.Observing
             if (r)
                 FinalizeChange(match, results, conns, manager);
         }
+
         #endregion
 
         #region Add to match NetworkObject.
+
         /// <summary>
         /// Adds conn to match.
         /// </summary>
@@ -147,12 +163,13 @@ namespace FishNet.Component.Observing
                 _matchObjects.Add(match, results);
             }
 
-            bool r = results.Add(nob);
+            var r = results.Add(nob);
             _objectMatch[nob] = match;
 
             if (r) //todo this needs to add to conns matches and do same for removing.
                 FinalizeChange(match, results, nob, manager);
         }
+
         /// <summary>
         /// Adds conns to match.
         /// </summary>
@@ -168,10 +185,10 @@ namespace FishNet.Component.Observing
                 _matchObjects.Add(match, results);
             }
 
-            bool r = false;
-            for (int i = 0; i < nobs.Length; i++)
+            var r = false;
+            for (var i = 0; i < nobs.Length; i++)
             {
-                NetworkObject n = nobs[i];
+                var n = nobs[i];
                 r |= results.Add(n);
                 _objectMatch[n] = match;
             }
@@ -179,6 +196,7 @@ namespace FishNet.Component.Observing
             if (r)
                 FinalizeChange(match, results, nobs, manager);
         }
+
         /// <summary>
         /// Adds conns to match.
         /// </summary>
@@ -194,10 +212,10 @@ namespace FishNet.Component.Observing
                 _matchObjects.Add(match, results);
             }
 
-            bool r = false;
-            for (int i = 0; i < nobs.Count; i++)
+            var r = false;
+            for (var i = 0; i < nobs.Count; i++)
             {
-                NetworkObject n = nobs[i];
+                var n = nobs[i];
                 r |= results.Add(n);
                 _objectMatch[n] = match;
             }
@@ -205,9 +223,11 @@ namespace FishNet.Component.Observing
             if (r)
                 FinalizeChange(match, results, nobs, manager);
         }
+
         #endregion
 
         #region Remove from match NetworkConnection.
+
         /* //todo this needs to be passing in the network manager to clear on,
          * otherwise only a single instance of NM is supported.
          * Users are already forced to specify which NM to add
@@ -223,6 +243,7 @@ namespace FishNet.Component.Observing
             _objectMatch.Clear();
             _matchObjects.Clear();
         }
+
         /// <summary>
         /// Removes conn from any match.
         /// This does not rebuild observers.
@@ -231,21 +252,20 @@ namespace FishNet.Component.Observing
         internal static void RemoveFromMatchWithoutRebuild(NetworkConnection conn, NetworkManager manager)
         {
             //If found to be in a match.
-            if (_connectionMatch.TryGetValueIL2CPP(conn, out int match))
-            {
+            if (_connectionMatch.TryGetValueIL2CPP(conn, out var match))
                 //If match is found.
-                if (_matchConnections.TryGetValue(match, out HashSet<NetworkConnection> conns))
+                if (_matchConnections.TryGetValue(match, out var conns))
                 {
                     conns.Remove(conn);
                     //If no more in hashset remove match.
                     if (conns.Count == 0)
                         _matchConnections.Remove(match);
                 }
-            }
 
             //Remove from connectionMatch.
             _connectionMatch.Remove(conn);
         }
+
         /// <summary>
         /// Removes conn from match.
         /// </summary>
@@ -255,14 +275,15 @@ namespace FishNet.Component.Observing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void RemoveFromMatch(int match, NetworkConnection conn, NetworkManager manager)
         {
-            if (_matchConnections.TryGetValueIL2CPP(match, out HashSet<NetworkConnection> results))
+            if (_matchConnections.TryGetValueIL2CPP(match, out var results))
             {
-                bool r = results.Remove(conn);
+                var r = results.Remove(conn);
                 _connectionMatch.Remove(conn);
                 if (r)
                     FinalizeChange(match, results, conn, manager);
             }
         }
+
         /// <summary>
         /// Removes conns from match.
         /// </summary>
@@ -272,12 +293,12 @@ namespace FishNet.Component.Observing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void RemoveFromMatch(int match, NetworkConnection[] conns, NetworkManager manager)
         {
-            if (_matchConnections.TryGetValueIL2CPP(match, out HashSet<NetworkConnection> results))
+            if (_matchConnections.TryGetValueIL2CPP(match, out var results))
             {
-                bool r = false;
-                for (int i = 0; i < conns.Length; i++)
+                var r = false;
+                for (var i = 0; i < conns.Length; i++)
                 {
-                    NetworkConnection c = conns[i];
+                    var c = conns[i];
                     r |= results.Remove(c);
                     _connectionMatch.Remove(c);
                 }
@@ -286,6 +307,7 @@ namespace FishNet.Component.Observing
                     FinalizeChange(match, results, conns, manager);
             }
         }
+
         /// <summary>
         /// Removes conns from match.
         /// </summary>
@@ -295,12 +317,12 @@ namespace FishNet.Component.Observing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void RemoveFromMatch(int match, List<NetworkConnection> conns, NetworkManager manager)
         {
-            if (_matchConnections.TryGetValueIL2CPP(match, out HashSet<NetworkConnection> results))
+            if (_matchConnections.TryGetValueIL2CPP(match, out var results))
             {
-                bool r = false;
-                for (int i = 0; i < conns.Count; i++)
+                var r = false;
+                for (var i = 0; i < conns.Count; i++)
                 {
-                    NetworkConnection c = conns[i];
+                    var c = conns[i];
                     r |= results.Remove(c);
                     _connectionMatch.Remove(c);
                 }
@@ -309,9 +331,11 @@ namespace FishNet.Component.Observing
                     FinalizeChange(match, results, conns, manager);
             }
         }
+
         #endregion
 
         #region Remove from match NetworkObject.
+
         /// <summary>
         /// Removes nob from any match.
         /// This does not rebuild observers.
@@ -320,21 +344,20 @@ namespace FishNet.Component.Observing
         internal static void RemoveFromMatchWithoutRebuild(NetworkObject nob, NetworkManager manager)
         {
             //If found to be in a match.
-            if (_objectMatch.TryGetValueIL2CPP(nob, out int match))
-            {
+            if (_objectMatch.TryGetValueIL2CPP(nob, out var match))
                 //If match is found.
-                if (_matchObjects.TryGetValue(match, out HashSet<NetworkObject> nobs))
+                if (_matchObjects.TryGetValue(match, out var nobs))
                 {
                     nobs.Remove(nob);
                     //If no more in hashset remove match.
                     if (nobs.Count == 0)
                         _matchObjects.Remove(match);
                 }
-            }
 
             //Remove from connectionMatch.
             _objectMatch.Remove(nob);
         }
+
         /// <summary>
         /// Removes conn from match.
         /// </summary>
@@ -344,14 +367,15 @@ namespace FishNet.Component.Observing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void RemoveFromMatch(int match, NetworkObject nob, NetworkManager manager)
         {
-            if (_matchObjects.TryGetValueIL2CPP(match, out HashSet<NetworkObject> results))
+            if (_matchObjects.TryGetValueIL2CPP(match, out var results))
             {
-                bool r = results.Remove(nob);
+                var r = results.Remove(nob);
                 _objectMatch.Remove(nob);
                 if (r)
                     FinalizeChange(match, results, nob, manager);
             }
         }
+
         /// <summary>
         /// Removes conns from match.
         /// </summary>
@@ -361,12 +385,12 @@ namespace FishNet.Component.Observing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void RemoveFromMatch(int match, NetworkObject[] nobs, NetworkManager manager)
         {
-            if (_matchObjects.TryGetValueIL2CPP(match, out HashSet<NetworkObject> results))
+            if (_matchObjects.TryGetValueIL2CPP(match, out var results))
             {
-                bool r = false;
-                for (int i = 0; i < nobs.Length; i++)
+                var r = false;
+                for (var i = 0; i < nobs.Length; i++)
                 {
-                    NetworkObject n = nobs[i];
+                    var n = nobs[i];
                     r |= results.Remove(n);
                     _objectMatch.Remove(n);
                 }
@@ -375,6 +399,7 @@ namespace FishNet.Component.Observing
                     FinalizeChange(match, results, nobs, manager);
             }
         }
+
         /// <summary>
         /// Removes conns from match.
         /// </summary>
@@ -384,12 +409,12 @@ namespace FishNet.Component.Observing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void RemoveFromMatch(int match, List<NetworkObject> nobs, NetworkManager manager)
         {
-            if (_matchObjects.TryGetValueIL2CPP(match, out HashSet<NetworkObject> results))
+            if (_matchObjects.TryGetValueIL2CPP(match, out var results))
             {
-                bool r = false;
-                for (int i = 0; i < nobs.Count; i++)
+                var r = false;
+                for (var i = 0; i < nobs.Count; i++)
                 {
-                    NetworkObject n = nobs[i];
+                    var n = nobs[i];
                     r |= results.Remove(n);
                     _objectMatch.Remove(n);
                 }
@@ -398,44 +423,53 @@ namespace FishNet.Component.Observing
                     FinalizeChange(match, results, nobs, manager);
             }
         }
+
         #endregion
 
 
         #region FinalizeChange NetworkConnection.
+
         /// <summary>
         /// Finalizes changes to observers.
         /// </summary>
-        private static void FinalizeChange(int match, HashSet<NetworkConnection> results, List<NetworkConnection> conns, NetworkManager manager)
+        private static void FinalizeChange(int match, HashSet<NetworkConnection> results, List<NetworkConnection> conns,
+            NetworkManager manager)
         {
-            ListCache<NetworkConnection> cache = ListCaches.NetworkConnectionCache;
+            var cache = ListCaches.NetworkConnectionCache;
             cache.Reset();
             cache.AddValues(conns);
             FinalizeChange(match, results, cache, manager);
         }
+
         /// <summary>
         /// Finalizes changes to observers.
         /// </summary>
-        private static void FinalizeChange(int match, HashSet<NetworkConnection> results, NetworkConnection[] conns, NetworkManager manager)
+        private static void FinalizeChange(int match, HashSet<NetworkConnection> results, NetworkConnection[] conns,
+            NetworkManager manager)
         {
-            ListCache<NetworkConnection> cache = ListCaches.NetworkConnectionCache;
+            var cache = ListCaches.NetworkConnectionCache;
             cache.Reset();
             cache.AddValues(conns);
             FinalizeChange(match, results, cache, manager);
         }
+
         /// <summary>
         /// Finalizes changes to observers.
         /// </summary>
-        private static void FinalizeChange(int match, HashSet<NetworkConnection> results, NetworkConnection conn, NetworkManager manager)
+        private static void FinalizeChange(int match, HashSet<NetworkConnection> results, NetworkConnection conn,
+            NetworkManager manager)
         {
-            ListCache<NetworkConnection> cache = ListCaches.NetworkConnectionCache;
+            var cache = ListCaches.NetworkConnectionCache;
             cache.Reset();
             cache.AddValue(conn);
             FinalizeChange(match, results, cache, manager);
         }
+
         /// <summary>
         /// Finalizes changes to observers.
         /// </summary>
-        private static void FinalizeChange(int match, HashSet<NetworkConnection> results, ListCache<NetworkConnection> conns, NetworkManager manager)
+        private static void FinalizeChange(int match, HashSet<NetworkConnection> results,
+            ListCache<NetworkConnection> conns, NetworkManager manager)
         {
             if (results.Count == 0)
                 _matchConnections.Remove(match);
@@ -445,45 +479,53 @@ namespace FishNet.Component.Observing
             else
                 manager.ServerManager.Objects.RebuildObservers(conns);
         }
+
         #endregion
 
 
-
         #region FinalizeChange NetworkObject.
+
         /// <summary>
         /// Finalizes changes to observers.
         /// </summary>
-        private static void FinalizeChange(int match, HashSet<NetworkObject> results, List<NetworkObject> nobs, NetworkManager manager)
+        private static void FinalizeChange(int match, HashSet<NetworkObject> results, List<NetworkObject> nobs,
+            NetworkManager manager)
         {
-            ListCache<NetworkObject> cache = ListCaches.NetworkObjectCache;
+            var cache = ListCaches.NetworkObjectCache;
             cache.Reset();
             cache.AddValues(nobs);
             FinalizeChange(match, results, cache, manager);
         }
+
         /// <summary>
         /// Finalizes changes to observers.
         /// </summary>
-        private static void FinalizeChange(int match, HashSet<NetworkObject> results, NetworkObject[] nobs, NetworkManager manager)
+        private static void FinalizeChange(int match, HashSet<NetworkObject> results, NetworkObject[] nobs,
+            NetworkManager manager)
         {
-            ListCache<NetworkObject> cache = ListCaches.NetworkObjectCache;
+            var cache = ListCaches.NetworkObjectCache;
             cache.Reset();
             cache.AddValues(nobs);
             FinalizeChange(match, results, cache, manager);
         }
+
         /// <summary>
         /// Finalizes changes to observers.
         /// </summary>
-        private static void FinalizeChange(int match, HashSet<NetworkObject> results, NetworkObject nob, NetworkManager manager)
+        private static void FinalizeChange(int match, HashSet<NetworkObject> results, NetworkObject nob,
+            NetworkManager manager)
         {
-            ListCache<NetworkObject> cache = ListCaches.NetworkObjectCache;
+            var cache = ListCaches.NetworkObjectCache;
             cache.Reset();
             cache.AddValue(nob);
             FinalizeChange(match, results, cache, manager);
         }
+
         /// <summary>
         /// Finalizes changes to observers.
         /// </summary>
-        private static void FinalizeChange(int match, HashSet<NetworkObject> results, ListCache<NetworkObject> nobs, NetworkManager manager)
+        private static void FinalizeChange(int match, HashSet<NetworkObject> results, ListCache<NetworkObject> nobs,
+            NetworkManager manager)
         {
             if (results.Count == 0)
                 _matchConnections.Remove(match);
@@ -498,6 +540,7 @@ namespace FishNet.Component.Observing
                 manager.ServerManager.Objects.RebuildObservers(nobs);
             }
         }
+
         #endregion
 
         /// <summary>
@@ -510,18 +553,18 @@ namespace FishNet.Component.Observing
         {
             //If here then checks are being processed.
             notProcessed = false;
-            NetworkConnection owner = base.NetworkObject.Owner;
+            var owner = NetworkObject.Owner;
             /* If object is owned then check if owner
             * and connection share a match. */
             if (owner.IsValid)
             {
-                if (base.NetworkObject.name == "CCC")
+                if (NetworkObject.name == "CCC")
                     Debug.Log("0");
                 //Connection isn't in a match so condition cannot be met.
-                if (!_connectionMatch.TryGetValueIL2CPP(connection, out int match))
+                if (!_connectionMatch.TryGetValueIL2CPP(connection, out var match))
                     return false;
                 //Match isn't found.
-                if (!_matchConnections.TryGetValueIL2CPP(match, out HashSet<NetworkConnection> conns))
+                if (!_matchConnections.TryGetValueIL2CPP(match, out var conns))
                     return false;
 
                 //If owner is in same match return true.
@@ -532,13 +575,13 @@ namespace FishNet.Component.Observing
             else
             {
                 //Object isn't in a match.
-                if (!_objectMatch.TryGetValueIL2CPP(base.NetworkObject, out int objectMatch))
+                if (!_objectMatch.TryGetValueIL2CPP(NetworkObject, out var objectMatch))
                     return true;
                 /* See if connection is in the same match as the object.
                  * If connection isn't in a match then it fails. */
-                if (!_connectionMatch.TryGetValueIL2CPP(connection, out int connectionMatch))
+                if (!_connectionMatch.TryGetValueIL2CPP(connection, out var connectionMatch))
                     return false;
-                return (connectionMatch == objectMatch);
+                return connectionMatch == objectMatch;
             }
         }
 
@@ -557,7 +600,7 @@ namespace FishNet.Component.Observing
         /// <returns></returns>
         public override ObserverCondition Clone()
         {
-            MatchCondition copy = ScriptableObject.CreateInstance<MatchCondition>();
+            var copy = CreateInstance<MatchCondition>();
             copy.ConditionConstructor();
             return copy;
         }

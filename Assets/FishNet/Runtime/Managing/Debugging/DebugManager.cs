@@ -14,6 +14,4 @@ namespace FishNet.Managing.Debugging
         public bool ReconcileRpcLinks = true;
         public bool ServerRpcLinks = true;
     }
-
-
 }

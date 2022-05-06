@@ -8,110 +8,131 @@ using UnityEngine.SceneManagement;
 
 namespace FishNet.Connection
 {
-
     /// <summary>
     /// A container for a connected client used to perform actions on and gather information for the declared client.
     /// </summary>
     public partial class NetworkConnection : IEquatable<NetworkConnection>
     {
-
         #region Public.
+
         /// <summary>
         /// Called after this connection has loaded start scenes. Boolean will be true if asServer. Available to this connection and server.
         /// </summary>
         public event Action<NetworkConnection, bool> OnLoadedStartScenes;
+
         /// <summary>
         /// Called after connection gains ownership of an object, and after the object has been added to Objects. Available to this connection and server.
         /// </summary>
         public event Action<NetworkObject> OnObjectAdded;
+
         /// <summary>
         /// Called after connection loses ownership of an object, and after the object has been removed from Objects. Available to this connection and server.
         /// </summary>
         public event Action<NetworkObject> OnObjectRemoved;
+
         /// <summary>
         /// NetworkManager managing this class.
         /// </summary>
         public NetworkManager NetworkManager { get; private set; }
+
         /// <summary>
         /// True if connection has loaded start scenes. Available to this connection and server.
         /// </summary>
-        public bool LoadedStartScenes => (_loadedStartScenesAsServer || _loadedStartScenesAsClient);
+        public bool LoadedStartScenes => _loadedStartScenesAsServer || _loadedStartScenesAsClient;
+
         /// <summary>
         /// True if loaded start scenes as server.
         /// </summary>
         private bool _loadedStartScenesAsServer;
+
         /// <summary>
         /// True if loaded start scenes as client.
         /// </summary>
         private bool _loadedStartScenesAsClient;
+
         /// <summary>
         /// True if this connection is authenticated. Only available to server.
         /// </summary>
         public bool Authenticated { get; private set; }
+
         /// <summary>
         /// True if this connection IsValid and not Disconnecting.
         /// </summary>
-        public bool IsActive => (ClientId >= 0 && !Disconnecting);
+        public bool IsActive => ClientId >= 0 && !Disconnecting;
+
         /// <summary>
         /// True if this connection is valid. An invalid connection indicates no client is set for this reference.
         /// </summary>
-        public bool IsValid => (ClientId >= 0);
+        public bool IsValid => ClientId >= 0;
+
         /// <summary>
         /// Unique Id for this connection.
         /// </summary>
         public int ClientId = -1;
+
         /// <summary>
         /// Returns if this connection is for the local client.
         /// </summary>
-        public bool IsLocalClient => (NetworkManager == null) ? false : (NetworkManager.ClientManager.Connection == this);
+        public bool IsLocalClient => NetworkManager == null ? false : NetworkManager.ClientManager.Connection == this;
+
         /// <summary>
         /// 
         /// </summary>
-        private HashSet<NetworkObject> _objects = new HashSet<NetworkObject>();
+        private HashSet<NetworkObject> _objects = new();
+
         /// <summary>
         /// Objects owned by this connection. Available to this connection and server.
         /// </summary>
         public IReadOnlyCollection<NetworkObject> Objects => _objects;
+
         /// <summary>
         /// The first object within Objects.
         /// </summary>
         public NetworkObject FirstObject { get; private set; }
+
         /// <summary>
         /// Scenes this connection is in. Available to this connection and server.
         /// </summary>
-        public HashSet<Scene> Scenes { get; private set; } = new HashSet<Scene>();
+        public HashSet<Scene> Scenes { get; private set; } = new();
+
         /// <summary>
         /// True if this connection is being disconnected. Only available to server.
         /// </summary>
         public bool Disconnecting { get; private set; }
+
         /// <summary>
         /// Custom data associated with this connection which may be modified by the user.
         /// The value of this field are not synchronized over the network.
         /// </summary>
         public object CustomData = null;
+
         #endregion
 
         #region Comparers.
+
         public override bool Equals(object obj)
         {
-            return this.Equals(obj as NetworkConnection);
+            return Equals(obj as NetworkConnection);
         }
+
         public bool Equals(NetworkConnection nc)
         {
             if (nc is null)
                 return false;
             //If either is -1 Id.
-            if (this.ClientId == -1 || nc.ClientId == -1)
+            if (ClientId == -1 || nc.ClientId == -1)
                 return false;
-            if (System.Object.ReferenceEquals(this, nc))
+            if (ReferenceEquals(this, nc))
                 return true;
 
-            return (this.ClientId == nc.ClientId);
+            return ClientId == nc.ClientId;
         }
+
         public override int GetHashCode()
         {
             return ClientId;
         }
+
         public static bool operator ==(NetworkConnection a, NetworkConnection b)
         {
             if (a is null && b is null)
@@ -119,16 +140,21 @@ namespace FishNet.Connection
             if (a is null && !(b is null))
                 return false;
 
-            return (b == null) ? a.Equals(b) : b.Equals(a);
+            return b == null ? a.Equals(b) : b.Equals(a);
         }
+
         public static bool operator !=(NetworkConnection a, NetworkConnection b)
         {
             return !(a == b);
         }
+
         #endregion
 
         [APIExclude]
-        public NetworkConnection() { }
+        public NetworkConnection()
+        {
+        }
+
         [APIExclude]
         public NetworkConnection(NetworkManager manager, int clientId)
         {
@@ -192,9 +218,9 @@ namespace FishNet.Connection
         /// <returns></returns>
         internal bool SetLoadedStartScenes(bool asServer)
         {
-            bool loadedToCheck = (asServer) ? _loadedStartScenesAsServer : _loadedStartScenesAsClient;
+            var loadedToCheck = asServer ? _loadedStartScenesAsServer : _loadedStartScenesAsClient;
             //Result becomes true if not yet loaded start scenes.
-            bool result = !loadedToCheck;
+            var result = !loadedToCheck;
             if (asServer)
                 _loadedStartScenesAsServer = true;
             else
@@ -258,17 +284,13 @@ namespace FishNet.Connection
         private void SetFirstObject()
         {
             if (_objects.Count == 0)
-            {
                 FirstObject = null;
-            }
             else
-            {
-                foreach (NetworkObject nob in Objects)
+                foreach (var nob in Objects)
                 {
                     FirstObject = nob;
                     break;
                 }
-            }
         }
 
         /// <summary>
@@ -290,8 +312,5 @@ namespace FishNet.Connection
         {
             return Scenes.Remove(scene);
         }
-
     }
-
-
 }

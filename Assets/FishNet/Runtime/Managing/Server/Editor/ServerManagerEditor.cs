@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace FishNet.Managing.Server.Editing
 {
-
-
     [CustomEditor(typeof(ServerManager), true)]
     [CanEditMultipleObjects]
     public class ServerManagerEditor : Editor
@@ -34,7 +32,8 @@ namespace FishNet.Managing.Server.Editing
             serializedObject.Update();
 
             GUI.enabled = false;
-            EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour((ServerManager)target), typeof(ServerManager), false);
+            EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour((ServerManager) target),
+                typeof(ServerManager), false);
             GUI.enabled = true;
 
 
@@ -47,6 +46,7 @@ namespace FishNet.Managing.Server.Editing
                 EditorGUILayout.PropertyField(_frameRate);
                 EditorGUI.indentLevel--;
             }
+
             EditorGUILayout.PropertyField(_shareIds);
             EditorGUILayout.PropertyField(_startOnHeadless);
             EditorGUILayout.PropertyField(_limitClientMTU);
@@ -55,7 +55,6 @@ namespace FishNet.Managing.Server.Editing
 
             serializedObject.ApplyModifiedProperties();
         }
-
     }
 }
 #endif

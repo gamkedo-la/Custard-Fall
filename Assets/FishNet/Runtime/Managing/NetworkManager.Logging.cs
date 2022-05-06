@@ -7,18 +7,21 @@ namespace FishNet.Managing
     public partial class NetworkManager : MonoBehaviour
     {
         #region Serialized.
+
         /// <summary>
         /// Logging configuration to use. When empty default logging settings will be used.
         /// </summary>
-        [Tooltip("Logging configuration to use. When empty default logging settings will be used.")]
-        [SerializeField]
+        [Tooltip("Logging configuration to use. When empty default logging settings will be used.")] [SerializeField]
         private LoggingConfiguration _logging;
+
         #endregion
 
         #region Const.
+
         private const string ERROR_LOGGING_PREFIX = "Error - ";
         private const string WARNING_LOGGING_PREFIX = "Warning - ";
         private const string COMMON_LOGGING_PREFIX = "Log - ";
+
         #endregion
 
         /// <summary>
@@ -43,7 +46,7 @@ namespace FishNet.Managing
         [APIExclude]
         public static bool StaticCanLog(LoggingType loggingType)
         {
-            NetworkManager nm = InstanceFinder.NetworkManager;
+            var nm = InstanceFinder.NetworkManager;
             if (nm == null || !nm.CanLog(loggingType))
                 return false;
             else
@@ -117,8 +120,6 @@ namespace FishNet.Managing
                 prefix = ERROR_LOGGING_PREFIX;
             else
                 prefix = string.Empty;
-
         }
     }
-
 }

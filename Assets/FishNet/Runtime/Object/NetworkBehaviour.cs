@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [assembly: InternalsVisibleTo(UtilityConstants.CODEGEN_ASSEMBLY_NAME)]
+
 namespace FishNet.Object
 {
     /// <summary>
@@ -12,20 +13,23 @@ namespace FishNet.Object
     public abstract partial class NetworkBehaviour : MonoBehaviour
     {
         #region Debug //debug
+
         //[HideInInspector]
         //public string GivenName;
         //public void SetGivenName(string s) => GivenName = s;
+
         #endregion
 
         /// <summary>
         /// True if this NetworkBehaviour is initialized for the network.
         /// </summary>
         public bool IsSpawned => _networkObjectCache.IsSpawned;
+
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField, HideInInspector]
-        private byte _componentIndexCache = byte.MaxValue;
+        [SerializeField] [HideInInspector] private byte _componentIndexCache = byte.MaxValue;
+
         /// <summary>
         /// ComponentIndex for this NetworkBehaviour.
         /// </summary>
@@ -38,14 +42,13 @@ namespace FishNet.Object
         /// <summary>
         /// NetworkObject automatically added or discovered during edit time.
         /// </summary>
-        [SerializeField, HideInInspector]
-        private NetworkObject _addedNetworkObject;
-#endif 
+        [SerializeField] [HideInInspector] private NetworkObject _addedNetworkObject;
+#endif
         /// <summary>
         /// 
         /// </summary>
-        [SerializeField, HideInInspector]
-        private NetworkObject _networkObjectCache;
+        [SerializeField] [HideInInspector] private NetworkObject _networkObjectCache;
+
         /// <summary>
         /// NetworkObject this behaviour is for.
         /// </summary>
@@ -73,13 +76,14 @@ namespace FishNet.Object
         }
 
         #region Editor.
+
         protected virtual void Reset()
         {
 #if UNITY_EDITOR
             if (Application.isPlaying)
                 return;
 
-            NetworkObject nob = TryAddNetworkObject();
+            var nob = TryAddNetworkObject();
             nob.UpdateNetworkBehaviours();
 #endif
         }
@@ -90,7 +94,7 @@ namespace FishNet.Object
             if (Application.isPlaying)
                 return;
 
-            NetworkObject nob = TryAddNetworkObject();
+            var nob = TryAddNetworkObject();
             //If componentIndex has not been set.
             if (ComponentIndex == byte.MaxValue)
                 nob.UpdateNetworkBehaviours();
@@ -110,24 +114,21 @@ namespace FishNet.Object
              * work when modifying prefabs in the inspector. Unity, you're starting
              * to suck a lot right now. */
             NetworkObject result = null;
-            Transform climb = transform;
+            var climb = transform;
 
             while (climb != null)
-            {
                 if (climb.TryGetComponent<NetworkObject>(out result))
                     break;
                 else
                     climb = climb.parent;
-            }
 
-            _addedNetworkObject = (result != null) ? result : transform.root.gameObject.AddComponent<NetworkObject>();
+            _addedNetworkObject = result != null ? result : transform.root.gameObject.AddComponent<NetworkObject>();
             return _addedNetworkObject;
 #else
             return null;
 #endif
         }
+
         #endregion
     }
-
-
 }

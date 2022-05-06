@@ -8,11 +8,13 @@ namespace FishNet.Editing
 {
     internal class PrefabProcessor : AssetPostprocessor
     {
-        #region Private.   
+        #region Private.
+
         /// <summary>
         /// ScriptableObject to store default prefabs.
         /// </summary>
         private static DefaultPrefabObjects _defaultPrefabs;
+
         #endregion
 
         /// <summary>
@@ -23,12 +25,12 @@ namespace FishNet.Editing
         /// <param name="movedAssets"></param>
         /// <param name="movedFromAssetPaths"></param>
 #if UNITY_2021_3_OR_NEWER
-        private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths, bool didDomainReload)
+        private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets,
+            string[] movedAssets, string[] movedFromAssetPaths, bool didDomainReload)
 #else
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 #endif
         {
-
 #if UNITY_2021_3_OR_NEWER
             if (didDomainReload)
                 return;
@@ -43,7 +45,7 @@ namespace FishNet.Editing
                 return;
 
             //True if null must be removed as well.
-            bool removeNull = (deletedAssets.Length > 0 || movedAssets.Length > 0 || movedFromAssetPaths.Length > 0);
+            var removeNull = deletedAssets.Length > 0 || movedAssets.Length > 0 || movedFromAssetPaths.Length > 0;
             if (removeNull)
                 _defaultPrefabs.RemoveNull();
 
@@ -52,18 +54,17 @@ namespace FishNet.Editing
             if (justPopulated)
                 return;
 
-            System.Type goType = typeof(UnityEngine.GameObject);
-            foreach (string item in importedAssets)
+            var goType = typeof(GameObject);
+            foreach (var item in importedAssets)
             {
-                System.Type assetType = AssetDatabase.GetMainAssetTypeAtPath(item);
+                var assetType = AssetDatabase.GetMainAssetTypeAtPath(item);
                 if (assetType != goType)
                     continue;
 
-                GameObject go = (GameObject)AssetDatabase.LoadAssetAtPath(item, typeof(GameObject));
+                var go = (GameObject) AssetDatabase.LoadAssetAtPath(item, typeof(GameObject));
                 //If is a gameobject.
                 if (go != null)
                 {
-
                     NetworkObject nob;
                     //Not a network object.
                     if (!go.TryGetComponent<NetworkObject>(out nob))
@@ -77,9 +78,7 @@ namespace FishNet.Editing
 
             EditorUtility.SetDirty(_defaultPrefabs);
         }
-
     }
-
 }
 
 #endif

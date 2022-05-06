@@ -9,12 +9,12 @@ namespace FishNet.Object
         /// </summary>
         internal void WriteDirtySyncTypes()
         {
-            NetworkBehaviour[] nbs = NetworkBehaviours;
-            int count = nbs.Length;
-            for (int i = 0; i < count; i++)
+            var nbs = NetworkBehaviours;
+            var count = nbs.Length;
+            for (var i = 0; i < count; i++)
             {
                 //There was a null check here before, shouldn't be needed so it was removed.
-                NetworkBehaviour nb = nbs[i];
+                var nb = nbs[i];
                 nb.WriteDirtySyncTypes(true, true);
                 nb.WriteDirtySyncTypes(false, true);
             }
@@ -25,12 +25,10 @@ namespace FishNet.Object
         /// </summary>
         internal void ResetSyncTypes(bool asServer)
         {
-            NetworkBehaviour[] nbs = NetworkBehaviours;
-            int count = nbs.Length;
-            for (int i = 0; i < count; i++)
+            var nbs = NetworkBehaviours;
+            var count = nbs.Length;
+            for (var i = 0; i < count; i++)
                 nbs[i].ResetSyncTypes(asServer);
         }
     }
-
 }
-

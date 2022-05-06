@@ -29,6 +29,4 @@ namespace FishNet.CodeGenerating.Helping
             return obj.FullName.GetHashCode();
         }
     }
-
-
 }

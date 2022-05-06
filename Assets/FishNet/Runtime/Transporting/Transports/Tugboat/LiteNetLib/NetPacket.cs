@@ -30,6 +30,7 @@ namespace LiteNetLib
     internal sealed class NetPacket
     {
         private static int _propertiesCount = -1;
+
         private static int PropertiesCount
         {
             get
@@ -40,14 +41,14 @@ namespace LiteNetLib
                 return _propertiesCount;
             }
         }
+
         private static readonly int[] HeaderSizes;
 
         static NetPacket()
         {
             HeaderSizes = NetUtils.AllocatePinnedUninitializedArray<int>(PropertiesCount);
-            for (int i = 0; i < HeaderSizes.Length; i++)
-            {
-                switch ((PacketProperty)i)
+            for (var i = 0; i < HeaderSizes.Length; i++)
+                switch ((PacketProperty) i)
                 {
                     case PacketProperty.Channeled:
                     case PacketProperty.Ack:
@@ -72,20 +73,19 @@ namespace LiteNetLib
                         HeaderSizes[i] = NetConstants.HeaderSize;
                         break;
                 }
-            }
         }
 
         //Header
         public PacketProperty Property
         {
-            get => (PacketProperty)(RawData[0] & 0x1F);
-            set => RawData[0] = (byte)((RawData[0] & 0xE0) | (byte)value);
+            get => (PacketProperty) (RawData[0] & 0x1F);
+            set => RawData[0] = (byte) ((RawData[0] & 0xE0) | (byte) value);
         }
 
         public byte ConnectionNumber
         {
-            get => (byte)((RawData[0] & 0x60) >> 5);
-            set => RawData[0] = (byte)((RawData[0] & 0x9F) | (value << 5));
+            get => (byte) ((RawData[0] & 0x60) >> 5);
+            set => RawData[0] = (byte) ((RawData[0] & 0x9F) | (value << 5));
         }
 
         public ushort Sequence
@@ -163,7 +163,7 @@ namespace LiteNetLib
 
         public static int GetHeaderSize(PacketProperty property)
         {
-            return HeaderSizes[(int)property];
+            return HeaderSizes[(int) property];
         }
 
         public int GetHeaderSize()
@@ -173,11 +173,11 @@ namespace LiteNetLib
 
         public bool Verify()
         {
-            byte property = (byte)(RawData[0] & 0x1F);
+            var property = (byte) (RawData[0] & 0x1F);
             if (property >= PropertiesCount)
                 return false;
-            int headerSize = HeaderSizes[property];
-            bool fragmented = (RawData[0] & 0x80) != 0;
+            var headerSize = HeaderSizes[property];
+            var fragmented = (RawData[0] & 0x80) != 0;
             return Size >= headerSize && (!fragmented || Size >= headerSize + NetConstants.FragmentHeaderSize);
         }
     }
@@ -191,7 +191,8 @@ namespace LiteNetLib
         public readonly NetDataReader Data;
         public readonly int PeerId;
 
-        private NetConnectRequestPacket(long connectionTime, byte connectionNumber, int localId, byte[] targetAddress, NetDataReader data)
+        private NetConnectRequestPacket(long connectionTime, byte connectionNumber, int localId, byte[] targetAddress,
+            NetDataReader data)
         {
             ConnectionTime = connectionTime;
             ConnectionNumber = connectionNumber;
@@ -211,16 +212,16 @@ namespace LiteNetLib
                 return null;
 
             //Getting connection time for peer
-            long connectionTime = BitConverter.ToInt64(packet.RawData, 5);
+            var connectionTime = BitConverter.ToInt64(packet.RawData, 5);
 
             //Get peer id
-            int peerId = BitConverter.ToInt32(packet.RawData, 13);
+            var peerId = BitConverter.ToInt32(packet.RawData, 13);
 
             //Get target address
             int addrSize = packet.RawData[HeaderSize - 1];
             if (addrSize != 16 && addrSize != 28)
                 return null;
-            byte[] addressBytes = new byte[addrSize];
+            var addressBytes = new byte[addrSize];
             Buffer.BlockCopy(packet.RawData, HeaderSize, addressBytes, 0, addrSize);
 
             // Read data and create request
@@ -231,17 +232,18 @@ namespace LiteNetLib
             return new NetConnectRequestPacket(connectionTime, packet.ConnectionNumber, peerId, addressBytes, reader);
         }
 
-        public static NetPacket Make(NetDataWriter connectData, SocketAddress addressBytes, long connectTime, int localId)
+        public static NetPacket Make(NetDataWriter connectData, SocketAddress addressBytes, long connectTime,
+            int localId)
         {
             //Make initial packet
-            NetPacket packet = new NetPacket(PacketProperty.ConnectRequest, connectData.Length + addressBytes.Size);
+            var packet = new NetPacket(PacketProperty.ConnectRequest, connectData.Length + addressBytes.Size);
 
             //Add data
             FastBitConverter.GetBytes(packet.RawData, 1, NetConstants.ProtocolId);
             FastBitConverter.GetBytes(packet.RawData, 5, connectTime);
             FastBitConverter.GetBytes(packet.RawData, 13, localId);
-            packet.RawData[HeaderSize - 1] = (byte)addressBytes.Size;
-            for (int i = 0; i < addressBytes.Size; i++)
+            packet.RawData[HeaderSize - 1] = (byte) addressBytes.Size;
+            for (var i = 0; i < addressBytes.Size; i++)
                 packet.RawData[HeaderSize + i] = addressBytes[i];
             Buffer.BlockCopy(connectData.Data, 0, packet.RawData, HeaderSize + addressBytes.Size, connectData.Length);
             return packet;
@@ -267,30 +269,30 @@ namespace LiteNetLib
             if (packet.Size != Size)
                 return null;
 
-            long connectionId = BitConverter.ToInt64(packet.RawData, 1);
+            var connectionId = BitConverter.ToInt64(packet.RawData, 1);
 
             //check connect num
-            byte connectionNumber = packet.RawData[9];
+            var connectionNumber = packet.RawData[9];
             if (connectionNumber >= NetConstants.MaxConnectionNumber)
                 return null;
 
             //check reused flag
-            byte isReused = packet.RawData[10];
+            var isReused = packet.RawData[10];
             if (isReused > 1)
                 return null;
 
             //get remote peer id
-            int peerId = BitConverter.ToInt32(packet.RawData, 11);
+            var peerId = BitConverter.ToInt32(packet.RawData, 11);
 
             return new NetConnectAcceptPacket(connectionId, connectionNumber, peerId); //pool this.
         }
 
         public static NetPacket Make(long connectTime, byte connectNum, bool reusedPeer, int localPeerId)
         {
-            NetPacket packet = new NetPacket(PacketProperty.ConnectAccept, 0); //pool this
+            var packet = new NetPacket(PacketProperty.ConnectAccept, 0); //pool this
             FastBitConverter.GetBytes(packet.RawData, 1, connectTime);
             packet.RawData[9] = connectNum;
-            packet.RawData[10] = (byte)(reusedPeer ? 1 : 0);
+            packet.RawData[10] = (byte) (reusedPeer ? 1 : 0);
             FastBitConverter.GetBytes(packet.RawData, 11, localPeerId);
             return packet;
         }

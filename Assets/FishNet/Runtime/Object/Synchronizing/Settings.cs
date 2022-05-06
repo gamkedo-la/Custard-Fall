@@ -8,14 +8,17 @@ namespace FishNet.Object.Synchronizing.Internal
         /// Defines the write permissions for this var
         /// </summary>
         public WritePermission WritePermission = WritePermission.ServerOnly;
+
         /// <summary>
         /// Clients which may receive updated values.
         /// </summary>
         public ReadPermission ReadPermission = ReadPermission.Observers;
+
         /// <summary>
         /// How often this variable may synchronize.
         /// </summary>
         public float SendTickRate = 0f;
+
         /// <summary>
         /// Channel to send values on.
         /// </summary>
@@ -26,10 +29,10 @@ namespace FishNet.Object.Synchronizing.Internal
         /// </summary>
         public Settings()
         {
-
         }
 
-        public Settings(WritePermission writePermission, ReadPermission readPermission, float sendTickrate, Channel channel)
+        public Settings(WritePermission writePermission, ReadPermission readPermission, float sendTickrate,
+            Channel channel)
         {
             WritePermission = writePermission;
             ReadPermission = readPermission;
@@ -48,6 +51,5 @@ namespace FishNet.Object.Synchronizing.Internal
             SendTickRate = sendTickrate;
             Channel = channel;
         }
-
     }
 }

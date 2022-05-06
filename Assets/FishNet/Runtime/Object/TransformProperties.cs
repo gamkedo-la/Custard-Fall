@@ -8,6 +8,7 @@ namespace FishNet.Object
         public Vector3 Position;
         public Quaternion Rotation;
         public Vector3 LocalScale;
+
         public SceneTransformProperties(Vector3 position, Quaternion rotation, Vector3 localScale)
         {
             Position = position;
@@ -16,4 +17,3 @@ namespace FishNet.Object
         }
     }
 }
-

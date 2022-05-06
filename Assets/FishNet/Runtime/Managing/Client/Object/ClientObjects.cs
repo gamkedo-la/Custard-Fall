@@ -20,17 +20,18 @@ namespace FishNet.Managing.Client
     /// </summary>
     public partial class ClientObjects : ManagedObjects
     {
-
         #region Private.
+
         /// <summary>
         /// NetworkObjects which are cached to be spawned or despawned.
         /// </summary>
         private ClientObjectCache _objectCache;
+
         #endregion
 
         internal ClientObjects(NetworkManager networkManager)
         {
-            base.NetworkManager = networkManager;
+            NetworkManager = networkManager;
             _objectCache = new ClientObjectCache(this);
         }
 
@@ -53,7 +54,7 @@ namespace FishNet.Managing.Client
              * Calling StopConnection on the client will set it's local state
              * to Stopping which will result in a deinit. */
             if (NetworkManager.IsClient)
-                base.NetworkManager.ClientManager.StopConnection();
+                NetworkManager.ClientManager.StopConnection();
         }
 
         /// <summary>
@@ -71,8 +72,8 @@ namespace FishNet.Managing.Client
                 /* Clear spawned and scene objects as they will be rebuilt.
                  * Spawned would have already be cleared if DespawnSpawned
                  * was called but it won't hurt anything clearing an empty collection. */
-                base.Spawned.Clear();
-                base.SceneObjects.Clear();
+                Spawned.Clear();
+                SceneObjects.Clear();
             }
         }
 
@@ -87,7 +88,7 @@ namespace FishNet.Managing.Client
         {
             base.SceneManager_sceneLoaded(s, arg1);
 
-            if (!base.NetworkManager.IsClient)
+            if (!NetworkManager.IsClient)
                 return;
             /* When a scene first loads for a client it should disable
              * all network objects in that scene. The server will send
@@ -100,7 +101,7 @@ namespace FishNet.Managing.Client
         /// </summary>
         internal void RegisterAndDespawnSceneObjects()
         {
-            for (int i = 0; i < SceneManager.sceneCount; i++)
+            for (var i = 0; i < SceneManager.sceneCount; i++)
                 RegisterAndDespawnSceneObjects(SceneManager.GetSceneAt(i));
         }
 
@@ -111,17 +112,17 @@ namespace FishNet.Managing.Client
         private void RegisterAndDespawnSceneObjects(Scene s)
         {
             int nobCount;
-            List<NetworkObject> networkObjects = SceneFN.GetSceneNetworkObjects(s, out nobCount);
+            var networkObjects = SceneFN.GetSceneNetworkObjects(s, out nobCount);
 
-            for (int i = 0; i < nobCount; i++)
+            for (var i = 0; i < nobCount; i++)
             {
-                NetworkObject nob = networkObjects[i];
-                base.UpdateNetworkBehaviours(nob, false);
+                var nob = networkObjects[i];
+                UpdateNetworkBehaviours(nob, false);
                 if (nob.SceneObject && nob.IsNetworked)
                 {
-                    base.AddToSceneObjects(nob);
+                    AddToSceneObjects(nob);
                     //Only run if not also server, as this already ran on server.
-                    if (!base.NetworkManager.IsServer)
+                    if (!NetworkManager.IsServer)
                         nob.gameObject.SetActive(false);
                 }
             }
@@ -143,8 +144,8 @@ namespace FishNet.Managing.Client
         /// <param name="reader"></param>
         internal void ParseOwnershipChange(PooledReader reader)
         {
-            NetworkObject nob = reader.ReadNetworkObject();
-            NetworkConnection newOwner = reader.ReadNetworkConnection();
+            var nob = reader.ReadNetworkObject();
+            var newOwner = reader.ReadNetworkConnection();
             if (nob != null)
             {
                 nob.GiveOwnership(newOwner, false);
@@ -152,7 +153,8 @@ namespace FishNet.Managing.Client
             else
             {
                 if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"NetworkBehaviour could not be found when trying to parse OwnershipChange packet.");
+                    Debug.LogWarning(
+                        $"NetworkBehaviour could not be found when trying to parse OwnershipChange packet.");
             }
         }
 
@@ -165,9 +167,9 @@ namespace FishNet.Managing.Client
         {
             //cleanup this is unique to synctypes where length comes first.
             //this will change once I tidy up synctypes.
-            ushort packetId = (isSyncObject) ? (ushort)PacketId.SyncObject : (ushort)PacketId.SyncVar;
-            NetworkBehaviour nb = reader.ReadNetworkBehaviour();
-            int dataLength = Packets.GetPacketLength(packetId, reader, channel);
+            var packetId = isSyncObject ? (ushort) PacketId.SyncObject : (ushort) PacketId.SyncVar;
+            var nb = reader.ReadNetworkBehaviour();
+            var dataLength = Packets.GetPacketLength(packetId, reader, channel);
 
             if (nb != null)
             {
@@ -176,7 +178,7 @@ namespace FishNet.Managing.Client
                  * a set length and data must be read through completion.
                  * The only way to know where completion of syncvar is, versus
                  * when another packet starts is by including the length. */
-                int length = reader.ReadInt32();
+                var length = reader.ReadInt32();
                 if (length > 0)
                     nb.OnSyncType(reader, length, isSyncObject);
             }
@@ -193,13 +195,13 @@ namespace FishNet.Managing.Client
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void ParseReconcileRpc(PooledReader reader, Channel channel)
         {
-            NetworkBehaviour nb = reader.ReadNetworkBehaviour();
-            int dataLength = Packets.GetPacketLength((ushort)PacketId.Reconcile, reader, channel);
-            
+            var nb = reader.ReadNetworkBehaviour();
+            var dataLength = Packets.GetPacketLength((ushort) PacketId.Reconcile, reader, channel);
+
             if (nb != null)
                 nb.OnReconcileRpc(null, reader, channel);
             else
-                SkipDataLength((ushort)PacketId.ObserversRpc, reader, dataLength);
+                SkipDataLength((ushort) PacketId.ObserversRpc, reader, dataLength);
         }
 
         /// <summary>
@@ -209,14 +211,15 @@ namespace FishNet.Managing.Client
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void ParseObserversRpc(PooledReader reader, Channel channel)
         {
-            NetworkBehaviour nb = reader.ReadNetworkBehaviour();
-            int dataLength = Packets.GetPacketLength((ushort)PacketId.ObserversRpc, reader, channel);
+            var nb = reader.ReadNetworkBehaviour();
+            var dataLength = Packets.GetPacketLength((ushort) PacketId.ObserversRpc, reader, channel);
 
             if (nb != null)
                 nb.OnObserversRpc(null, reader, channel);
             else
-                SkipDataLength((ushort)PacketId.ObserversRpc, reader, dataLength);
+                SkipDataLength((ushort) PacketId.ObserversRpc, reader, dataLength);
         }
+
         /// <summary>
         /// Parses a TargetRpc.
         /// </summary>
@@ -224,13 +227,13 @@ namespace FishNet.Managing.Client
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void ParseTargetRpc(PooledReader reader, Channel channel)
         {
-            NetworkBehaviour nb = reader.ReadNetworkBehaviour();
-            int dataLength = Packets.GetPacketLength((ushort)PacketId.TargetRpc, reader, channel);
+            var nb = reader.ReadNetworkBehaviour();
+            var dataLength = Packets.GetPacketLength((ushort) PacketId.TargetRpc, reader, channel);
 
             if (nb != null)
                 nb.OnTargetRpc(null, reader, channel);
             else
-                SkipDataLength((ushort)PacketId.TargetRpc, reader, dataLength);
+                SkipDataLength((ushort) PacketId.TargetRpc, reader, dataLength);
         }
 
         /// <summary>
@@ -239,9 +242,9 @@ namespace FishNet.Managing.Client
         /// <param name="reader"></param>
         internal void CacheSpawn(PooledReader reader)
         {
-            int objectId = reader.ReadNetworkObjectId();
-            int ownerId = reader.ReadNetworkConnectionId();
-            bool sceneObject = reader.ReadBoolean();
+            var objectId = reader.ReadNetworkObjectId();
+            var ownerId = reader.ReadNetworkConnectionId();
+            var sceneObject = reader.ReadBoolean();
 
             NetworkObject nob;
             if (sceneObject)
@@ -249,8 +252,8 @@ namespace FishNet.Managing.Client
             else
                 nob = ReadSpawnedObject(reader, objectId);
 
-            ArraySegment<byte> rpcLinks = reader.ReadArraySegmentAndSize();
-            ArraySegment<byte> syncValues = reader.ReadArraySegmentAndSize();
+            var rpcLinks = reader.ReadArraySegmentAndSize();
+            var syncValues = reader.ReadArraySegmentAndSize();
 
             /*If nob is null then exit method. Since ClientObjects gets nob from
              * server objects as host this can occur sometimes
@@ -260,10 +263,9 @@ namespace FishNet.Managing.Client
             {
                 //Only error if client only.
                 if (!NetworkManager.IsHost)
-                {
                     if (NetworkManager.CanLog(LoggingType.Error))
-                        Debug.LogError($"Spawn object could not be found or created for Id {objectId}; scene object: {sceneObject}.");
-                }
+                        Debug.LogError(
+                            $"Spawn object could not be found or created for Id {objectId}; scene object: {sceneObject}.");
 
                 return;
             }
@@ -271,13 +273,14 @@ namespace FishNet.Managing.Client
             {
                 nob.SetIsNetworked(true);
             }
+
             /* If not host then pre-initialize. Pre-initializing applies
              * values needed to run such as owner, network manager, and completes
              * other reference creating functions. */
-            if (!base.NetworkManager.IsHost)
+            if (!NetworkManager.IsHost)
             {
                 //If local client is owner then use localconnection reference.
-                NetworkConnection localConnection = base.NetworkManager.ClientManager.Connection;
+                var localConnection = NetworkManager.ClientManager.Connection;
                 NetworkConnection owner;
                 //If owner is self.
                 if (ownerId == localConnection.ClientId)
@@ -288,9 +291,10 @@ namespace FishNet.Managing.Client
                 {
                     /* If owner cannot be found then share owners
                      * is disabled */
-                    if (!base.NetworkManager.ClientManager.Clients.TryGetValueIL2CPP(ownerId, out owner))
+                    if (!NetworkManager.ClientManager.Clients.TryGetValueIL2CPP(ownerId, out owner))
                         owner = NetworkManager.EmptyConnection;
                 }
+
                 nob.InitializeOnceInternal(NetworkManager, objectId, owner, false);
             }
 
@@ -303,8 +307,8 @@ namespace FishNet.Managing.Client
         /// <param name="reader"></param>
         internal void CacheDespawn(PooledReader reader)
         {
-            int objectId = reader.ReadNetworkObjectId();
-            if (base.Spawned.TryGetValueIL2CPP(objectId, out NetworkObject nob))
+            var objectId = reader.ReadNetworkObjectId();
+            if (Spawned.TryGetValueIL2CPP(objectId, out var nob))
                 _objectCache.AddDespawn(nob);
         }
 
@@ -326,16 +330,16 @@ namespace FishNet.Managing.Client
         /// <param name="setProperties">True to also read properties and set them.</param>
         private NetworkObject ReadSceneObject(PooledReader reader, bool setProperties)
         {
-            ulong sceneId = reader.ReadUInt64(AutoPackType.Unpacked);
+            var sceneId = reader.ReadUInt64(AutoPackType.Unpacked);
             NetworkObject nob;
-            base.SceneObjects.TryGetValueIL2CPP(sceneId, out nob);
+            SceneObjects.TryGetValueIL2CPP(sceneId, out nob);
             //If found in scene objects.
             if (nob != null)
             {
                 if (setProperties)
                 {
                     //Read changed.
-                    ChangedTransformProperties ctp = (ChangedTransformProperties)reader.ReadByte();
+                    var ctp = (ChangedTransformProperties) reader.ReadByte();
                     //If scene object has changed.
                     if (ctp != ChangedTransformProperties.Unset)
                     {
@@ -343,7 +347,8 @@ namespace FishNet.Managing.Client
                         if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.Position))
                             nob.transform.position = reader.ReadVector3();
                         if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.Rotation))
-                            nob.transform.rotation = reader.ReadQuaternion(base.NetworkManager.ServerManager.SpawnPacking.Rotation);
+                            nob.transform.rotation =
+                                reader.ReadQuaternion(NetworkManager.ServerManager.SpawnPacking.Rotation);
                         if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.LocalScale))
                             nob.transform.localScale = reader.ReadVector3();
                     }
@@ -355,7 +360,8 @@ namespace FishNet.Managing.Client
             else
             {
                 if (NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"SceneId of {sceneId} not found in SceneObjects. This may occur if your scene differs between client and server, if client does not have the scene loaded, or if networked scene objects do not have a SceneCondition. See ObserverManager in the documentation for more on conditions.");
+                    Debug.LogError(
+                        $"SceneId of {sceneId} not found in SceneObjects. This may occur if your scene differs between client and server, if client does not have the scene loaded, or if networked scene objects do not have a SceneCondition. See ObserverManager in the documentation for more on conditions.");
                 return null;
             }
         }
@@ -368,25 +374,26 @@ namespace FishNet.Managing.Client
         /// <param name="owner"></param>
         private NetworkObject ReadSpawnedObject(PooledReader reader, int objectId)
         {
-            short prefabId = reader.ReadInt16();
-            Vector3 position = reader.ReadVector3();
-            Quaternion rotation = reader.ReadQuaternion(base.NetworkManager.ServerManager.SpawnPacking.Rotation);
-            Vector3 localScale = reader.ReadVector3();
+            var prefabId = reader.ReadInt16();
+            var position = reader.ReadVector3();
+            var rotation = reader.ReadQuaternion(NetworkManager.ServerManager.SpawnPacking.Rotation);
+            var localScale = reader.ReadVector3();
 
             NetworkObject result = null;
 
             if (prefabId == -1)
             {
                 if (NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"Spawned object has an invalid prefabId. Make sure all objects which are being spawned over the network are within SpawnableObjects on the NetworkManager.");
+                    Debug.LogError(
+                        $"Spawned object has an invalid prefabId. Make sure all objects which are being spawned over the network are within SpawnableObjects on the NetworkManager.");
             }
             else
             {
                 //Only instantiate if not host.
-                if (!base.NetworkManager.IsHost)
+                if (!NetworkManager.IsHost)
                 {
-                    NetworkObject prefab = NetworkManager.SpawnablePrefabs.GetObject(false, prefabId);
-                    result = MonoBehaviour.Instantiate<NetworkObject>(prefab, position, rotation);
+                    var prefab = NetworkManager.SpawnablePrefabs.GetObject(false, prefabId);
+                    result = UnityEngine.Object.Instantiate<NetworkObject>(prefab, position, rotation);
                     result.transform.position = position;
                     result.transform.rotation = rotation;
                     result.transform.localScale = localScale;
@@ -400,7 +407,5 @@ namespace FishNet.Managing.Client
 
             return result;
         }
-
     }
-
 }

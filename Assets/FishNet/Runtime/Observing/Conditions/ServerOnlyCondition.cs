@@ -10,7 +10,6 @@ namespace FishNet.Component.Observing
     [CreateAssetMenu(menuName = "FishNet/Observers/Server Only Condition", fileName = "New Server Only Condition")]
     public class ServerOnlyCondition : ObserverCondition
     {
-
         /// <summary>
         /// Returns if the object which this condition resides should be visible to connection.
         /// </summary>
@@ -40,7 +39,7 @@ namespace FishNet.Component.Observing
         /// <returns></returns>
         public override ObserverCondition Clone()
         {
-            ServerOnlyCondition copy = ScriptableObject.CreateInstance<ServerOnlyCondition>();
+            var copy = CreateInstance<ServerOnlyCondition>();
             return copy;
         }
     }

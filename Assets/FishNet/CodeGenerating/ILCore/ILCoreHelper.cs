@@ -7,7 +7,6 @@ namespace FishNet.CodeGenerating.ILCore
 {
     internal static class ILCoreHelper
     {
-
         /// <summary>
         /// Returns AssembleDefinition for compiledAssembly.
         /// </summary>
@@ -15,8 +14,8 @@ namespace FishNet.CodeGenerating.ILCore
         /// <returns></returns>
         internal static AssemblyDefinition GetAssemblyDefinition(ICompiledAssembly compiledAssembly)
         {
-            PostProcessorAssemblyResolver assemblyResolver = new PostProcessorAssemblyResolver(compiledAssembly);
-            ReaderParameters readerParameters = new ReaderParameters
+            var assemblyResolver = new PostProcessorAssemblyResolver(compiledAssembly);
+            var readerParameters = new ReaderParameters
             {
                 SymbolStream = new MemoryStream(compiledAssembly.InMemoryAssembly.PdbData),
                 SymbolReaderProvider = new PortablePdbReaderProvider(),
@@ -25,14 +24,13 @@ namespace FishNet.CodeGenerating.ILCore
                 ReadingMode = ReadingMode.Immediate
             };
 
-            AssemblyDefinition assemblyDefinition = AssemblyDefinition.ReadAssembly(new MemoryStream(compiledAssembly.InMemoryAssembly.PeData), readerParameters);
+            var assemblyDefinition =
+                AssemblyDefinition.ReadAssembly(new MemoryStream(compiledAssembly.InMemoryAssembly.PeData),
+                    readerParameters);
             //Allows us to resolve inside FishNet assembly, such as for components.
             assemblyResolver.AddAssemblyDefinitionBeingOperatedOn(assemblyDefinition);
 
             return assemblyDefinition;
         }
-
-
     }
-
 }

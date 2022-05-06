@@ -8,7 +8,7 @@ namespace FishNet.Utility.Extension
         /// <summary>
         /// Random for shuffling.
         /// </summary>
-        private static Random _random = new Random();
+        private static Random _random = new();
 
         /// <summary>
         /// Shuffle based on Fisher-Yates shuffle.
@@ -17,17 +17,15 @@ namespace FishNet.Utility.Extension
         /// </summary>
         public static void Shuffle<T>(this IList<T> lst)
         {
-            int n = lst.Count;
+            var n = lst.Count;
             while (n > 1)
             {
                 n--;
-                int k = _random.Next(n + 1);
-                T value = lst[k];
+                var k = _random.Next(n + 1);
+                var value = lst[k];
                 lst[k] = lst[n];
                 lst[n] = value;
             }
         }
-
     }
-
 }

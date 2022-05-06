@@ -8,16 +8,17 @@ using UnityEngine;
 
 namespace FishNet.Object
 {
-
     public abstract partial class NetworkBehaviour : MonoBehaviour
     {
         #region Types.
+
         private struct RpcLinkType
         {
             /// <summary>
             /// Index of link.
             /// </summary>
             public ushort LinkIndex;
+
             /// <summary>
             /// Type of Rpc link is for.
             /// </summary>
@@ -32,11 +33,13 @@ namespace FishNet.Object
 
         #endregion
 
-        #region Private.        
+        #region Private.
+
         /// <summary>
         /// Link indexes for RPCs.
         /// </summary>
-        private Dictionary<uint, RpcLinkType> _rpcLinks = new Dictionary<uint, RpcLinkType>();
+        private Dictionary<uint, RpcLinkType> _rpcLinks = new();
+
         #endregion
 
         /// <summary>
@@ -54,32 +57,26 @@ namespace FishNet.Object
                  * when the object is destroyed they can be added back
                  * into availableRpcLinks, within the ServerManager. */
 
-                ServerManager serverManager = NetworkManager.ServerManager;
+                var serverManager = NetworkManager.ServerManager;
                 //ObserverRpcs.
-                foreach (uint rpcHash in _observersRpcDelegates.Keys)
-                {
+                foreach (var rpcHash in _observersRpcDelegates.Keys)
                     if (!MakeLink(rpcHash, RpcType.Observers))
                         return;
-                }
                 //TargetRpcs.
-                foreach (uint rpcHash in _targetRpcDelegates.Keys)
-                {
+                foreach (var rpcHash in _targetRpcDelegates.Keys)
                     if (!MakeLink(rpcHash, RpcType.Target))
                         return;
-                }
                 //ReconcileRpcs.
-                foreach (uint rpcHash in _reconcileRpcDelegates.Keys)
-                {
+                foreach (var rpcHash in _reconcileRpcDelegates.Keys)
                     if (!MakeLink(rpcHash, RpcType.Reconcile))
                         return;
-                }
 
                 /* Tries to make a link and returns if
                  * successful. When a link cannot be made the method
                  * should exit as no other links will be possible. */
                 bool MakeLink(uint rpcHash, RpcType rpcType)
                 {
-                    if (serverManager.GetRpcLink(out ushort linkIndex))
+                    if (serverManager.GetRpcLink(out var linkIndex))
                     {
                         _rpcLinks[rpcHash] = new RpcLinkType(linkIndex, rpcType);
                         return true;
@@ -114,7 +111,7 @@ namespace FishNet.Object
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private PooledWriter CreateLinkedRpc(RpcLinkType link, PooledWriter methodWriter, Channel channel)
         {
-            PooledWriter writer = WriterPool.GetWriter();
+            var writer = WriterPool.GetWriter();
             writer.WriteUInt16(link.LinkIndex);
             ////Write length only if unreliable.
             //if (channel == Channel.Unreliable)
@@ -131,15 +128,15 @@ namespace FishNet.Object
         /// </summary>
         internal void WriteRpcLinks(PooledWriter writer)
         {
-            PooledWriter rpcLinkWriter = WriterPool.GetWriter();
-            foreach (KeyValuePair<uint, RpcLinkType> item in _rpcLinks)
+            var rpcLinkWriter = WriterPool.GetWriter();
+            foreach (var item in _rpcLinks)
             {
                 //RpcLink index.
                 rpcLinkWriter.WriteUInt16(item.Value.LinkIndex);
                 //Hash.
-                rpcLinkWriter.WriteUInt16((ushort)item.Key);
+                rpcLinkWriter.WriteUInt16((ushort) item.Key);
                 //True/false if observersRpc.
-                rpcLinkWriter.WriteByte((byte)item.Value.RpcType);
+                rpcLinkWriter.WriteByte((byte) item.Value.RpcType);
             }
 
             writer.WriteBytesAndSize(rpcLinkWriter.GetBuffer(), 0, rpcLinkWriter.Length);
@@ -147,4 +144,3 @@ namespace FishNet.Object
         }
     }
 }
-

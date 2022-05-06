@@ -12,16 +12,19 @@ using System.Text;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 
 namespace FishNet.CodeGenerating.ILCore
-{ 
+{
     public class FishNetILPP : ILPostProcessor
     {
         #region Const.
+
         internal const string RUNTIME_ASSEMBLY_NAME = "FishNet.Runtime";
+
         /// <summary>
         /// If not empty codegen will only include types within this Namespace while iterating RUNTIME_ASSEMBLY_NAME>
         /// </summary>
         //internal const string CODEGEN_THIS_NAMESPACE = "FishNet.Managing.Scened";
         internal const string CODEGEN_THIS_NAMESPACE = "";
+
         #endregion
 
         public override bool WillProcess(ICompiledAssembly compiledAssembly)
@@ -41,18 +44,21 @@ namespace FishNet.CodeGenerating.ILCore
              * fishnet assembly, but the option below is for debugging. I would
              * comment out this check if I wanted to compile fishnet runtime. */
             if (CODEGEN_THIS_NAMESPACE.Length == 0)
-            {
                 if (compiledAssembly.Name == RUNTIME_ASSEMBLY_NAME)
                     return false;
-            }
-            bool referencesFishNet = FishNetILPP.IsFishNetAssembly(compiledAssembly) || compiledAssembly.References.Any(filePath => Path.GetFileNameWithoutExtension(filePath) == RUNTIME_ASSEMBLY_NAME);
+            var referencesFishNet = IsFishNetAssembly(compiledAssembly) || compiledAssembly.References.Any(filePath =>
+                Path.GetFileNameWithoutExtension(filePath) == RUNTIME_ASSEMBLY_NAME);
             return referencesFishNet;
         }
-        public override ILPostProcessor GetInstance() => this;
+
+        public override ILPostProcessor GetInstance()
+        {
+            return this;
+        }
 
         public override ILPostProcessResult Process(ICompiledAssembly compiledAssembly)
         {
-            AssemblyDefinition assemblyDef = ILCoreHelper.GetAssemblyDefinition(compiledAssembly);
+            var assemblyDef = ILCoreHelper.GetAssemblyDefinition(compiledAssembly);
             if (assemblyDef == null)
                 return null;
             //Check WillProcess again; somehow certain editor scripts skip the WillProcess check.
@@ -62,7 +68,7 @@ namespace FishNet.CodeGenerating.ILCore
             if (!CodegenSession.Reset(assemblyDef.MainModule))
                 return null;
 
-            bool modified = false;
+            var modified = false;
 
             if (IsFishNetAssembly(compiledAssembly))
             {
@@ -73,7 +79,8 @@ namespace FishNet.CodeGenerating.ILCore
             {
                 /* If one or more scripts use RPCs but don't inherit NetworkBehaviours
                  * then don't bother processing the rest. */
-                if (CodegenSession.NetworkBehaviourProcessor.NonNetworkBehaviourHasInvalidAttributes(CodegenSession.Module.Types))
+                if (CodegenSession.NetworkBehaviourProcessor.NonNetworkBehaviourHasInvalidAttributes(CodegenSession
+                        .Module.Types))
                     return new ILPostProcessResult(null, CodegenSession.Diagnostics);
                 //before 226ms, after 17ms                   
                 modified |= CreateDeclaredDelegates();
@@ -99,15 +106,17 @@ namespace FishNet.CodeGenerating.ILCore
                  * amount of work so it will have to be put on hold, for... a long.. long while. */
                 if (CodegenSession.DifferentAssemblySyncVars.Count > 0)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.AppendLine($"Assembly {CodegenSession.Module.Name} has inherited access to SyncVars in different assemblies. When accessing SyncVars across assemblies be sure to use Get/Set methods withinin the inherited assembly script to change SyncVars. Accessible fields are:");
+                    var sb = new StringBuilder();
+                    sb.AppendLine(
+                        $"Assembly {CodegenSession.Module.Name} has inherited access to SyncVars in different assemblies. When accessing SyncVars across assemblies be sure to use Get/Set methods withinin the inherited assembly script to change SyncVars. Accessible fields are:");
 
                     //foreach ((TypeDefinition td, FieldDefinition fd) item in CodegenSession.DifferentAssemblySyncVars)
                     //{ 
                     // //   sb.AppendLine($"Field {item.fd.Name} within {item.fd.DeclaringType.FullName} in assembly {item.fd.Module.Name} is accessible.");
                     //}
-                    foreach (FieldDefinition item in CodegenSession.DifferentAssemblySyncVars)
-                        sb.AppendLine($"   - Field {item.Name} within {item.DeclaringType.FullName} in assembly {item.Module.Name}.");
+                    foreach (var item in CodegenSession.DifferentAssemblySyncVars)
+                        sb.AppendLine(
+                            $"   - Field {item.Name} within {item.DeclaringType.FullName} in assembly {item.Module.Name}.");
 
                     CodegenSession.LogWarning("v------- IMPORTANT -------v");
                     CodegenSession.LogWarning(sb.ToString());
@@ -123,16 +132,17 @@ namespace FishNet.CodeGenerating.ILCore
             }
             else
             {
-                MemoryStream pe = new MemoryStream();
-                MemoryStream pdb = new MemoryStream();
-                WriterParameters writerParameters = new WriterParameters
+                var pe = new MemoryStream();
+                var pdb = new MemoryStream();
+                var writerParameters = new WriterParameters
                 {
                     SymbolWriterProvider = new PortablePdbWriterProvider(),
                     SymbolStream = pdb,
                     WriteSymbols = true
                 };
                 assemblyDef.Write(pe, writerParameters);
-                return new ILPostProcessResult(new InMemoryAssembly(pe.ToArray(), pdb.ToArray()), CodegenSession.Diagnostics);
+                return new ILPostProcessResult(new InMemoryAssembly(pe.ToArray(), pdb.ToArray()),
+                    CodegenSession.Diagnostics);
             }
         }
 
@@ -142,35 +152,30 @@ namespace FishNet.CodeGenerating.ILCore
         /// <returns></returns>
         private bool ModifyMakePublicMethods()
         {
-            string makePublicTypeFullName = typeof(CodegenMakePublicAttribute).FullName;
-            foreach (TypeDefinition td in CodegenSession.Module.Types)
-            {
-                foreach (MethodDefinition md in td.Methods)
+            var makePublicTypeFullName = typeof(CodegenMakePublicAttribute).FullName;
+            foreach (var td in CodegenSession.Module.Types)
+            foreach (var md in td.Methods)
+            foreach (var ca in md.CustomAttributes)
+                if (ca.AttributeType.FullName == makePublicTypeFullName)
                 {
-                    foreach (CustomAttribute ca in md.CustomAttributes)
-                    {
-                        if (ca.AttributeType.FullName == makePublicTypeFullName)
-                        {
-                            md.Attributes &= ~MethodAttributes.Assembly;
-                            md.Attributes |= MethodAttributes.Public;
-                        }
-                    }
+                    md.Attributes &= ~MethodAttributes.Assembly;
+                    md.Attributes |= MethodAttributes.Public;
                 }
-            }
 
             //There is always at least one modified.
             return true;
         }
+
         /// <summary>
         /// Creates delegates for user declared serializers.
         /// </summary>
         public bool CreateDeclaredDelegates()
         {
-            bool modified = false;
+            var modified = false;
 
-            TypeAttributes readWriteExtensionTypeAttr = (TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
-            List<TypeDefinition> allTypeDefs = CodegenSession.Module.Types.ToList();
-            foreach (TypeDefinition td in allTypeDefs)
+            var readWriteExtensionTypeAttr = TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract;
+            var allTypeDefs = CodegenSession.Module.Types.ToList();
+            foreach (var td in allTypeDefs)
             {
                 if (CodegenSession.GeneralHelper.IgnoreTypeDefinition(td))
                     continue;
@@ -189,11 +194,11 @@ namespace FishNet.CodeGenerating.ILCore
         /// <param name="diagnostics"></param>
         private bool CreateDeclaredSerializers()
         {
-            bool modified = false;
+            var modified = false;
 
-            TypeAttributes readWriteExtensionTypeAttr = (TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract);
-            List<TypeDefinition> allTypeDefs = CodegenSession.Module.Types.ToList();
-            foreach (TypeDefinition td in allTypeDefs)
+            var readWriteExtensionTypeAttr = TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.Abstract;
+            var allTypeDefs = CodegenSession.Module.Types.ToList();
+            foreach (var td in allTypeDefs)
             {
                 if (CodegenSession.GeneralHelper.IgnoreTypeDefinition(td))
                     continue;
@@ -212,14 +217,14 @@ namespace FishNet.CodeGenerating.ILCore
         /// <param name="diagnostics"></param>
         private bool CreateIBroadcast()
         {
-            bool modified = false;
+            var modified = false;
 
-            string networkBehaviourFullName = CodegenSession.ObjectHelper.NetworkBehaviour_FullName;
+            var networkBehaviourFullName = CodegenSession.ObjectHelper.NetworkBehaviour_FullName;
 
-            HashSet<TypeDefinition> typeDefs = new HashSet<TypeDefinition>();
-            foreach (TypeDefinition td in CodegenSession.Module.Types)
+            var typeDefs = new HashSet<TypeDefinition>();
+            foreach (var td in CodegenSession.Module.Types)
             {
-                TypeDefinition climbTd = td;
+                var climbTd = td;
                 do
                 {
                     //Reached NetworkBehaviour class.
@@ -233,28 +238,26 @@ namespace FishNet.CodeGenerating.ILCore
                     //7ms
 
                     //Add nested. Only going to go a single layer deep.
-                    foreach (TypeDefinition nestedTypeDef in td.NestedTypes)
-                    {
+                    foreach (var nestedTypeDef in td.NestedTypes)
                         if (nestedTypeDef.ImplementsInterface<IBroadcast>())
                             typeDefs.Add(nestedTypeDef);
-                    }
                     //0ms
 
                     climbTd = climbTd.GetNextBaseClass();
                     //this + name check 40ms
                 } while (climbTd != null);
-
             }
 
 
             //Create reader/writers for found typeDefs.
-            foreach (TypeDefinition td in typeDefs)
+            foreach (var td in typeDefs)
             {
-                TypeReference typeRef = CodegenSession.ImportReference(td);
+                var typeRef = CodegenSession.ImportReference(td);
 
-                bool canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(typeRef, true);
+                var canSerialize = CodegenSession.GeneralHelper.HasSerializerAndDeserializer(typeRef, true);
                 if (!canSerialize)
-                    CodegenSession.LogError($"Broadcast {td.Name} does not support serialization. Use a supported type or create a custom serializer.");
+                    CodegenSession.LogError(
+                        $"Broadcast {td.Name} does not support serialization. Use a supported type or create a custom serializer.");
                 else
                     modified = true;
             }
@@ -268,10 +271,10 @@ namespace FishNet.CodeGenerating.ILCore
         /// <returns></returns>
         private bool CreateQOLAttributes()
         {
-            bool modified = false;
+            var modified = false;
 
-            List<TypeDefinition> allTypeDefs = CodegenSession.Module.Types.ToList();
-            foreach (TypeDefinition td in allTypeDefs)
+            var allTypeDefs = CodegenSession.Module.Types.ToList();
+            foreach (var td in allTypeDefs)
             {
                 if (CodegenSession.GeneralHelper.IgnoreTypeDefinition(td))
                     continue;
@@ -290,9 +293,9 @@ namespace FishNet.CodeGenerating.ILCore
         /// <param name="diagnostics"></param>
         private bool CreateNetworkBehaviours()
         {
-            bool modified = false;
+            var modified = false;
             //Get all network behaviours to process.
-            List<TypeDefinition> networkBehaviourTypeDefs = CodegenSession.Module.Types
+            var networkBehaviourTypeDefs = CodegenSession.Module.Types
                 .Where(td => td.IsSubclassOf(CodegenSession.ObjectHelper.NetworkBehaviour_FullName))
                 .ToList();
 
@@ -304,25 +307,25 @@ namespace FishNet.CodeGenerating.ILCore
              * Since processing iterates all parent classes there's no reason to include them */
             RemoveInheritedTypeDefinitions(networkBehaviourTypeDefs);
             //Set how many rpcs are in children classes for each typedef.
-            Dictionary<TypeDefinition, uint> inheritedRpcCounts = new Dictionary<TypeDefinition, uint>();
+            var inheritedRpcCounts = new Dictionary<TypeDefinition, uint>();
             SetChildRpcCounts(inheritedRpcCounts, networkBehaviourTypeDefs);
             //Set how many synctypes are in children classes for each typedef.
-            Dictionary<TypeDefinition, uint> inheritedSyncTypeCounts = new Dictionary<TypeDefinition, uint>();
+            var inheritedSyncTypeCounts = new Dictionary<TypeDefinition, uint>();
             SetChildSyncTypeCounts(inheritedSyncTypeCounts, networkBehaviourTypeDefs);
 
             /* This holds all sync types created, synclist, dictionary, var
              * and so on. This data is used after all syncvars are made so
              * other methods can look for references to created synctypes and
              * replace accessors accordingly. */
-            List<(SyncType, ProcessedSync)> allProcessedSyncs = new List<(SyncType, ProcessedSync)>();
-            HashSet<string> allProcessedCallbacks = new HashSet<string>();
-            List<TypeDefinition> processedClasses = new List<TypeDefinition>();
+            var allProcessedSyncs = new List<(SyncType, ProcessedSync)>();
+            var allProcessedCallbacks = new HashSet<string>();
+            var processedClasses = new List<TypeDefinition>();
 
-            foreach (TypeDefinition typeDef in networkBehaviourTypeDefs)
+            foreach (var typeDef in networkBehaviourTypeDefs)
             {
                 CodegenSession.ImportReference(typeDef);
                 //Synctypes processed for this nb and it's inherited classes.
-                List<(SyncType, ProcessedSync)> processedSyncs = new List<(SyncType, ProcessedSync)>();
+                var processedSyncs = new List<(SyncType, ProcessedSync)>();
                 CodegenSession.NetworkBehaviourProcessor.Process(typeDef, processedSyncs,
                     inheritedSyncTypeCounts, inheritedRpcCounts);
                 //Add to all processed.
@@ -332,13 +335,11 @@ namespace FishNet.CodeGenerating.ILCore
             /* Must run through all scripts should user change syncvar
              * from outside the networkbehaviour. */
             if (allProcessedSyncs.Count > 0)
-            {
-                foreach (TypeDefinition td in CodegenSession.Module.Types)
+                foreach (var td in CodegenSession.Module.Types)
                 {
                     CodegenSession.NetworkBehaviourSyncProcessor.ReplaceGetSets(td, allProcessedSyncs);
                     CodegenSession.RpcProcessor.RedirectBaseCalls();
                 }
-            }
 
             /* Removes typedefinitions which are inherited by
              * another within tds. For example, if the collection
@@ -347,16 +348,16 @@ namespace FishNet.CodeGenerating.ILCore
              *  Since they are both inherited by A. */
             void RemoveInheritedTypeDefinitions(List<TypeDefinition> tds)
             {
-                HashSet<TypeDefinition> inheritedTds = new HashSet<TypeDefinition>();
+                var inheritedTds = new HashSet<TypeDefinition>();
                 /* Remove any networkbehaviour typedefs which are inherited by
                  * another networkbehaviour typedef. When a networkbehaviour typedef
                  * is processed so are all of the inherited types. */
-                for (int i = 0; i < tds.Count; i++)
+                for (var i = 0; i < tds.Count; i++)
                 {
                     /* Iterates all base types and
                      * adds them to inheritedTds so long
                      * as the base type is not a NetworkBehaviour. */
-                    TypeDefinition copyTd = tds[i].GetNextBaseClass();
+                    var copyTd = tds[i].GetNextBaseClass();
                     while (copyTd != null)
                     {
                         //Class is NB.
@@ -369,7 +370,7 @@ namespace FishNet.CodeGenerating.ILCore
                 }
 
                 //Remove all inherited types.
-                foreach (TypeDefinition item in inheritedTds)
+                foreach (var item in inheritedTds)
                     tds.Remove(item);
             }
 
@@ -382,16 +383,16 @@ namespace FishNet.CodeGenerating.ILCore
              * then B child rpc counts will be 3, and C will be 4. */
             void SetChildRpcCounts(Dictionary<TypeDefinition, uint> typeDefCounts, List<TypeDefinition> tds)
             {
-                foreach (TypeDefinition typeDef in tds)
+                foreach (var typeDef in tds)
                 {
                     //Number of RPCs found while climbing typeDef.
                     uint childCount = 0;
 
-                    TypeDefinition copyTd = typeDef;
+                    var copyTd = typeDef;
                     do
                     {
                         //How many RPCs are in copyTd.
-                        uint copyCount = CodegenSession.RpcProcessor.GetRpcCount(copyTd);
+                        var copyCount = CodegenSession.RpcProcessor.GetRpcCount(copyTd);
 
                         /* If not found it this is the first time being
                          * processed. When this occurs set the value
@@ -414,7 +415,6 @@ namespace FishNet.CodeGenerating.ILCore
                         copyTd = copyTd.GetNextBaseClassToProcess();
                     } while (copyTd != null);
                 }
-
             }
 
 
@@ -422,16 +422,16 @@ namespace FishNet.CodeGenerating.ILCore
              * but for SyncTypes. */
             void SetChildSyncTypeCounts(Dictionary<TypeDefinition, uint> typeDefCounts, List<TypeDefinition> tds)
             {
-                foreach (TypeDefinition typeDef in tds)
+                foreach (var typeDef in tds)
                 {
                     //Number of RPCs found while climbing typeDef.
                     uint childCount = 0;
 
-                    TypeDefinition copyTd = typeDef;
+                    var copyTd = typeDef;
                     do
                     {
                         //How many RPCs are in copyTd.
-                        uint copyCount = CodegenSession.NetworkBehaviourSyncProcessor.GetSyncTypeCount(copyTd);
+                        var copyCount = CodegenSession.NetworkBehaviourSyncProcessor.GetSyncTypeCount(copyTd);
 
                         /* If not found it this is the first time being
                          * processed. When this occurs set the value
@@ -467,16 +467,26 @@ namespace FishNet.CodeGenerating.ILCore
         /// <param name="diagnostics"></param>
         private bool CreateGenericReadWriteDelegates()
         {
-            bool modified = false;
+            var modified = false;
             modified |= CodegenSession.WriterHelper.CreateGenericDelegates();
             modified |= CodegenSession.ReaderHelper.CreateGenericDelegates();
 
             return modified;
         }
 
-        internal static bool IsFishNetAssembly(ICompiledAssembly assembly) => (assembly.Name == FishNetILPP.RUNTIME_ASSEMBLY_NAME);
-        internal static bool IsFishNetAssembly() => (CodegenSession.Module.Assembly.Name.Name == FishNetILPP.RUNTIME_ASSEMBLY_NAME);
-        internal static bool IsFishNetAssembly(ModuleDefinition moduleDef) => (moduleDef.Assembly.Name.Name == FishNetILPP.RUNTIME_ASSEMBLY_NAME);
+        internal static bool IsFishNetAssembly(ICompiledAssembly assembly)
+        {
+            return assembly.Name == RUNTIME_ASSEMBLY_NAME;
+        }
 
+        internal static bool IsFishNetAssembly()
+        {
+            return CodegenSession.Module.Assembly.Name.Name == RUNTIME_ASSEMBLY_NAME;
+        }
+
+        internal static bool IsFishNetAssembly(ModuleDefinition moduleDef)
+        {
+            return moduleDef.Assembly.Name.Name == RUNTIME_ASSEMBLY_NAME;
+        }
     }
 }

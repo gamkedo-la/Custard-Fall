@@ -15,15 +15,18 @@ namespace FishNet.Object
     public sealed partial class NetworkObject : MonoBehaviour
     {
         #region Public.
+
         /// <summary>
         /// True if this object has been initialized on the client side.
         /// This is set true right before client callbacks.
         /// </summary>
         public bool ClientInitialized { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         private bool _isClient;
+
         /// <summary>
         /// True if the client is active and authenticated.
         /// </summary>
@@ -37,34 +40,39 @@ namespace FishNet.Object
             get
             {
                 if (IsServer)
-                    return (NetworkManager == null) ? false : NetworkManager.IsClient;
+                    return NetworkManager == null ? false : NetworkManager.IsClient;
                 else
                     return _isClient;
             }
 
             private set => _isClient = value;
         }
-        
+
         /// <summary>
         /// True if only the client is active and authenticated.
         /// </summary>
-        public bool IsClientOnly => (IsClient && !IsServer);
+        public bool IsClientOnly => IsClient && !IsServer;
+
         /// <summary>
         /// True if server is active.
         /// </summary>
         public bool IsServer { get; private set; }
+
         /// <summary>
         /// True if only the server is active.
         /// </summary>
-        public bool IsServerOnly => (IsServer && !IsClient);
+        public bool IsServerOnly => IsServer && !IsClient;
+
         /// <summary>
         /// True if client and server are active.
         /// </summary>
-        public bool IsHost => (IsClient && IsServer);
+        public bool IsHost => IsClient && IsServer;
+
         /// <summary>
         /// True if client nor server are active.
         /// </summary>
-        public bool IsOffline => (!IsClient && !IsServer);
+        public bool IsOffline => !IsClient && !IsServer;
+
         /// <summary>
         /// True if the local client is the owner of this object.
         /// </summary>
@@ -98,11 +106,12 @@ namespace FishNet.Object
                 return Owner.IsLocalClient;
             }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
         private NetworkConnection _owner;
+
         /// <summary>
         /// Owner of this object.
         /// </summary>
@@ -112,63 +121,75 @@ namespace FishNet.Object
             {
                 //Ensures a null Owner is never returned.
                 if (_owner == null)
-                    return FishNet.Managing.NetworkManager.EmptyConnection;
+                    return NetworkManager.EmptyConnection;
 
                 return _owner;
             }
-            private set { _owner = value; }
+            private set => _owner = value;
         }
+
         /// <summary>
         /// True if there is an owner.
         /// </summary>
         [Obsolete("Use Owner.IsValid instead.")] //Remove on 2022/06/01
-        public bool OwnerIsValid => (Owner == null) ? false : Owner.IsValid;
+        public bool OwnerIsValid => Owner == null ? false : Owner.IsValid;
+
         /// <summary>
         /// True if there is an owner and their connect is active. This will return false if there is no owner, or if the connection is disconnecting.
         /// </summary>
         [Obsolete("Use Owner.IsValid instead.")] //Remove on 2022/06/01
-        public bool OwnerIsActive => (Owner == null) ? false : Owner.IsActive;
+        public bool OwnerIsActive => Owner == null ? false : Owner.IsActive;
+
         /// <summary>
         /// ClientId for this NetworkObject owner.
         /// </summary>
-        public int OwnerId => (!Owner.IsValid) ? -1 : Owner.ClientId;
+        public int OwnerId => !Owner.IsValid ? -1 : Owner.ClientId;
+
         /// <summary>
         /// True if the object is initialized for the network.
         /// </summary>
-        public bool IsSpawned => (!Deinitializing && ObjectId >= 0);
+        public bool IsSpawned => !Deinitializing && ObjectId >= 0;
+
         /// <summary>
         /// The local connection of the client calling this method.
         /// </summary>
-        public NetworkConnection LocalConnection => (NetworkManager == null) ? new NetworkConnection() : NetworkManager.ClientManager.Connection;
+        public NetworkConnection LocalConnection =>
+            NetworkManager == null ? new NetworkConnection() : NetworkManager.ClientManager.Connection;
+
         /// <summary>
         /// NetworkManager for this object.
         /// </summary>
         public NetworkManager NetworkManager { get; private set; }
+
         /// <summary>
         /// ServerManager for this object.
         /// </summary>
         public ServerManager ServerManager { get; private set; }
+
         /// <summary>
         /// ClientManager for this object.
         /// </summary>
         public ClientManager ClientManager { get; private set; }
+
         /// <summary>
         /// TransportManager for this object.
         /// </summary>
         public TransportManager TransportManager { get; private set; }
+
         /// <summary>
         /// TimeManager for this object.
         /// </summary>
         public TimeManager TimeManager { get; private set; }
+
         /// <summary>
         /// SceneManager for this object.
         /// </summary>
         public SceneManager SceneManager { get; private set; }
+
         /// <summary>
         /// RollbackManager for this object.
         /// </summary>
         public RollbackManager RollbackManager { get; private set; }
-
 
         #endregion
 
@@ -178,9 +199,10 @@ namespace FishNet.Object
         /// <param name="destroyInstantiated">True to also destroy the object if it was instantiated. False will only disable the object.</param>
         public void Despawn()
         {
-            NetworkObject nob = this;
+            var nob = this;
             NetworkManager.ServerManager.Despawn(nob);
         }
+
         /// <summary>
         /// Spawns an object over the network. Only call from the server.
         /// </summary>
@@ -198,40 +220,32 @@ namespace FishNet.Object
         /// <returns></returns>
         internal bool CanSpawnOrDespawn(bool warn)
         {
-            bool canExecute = true;
+            var canExecute = true;
 
             if (NetworkManager == null)
             {
                 canExecute = false;
                 if (warn)
-                {
                     if (NetworkManager.CanLog(LoggingType.Warning))
-                        Debug.LogWarning($"Cannot despawn {gameObject.name}, NetworkManager reference is null. This may occur if the object is not spawned or initialized.");
-                }
+                        Debug.LogWarning(
+                            $"Cannot despawn {gameObject.name}, NetworkManager reference is null. This may occur if the object is not spawned or initialized.");
             }
             else if (!IsServer)
             {
                 canExecute = false;
                 if (warn)
-                {
                     if (NetworkManager.CanLog(LoggingType.Warning))
                         Debug.LogWarning($"Cannot spawn or despawn {gameObject.name}, server is not active.");
-                }
             }
             else if (Deinitializing)
             {
                 canExecute = false;
                 if (warn)
-                {
                     if (NetworkManager.CanLog(LoggingType.Warning))
                         Debug.LogWarning($"Cannot despawn {gameObject.name}, it is already deinitializing.");
-                }
             }
 
             return canExecute;
         }
-
     }
-
 }
-

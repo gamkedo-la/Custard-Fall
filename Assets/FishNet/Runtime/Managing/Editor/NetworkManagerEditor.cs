@@ -33,10 +33,11 @@ namespace FishNet.Managing.Editing
         {
             serializedObject.Update();
 
-            NetworkManager networkManager = (NetworkManager)target;
+            var networkManager = (NetworkManager) target;
 
             GUI.enabled = false;
-            EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour(networkManager), typeof(NetworkManager), false);
+            EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour(networkManager), typeof(NetworkManager),
+                false);
             GUI.enabled = true;
 
             //EditorGUILayout.BeginVertical(GUI.skin.box);
@@ -63,18 +64,15 @@ namespace FishNet.Managing.Editing
             EditorGUILayout.PropertyField(_refreshDefaultPrefabs);
             //Show manual refresh button if not auto refresh.
             if (_refreshDefaultPrefabs.boolValue == false)
-            {
-                using (GUILayout.HorizontalScope hs = new GUILayout.HorizontalScope())
+                using (var hs = new GUILayout.HorizontalScope())
                 {
                     GUILayout.Space(15f);
                     if (GUILayout.Button("Manually Refresh Default Prefabs"))
-                    {
-                        if (networkManager.SpawnablePrefabs != null && networkManager.SpawnablePrefabs is DefaultPrefabObjects dpo)
+                        if (networkManager.SpawnablePrefabs != null &&
+                            networkManager.SpawnablePrefabs is DefaultPrefabObjects dpo)
                             dpo.PopulateDefaultPrefabs(true, true);
-                    }      
                 }
 
-            }
             EditorGUI.indentLevel--;
             EditorGUILayout.Space();
 

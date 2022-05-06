@@ -16,32 +16,32 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 /// </summary>
 public class DefaultScene : MonoBehaviour
 {
-
     #region Serialized.
+
     /// <summary>
     /// True to replace all scenes with the offline scene immediately.
     /// </summary>
-    [Tooltip("True to replace all scenes with the offline scene immediately.")]
-    [SerializeField]
+    [Tooltip("True to replace all scenes with the offline scene immediately.")] [SerializeField]
     private bool _startInOffline;
+
     /// <summary>
     /// Scene to load when disconnected. Server and client will load this scene.
     /// </summary>
-    [Tooltip("Scene to load when disconnected. Server and client will load this scene.")]
-    [SerializeField, Scene]
+    [Tooltip("Scene to load when disconnected. Server and client will load this scene.")] [SerializeField] [Scene]
     private string _offlineScene;
+
     /// <summary>
     /// Scene to load when connected. Server and client will load this scene.
     /// </summary>
-    [Tooltip("Scene to load when connected. Server and client will load this scene.")]
-    [SerializeField, Scene]
+    [Tooltip("Scene to load when connected. Server and client will load this scene.")] [SerializeField] [Scene]
     private string _onlineScene;
+
     /// <summary>
     /// Which scenes to replace when loading into onlineScene.
     /// </summary>
-    [Tooltip("Which scenes to replace when loading into onlineScene.")]
-    [SerializeField]
+    [Tooltip("Which scenes to replace when loading into onlineScene.")] [SerializeField]
     private ReplaceOption _replaceScenes = ReplaceOption.All;
+
     #endregion
 
     private void Awake()
@@ -51,7 +51,6 @@ public class DefaultScene : MonoBehaviour
 
     private void OnDestroy()
     {
-
         if (!ApplicationState.IsQuitting())
         {
             InstanceFinder.ClientManager.OnClientConnectionState -= ClientManager_OnClientConnectionState;
@@ -84,15 +83,13 @@ public class DefaultScene : MonoBehaviour
     /// </summary>
     private void SceneManager_OnLoadEnd(SceneLoadEndEventArgs obj)
     {
-        bool onlineLoaded = false;
-        foreach (Scene s in obj.LoadedScenes)
-        {
+        var onlineLoaded = false;
+        foreach (var s in obj.LoadedScenes)
             if (s.name == GetSceneName(_onlineScene))
             {
                 onlineLoaded = true;
                 break;
             }
-        }
 
         //If online scene was loaded then unload offline.
         if (onlineLoaded)
@@ -118,7 +115,7 @@ public class DefaultScene : MonoBehaviour
                 return;
 
             //If here can load scene.
-            SceneLoadData sld = new SceneLoadData(GetSceneName(_onlineScene));
+            var sld = new SceneLoadData(GetSceneName(_onlineScene));
             sld.ReplaceScenes = _replaceScenes;
             InstanceFinder.SceneManager.LoadGlobalScenes(sld);
         }
@@ -135,11 +132,9 @@ public class DefaultScene : MonoBehaviour
     private void ClientManager_OnClientConnectionState(ClientConnectionStateArgs obj)
     {
         if (obj.ConnectionState == LocalConnectionStates.Stopped)
-        {
             //Only load offline scene if not also server.
             if (!InstanceFinder.IsServer)
                 LoadOfflineScene();
-        }
     }
 
     /// <summary>
@@ -159,7 +154,7 @@ public class DefaultScene : MonoBehaviour
     /// </summary>
     private void UnloadOfflineScene()
     {
-        Scene s = UnitySceneManager.GetSceneByName(GetSceneName(_offlineScene));
+        var s = UnitySceneManager.GetSceneByName(GetSceneName(_offlineScene));
         if (string.IsNullOrEmpty(s.name))
             return;
 

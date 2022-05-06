@@ -11,16 +11,18 @@ namespace FishNet.Connection
 {
     public partial class NetworkConnection
     {
-
         #region Private.
+
         /// <summary>
         /// PacketBundles to send to this connection. An entry will be made for each channel.
         /// </summary>
-        private List<PacketBundle> _toClientBundles = new List<PacketBundle>();
+        private List<PacketBundle> _toClientBundles = new();
+
         /// <summary>
         /// True if this object has been dirtied.
         /// </summary>
         private bool _serverDirtied;
+
         #endregion
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace FishNet.Connection
         {
             for (byte i = 0; i < TransportManager.CHANNEL_COUNT; i++)
             {
-                int mtu = NetworkManager.TransportManager.Transport.GetMTU(i);
+                var mtu = NetworkManager.TransportManager.Transport.GetMTU(i);
                 _toClientBundles.Add(new PacketBundle(NetworkManager, mtu));
             }
         }
@@ -43,7 +45,8 @@ namespace FishNet.Connection
         /// <param name="message">Broadcast data being sent; for example: an instance of your broadcast type.</param>
         /// <param name="requireAuthenticated">True if the client must be authenticated for this broadcast to send.</param>
         /// <param name="channel">Channel to send on.</param>
-        public void Broadcast<T>(T message, bool requireAuthenticated = true, Channel channel = Channel.Reliable) where T : struct, IBroadcast
+        public void Broadcast<T>(T message, bool requireAuthenticated = true, Channel channel = Channel.Reliable)
+            where T : struct, IBroadcast
         {
             if (!IsActive)
             {
@@ -71,6 +74,7 @@ namespace FishNet.Connection
                     Debug.LogWarning($"Data cannot be sent to connection {ClientId} because it is not active.");
                 return;
             }
+
             //If channel is out of bounds then default to the first channel.
             if (channel >= _toClientBundles.Count)
                 channel = 0;
@@ -95,7 +99,7 @@ namespace FishNet.Connection
         /// </summary>
         private void ServerDirty()
         {
-            bool wasDirty = _serverDirtied;
+            var wasDirty = _serverDirtied;
             _serverDirtied = true;
 
             //If not yet dirty then tell transport manager this is dirty.
@@ -111,6 +115,4 @@ namespace FishNet.Connection
             _serverDirtied = false;
         }
     }
-
-
 }

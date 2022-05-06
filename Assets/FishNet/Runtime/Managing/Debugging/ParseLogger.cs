@@ -10,13 +10,13 @@ using UnityEngine;
 
 namespace FishNet.Managing.Debugging
 {
-
     internal class ParseLogger
     {
         /// <summary>
         /// Contains the last several non-split packets to arrive. This is used for debugging.
         /// </summary>
-        private Queue<PacketId> _incomingPacketIds = new Queue<PacketId>();
+        private Queue<PacketId> _incomingPacketIds = new();
+
         /// <summary>
         /// Maximum number of packets allowed to be queued.
         /// </summary>
@@ -56,22 +56,22 @@ namespace FishNet.Managing.Debugging
                 if (!nm.CanLog(LoggingType.Error))
                     return;
             }
-            
-            StringBuilder sb = new StringBuilder();
-            foreach (PacketId item in _incomingPacketIds)
+
+            var sb = new StringBuilder();
+            foreach (var item in _incomingPacketIds)
                 sb.Insert(0, $"{item.ToString()}{Environment.NewLine}");
 
-            NetworkObject lastNob = Reader.LastNetworkObject;
-            string nobData = (lastNob == null) ? "Unset" : $"Id {lastNob.ObjectId} on gameObject {lastNob.name}";
-            NetworkBehaviour lastNb = Reader.LastNetworkBehaviour;
-            string nbData = (lastNb == null) ? "Unset" : lastNb.GetType().Name;
+            var lastNob = Reader.LastNetworkObject;
+            var nobData = lastNob == null ? "Unset" : $"Id {lastNob.ObjectId} on gameObject {lastNob.name}";
+            var lastNb = Reader.LastNetworkBehaviour;
+            var nbData = lastNb == null ? "Unset" : lastNb.GetType().Name;
 
-            Debug.LogError($"The last {_incomingPacketIds.Count} packets to arrive are: {Environment.NewLine}{sb.ToString()}");
+            Debug.LogError(
+                $"The last {_incomingPacketIds.Count} packets to arrive are: {Environment.NewLine}{sb.ToString()}");
             Debug.LogError($"The last parsed NetworkObject is {nobData}, and NetworkBehaviour {nbData}.");
 
             Reset();
         }
     }
-
 }
 #endif

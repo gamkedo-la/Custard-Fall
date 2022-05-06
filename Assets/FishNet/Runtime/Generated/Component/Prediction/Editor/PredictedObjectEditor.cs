@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace FishNet.Component.Prediction
 {
-
-
     [CustomEditor(typeof(PredictedObject), true)]
     [CanEditMultipleObjects]
     public class PredictionObjectEditor : Editor
@@ -19,11 +17,11 @@ namespace FishNet.Component.Prediction
 
         protected virtual void OnEnable()
         {
-             _graphicalObject= serializedObject.FindProperty("_graphicalObject");
+            _graphicalObject = serializedObject.FindProperty("_graphicalObject");
             _smoothingDuration = serializedObject.FindProperty("_smoothingDuration");
             _predictionType = serializedObject.FindProperty("_predictionType");
             _rigidbody = serializedObject.FindProperty("_rigidbody");
-            _rigidbody2d= serializedObject.FindProperty("_rigidbody2d");
+            _rigidbody2d = serializedObject.FindProperty("_rigidbody2d");
             _predictionRatio = serializedObject.FindProperty("_predictionRatio");
         }
 
@@ -32,30 +30,35 @@ namespace FishNet.Component.Prediction
             serializedObject.Update();
 
             GUI.enabled = false;
-            EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour((PredictedObject)target), typeof(PredictedObject), false);
+            EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour((PredictedObject) target),
+                typeof(PredictedObject), false);
             GUI.enabled = true;
 
-            EditorGUILayout.HelpBox("This component is experimental. Documentation may not yet be available.", MessageType.Warning);
+            EditorGUILayout.HelpBox("This component is experimental. Documentation may not yet be available.",
+                MessageType.Warning);
 
             EditorGUILayout.PropertyField(_graphicalObject);
             EditorGUILayout.PropertyField(_smoothingDuration);
 
             EditorGUILayout.PropertyField(_predictionType);
-            PredictedObject.PredictionType movementType = (PredictedObject.PredictionType)_predictionType.intValue;
+            var movementType = (PredictedObject.PredictionType) _predictionType.intValue;
             if (movementType != PredictedObject.PredictionType.Other)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.HelpBox("When using physics prediction do not include a NetworkTransform; this component will synchronize instead.", MessageType.Info);
+                EditorGUILayout.HelpBox(
+                    "When using physics prediction do not include a NetworkTransform; this component will synchronize instead.",
+                    MessageType.Info);
                 if (movementType == PredictedObject.PredictionType.Rigidbody)
                     EditorGUILayout.PropertyField(_rigidbody);
                 else
-                    EditorGUILayout.PropertyField(_rigidbody2d, new GUIContent("Rigidbody2D", "Rigidbody2D to predict."));
+                    EditorGUILayout.PropertyField(_rigidbody2d,
+                        new GUIContent("Rigidbody2D", "Rigidbody2D to predict."));
                 EditorGUILayout.PropertyField(_predictionRatio);
                 EditorGUI.indentLevel--;
             }
 
             EditorGUILayout.Space();
-            
+
             //EditorGUILayout.HelpBox("To remove scripts added by PredictedObject click 'Cleanup' below.", MessageType.Info);
             //if (GUILayout.Button("Cleanup"))
             //{
@@ -64,11 +67,9 @@ namespace FishNet.Component.Prediction
             //}
             //else
             //{
-                serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
             //}
-            
         }
-
     }
 }
 #endif

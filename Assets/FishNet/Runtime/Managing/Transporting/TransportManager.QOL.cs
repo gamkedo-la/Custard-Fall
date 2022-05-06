@@ -4,17 +4,21 @@ using UnityEngine;
 
 namespace FishNet.Managing.Transporting
 {
-
     /// <summary>
     /// Communicates with the Transport to send and receive data.
     /// </summary>
     public sealed partial class TransportManager : MonoBehaviour
     {
         #region Public.
+
         /// <summary>
         /// Returns IsLocalTransport for the current transport.
         /// </summary>
-        public bool IsLocalTransport(int connectionId) => (Transport == null) ? false : Transport.IsLocalTransport(connectionId);
+        public bool IsLocalTransport(int connectionId)
+        {
+            return Transport == null ? false : Transport.IsLocalTransport(connectionId);
+        }
+
         #endregion
 
 
@@ -27,14 +31,10 @@ namespace FishNet.Managing.Transporting
         {
             //If using multipass try to find the correct transport.
             if (Transport is Multipass mp)
-            {
                 return mp.GetTransport(index);
-            }
             //Not using multipass.
             else
-            {
                 return Transport;
-            }
         }
 
         /// <summary>
@@ -61,5 +61,4 @@ namespace FishNet.Managing.Transporting
             }
         }
     }
-
 }

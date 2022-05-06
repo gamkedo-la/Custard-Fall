@@ -5,12 +5,13 @@ namespace FishNet.Managing
 {
     public sealed partial class NetworkManager : MonoBehaviour
     {
-
         #region Public.
+
         /// <summary>
         /// RollbackManager for this NetworkManager.
         /// </summary>
         public RollbackManager RollbackManager { get; private set; }
+
         #endregion
 
 
@@ -19,14 +20,10 @@ namespace FishNet.Managing
         /// </summary>
         private void AddRollbackManager()
         {
-            if (gameObject.TryGetComponent<RollbackManager>(out RollbackManager result))
+            if (gameObject.TryGetComponent<RollbackManager>(out var result))
                 RollbackManager = result;
             else
                 RollbackManager = gameObject.AddComponent<RollbackManager>();
         }
-
-
     }
-
-
 }

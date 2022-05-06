@@ -9,21 +9,23 @@ using UnityEngine.Scripting;
 
 namespace FishNet.Managing.Client
 {
-
     /// <summary>
     /// Information about cached network objects.
     /// </summary>
     internal class ClientObjectCache
     {
         #region Private.
+
         /// <summary>
         /// Cached objects buffer. Contains spawns and despawns.
         /// </summary>
-        private ListCache<CachedNetworkObject> _cachedObjects = new ListCache<CachedNetworkObject>(0);
+        private ListCache<CachedNetworkObject> _cachedObjects = new(0);
+
         /// <summary>
         /// ClientObjects reference.
         /// </summary>
         private ClientObjects _clientObjects;
+
         #endregion
 
         public ClientObjectCache(ClientObjects cobs)
@@ -37,9 +39,10 @@ namespace FishNet.Managing.Client
         /// <param name="nob"></param>
         /// <param name="syncValues"></param>
         /// <param name="manager"></param>
-        public void AddSpawn(NetworkObject nob, ArraySegment<byte> rpcLinks, ArraySegment<byte> syncValues, NetworkManager manager)
+        public void AddSpawn(NetworkObject nob, ArraySegment<byte> rpcLinks, ArraySegment<byte> syncValues,
+            NetworkManager manager)
         {
-            CachedNetworkObject cnob = _cachedObjects.AddReference();
+            var cnob = _cachedObjects.AddReference();
             cnob.InitializeSpawn(nob, rpcLinks, syncValues, manager);
             _clientObjects.AddToSpawned(nob);
         }
@@ -50,7 +53,7 @@ namespace FishNet.Managing.Client
         /// <param name="nob"></param>
         public void AddDespawn(NetworkObject nob)
         {
-            CachedNetworkObject cnob = _cachedObjects.AddReference();
+            var cnob = _cachedObjects.AddReference();
             cnob.InitializeDespawn(nob);
         }
 
@@ -60,18 +63,18 @@ namespace FishNet.Managing.Client
         /// </summary>
         public void Iterate()
         {
-            int written = _cachedObjects.Written;
+            var written = _cachedObjects.Written;
             if (written == 0)
                 return;
 
             try
             {
-                List<CachedNetworkObject> collection = _cachedObjects.Collection;
+                var collection = _cachedObjects.Collection;
                 /* The next iteration will set rpclinks,
                  * synctypes, and so on. */
-                for (int i = 0; i < written; i++)
+                for (var i = 0; i < written; i++)
                 {
-                    CachedNetworkObject cnob = collection[i];
+                    var cnob = collection[i];
                     if (cnob.Spawn)
                         IterateSpawn(cnob);
                     else
@@ -81,9 +84,9 @@ namespace FishNet.Managing.Client
                 /* Lastly activate the objects after all data
                  * has been synchronized. This will execute callbacks,
                  * and any synctype hooks after the callbacks. */
-                for (int i = 0; i < written; i++)
+                for (var i = 0; i < written; i++)
                 {
-                    CachedNetworkObject cnob = collection[i];
+                    var cnob = collection[i];
                     if (cnob.Spawn)
                     {
                         cnob.NetworkObject.gameObject.SetActive(true);
@@ -113,38 +116,39 @@ namespace FishNet.Managing.Client
              * removes it from spawn. */
             _clientObjects.AddToSpawned(cnob.NetworkObject);
 
-            List<ushort> rpcLinkIndexes = new List<ushort>();
+            var rpcLinkIndexes = new List<ushort>();
             //Apply rpcLinks.
-            foreach (NetworkBehaviour nb in cnob.NetworkObject.NetworkBehaviours)
+            foreach (var nb in cnob.NetworkObject.NetworkBehaviours)
             {
-                PooledReader reader = cnob.RpcLinkReader;
-                int length = reader.ReadInt32();
+                var reader = cnob.RpcLinkReader;
+                var length = reader.ReadInt32();
 
-                int readerStart = reader.Position;
+                var readerStart = reader.Position;
                 while (reader.Position - readerStart < length)
                 {
                     //Index of RpcLink.
-                    ushort linkIndex = reader.ReadUInt16();
-                    RpcLink link = new RpcLink(
+                    var linkIndex = reader.ReadUInt16();
+                    var link = new RpcLink(
                         cnob.NetworkObject.ObjectId, nb.ComponentIndex,
                         //RpcHash.
                         reader.ReadUInt16(),
                         //ObserverRpc.
-                        (RpcType)reader.ReadByte());
+                        (RpcType) reader.ReadByte());
                     //Add to links.
                     _clientObjects.SetRpcLink(linkIndex, link);
 
                     rpcLinkIndexes.Add(linkIndex);
                 }
             }
+
             cnob.NetworkObject.SetRpcLinkIndexes(rpcLinkIndexes);
 
             //Apply syncTypes.
-            foreach (NetworkBehaviour nb in cnob.NetworkObject.NetworkBehaviours)
+            foreach (var nb in cnob.NetworkObject.NetworkBehaviours)
             {
-                PooledReader reader = cnob.SyncValuesReader;
+                var reader = cnob.SyncValuesReader;
                 //SyncVars.
-                int length = reader.ReadInt32();
+                var length = reader.ReadInt32();
                 nb.OnSyncType(reader, length, false);
                 //SyncObjects
                 length = reader.ReadInt32();
@@ -180,15 +184,18 @@ namespace FishNet.Managing.Client
         /// True if spawning.
         /// </summary>
         public bool Spawn { get; private set; }
+
         /// <summary>
         /// Cached NetworkObject.
         /// </summary>
 #pragma warning disable 0649
         public NetworkObject NetworkObject { get; private set; }
+
         /// <summary>
         /// Reader containing rpc links for the network object.
         /// </summary>
         public PooledReader RpcLinkReader { get; private set; }
+
         /// <summary>
         /// Reader containing sync values for the network object.
         /// </summary>
@@ -200,7 +207,8 @@ namespace FishNet.Managing.Client
         /// <param name="nob"></param>
         /// <param name="syncValues"></param>
         /// <param name="manager"></param>
-        public void InitializeSpawn(NetworkObject nob, ArraySegment<byte> rpcLinks, ArraySegment<byte> syncValues, NetworkManager manager)
+        public void InitializeSpawn(NetworkObject nob, ArraySegment<byte> rpcLinks, ArraySegment<byte> syncValues,
+            NetworkManager manager)
         {
             Spawn = true;
 
@@ -227,5 +235,4 @@ namespace FishNet.Managing.Client
                 SyncValuesReader.Dispose();
         }
     }
-
 }

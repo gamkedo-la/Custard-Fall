@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace FishNet.Component.Observing
 {
-
     namespace FishNet.Component.Prediction.Editing
     {
         [CustomEditor(typeof(MatchCondition), true)]
@@ -13,13 +12,12 @@ namespace FishNet.Component.Observing
         {
             public override void OnInspectorGUI()
             {
-
-                EditorGUILayout.HelpBox("This component is experimental. Documentation may not yet be available.", MessageType.Warning);
+                EditorGUILayout.HelpBox("This component is experimental. Documentation may not yet be available.",
+                    MessageType.Warning);
                 base.OnInspectorGUI();
             }
         }
     }
-
 }
 
 #endif

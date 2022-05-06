@@ -3,10 +3,8 @@
 
 namespace FishNet.CodeGenerating.Helping.Extension
 {
-
     internal static class FieldReferenceExtensions
     {
-
         /// <summary>
         /// Gets a Resolve favoring cached results first.
         /// </summary>
@@ -19,14 +17,10 @@ namespace FishNet.CodeGenerating.Helping.Extension
         public static FieldReference MakeHostGenericIfNeeded(this FieldReference fd)
         {
             if (fd.DeclaringType.HasGenericParameters)
-            {
-                return new FieldReference(fd.Name, fd.FieldType, fd.DeclaringType.CachedResolve().ConvertToGenericIfNeeded());
-            }
+                return new FieldReference(fd.Name, fd.FieldType,
+                    fd.DeclaringType.CachedResolve().ConvertToGenericIfNeeded());
 
             return fd;
         }
-
-
     }
-
 }

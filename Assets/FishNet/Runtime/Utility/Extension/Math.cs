@@ -1,9 +1,7 @@
 ﻿namespace FishNet.Utility.Extension
 {
-
     public static class MathFN
     {
-
         /// <summary>
         /// Returns a clamped SBytte.
         /// </summary>
@@ -14,7 +12,7 @@
             else if (value > max)
                 return max;
             else
-                return (sbyte)value;
+                return (sbyte) value;
         }
 
         /// <summary>
@@ -30,5 +28,4 @@
                 return value;
         }
     }
-
 }

@@ -8,15 +8,14 @@ using UnityEngine;
 
 namespace FishNet.Editing
 {
-
     [InitializeOnLoad]
     internal static class DefaultPrefabsFinder
     {
         /// <summary>
         /// True if initialized.
         /// </summary>
-        [System.NonSerialized]
-        private static bool _initialized;
+        [System.NonSerialized] private static bool _initialized;
+
         /// <summary>
         /// Found default prefabs.
         /// </summary>
@@ -34,9 +33,9 @@ namespace FishNet.Editing
         {
             if (_defaultPrefabs == null)
             {
-                List<UnityEngine.Object> results = Finding.GetScriptableObjects<DefaultPrefabObjects>(true, true);
+                var results = Finding.GetScriptableObjects<DefaultPrefabObjects>(true, true);
                 if (results.Count > 0)
-                    _defaultPrefabs = (DefaultPrefabObjects)results[0];
+                    _defaultPrefabs = (DefaultPrefabObjects) results[0];
             }
 
             justPopulated = false;
@@ -45,9 +44,9 @@ namespace FishNet.Editing
             {
                 if (DefaultPrefabObjects.CanAutomate)
                 {
-                    DefaultPrefabObjects dpo = ScriptableObject.CreateInstance<DefaultPrefabObjects>();
+                    var dpo = ScriptableObject.CreateInstance<DefaultPrefabObjects>();
                     //Get save directory.
-                    string savePath = Finding.GetFishNetRuntimePath(true);
+                    var savePath = Finding.GetFishNetRuntimePath(true);
                     AssetDatabase.CreateAsset(dpo, Path.Combine(savePath, $"{nameof(DefaultPrefabObjects)}.asset"));
                 }
                 else
@@ -78,11 +77,9 @@ namespace FishNet.Editing
             GetDefaultPrefabsFile(out _);
 
             if (_defaultPrefabs != null)
-            {
                 //Populate any missing.
                 if (_defaultPrefabs.GetObjectCount() == 0)
                     PopulateDefaultPrefabs();
-            }
         }
 
 
@@ -101,16 +98,14 @@ namespace FishNet.Editing
             if (_defaultPrefabs.GetObjectCount() > 0)
                 return false;
 
-            List<GameObject> gameObjects = Finding.GetGameObjects(true, true, false);
-            foreach (GameObject go in gameObjects)
-            {
+            var gameObjects = Finding.GetGameObjects(true, true, false);
+            foreach (var go in gameObjects)
                 if (go.TryGetComponent(out NetworkObject nob))
                     _defaultPrefabs.AddObject(nob);
-            }
 
             _defaultPrefabs.Sort();
 
-            int entriesAdded = _defaultPrefabs.GetObjectCount();
+            var entriesAdded = _defaultPrefabs.GetObjectCount();
             //Only print if some were added.
             if (log && entriesAdded > 0)
                 Debug.Log($"Default prefabs was populated with {entriesAdded} prefabs.");
@@ -118,9 +113,6 @@ namespace FishNet.Editing
             EditorUtility.SetDirty(_defaultPrefabs);
             return true;
         }
-
     }
-
-
 }
 #endif

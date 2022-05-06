@@ -8,113 +8,157 @@
 // Licensed under the MIT/X11 license.
 //
 
-namespace MonoFN.Cecil {
+namespace MonoFN.Cecil
+{
+    public sealed class PInvokeInfo
+    {
+        private ushort attributes;
+        private string entry_point;
+        private ModuleReference module;
 
-	public sealed class PInvokeInfo {
+        public PInvokeAttributes Attributes
+        {
+            get => (PInvokeAttributes) attributes;
+            set => attributes = (ushort) value;
+        }
 
-		ushort attributes;
-		string entry_point;
-		ModuleReference module;
+        public string EntryPoint
+        {
+            get => entry_point;
+            set => entry_point = value;
+        }
 
-		public PInvokeAttributes Attributes {
-			get { return (PInvokeAttributes)attributes; }
-			set { attributes = (ushort)value; }
-		}
+        public ModuleReference Module
+        {
+            get => module;
+            set => module = value;
+        }
 
-		public string EntryPoint {
-			get { return entry_point; }
-			set { entry_point = value; }
-		}
+        #region PInvokeAttributes
 
-		public ModuleReference Module {
-			get { return module; }
-			set { module = value; }
-		}
+        public bool IsNoMangle
+        {
+            get => attributes.GetAttributes((ushort) PInvokeAttributes.NoMangle);
+            set => attributes = attributes.SetAttributes((ushort) PInvokeAttributes.NoMangle, value);
+        }
 
-		#region PInvokeAttributes
+        public bool IsCharSetNotSpec
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CharSetMask,
+                (ushort) PInvokeAttributes.CharSetNotSpec);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CharSetMask,
+                (ushort) PInvokeAttributes.CharSetNotSpec, value);
+        }
 
-		public bool IsNoMangle {
-			get { return attributes.GetAttributes ((ushort)PInvokeAttributes.NoMangle); }
-			set { attributes = attributes.SetAttributes ((ushort)PInvokeAttributes.NoMangle, value); }
-		}
+        public bool IsCharSetAnsi
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CharSetMask,
+                (ushort) PInvokeAttributes.CharSetAnsi);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CharSetMask,
+                (ushort) PInvokeAttributes.CharSetAnsi, value);
+        }
 
-		public bool IsCharSetNotSpec {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CharSetMask, (ushort)PInvokeAttributes.CharSetNotSpec); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CharSetMask, (ushort)PInvokeAttributes.CharSetNotSpec, value); }
-		}
+        public bool IsCharSetUnicode
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CharSetMask,
+                (ushort) PInvokeAttributes.CharSetUnicode);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CharSetMask,
+                (ushort) PInvokeAttributes.CharSetUnicode, value);
+        }
 
-		public bool IsCharSetAnsi {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CharSetMask, (ushort)PInvokeAttributes.CharSetAnsi); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CharSetMask, (ushort)PInvokeAttributes.CharSetAnsi, value); }
-		}
+        public bool IsCharSetAuto
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CharSetMask,
+                (ushort) PInvokeAttributes.CharSetAuto);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CharSetMask,
+                (ushort) PInvokeAttributes.CharSetAuto, value);
+        }
 
-		public bool IsCharSetUnicode {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CharSetMask, (ushort)PInvokeAttributes.CharSetUnicode); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CharSetMask, (ushort)PInvokeAttributes.CharSetUnicode, value); }
-		}
+        public bool SupportsLastError
+        {
+            get => attributes.GetAttributes((ushort) PInvokeAttributes.SupportsLastError);
+            set => attributes = attributes.SetAttributes((ushort) PInvokeAttributes.SupportsLastError, value);
+        }
 
-		public bool IsCharSetAuto {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CharSetMask, (ushort)PInvokeAttributes.CharSetAuto); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CharSetMask, (ushort)PInvokeAttributes.CharSetAuto, value); }
-		}
+        public bool IsCallConvWinapi
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvWinapi);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvWinapi, value);
+        }
 
-		public bool SupportsLastError {
-			get { return attributes.GetAttributes ((ushort)PInvokeAttributes.SupportsLastError); }
-			set { attributes = attributes.SetAttributes ((ushort)PInvokeAttributes.SupportsLastError, value); }
-		}
+        public bool IsCallConvCdecl
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvCdecl);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvCdecl, value);
+        }
 
-		public bool IsCallConvWinapi {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvWinapi); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvWinapi, value); }
-		}
+        public bool IsCallConvStdCall
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvStdCall);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvStdCall, value);
+        }
 
-		public bool IsCallConvCdecl {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvCdecl); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvCdecl, value); }
-		}
+        public bool IsCallConvThiscall
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvThiscall);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvThiscall, value);
+        }
 
-		public bool IsCallConvStdCall {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvStdCall); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvStdCall, value); }
-		}
+        public bool IsCallConvFastcall
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvFastcall);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.CallConvMask,
+                (ushort) PInvokeAttributes.CallConvFastcall, value);
+        }
 
-		public bool IsCallConvThiscall {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvThiscall); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvThiscall, value); }
-		}
+        public bool IsBestFitEnabled
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.BestFitMask,
+                (ushort) PInvokeAttributes.BestFitEnabled);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.BestFitMask,
+                (ushort) PInvokeAttributes.BestFitEnabled, value);
+        }
 
-		public bool IsCallConvFastcall {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvFastcall); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.CallConvMask, (ushort)PInvokeAttributes.CallConvFastcall, value); }
-		}
+        public bool IsBestFitDisabled
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.BestFitMask,
+                (ushort) PInvokeAttributes.BestFitDisabled);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.BestFitMask,
+                (ushort) PInvokeAttributes.BestFitDisabled, value);
+        }
 
-		public bool IsBestFitEnabled {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.BestFitMask, (ushort)PInvokeAttributes.BestFitEnabled); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.BestFitMask, (ushort)PInvokeAttributes.BestFitEnabled, value); }
-		}
+        public bool IsThrowOnUnmappableCharEnabled
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.ThrowOnUnmappableCharMask,
+                (ushort) PInvokeAttributes.ThrowOnUnmappableCharEnabled);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.ThrowOnUnmappableCharMask,
+                (ushort) PInvokeAttributes.ThrowOnUnmappableCharEnabled, value);
+        }
 
-		public bool IsBestFitDisabled {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.BestFitMask, (ushort)PInvokeAttributes.BestFitDisabled); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.BestFitMask, (ushort)PInvokeAttributes.BestFitDisabled, value); }
-		}
+        public bool IsThrowOnUnmappableCharDisabled
+        {
+            get => attributes.GetMaskedAttributes((ushort) PInvokeAttributes.ThrowOnUnmappableCharMask,
+                (ushort) PInvokeAttributes.ThrowOnUnmappableCharDisabled);
+            set => attributes = attributes.SetMaskedAttributes((ushort) PInvokeAttributes.ThrowOnUnmappableCharMask,
+                (ushort) PInvokeAttributes.ThrowOnUnmappableCharDisabled, value);
+        }
 
-		public bool IsThrowOnUnmappableCharEnabled {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.ThrowOnUnmappableCharMask, (ushort)PInvokeAttributes.ThrowOnUnmappableCharEnabled); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.ThrowOnUnmappableCharMask, (ushort)PInvokeAttributes.ThrowOnUnmappableCharEnabled, value); }
-		}
+        #endregion
 
-		public bool IsThrowOnUnmappableCharDisabled {
-			get { return attributes.GetMaskedAttributes ((ushort)PInvokeAttributes.ThrowOnUnmappableCharMask, (ushort)PInvokeAttributes.ThrowOnUnmappableCharDisabled); }
-			set { attributes = attributes.SetMaskedAttributes ((ushort)PInvokeAttributes.ThrowOnUnmappableCharMask, (ushort)PInvokeAttributes.ThrowOnUnmappableCharDisabled, value); }
-		}
-
-		#endregion
-
-		public PInvokeInfo (PInvokeAttributes attributes, string entryPoint, ModuleReference module)
-		{
-			this.attributes = (ushort)attributes;
-			this.entry_point = entryPoint;
-			this.module = module;
-		}
-	}
+        public PInvokeInfo(PInvokeAttributes attributes, string entryPoint, ModuleReference module)
+        {
+            this.attributes = (ushort) attributes;
+            entry_point = entryPoint;
+            this.module = module;
+        }
+    }
 }

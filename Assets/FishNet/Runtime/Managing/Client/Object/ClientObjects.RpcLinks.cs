@@ -17,12 +17,13 @@ namespace FishNet.Managing.Client
     /// </summary>
     public partial class ClientObjects : ManagedObjects
     {
-
         #region Private.
+
         /// <summary>
         /// RPCLinks of currently spawned objects.
         /// </summary>
-        private Dictionary<ushort, RpcLink> _rpcLinks = new Dictionary<ushort, RpcLink>();
+        private Dictionary<ushort, RpcLink> _rpcLinks = new();
+
         #endregion
 
         /// <summary>
@@ -33,10 +34,10 @@ namespace FishNet.Managing.Client
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void ParseRpcLink(PooledReader reader, ushort index, Channel channel)
         {
-            int dataLength = Packets.GetPacketLength(ushort.MaxValue, reader, channel);
+            var dataLength = Packets.GetPacketLength(ushort.MaxValue, reader, channel);
 
             //Link index isn't stored.
-            if (!_rpcLinks.TryGetValueIL2CPP(index, out RpcLink link))
+            if (!_rpcLinks.TryGetValueIL2CPP(index, out var link))
             {
                 /* Like other reliable communications the object
                 * should never be missing.*/
@@ -44,10 +45,10 @@ namespace FishNet.Managing.Client
                 return;
             }
             else
-            //Found NetworkObject for link.
-            if (Spawned.TryGetValueIL2CPP(link.ObjectId, out NetworkObject nob))
+                //Found NetworkObject for link.
+            if (Spawned.TryGetValueIL2CPP(link.ObjectId, out var nob))
             {
-                NetworkBehaviour nb = nob.NetworkBehaviours[link.ComponentIndex];
+                var nb = nob.NetworkBehaviours[link.ComponentIndex];
                 if (link.RpcType == RpcType.Target)
                     nb.OnTargetRpc(link.RpcHash, reader, channel);
                 else if (link.RpcType == RpcType.Observers)
@@ -80,10 +81,8 @@ namespace FishNet.Managing.Client
             if (values == null)
                 return;
 
-            for (int i = 0; i < values.Count; i++)
+            for (var i = 0; i < values.Count; i++)
                 _rpcLinks.Remove(values[i]);
         }
-
     }
-
 }

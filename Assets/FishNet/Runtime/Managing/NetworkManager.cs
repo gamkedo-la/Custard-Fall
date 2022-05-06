@@ -31,6 +31,7 @@ namespace FishNet.Managing
     public sealed partial class NetworkManager : MonoBehaviour
     {
         #region Types.
+
         /// <summary>
         /// Which socket to iterate data on first when as host.
         /// </summary>
@@ -39,6 +40,7 @@ namespace FishNet.Managing
             ServerFirst,
             ClientFirst
         }
+
         /// <summary>
         /// How to persist with multiple NetworkManagers.
         /// </summary>
@@ -48,10 +50,12 @@ namespace FishNet.Managing
             /// Destroy any new NetworkManagers.
             /// </summary>
             DestroyNewest,
+
             /// <summary>
             /// Destroy previous NetworkManager when a new NetworkManager occurs.
             /// </summary>
             DestroyOldest,
+
             /// <summary>
             /// Allow multiple NetworkManagers, do not destroy any automatically.
             /// </summary>
@@ -61,10 +65,12 @@ namespace FishNet.Managing
         #endregion
 
         #region Public.
+
         /// <summary>
         /// 
         /// </summary>
-        private static List<NetworkManager> _instances = new List<NetworkManager>();
+        private static List<NetworkManager> _instances = new();
+
         /// <summary>
         /// Currently initialized NetworkManagers.
         /// </summary>
@@ -76,14 +82,13 @@ namespace FishNet.Managing
                 * This shouldn't happen because instances are removed
                 * OnDestroy but none the less something is causing
                 * it. */
-                for (int i = 0; i < _instances.Count; i++)
-                {
+                for (var i = 0; i < _instances.Count; i++)
                     if (_instances[i] == null)
                     {
                         _instances.RemoveAt(i);
                         i--;
                     }
-                }
+
                 return _instances;
             }
         }
@@ -92,131 +97,158 @@ namespace FishNet.Managing
         /// True if server is active.
         /// </summary>
         public bool IsServer => ServerManager.Started;
+
         /// <summary>
         /// True if only the server is active.
         /// </summary>
-        public bool IsServerOnly => (IsServer && !IsClient);
+        public bool IsServerOnly => IsServer && !IsClient;
+
         /// <summary>
         /// True if the client is active and authenticated.
         /// </summary>
-        public bool IsClient => (ClientManager.Started && ClientManager.Connection.Authenticated);
+        public bool IsClient => ClientManager.Started && ClientManager.Connection.Authenticated;
+
         /// <summary>
         /// True if only the client is active and authenticated.
         /// </summary>
-        public bool IsClientOnly => (!IsServer && IsClient);
+        public bool IsClientOnly => !IsServer && IsClient;
+
         /// <summary>
         /// True if client and server are active.
         /// </summary>
-        public bool IsHost => (IsServer && IsClient);
+        public bool IsHost => IsServer && IsClient;
+
         /// <summary>
         /// True if client nor server are active.
         /// </summary>
-        public bool IsOffline => (!IsServer && !IsClient);
+        public bool IsOffline => !IsServer && !IsClient;
+
         /// <summary>
         /// ServerManager for this NetworkManager.
         /// </summary>
         public ServerManager ServerManager { get; private set; }
+
         /// <summary>
         /// ClientManager for this NetworkManager.
         /// </summary>
         public ClientManager ClientManager { get; private set; }
+
         /// <summary>
         /// TransportManager for this NetworkManager.
         /// </summary>
         public TransportManager TransportManager { get; private set; }
+
         /// <summary>
         /// TimeManager for this NetworkManager.
         /// </summary>
         public TimeManager TimeManager { get; private set; }
+
         /// <summary>
         /// SceneManager for this NetworkManager.
         /// </summary>
         public SceneManager SceneManager { get; private set; }
+
         /// <summary>
         /// ObserverManager for this NetworkManager.
         /// </summary>
         public ObserverManager ObserverManager { get; private set; }
+
         /// <summary>
         /// Authenticator for this NetworkManager. May be null if no Authenticator is used.
         /// </summary>
         public Authenticator Authenticator { get; private set; }
+
         /// <summary>
         /// DebugManager for this NetworkManager.
         /// </summary>
         public DebugManager DebugManager { get; private set; }
+
         /// <summary>
         /// An empty connection reference. Used when a connection cannot be found to prevent object creation.
         /// </summary>
         [APIExclude]
-        public static NetworkConnection EmptyConnection { get; private set; } = new NetworkConnection();
+        public static NetworkConnection EmptyConnection { get; private set; } = new();
+
         #endregion
 
         #region Internal.
+
         /// <summary>
         /// Starting index for RpcLinks.
         /// </summary>
         internal static ushort StartingRpcLinkIndex;
+
         #endregion
 
         #region Serialized.
+
         /// <summary>
         /// True to refresh the DefaultPrefabObjects collection whenever the editor enters play mode. This is an attempt to alleviate the DefaultPrefabObjects scriptable object not refreshing when using multiple editor applications such as ParrelSync.
         /// </summary>
-        [Tooltip("True to refresh the DefaultPrefabObjects collection whenever the editor enters play mode. This is an attempt to alleviate the DefaultPrefabObjects scriptable object not refreshing when using multiple editor applications such as ParrelSync.")]
+        [Tooltip(
+            "True to refresh the DefaultPrefabObjects collection whenever the editor enters play mode. This is an attempt to alleviate the DefaultPrefabObjects scriptable object not refreshing when using multiple editor applications such as ParrelSync.")]
         [SerializeField]
         private bool _refreshDefaultPrefabs = false;
+
         /// <summary>
         /// True to have your application run while in the background.
         /// </summary>
-        [Tooltip("True to have your application run while in the background.")]
-        [SerializeField]
+        [Tooltip("True to have your application run while in the background.")] [SerializeField]
         private bool _runInBackground = true;
+
         /// <summary>
         /// True to make this instance DontDestroyOnLoad. This is typical if you only want one NetworkManager.
         /// </summary>
         [Tooltip("True to make this instance DontDestroyOnLoad. This is typical if you only want one NetworkManager.")]
         [SerializeField]
         private bool _dontDestroyOnLoad = true;
+
         /// <summary>
         /// How to persist when other NetworkManagers are introduced.
         /// </summary>
-        [Tooltip("How to persist when other NetworkManagers are introduced.")]
-        [SerializeField]
+        [Tooltip("How to persist when other NetworkManagers are introduced.")] [SerializeField]
         private PersistenceType _persistence = PersistenceType.DestroyNewest;
+
         /// <summary>
         /// 
         /// </summary>
-        [Tooltip("Whether client or server should iterate incoming data first when running as host.")]
-        [SerializeField]
+        [Tooltip("Whether client or server should iterate incoming data first when running as host.")] [SerializeField]
         private HostIterationOrder _incomingIterationOrder = HostIterationOrder.ClientFirst;
+
         /// <summary>
         /// Whether client or server should iterate incoming data first when running as host.
         /// </summary>
         internal HostIterationOrder IncomingIterationOrder => _incomingIterationOrder;
+
         /// <summary>
         /// 
         /// </summary>
-        [Tooltip("Whether client or server should iterate outgoing data first when running as host.")]
-        [SerializeField]
+        [Tooltip("Whether client or server should iterate outgoing data first when running as host.")] [SerializeField]
         private HostIterationOrder _outgoingIterationOrder = HostIterationOrder.ServerFirst;
+
         /// <summary>
         /// Whether client or server should iterate incoming data first when running as host.
         /// </summary>
         internal HostIterationOrder OutgoingIterationOrder => _outgoingIterationOrder;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// True if this NetworkManager can persist after Awake checks.
         /// </summary>
         private bool _canPersist;
+
         #endregion
 
         #region Const.
+
         /// <summary>
         /// Maximum framerate allowed.
         /// </summary>
         internal const ushort MAXIMUM_FRAMERATE = 9999;
+
         #endregion
 
 
@@ -227,7 +259,7 @@ namespace FishNet.Managing
                 return;
 
             if (StartingRpcLinkIndex == 0)
-                StartingRpcLinkIndex = (ushort)(EnumFN.GetHighestValue<PacketId>() + 1);
+                StartingRpcLinkIndex = (ushort) (EnumFN.GetHighestValue<PacketId>() + 1);
 
 #if UNITY_EDITOR
             /* If first instance then force
@@ -249,10 +281,9 @@ namespace FishNet.Managing
                 return;
 
             if (TryGetComponent<NetworkObject>(out _))
-            {
                 if (CanLog(LoggingType.Error))
-                    Debug.LogError($"NetworkObject component found on the NetworkManager object {gameObject.name}. This is not allowed and will cause problems. Remove the NetworkObject component from this object.");
-            }
+                    Debug.LogError(
+                        $"NetworkObject component found on the NetworkManager object {gameObject.name}. This is not allowed and will cause problems. Remove the NetworkObject component from this object.");
 
             SpawnablePrefabs.InitializePrefabRange(0);
             SetDontDestroyOnLoad();
@@ -295,10 +326,10 @@ namespace FishNet.Managing
         /// </summary>
         internal void UpdateFramerate()
         {
-            bool clientStarted = ClientManager.Started;
-            bool serverStarted = ServerManager.Started;
+            var clientStarted = ClientManager.Started;
+            var serverStarted = ServerManager.Started;
 
-            int frameRate = 0;
+            var frameRate = 0;
             //If both client and server are started then use whichever framerate is higher.
             if (clientStarted && serverStarted)
                 frameRate = Math.Max(ServerManager.FrameRate, ClientManager.FrameRate);
@@ -346,19 +377,20 @@ namespace FishNet.Managing
             if (_persistence == PersistenceType.AllowMultiple)
                 return true;
 
-            List<NetworkManager> instances = Instances.ToList();
+            var instances = Instances.ToList();
             //This is the first instance, it may initialize.
             if (instances.Count == 0)
                 return true;
 
             //First instance of NM.
-            NetworkManager firstInstance = instances[0];
+            var firstInstance = instances[0];
 
             //If to destroy the newest.
             if (_persistence == PersistenceType.DestroyNewest)
             {
                 if (CanLog(LoggingType.Common))
-                    Debug.Log($"NetworkManager on object {gameObject.name} is being destroyed due to persistence type {_persistence}. A NetworkManager instance already exist on {firstInstance.name}.");
+                    Debug.Log(
+                        $"NetworkManager on object {gameObject.name} is being destroyed due to persistence type {_persistence}. A NetworkManager instance already exist on {firstInstance.name}.");
                 Destroy(gameObject);
                 //This one is being destroyed because its the newest.
                 return false;
@@ -367,7 +399,8 @@ namespace FishNet.Managing
             else if (_persistence == PersistenceType.DestroyOldest)
             {
                 if (CanLog(LoggingType.Common))
-                    Debug.Log($"NetworkManager on object {firstInstance.name} is being destroyed due to persistence type {_persistence}. A NetworkManager instance has been created on {gameObject.name}.");
+                    Debug.Log(
+                        $"NetworkManager on object {firstInstance.name} is being destroyed due to persistence type {_persistence}. A NetworkManager instance has been created on {gameObject.name}.");
                 Destroy(firstInstance.gameObject);
                 //This being the new one will persist, allow initialization.
                 return true;
@@ -376,7 +409,8 @@ namespace FishNet.Managing
             else
             {
                 if (CanLog(LoggingType.Error))
-                    Debug.Log($"Persistance type of {_persistence} is unhandled on {gameObject.name}. Initialization will not proceed.");
+                    Debug.Log(
+                        $"Persistance type of {_persistence} is unhandled on {gameObject.name}. Initialization will not proceed.");
 
                 return false;
             }
@@ -393,7 +427,8 @@ namespace FishNet.Managing
             {
                 //Always throw an error as this would cause failure.
                 if (print)
-                    Debug.LogError($"SpawnablePrefabs is null on {gameObject.name}. Select the NetworkManager in scene {gameObject.scene.name} and choose a prefabs file. Choosing DefaultPrefabObjects will automatically populate prefabs for you.");
+                    Debug.LogError(
+                        $"SpawnablePrefabs is null on {gameObject.name}. Select the NetworkManager in scene {gameObject.scene.name} and choose a prefabs file. Choosing DefaultPrefabObjects will automatically populate prefabs for you.");
                 return false;
             }
 
@@ -423,7 +458,7 @@ namespace FishNet.Managing
         /// </summary>
         private void AddDebugManager()
         {
-            if (gameObject.TryGetComponent<DebugManager>(out DebugManager result))
+            if (gameObject.TryGetComponent<DebugManager>(out var result))
                 DebugManager = result;
             else
                 DebugManager = gameObject.AddComponent<DebugManager>();
@@ -434,7 +469,7 @@ namespace FishNet.Managing
         /// </summary>
         private void AddTransportManager()
         {
-            if (gameObject.TryGetComponent<TransportManager>(out TransportManager result))
+            if (gameObject.TryGetComponent<TransportManager>(out var result))
                 TransportManager = result;
             else
                 TransportManager = gameObject.AddComponent<TransportManager>();
@@ -445,7 +480,7 @@ namespace FishNet.Managing
         /// </summary>
         private void AddTimeManager()
         {
-            if (gameObject.TryGetComponent<TimeManager>(out TimeManager result))
+            if (gameObject.TryGetComponent<TimeManager>(out var result))
                 TimeManager = result;
             else
                 TimeManager = gameObject.AddComponent<TimeManager>();
@@ -457,7 +492,7 @@ namespace FishNet.Managing
         /// </summary>
         private void AddSceneManager()
         {
-            if (gameObject.TryGetComponent<SceneManager>(out SceneManager result))
+            if (gameObject.TryGetComponent<SceneManager>(out var result))
                 SceneManager = result;
             else
                 SceneManager = gameObject.AddComponent<SceneManager>();
@@ -468,7 +503,7 @@ namespace FishNet.Managing
         /// </summary>
         private void AddObserverManager()
         {
-            if (gameObject.TryGetComponent<ObserverManager>(out ObserverManager result))
+            if (gameObject.TryGetComponent<ObserverManager>(out var result))
                 ObserverManager = result;
             else
                 ObserverManager = gameObject.AddComponent<ObserverManager>();
@@ -481,25 +516,27 @@ namespace FishNet.Managing
         private void AddServerAndClientManagers()
         {
             //Add servermanager.
-            if (gameObject.TryGetComponent<ServerManager>(out ServerManager sm))
+            if (gameObject.TryGetComponent<ServerManager>(out var sm))
                 ServerManager = sm;
             else
                 ServerManager = gameObject.AddComponent<ServerManager>();
 
             //Add clientmanager.
-            if (gameObject.TryGetComponent<ClientManager>(out ClientManager cm))
+            if (gameObject.TryGetComponent<ClientManager>(out var cm))
                 ClientManager = cm;
             else
                 ClientManager = gameObject.AddComponent<ClientManager>();
         }
 
         #region Editor.
+
 #if UNITY_EDITOR
         private void OnValidate()
         {
             if (SpawnablePrefabs == null)
                 Reset();
         }
+
         private void Reset()
         {
             ValidateSpawnablePrefabs(true);
@@ -508,8 +545,5 @@ namespace FishNet.Managing
 #endif
 
         #endregion
-
     }
-
-
 }

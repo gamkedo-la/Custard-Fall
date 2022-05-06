@@ -7,12 +7,12 @@ namespace LiteNetLib
     {
         private NetPacket _head;
         private int _count;
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
 
         public NetPacket GetWithData(PacketProperty property, byte[] data, int start, int length)
         {
-            int headerSize = NetPacket.GetHeaderSize(property);
-            NetPacket packet = GetPacket(length + headerSize);
+            var headerSize = NetPacket.GetHeaderSize(property);
+            var packet = GetPacket(length + headerSize);
             packet.Property = property;
             Buffer.BlockCopy(data, start, packet.RawData, headerSize, length);
             return packet;
@@ -21,14 +21,14 @@ namespace LiteNetLib
         //Get packet with size
         public NetPacket GetWithProperty(PacketProperty property, int size)
         {
-            NetPacket packet = GetPacket(size + NetPacket.GetHeaderSize(property));
+            var packet = GetPacket(size + NetPacket.GetHeaderSize(property));
             packet.Property = property;
             return packet;
         }
 
         public NetPacket GetWithProperty(PacketProperty property)
         {
-            NetPacket packet = GetPacket(NetPacket.GetHeaderSize(property));
+            var packet = GetPacket(NetPacket.GetHeaderSize(property));
             packet.Property = property;
             return packet;
         }
@@ -57,10 +57,8 @@ namespace LiteNetLib
         public void Recycle(NetPacket packet)
         {
             if (packet.RawData.Length > NetConstants.MaxPacketSize || _count >= NetConstants.PacketPoolSize)
-            {
                 //Don't pool big packets. Save memory
                 return;
-            }
 
             Interlocked.Increment(ref _count);
 

@@ -6,17 +6,15 @@ using UnityEngine;
 
 namespace FishNet.CodeGenerating.Helping.Extension
 {
-
     internal static class TypeReferenceExtensions
     {
-
         /// <summary>
         /// Returns if typeRef is a class or struct.
         /// </summary>
         internal static bool IsClassOrStruct(this TypeReference typeRef)
         {
-            TypeDefinition typeDef = typeRef.CachedResolve();
-            return (!typeDef.IsPrimitive && (typeDef.IsClass || typeDef.IsValueType));
+            var typeDef = typeRef.CachedResolve();
+            return !typeDef.IsPrimitive && (typeDef.IsClass || typeDef.IsValueType);
         }
 
         /// <summary>
@@ -46,7 +44,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
         {
             while (typeDefinition != null)
             {
-                foreach (FieldDefinition field in typeDefinition.Fields)
+                foreach (var field in typeDefinition.Fields)
                 {
                     if (field.IsStatic || field.IsPrivate)
                         continue;
@@ -77,26 +75,24 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         public static MethodDefinition GetMethodInBase(this TypeReference typeRef, string methodName)
         {
-            TypeDefinition td = typeRef.CachedResolve().GetNextBaseClass();
+            var td = typeRef.CachedResolve().GetNextBaseClass();
             while (td != null)
             {
                 Debug.LogWarning(td.Name);
-                foreach (MethodDefinition md in td.Methods)
+                foreach (var md in td.Methods)
                 {
                     Debug.Log("X " + md.Name);
                     if (md.Name == methodName)
-                    {
                         return md;
 
-                        //MethodReference method = md;
-                        //if (typeRefCopy.IsGenericInstance)
-                        //{
-                        //    var baseTypeInstance = (GenericInstanceType)typeRef;
-                        //    method = method.MakeHostInstanceGeneric(baseTypeInstance);
-                        //}
+                    //MethodReference method = md;
+                    //if (typeRefCopy.IsGenericInstance)
+                    //{
+                    //    var baseTypeInstance = (GenericInstanceType)typeRef;
+                    //    method = method.MakeHostInstanceGeneric(baseTypeInstance);
+                    //}
 
-                        //return method;
-                    }
+                    //return method;
                 }
 
                 try
@@ -129,7 +125,6 @@ namespace FishNet.CodeGenerating.Helping.Extension
         }
 
 
-
         /// <summary>
         /// Returns if typeRef is a multidimensional array.
         /// </summary>
@@ -150,14 +145,11 @@ namespace FishNet.CodeGenerating.Helping.Extension
         {
             while (typeRef != null)
             {
-                if (typeRef.Scope.Name == "Windows")
-                {
-                    return false;
-                }
+                if (typeRef.Scope.Name == "Windows") return false;
 
                 if (typeRef.Scope.Name == "mscorlib")
                 {
-                    TypeDefinition resolved = typeRef.CachedResolve();
+                    var resolved = typeRef.CachedResolve();
                     return resolved != null;
                 }
 
@@ -170,6 +162,7 @@ namespace FishNet.CodeGenerating.Helping.Extension
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -184,10 +177,8 @@ namespace FishNet.CodeGenerating.Helping.Extension
             {
                 // get all the generic parameters and make a generic instance out of it
                 var genericTypes = new TypeReference[type.GenericParameters.Count];
-                for (int i = 0; i < type.GenericParameters.Count; i++)
-                {
+                for (var i = 0; i < type.GenericParameters.Count; i++)
                     genericTypes[i] = type.GenericParameters[i].GetElementType();
-                }
 
                 return type.MakeGenericInstanceType(genericTypes);
             }
@@ -196,7 +187,5 @@ namespace FishNet.CodeGenerating.Helping.Extension
                 return type;
             }
         }
-
     }
-
 }

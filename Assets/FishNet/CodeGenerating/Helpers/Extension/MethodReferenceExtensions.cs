@@ -4,7 +4,6 @@ using System;
 
 namespace FishNet.CodeGenerating.Helping.Extension
 {
-
     public static class MethodReferenceExtensions
     {
         /// <summary>
@@ -13,10 +12,11 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <param name="method"></param>
         /// <param name="genericArguments"></param>
         /// <returns></returns>
-        public static GenericInstanceMethod MakeGenericMethod(this MethodReference method, params TypeReference[] genericArguments)
+        public static GenericInstanceMethod MakeGenericMethod(this MethodReference method,
+            params TypeReference[] genericArguments)
         {
-            GenericInstanceMethod result = new GenericInstanceMethod(method);
-            foreach (TypeReference argument in genericArguments)
+            var result = new GenericInstanceMethod(method);
+            foreach (var argument in genericArguments)
                 result.GenericArguments.Add(argument);
             return result;
         }
@@ -28,8 +28,8 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <returns></returns>
         public static GenericInstanceMethod MakeGenericMethod(this MethodReference method)
         {
-            GenericInstanceMethod result = new GenericInstanceMethod(method);
-            foreach (ParameterDefinition pd in method.Parameters)
+            var result = new GenericInstanceMethod(method);
+            foreach (var pd in method.Parameters)
                 result.GenericArguments.Add(pd.ParameterType);
 
             return result;
@@ -52,23 +52,25 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <param name="self"></param>
         /// <param name="instanceType"></param>
         /// <returns></returns>
-        public static MethodReference MakeHostInstanceGeneric(this MethodReference self, GenericInstanceType instanceType)
+        public static MethodReference MakeHostInstanceGeneric(this MethodReference self,
+            GenericInstanceType instanceType)
         {
-            MethodReference reference = new MethodReference(self.Name, self.ReturnType, instanceType)
+            var reference = new MethodReference(self.Name, self.ReturnType, instanceType)
             {
                 CallingConvention = self.CallingConvention,
                 HasThis = self.HasThis,
                 ExplicitThis = self.ExplicitThis
             };
 
-            foreach (ParameterDefinition parameter in self.Parameters)
+            foreach (var parameter in self.Parameters)
                 reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
 
-            foreach (GenericParameter generic_parameter in self.GenericParameters)
+            foreach (var generic_parameter in self.GenericParameters)
                 reference.GenericParameters.Add(new GenericParameter(generic_parameter.Name, reference));
 
             return CodegenSession.ImportReference(reference);
         }
+
         /// <summary>
         /// Given a method of a generic class such as ArraySegment`T.get_Count,
         /// and a generic instance such as ArraySegment`int
@@ -78,29 +80,31 @@ namespace FishNet.CodeGenerating.Helping.Extension
         /// <param name="self"></param>
         /// <param name="instanceType"></param>
         /// <returns></returns>
-        public static MethodReference MakeHostInstanceGeneric(this MethodReference self, TypeReference typeRef, params TypeReference[] args)
+        public static MethodReference MakeHostInstanceGeneric(this MethodReference self, TypeReference typeRef,
+            params TypeReference[] args)
         {
-
-            GenericInstanceType git = typeRef.MakeGenericInstanceType(args);
-            MethodReference reference = new MethodReference(self.Name, self.ReturnType, git)
+            var git = typeRef.MakeGenericInstanceType(args);
+            var reference = new MethodReference(self.Name, self.ReturnType, git)
             {
                 CallingConvention = self.CallingConvention,
                 HasThis = self.HasThis,
                 ExplicitThis = self.ExplicitThis
             };
 
-            foreach (ParameterDefinition parameter in self.Parameters)
+            foreach (var parameter in self.Parameters)
                 reference.Parameters.Add(new ParameterDefinition(parameter.ParameterType));
 
-            foreach (GenericParameter generic_parameter in self.GenericParameters)
+            foreach (var generic_parameter in self.GenericParameters)
                 reference.GenericParameters.Add(new GenericParameter(generic_parameter.Name, reference));
 
             return reference;
         }
+
         public static bool Is<T>(this MethodReference method, string name)
         {
             return method.DeclaringType.Is<T>() && method.Name == name;
         }
+
         public static bool Is<T>(this TypeReference td)
         {
             return Is(td, typeof(T));
@@ -108,16 +112,8 @@ namespace FishNet.CodeGenerating.Helping.Extension
 
         public static bool Is(this TypeReference td, Type t)
         {
-            if (t.IsGenericType)
-            {
-                return td.GetElementType().FullName == t.FullName;
-            }
+            if (t.IsGenericType) return td.GetElementType().FullName == t.FullName;
             return td.FullName == t.FullName;
         }
-
-
-
     }
-
-
 }

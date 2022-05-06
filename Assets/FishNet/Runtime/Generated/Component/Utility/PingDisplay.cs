@@ -9,6 +9,7 @@ namespace FishNet.Component.Utility
     public class PingDisplay : MonoBehaviour
     {
         #region Types.
+
         private enum Corner
         {
             TopLeft,
@@ -16,30 +17,36 @@ namespace FishNet.Component.Utility
             BottomLeft,
             BottomRight
         }
+
         #endregion
 
         #region Serialized.
+
         /// <summary>
         /// Which corner to display ping in.
         /// </summary>
-        [Tooltip("Which corner to display ping in.")]
-        [SerializeField]
+        [Tooltip("Which corner to display ping in.")] [SerializeField]
         private Corner _placement = Corner.TopRight;
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Next time TimeManager can be polled. Throttle this to save performance.
         /// </summary>
         private float _nextTimeManagerTime;
+
         /// <summary>
         /// TimeManager to get ping from.
         /// </summary>
         private TimeManager _timeManager;
+
         /// <summary>
         /// Style for drawn ping.
         /// </summary>
-        private GUIStyle _style = new GUIStyle();
+        private GUIStyle _style = new();
+
         #endregion
 
         private void OnGUI()
@@ -55,9 +62,9 @@ namespace FishNet.Component.Utility
 
             _style.normal.textColor = Color.white;
             _style.fontSize = 15;
-            float width = 85f;
-            float height = 15f;
-            float edge = 10f;
+            var width = 85f;
+            var height = 15f;
+            var edge = 10f;
 
             float horizontal;
             float vertical;
@@ -82,9 +89,8 @@ namespace FishNet.Component.Utility
                 horizontal = Screen.width - width - edge;
                 vertical = Screen.height - height - edge;
             }
+
             GUI.Label(new Rect(horizontal, vertical, width, height), $"Ping: {_timeManager.RoundTripTime}ms", _style);
         }
     }
-
-
 }

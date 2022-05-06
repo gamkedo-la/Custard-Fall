@@ -24,12 +24,10 @@ namespace FishNet.Object
         /// <param name="whole"></param>
         /// <param name="part"></param>
         /// <returns></returns>
-        public static bool TransformPropertiesContains(ChangedTransformProperties whole, ChangedTransformProperties part)
+        public static bool TransformPropertiesContains(ChangedTransformProperties whole,
+            ChangedTransformProperties part)
         {
             return (whole & part) == part;
         }
     }
-
-
 }
-

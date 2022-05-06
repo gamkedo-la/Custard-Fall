@@ -10,15 +10,17 @@ namespace FishNet.Editing
     public static class Finding
     {
         #region Private.
+
         /// <summary>
         /// Path where the FishNet.Runtime assembly is.
         /// </summary>
-        [System.NonSerialized]
-        private static string _fishNetRuntimePath = string.Empty;
+        [System.NonSerialized] private static string _fishNetRuntimePath = string.Empty;
+
         /// <summary>
         /// Path where the FishNet.Generated assembly is.
         /// </summary>
         private static string _fishNetGeneratedPath = string.Empty;
+
         #endregion
 
         /// <summary>
@@ -30,16 +32,16 @@ namespace FishNet.Editing
             if (_fishNetGeneratedPath != string.Empty && _fishNetRuntimePath != string.Empty)
                 return;
 
-            string[] guids = AssetDatabase.FindAssets("t:asmdef", new string[] { "Assets" });
-            string[] objectPaths = new string[guids.Length];
-            for (int i = 0; i < guids.Length; i++)
+            var guids = AssetDatabase.FindAssets("t:asmdef", new string[] {"Assets"});
+            var objectPaths = new string[guids.Length];
+            for (var i = 0; i < guids.Length; i++)
                 objectPaths[i] = AssetDatabase.GUIDToAssetPath(guids[i]);
 
-            string runtimeName = (UtilityConstants.RUNTIME_ASSEMBLY_NAME + ".asmdef").ToLower();
-            string generatedName = (UtilityConstants.GENERATED_ASSEMBLY_NAME + ".asmdef").ToLower();
+            var runtimeName = (UtilityConstants.RUNTIME_ASSEMBLY_NAME + ".asmdef").ToLower();
+            var generatedName = (UtilityConstants.GENERATED_ASSEMBLY_NAME + ".asmdef").ToLower();
             /* Find all network managers which use Single prefab linking
              * as well all network object prefabs. */
-            foreach (string item in objectPaths)
+            foreach (var item in objectPaths)
             {
                 //Found directory to create object in.
                 if (item.ToLower().Contains(runtimeName))
@@ -51,6 +53,7 @@ namespace FishNet.Editing
                     return;
             }
         }
+
         /// <summary>
         /// Gets path for where the FishNet.Runtime assembly is.
         /// </summary>
@@ -60,6 +63,7 @@ namespace FishNet.Editing
             SetPaths(error);
             return _fishNetRuntimePath;
         }
+
         /// <summary>
         /// Gets path for where the FishNet.Generated assembly is.
         /// </summary>
@@ -76,41 +80,41 @@ namespace FishNet.Editing
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static List<GameObject> GetGameObjects(bool userAssemblies, bool fishNetAssembly, bool includeScenes, string[] ignoredPaths = null)
+        public static List<GameObject> GetGameObjects(bool userAssemblies, bool fishNetAssembly, bool includeScenes,
+            string[] ignoredPaths = null)
         {
-            List<GameObject> results = new List<GameObject>();
+            var results = new List<GameObject>();
 
             string[] guids;
             string[] objectPaths;
 
             guids = AssetDatabase.FindAssets("t:GameObject", null);
             objectPaths = new string[guids.Length];
-            for (int i = 0; i < guids.Length; i++)
+            for (var i = 0; i < guids.Length; i++)
                 objectPaths[i] = AssetDatabase.GUIDToAssetPath(guids[i]);
 
-            foreach (string item in objectPaths)
+            foreach (var item in objectPaths)
             {
-                bool inFishNet = item.Contains(_fishNetRuntimePath);
+                var inFishNet = item.Contains(_fishNetRuntimePath);
                 if (inFishNet && !fishNetAssembly)
                     continue;
                 if (!inFishNet && !userAssemblies)
                     continue;
                 if (ignoredPaths != null)
                 {
-                    bool ignore = false;
-                    foreach (string path in ignoredPaths)
-                    {
+                    var ignore = false;
+                    foreach (var path in ignoredPaths)
                         if (item.Contains(path))
                         {
                             ignore = true;
                             break;
                         }
-                    }
+
                     if (ignore)
                         continue;
                 }
 
-                GameObject go = (GameObject)AssetDatabase.LoadAssetAtPath(item, typeof(GameObject));
+                var go = (GameObject) AssetDatabase.LoadAssetAtPath(item, typeof(GameObject));
                 results.Add(go);
             }
 
@@ -126,28 +130,29 @@ namespace FishNet.Editing
         /// <returns></returns>
         private static List<GameObject> GetSceneGameObjects()
         {
-            List<GameObject> results = new List<GameObject>();
+            var results = new List<GameObject>();
 
-            for (int i = 0; i < SceneManager.sceneCount; i++)
+            for (var i = 0; i < SceneManager.sceneCount; i++)
                 results.AddRange(GetSceneGameObjects(SceneManager.GetSceneAt(i)));
 
             return results;
         }
+
         /// <summary>
         /// Gets all GameObjects in a scene.
         /// </summary>
         private static List<GameObject> GetSceneGameObjects(Scene s)
         {
-            List<GameObject> results = new List<GameObject>();
-            List<Transform> buffer = new List<Transform>();
+            var results = new List<GameObject>();
+            var buffer = new List<Transform>();
             //Iterate all root objects for the scene.
-            GameObject[] gos = s.GetRootGameObjects();
-            for (int i = 0; i < gos.Length; i++)
+            var gos = s.GetRootGameObjects();
+            for (var i = 0; i < gos.Length; i++)
             {
                 /* Get GameObjects within children of each
                  * root object then add them to the cache. */
                 gos[i].GetComponentsInChildren<Transform>(true, buffer);
-                foreach (Transform t in buffer)
+                foreach (var t in buffer)
                     results.Add(t.gameObject);
             }
 
@@ -162,44 +167,44 @@ namespace FishNet.Editing
         /// <returns></returns>
         public static List<UnityEngine.Object> GetScriptableObjects<T>(bool fishNetAssembly, bool breakOnFirst = false)
         {
-            System.Type tType = typeof(T);
-            List<UnityEngine.Object> results = new List<UnityEngine.Object>();
+            var tType = typeof(T);
+            var results = new List<UnityEngine.Object>();
 
-            string[] guids = AssetDatabase.FindAssets("t:ScriptableObject", new string[] { "Assets" });
-            string[] objectPaths = new string[guids.Length];
-            for (int i = 0; i < guids.Length; i++)
+            var guids = AssetDatabase.FindAssets("t:ScriptableObject", new string[] {"Assets"});
+            var objectPaths = new string[guids.Length];
+            for (var i = 0; i < guids.Length; i++)
                 objectPaths[i] = AssetDatabase.GUIDToAssetPath(guids[i]);
 
 
             /* This might be faster than using directory comparers.
              * Don't really care since this occurs only at edit. */
-            List<string> fishNetPaths = new List<string>();
+            var fishNetPaths = new List<string>();
             fishNetPaths.Add(_fishNetGeneratedPath.Replace(@"/", @"\"));
             fishNetPaths.Add(_fishNetGeneratedPath.Replace(@"\", @"/"));
             fishNetPaths.Add(_fishNetRuntimePath.Replace(@"/", @"\"));
             fishNetPaths.Add(_fishNetRuntimePath.Replace(@"\", @"/"));
             /* Find all network managers which use Single prefab linking
              * as well all network object prefabs. */
-            foreach (string item in objectPaths)
+            foreach (var item in objectPaths)
             {
                 //This will skip hidden unity types.
                 if (!item.EndsWith(".asset"))
                     continue;
                 if (fishNetAssembly)
                 {
-                    bool found = false;
-                    foreach (string path in fishNetPaths)
-                    {
+                    var found = false;
+                    foreach (var path in fishNetPaths)
                         if (item.Contains(path))
                         {
                             found = true;
                             break;
                         }
-                    }
+
                     if (!found)
                         continue;
                 }
-                UnityEngine.Object obj = AssetDatabase.LoadAssetAtPath(item, tType);
+
+                var obj = AssetDatabase.LoadAssetAtPath(item, tType);
                 if (obj != null && tType != null && obj.GetType() == tType)
                 {
                     results.Add(obj);
@@ -210,7 +215,6 @@ namespace FishNet.Editing
 
             return results;
         }
-
     }
 }
 #endif

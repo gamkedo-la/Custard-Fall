@@ -15,5 +15,4 @@ namespace FishNet.Broadcast.Helping
             return typeof(T).FullName.GetStableHash16();
         }
     }
-
 }

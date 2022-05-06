@@ -15,6 +15,7 @@ namespace FishNet.Observing
     public sealed class NetworkObserver : NetworkBehaviour
     {
         #region Types.
+
         /// <summary>
         /// How ObserverManager conditions are used.
         /// </summary>
@@ -24,38 +25,45 @@ namespace FishNet.Observing
             /// Keep current conditions, add new conditions from manager.
             /// </summary>
             AddMissing = 1,
+
             /// <summary>
             /// Replace current conditions with manager conditions.
             /// </summary>
             UseManager = 2,
+
             /// <summary>
             /// Keep current conditions, ignore manager conditions.
             /// </summary>
-            IgnoreManager = 3,
+            IgnoreManager = 3
         }
+
         #endregion
 
         #region Serialized.
+
         /// <summary>
         /// 
         /// </summary>
-        [Tooltip("How ObserverManager conditions are used.")]
-        [SerializeField]
+        [Tooltip("How ObserverManager conditions are used.")] [SerializeField]
         private ConditionOverrideType _overrideType = ConditionOverrideType.IgnoreManager;
+
         /// <summary>
         /// How ObserverManager conditions are used.
         /// </summary>
         public ConditionOverrideType OverrideType => _overrideType;
+
         /// <summary>
         /// 
         /// </summary>
         [Tooltip("Conditions connections must met to be added as an observer. Multiple conditions may be used.")]
         [SerializeField]
-        internal List<ObserverCondition> _observerConditions = new List<ObserverCondition>();
+        internal List<ObserverCondition> _observerConditions = new();
+
         /// <summary>
         /// Conditions connections must met to be added as an observer. Multiple conditions may be used.
         /// </summary>
         public IReadOnlyList<ObserverCondition> ObserverConditions => _observerConditions;
+
         [APIExclude]
 #if MIRROR
         public List<ObserverCondition> ObserverConditionsInternal
@@ -66,33 +74,41 @@ namespace FishNet.Observing
             get => _observerConditions;
             set => _observerConditions = value;
         }
+
         #endregion
 
         #region Private.
+
         /// <summary>
         /// Conditions under this component which are timed.
         /// </summary>
-        private List<ObserverCondition> _timedConditions = new List<ObserverCondition>();
+        private List<ObserverCondition> _timedConditions = new();
+
         /// <summary>
         /// True if all non-timed conditions passed.
         /// </summary>
         private bool _nonTimedMet;
+
         /// <summary>
         /// NetworkObject this belongs to.
         /// </summary>
         private NetworkObject _networkObject;
+
         /// <summary>
         /// True if renderers have been populated.
         /// </summary>
         private bool _renderersPopulated;
+
         /// <summary>
         /// Becomes true when registered with ServerObjects as Timed observers.
         /// </summary>
         private bool _registeredAsTimed;
+
         /// <summary>
         /// Found renderers on and beneath this object.
         /// </summary>
         private Renderer[] _renderers;
+
         #endregion
 
         private void OnEnable()
@@ -100,11 +116,13 @@ namespace FishNet.Observing
             if (_networkObject != null && _networkObject.IsServer)
                 RegisterTimedConditions();
         }
+
         private void OnDisable()
         {
             if (_networkObject != null && _networkObject.Deinitializing)
                 UnregisterTimedConditions();
         }
+
         private void OnDestroy()
         {
             if (_networkObject != null)
@@ -119,9 +137,8 @@ namespace FishNet.Observing
         {
             _networkObject = networkObject;
 
-            bool observerFound = false;
-            for (int i = 0; i < _observerConditions.Count; i++)
-            {
+            var observerFound = false;
+            for (var i = 0; i < _observerConditions.Count; i++)
                 if (_observerConditions[i] != null)
                 {
                     observerFound = true;
@@ -131,7 +148,7 @@ namespace FishNet.Observing
                      * once in the scene. Double edged sword of using scriptable
                      * objects for conditions. */
                     _observerConditions[i] = _observerConditions[i].Clone();
-                    ObserverCondition oc = _observerConditions[i];
+                    var oc = _observerConditions[i];
                     oc.InitializeOnce(_networkObject);
                     //If timed also register as containing timed conditions.
                     if (oc.Timed())
@@ -142,7 +159,6 @@ namespace FishNet.Observing
                     _observerConditions.RemoveAt(i);
                     i--;
                 }
-            }
 
             //No observers specified 
             if (!observerFound)
@@ -158,9 +174,11 @@ namespace FishNet.Observing
                 if (OverrideType != ConditionOverrideType.IgnoreManager)
                 {
                     if (NetworkManager.CanLog(LoggingType.Warning))
-                        Debug.LogWarning($"NetworkObserver exist on {gameObject.name} but there are no observer conditions. This script has been removed.");
+                        Debug.LogWarning(
+                            $"NetworkObserver exist on {gameObject.name} but there are no observer conditions. This script has been removed.");
                     Destroy(this);
                 }
+
                 return;
             }
 
@@ -177,12 +195,10 @@ namespace FishNet.Observing
              * condition collections aren't going to be long
              * enough to make doing so worth while. */
 
-            System.Type conditionType = typeof(T);
-            for (int i = 0; i < _observerConditions.Count; i++)
-            {
+            var conditionType = typeof(T);
+            for (var i = 0; i < _observerConditions.Count; i++)
                 if (_observerConditions[i].GetType() == conditionType)
                     return _observerConditions[i];
-            }
 
             //Fall through, not found.
             return null;
@@ -195,19 +211,19 @@ namespace FishNet.Observing
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal ObserverStateChange RebuildObservers(NetworkConnection connection, bool timedOnly)
         {
-            bool currentlyAdded = (_networkObject.Observers.Contains(connection));
+            var currentlyAdded = _networkObject.Observers.Contains(connection);
 
             //True if all conditions are met.
-            bool allConditionsMet = true;
+            var allConditionsMet = true;
             //True if all non timed conditions are met.
-            bool nonTimedMet = true;
+            var nonTimedMet = true;
             /* If cnnection is owner then they can see the object. */
-            bool notOwner = (connection != _networkObject.Owner);
+            var notOwner = connection != _networkObject.Owner;
             /* If host and connection is the local client for host
              * then do not update visibility for it. This will ensure
              * objects which the host does not own will not be hidden
              * from the host. */
-            bool notLocalConnection = !(_networkObject.IsHost && connection == _networkObject.LocalConnection);
+            var notLocalConnection = !(_networkObject.IsHost && connection == _networkObject.LocalConnection);
 
             /* Only check conditions if not owner. Owner will always
             * have visibility. */
@@ -223,15 +239,15 @@ namespace FishNet.Observing
                 }
                 else
                 {
-                    List<ObserverCondition> collection = (timedOnly) ? _timedConditions : _observerConditions;
-                    for (int i = 0; i < collection.Count; i++)
+                    var collection = timedOnly ? _timedConditions : _observerConditions;
+                    for (var i = 0; i < collection.Count; i++)
                     {
-                        ObserverCondition condition = collection[i];
+                        var condition = collection[i];
                         /* If any observer returns removed then break
                          * from loop and return removed. If one observer has
                          * removed then there's no reason to iterate
                          * the rest. */
-                        bool conditionMet = condition.ConditionMet(connection, currentlyAdded, out bool notProcessed);
+                        var conditionMet = condition.ConditionMet(connection, currentlyAdded, out var notProcessed);
                         if (notProcessed)
                             conditionMet = currentlyAdded;
 
@@ -333,10 +349,9 @@ namespace FishNet.Observing
                 _renderers = GetComponentsInChildren<Renderer>(true);
             }
 
-            int count = _renderers.Length;
-            for (int i = 0; i < count; i++)
+            var count = _renderers.Length;
+            for (var i = 0; i < count; i++)
                 _renderers[i].enabled = enable;
         }
-
     }
 }

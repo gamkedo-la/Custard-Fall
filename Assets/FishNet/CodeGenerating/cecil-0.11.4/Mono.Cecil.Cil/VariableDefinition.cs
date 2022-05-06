@@ -8,22 +8,20 @@
 // Licensed under the MIT/X11 license.
 //
 
-namespace MonoFN.Cecil.Cil {
+namespace MonoFN.Cecil.Cil
+{
+    public sealed class VariableDefinition : VariableReference
+    {
+        public bool IsPinned => variable_type.IsPinned;
 
-	public sealed class VariableDefinition : VariableReference {
+        public VariableDefinition(TypeReference variableType)
+            : base(variableType)
+        {
+        }
 
-		public bool IsPinned {
-			get { return variable_type.IsPinned; }
-		}
-
-		public VariableDefinition (TypeReference variableType)
-			: base (variableType)
-		{
-		}
-
-		public override VariableDefinition Resolve ()
-		{
-			return this;
-		}
-	}
+        public override VariableDefinition Resolve()
+        {
+            return this;
+        }
+    }
 }

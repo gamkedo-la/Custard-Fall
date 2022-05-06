@@ -1,6 +1,5 @@
 ﻿namespace FishNet.CodeGenerating.Helping
 {
-
     internal enum SerializerType
     {
         Invalid,
@@ -15,5 +14,4 @@
         ByReference,
         MultiDimensionalArray
     }
-
 }
