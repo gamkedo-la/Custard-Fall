@@ -1,13 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CustardBlock : MonoBehaviour
 {
+    private void Awake()
+    {
+        gameObject.SetActive(false);
+    }
 
     void Start()
     {
-        gameObject.SetActive(false);
+
     }
     
     void Update()
@@ -18,7 +23,6 @@ public class CustardBlock : MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
-        Debug.Log("#custard "+transform.position);
     }
 
     public void Hide()
