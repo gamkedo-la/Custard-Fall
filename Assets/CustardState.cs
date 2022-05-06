@@ -6,8 +6,9 @@ using UnityEngine;
 
 public class CustardState : MonoBehaviour
 {
-    private const int BLOCKS_WIDTH = 128;
-    private const int BLOCKS_HEIGHT = 128;
+    // using byte to make sure network transfer is always minimal, for performance reasons this also means max value is 255
+    private const byte BLOCKS_WIDTH = 128;
+    private const byte BLOCKS_HEIGHT = 128;
 
     public GameObject custardBlockPrefab;
 
@@ -28,31 +29,35 @@ public class CustardState : MonoBehaviour
 
     private void InitCustardBlocks()
     {
-        for (var i = 0; i < BLOCKS_WIDTH; i++)
-        for (var j = 0; j < BLOCKS_HEIGHT; j++)
+        for (byte i = 0; i < BLOCKS_WIDTH; i++)
+        for (byte j = 0; j < BLOCKS_HEIGHT; j++)
         {
             var custardPosition = GetCustardPosition(i, j);
             var custardCell = Instantiate(custardBlockPrefab,
                 new Vector3(custardPosition.x, 1.5f, custardPosition.y),
                 Quaternion.identity, _custardBlocksParent.transform);
-            _custardCells[i, j] =
-                custardCell;
-            if (IsInitialWorldCustard(i, j)) custardCell.GetComponent<CustardBlock>().Show();
+            _custardCells[i, j] = custardCell;
+            if (IsInitialWorldCustard(i, j))
+            {
+                custardCell.GetComponent<CustardBlock>().Show();
+                _cellsThatMightCauseChange.Add(new byte[]{i,j});
+            }
         }
     }
 
-    private bool IsInitialWorldCustard(int x, int y)
+    private bool IsInitialWorldCustard(byte x, byte y)
     {
         // all edges
         return x == 0 || y == 0 || x == BLOCKS_WIDTH - 1 || y == BLOCKS_HEIGHT - 1;
     }
 
-    private Vector2 GetCustardPosition(int x, int y)
+    private Vector2 GetCustardPosition(byte x, byte y)
     {
         return new Vector2(x - BLOCKS_WIDTH / 2, y - BLOCKS_HEIGHT / 2);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        
     }
 }
