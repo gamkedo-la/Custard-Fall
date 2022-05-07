@@ -4,25 +4,27 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class CustardState : MonoBehaviour
+public class CustardManager : MonoBehaviour
 {
     // using byte to make sure network transfer is always minimal, for performance reasons this also means max value is 255
     private const byte BLOCKS_WIDTH = 128;
     private const byte BLOCKS_HEIGHT = 128;
 
     public GameObject custardBlockPrefab;
-    public float CustardCrawlDuration = .5f;
-
     private GameObject _custardBlocksParent;
+    
+    public float custardCrawlDuration = .5f;
+    private float _custardUpdateCountdown;
+
+    private CustardBlock[,] _custardBlocks;
     private byte[,] _custardArea;
     private byte[,] _custardAreaBuffer;
     private byte[,] _heightMap;
-    private CustardBlock[,] _custardBlocks;
 
     private readonly HashSet<Coords> _cellsThatMightCauseChange = new();
     private readonly HashSet<Coords> _cellsThatMightCauseChangeNextIteration = new();
     private readonly HashSet<Coords> _cellsThatChange = new();
-    private float _custardUpdateCountdown;
+    
 
     private void Start()
     {
@@ -31,7 +33,7 @@ public class CustardState : MonoBehaviour
         _heightMap = new byte[BLOCKS_WIDTH, BLOCKS_HEIGHT];
         _custardAreaBuffer = new byte[BLOCKS_WIDTH, BLOCKS_HEIGHT];
         _custardBlocks = new CustardBlock[BLOCKS_WIDTH, BLOCKS_HEIGHT];
-        _custardUpdateCountdown = CustardCrawlDuration;
+        _custardUpdateCountdown = custardCrawlDuration;
 
         InitCustardBlocks();
     }
@@ -74,7 +76,7 @@ public class CustardState : MonoBehaviour
         return x == 0 || y == 0 || x == BLOCKS_WIDTH - 1 || y == BLOCKS_HEIGHT - 1;
     }
 
-    private Vector2 GetCustardPosition(byte x, byte y)
+    private static Vector2 GetCustardPosition(byte x, byte y)
     {
         return new Vector2(x - BLOCKS_WIDTH / 2, y - BLOCKS_HEIGHT / 2);
     }
@@ -84,15 +86,19 @@ public class CustardState : MonoBehaviour
         _custardUpdateCountdown -= Time.deltaTime;
         if (_cellsThatMightCauseChange.Count == 0)
         {
-            if (_custardUpdateCountdown <= 0.01f)
+            if (_custardUpdateCountdown <= 0.001f)
             {
+                // TODO copy only cells that change... do we actually need a custard buffer in that sense?
                 CopyFromInto(_custardAreaBuffer, _custardArea);
                 _cellsThatMightCauseChange.AddRange(_cellsThatMightCauseChangeNextIteration);
-                _cellsThatMightCauseChangeNextIteration.Clear();
 
-                _custardUpdateCountdown = CustardCrawlDuration;
+                // reset the countdown
+                _custardUpdateCountdown = custardCrawlDuration;
 
                 RenderChangedCustard();
+                
+                // cleanup
+                _cellsThatMightCauseChangeNextIteration.Clear();
                 _cellsThatChange.Clear();
             }
         }
@@ -122,10 +128,10 @@ public class CustardState : MonoBehaviour
         byte[,] custardAreaBuffer, HashSet<Coords> cellsThatMightCauseChangeNextIteration,
         HashSet<Coords> cellsThatChange)
     {
-        Queue<Coords> _tmpCellsQueue = new Queue<Coords>(cellsOfInterest);
-        while (_tmpCellsQueue.Count != 0)
+        Queue<Coords> tmpCellsQueue = new Queue<Coords>(cellsOfInterest);
+        while (tmpCellsQueue.Count != 0)
         {
-            var coords = _tmpCellsQueue.Dequeue();
+            var coords = tmpCellsQueue.Dequeue();
 
             byte[,] custardAreaOfEffect = GetLocalNeighborhood(coords, custardArea);
             byte[,] heightAreaOfEffect = GetLocalNeighborhood(coords, heightMap);
