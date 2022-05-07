@@ -323,6 +323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
+  CustardCrawlDuration: 0.5
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
