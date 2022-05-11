@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class CustardManager : MonoBehaviour
 
     public GameObject custardBlockPrefab;
     private GameObject _custardBlocksParent;
-    
+
     public float custardCrawlDuration = .5f;
     private float _custardUpdateCountdown;
 
@@ -24,7 +25,7 @@ public class CustardManager : MonoBehaviour
     private readonly HashSet<Coords> _cellsThatMightCauseChange = new();
     private readonly HashSet<Coords> _cellsThatMightCauseChangeNextIteration = new();
     private readonly HashSet<Coords> _cellsThatChange = new();
-    
+
 
     private void Start()
     {
@@ -52,7 +53,7 @@ public class CustardManager : MonoBehaviour
             {
                 custardCell.GetComponent<CustardBlock>().Show();
                 _custardArea[i, j] = 1;
-                _cellsThatMightCauseChange.Add(new Coords(i, j));
+                _cellsThatMightCauseChange.Add(Coords.Of(i, j));
             }
         }
 
@@ -88,18 +89,21 @@ public class CustardManager : MonoBehaviour
         {
             if (_custardUpdateCountdown <= 0.001f)
             {
-                // TODO copy only cells that change... do we actually need a custard buffer in that sense?
-                CopyFromInto(_custardAreaBuffer, _custardArea);
-                _cellsThatMightCauseChange.AddRange(_cellsThatMightCauseChangeNextIteration);
-
                 // reset the countdown
                 _custardUpdateCountdown = custardCrawlDuration;
 
-                RenderChangedCustard();
-                
-                // cleanup
-                _cellsThatMightCauseChangeNextIteration.Clear();
-                _cellsThatChange.Clear();
+                // if (_cellsThatChange.Count != 0)
+                // {
+                    // TODO copy only cells that change... do we actually need a custard buffer in that sense?
+                    CopyFromInto(_custardAreaBuffer, _custardArea);
+                    _cellsThatMightCauseChange.AddRange(_cellsThatMightCauseChangeNextIteration);
+
+                    RenderChangedCustard();
+
+                    // cleanup
+                    _cellsThatMightCauseChangeNextIteration.Clear();
+                    _cellsThatChange.Clear();
+                // }
             }
         }
         else
@@ -128,11 +132,8 @@ public class CustardManager : MonoBehaviour
         byte[,] custardAreaBuffer, HashSet<Coords> cellsThatMightCauseChangeNextIteration,
         HashSet<Coords> cellsThatChange)
     {
-        Queue<Coords> tmpCellsQueue = new Queue<Coords>(cellsOfInterest);
-        while (tmpCellsQueue.Count != 0)
+        foreach (Coords coords in cellsOfInterest)
         {
-            var coords = tmpCellsQueue.Dequeue();
-
             byte[,] custardAreaOfEffect = GetLocalNeighborhood(coords, custardArea);
             byte[,] heightAreaOfEffect = GetLocalNeighborhood(coords, heightMap);
 
@@ -143,54 +144,112 @@ public class CustardManager : MonoBehaviour
         cellsOfInterest.Clear();
     }
 
-    private void ChangeCellState(Coords coords, byte[,] custardAreaOfEffect, byte[,] heightAreaOfEffect,
+    private void ChangeCellState(Coords coords, byte[,] custardHeightMap, byte[,] localHeightMap,
         byte[,] custardAreaBuffer,
-        HashSet<Coords> cellsThatMightCauseChangeNextIteration, HashSet<Coords> cellsThatChange)
+        HashSet<Coords> cellsThatMightChangeNextIteration, HashSet<Coords> cellsThatChange)
     {
-        byte currentHeight = custardAreaOfEffect[1, 1];
-        byte nextHigherNeighbor = 0;
-        byte nextLowerNeighbor = 0;
+        if (coords.X is < 0 or > BLOCKS_WIDTH - 1 && coords.Y is < 0 or > BLOCKS_HEIGHT - 1)
+        {
+            // out of bounds of world area
+            return;
+        }
+
+        // note: for now let us ignore the case of a corner-on-corner block setup, where the neighboring custard is only adjacent through the corner edge
+        int pivotCustardHeight = custardHeightMap[1, 1];
+        int pivotHeight = pivotCustardHeight + localHeightMap[1, 1];
+        int biggestCustardStackAbove = 0;
+        int stackRequiredToStayAtLevel = 0;
 
         for (byte x = 0; x < 3; x++)
         {
             for (byte y = 0; y < 3; y++)
             {
-                int neighborHeight = custardAreaOfEffect[x, y] - heightAreaOfEffect[x, y];
-
-                if (neighborHeight > currentHeight)
+                if (coords.X == 0 && x == 0)
                 {
-                    if (coords.X > 0 && coords.X < BLOCKS_WIDTH - 1 && coords.Y > 0 && coords.Y < BLOCKS_HEIGHT - 1)
-                    {
-                        cellsThatMightCauseChangeNextIteration.Add(coords.Add(x - 1, y - 1));
-                        if ((nextHigherNeighbor == 0 || nextHigherNeighbor > neighborHeight))
-                        {
-                            nextHigherNeighbor = (byte) neighborHeight;
-                            cellsThatMightCauseChangeNextIteration.Add(coords);
-                        }
-                    }
+                    continue;
+                }
+                else if (coords.Y == 0 && y == 0)
+                {
+                    continue;
+                }
+                else if (coords.X == BLOCKS_WIDTH - 1 && x == 2)
+                {
+                    continue;
+                }
+                else if (coords.Y == BLOCKS_HEIGHT - 1 && y == 2)
+                {
+                    continue;
                 }
 
-                if (neighborHeight < currentHeight)
+                // the custard flows downwards, so we find out how much custard may be coming down
+                int neighborCustardHeight = custardHeightMap[x, y];
+                int neighborHeight = neighborCustardHeight + localHeightMap[x, y];
+
+                if (neighborHeight > pivotHeight)
                 {
-                    if (coords.X > 0 && coords.X < BLOCKS_WIDTH - 1 && coords.Y > 0 && coords.Y < BLOCKS_HEIGHT - 1)
+                    int flowyCustardStack = Math.Min(neighborCustardHeight, neighborHeight - pivotHeight);
+                    if (flowyCustardStack > 0)
                     {
-                        cellsThatMightCauseChangeNextIteration.Add(coords.Add(x - 1, y - 1));
-                        if ((nextLowerNeighbor == 0 || nextLowerNeighbor < neighborHeight))
+                        if (biggestCustardStackAbove < flowyCustardStack)
+                            biggestCustardStackAbove = flowyCustardStack;
+                        cellsThatMightChangeNextIteration.Add(coords);
+                    }
+                }
+                else if (neighborHeight == pivotHeight)
+                {
+                    stackRequiredToStayAtLevel = pivotCustardHeight;
+                }
+                else
+                {
+                    // or how much of the current stack needs to disappear to stay at level with neighboring custard
+                    // or be removed entirely
+                    var heightDifference = pivotHeight - neighborHeight;
+                    if (neighborCustardHeight == 0)
+                    {
+                        if (stackRequiredToStayAtLevel < pivotCustardHeight)
+                            stackRequiredToStayAtLevel = Math.Min(1, pivotCustardHeight - 1);
+                    }
+                    else
+                    {
+                        var tmpHeight = pivotCustardHeight > heightDifference ? heightDifference : pivotCustardHeight;
+                        if (stackRequiredToStayAtLevel < tmpHeight)
                         {
-                            nextLowerNeighbor = (byte) neighborHeight;
+                            stackRequiredToStayAtLevel = tmpHeight;
                         }
                     }
+
+                    if (heightDifference != 0)
+                        CellMightChangeNextIteration(coords, cellsThatMightChangeNextIteration, x - 1, y - 1);
                 }
             }
         }
 
-        var update = nextHigherNeighbor == 0 ? currentHeight : nextHigherNeighbor;
-        custardAreaBuffer[coords.X, coords.Y] = update;
-        if (nextHigherNeighbor > currentHeight)
+        var update = biggestCustardStackAbove > stackRequiredToStayAtLevel
+            ? biggestCustardStackAbove
+            : stackRequiredToStayAtLevel;
+        if (update is < 0 or > 255)
         {
-            cellsThatMightCauseChangeNextIteration.Add(coords);
-            cellsThatChange.Add(coords);
+            // clamp to safest bet
+            update = update < 0 ? 0 : pivotCustardHeight;
         }
+
+        custardAreaBuffer[coords.X, coords.Y] = (byte) update;
+        if (update != pivotCustardHeight)
+        {
+            cellsThatChange.Add(coords);
+            // always consider recently changed blocks to 
+            cellsThatMightChangeNextIteration.Add(coords);
+        }
+    }
+
+    private static void CellMightChangeNextIteration(Coords coords, HashSet<Coords> cellsThatMightChangeNextIteration,
+        int x,
+        int y)
+    {
+        if (coords.X == 0 && x == -1 || coords.X == BLOCKS_WIDTH - 1 && x == 1 || coords.Y == 0 && y == -1 ||
+            coords.Y == BLOCKS_HEIGHT - 1 && y == 1)
+            return;
+        cellsThatMightChangeNextIteration.Add(coords.Add(x, y));
     }
 
     private static byte[,] GetLocalNeighborhood(Coords coords, byte[,] map)
