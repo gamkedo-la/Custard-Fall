@@ -36,9 +36,22 @@ public class CustardManager : MonoBehaviour
         _custardBlocks = new CustardBlock[BLOCKS_WIDTH, BLOCKS_HEIGHT];
         _custardUpdateCountdown = custardCrawlDuration;
 
+        InitLevel();
         InitCustardBlocks();
     }
 
+    private void InitLevel()
+    {
+        for (byte i = 0; i < BLOCKS_WIDTH; i++)
+        for (byte j = 0; j < BLOCKS_HEIGHT; j++)
+        {
+            if (i is > 30 and < 40 && j is > 30 and < 40)
+                _heightMap[i, j] = 1;
+        }
+
+        CopyFromInto(_custardArea, _custardAreaBuffer);
+    }
+    
     private void InitCustardBlocks()
     {
         for (byte i = 0; i < BLOCKS_WIDTH; i++)
@@ -74,7 +87,8 @@ public class CustardManager : MonoBehaviour
     private bool IsInitialWorldCustard(byte x, byte y)
     {
         // all edges
-        return x == 0 || y == 0 || x == BLOCKS_WIDTH - 1 || y == BLOCKS_HEIGHT - 1;
+        return x == 0 || y == 0 || x == BLOCKS_WIDTH - 1 || y == BLOCKS_HEIGHT - 1 || x == 55 && y == 55 ||
+               x is > 90 and < 93 && y is > 90 and < 93;
     }
 
     private static Vector2 GetCustardPosition(byte x, byte y)
@@ -94,15 +108,15 @@ public class CustardManager : MonoBehaviour
 
                 // if (_cellsThatChange.Count != 0)
                 // {
-                    // TODO copy only cells that change... do we actually need a custard buffer in that sense?
-                    CopyFromInto(_custardAreaBuffer, _custardArea);
-                    _cellsThatMightCauseChange.AddRange(_cellsThatMightCauseChangeNextIteration);
+                // TODO copy only cells that change... do we actually need a custard buffer in that sense?
+                CopyFromInto(_custardAreaBuffer, _custardArea);
+                _cellsThatMightCauseChange.AddRange(_cellsThatMightCauseChangeNextIteration);
 
-                    RenderChangedCustard();
+                RenderChangedCustard();
 
-                    // cleanup
-                    _cellsThatMightCauseChangeNextIteration.Clear();
-                    _cellsThatChange.Clear();
+                // cleanup
+                _cellsThatMightCauseChangeNextIteration.Clear();
+                _cellsThatChange.Clear();
                 // }
             }
         }
@@ -117,9 +131,14 @@ public class CustardManager : MonoBehaviour
     {
         foreach (var cell in _cellsThatChange)
         {
-            if (_custardArea[cell.X, cell.Y] > 0)
+            var custardAmount = _custardArea[cell.X, cell.Y];
+            if (custardAmount > 0)
             {
-                _custardBlocks[cell.X, cell.Y].Show();
+                CustardBlock custardBlock = _custardBlocks[cell.X, cell.Y];
+                var blockGameObject = custardBlock.gameObject;
+                var scale = blockGameObject.transform.localScale;
+                blockGameObject.transform.localScale = new Vector3(scale.x, custardAmount, scale.z);
+                custardBlock.Show();
             }
             else
             {
@@ -191,8 +210,11 @@ public class CustardManager : MonoBehaviour
                     if (flowyCustardStack > 0)
                     {
                         if (biggestCustardStackAbove < flowyCustardStack)
+                        {
                             biggestCustardStackAbove = flowyCustardStack;
-                        cellsThatMightChangeNextIteration.Add(coords);
+                            if (biggestCustardStackAbove > pivotCustardHeight)
+                                cellsThatMightChangeNextIteration.Add(coords);
+                        }
                     }
                 }
                 else if (neighborHeight == pivotHeight)
@@ -207,7 +229,7 @@ public class CustardManager : MonoBehaviour
                     if (neighborCustardHeight == 0)
                     {
                         if (stackRequiredToStayAtLevel < pivotCustardHeight)
-                            stackRequiredToStayAtLevel = Math.Min(1, pivotCustardHeight - 1);
+                            stackRequiredToStayAtLevel = Math.Max(1, pivotCustardHeight - 1);
                     }
                     else
                     {
@@ -225,7 +247,7 @@ public class CustardManager : MonoBehaviour
         }
 
         var update = biggestCustardStackAbove > stackRequiredToStayAtLevel
-            ? biggestCustardStackAbove
+            ? pivotCustardHeight + 1
             : stackRequiredToStayAtLevel;
         if (update is < 0 or > 255)
         {
