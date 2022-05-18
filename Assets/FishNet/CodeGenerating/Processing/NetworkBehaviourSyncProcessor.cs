@@ -975,7 +975,7 @@ namespace FishNet.CodeGenerating.Processing
         {
             //Build processed syncs into dictionary for quicker loookups.
             var processedLookup = new Dictionary<FieldReference, List<ProcessedSync>>();
-            foreach ((var st, var ps) in processedSyncs)
+            foreach (var (st, ps) in processedSyncs)
             {
                 if (st != SyncType.Variable)
                     continue;

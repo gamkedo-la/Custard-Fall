@@ -699,7 +699,7 @@ namespace FishNet.Object.Synchronizing
         /// <returns></returns>
         public Enumerator GetEnumerator()
         {
-            return new(this);
+            return new Enumerator(this);
         }
 
         [APIExclude]

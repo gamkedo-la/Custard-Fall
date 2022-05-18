@@ -169,7 +169,7 @@ namespace FishNet.Managing.Scened
         /// <returns></returns>
         public static SceneLookupData CreateData(Scene scene)
         {
-            return new(scene);
+            return new SceneLookupData(scene);
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace FishNet.Managing.Scened
         /// <returns></returns>
         public static SceneLookupData CreateData(string name)
         {
-            return new(name);
+            return new SceneLookupData(name);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace FishNet.Managing.Scened
         /// <returns></returns>
         public static SceneLookupData CreateData(int handle)
         {
-            return new(handle);
+            return new SceneLookupData(handle);
         }
 
         /// <summary>

@@ -10,14 +10,6 @@ public class CustardBlock : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void Start()
-    {
-    }
-
-    private void Update()
-    {
-    }
-
     public void Show()
     {
         gameObject.SetActive(true);

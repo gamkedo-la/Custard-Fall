@@ -78,7 +78,7 @@ namespace FishNet.CodeGenerating.Processing
             }
 
             //Now that all declared are loaded see if any of them need generated serializers.
-            foreach ((var methodDef, var extensionType) in declaredMethods)
+            foreach (var (methodDef, extensionType) in declaredMethods)
                 CreateSerializers(extensionType, methodDef);
 
             return modified;

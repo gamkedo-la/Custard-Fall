@@ -85,7 +85,7 @@ namespace FishNet.Managing.Client
                 {
                     var handlerHashCode = handler.GetHashCode();
                     ServerBroadcastDelegate result = null;
-                    foreach ((var targetHashCode, var del) in targetHashCodes)
+                    foreach (var (targetHashCode, del) in targetHashCodes)
                         if (targetHashCode == handlerHashCode)
                         {
                             result = del;

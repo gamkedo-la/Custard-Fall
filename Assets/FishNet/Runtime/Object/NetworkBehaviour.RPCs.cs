@@ -54,7 +54,7 @@ namespace FishNet.Object
         internal void OnSendBufferedRpcs(NetworkConnection conn)
         {
             var tm = _networkObjectCache.NetworkManager.TransportManager;
-            foreach ((var writer, var ch) in _bufferedRpcs.Values)
+            foreach (var (writer, ch) in _bufferedRpcs.Values)
                 tm.SendToClient((byte) ch, writer.GetArraySegment(), conn);
         }
 
@@ -123,7 +123,7 @@ namespace FishNet.Object
         /// </summary>
         public void ClearBuffedRpcs()
         {
-            foreach ((var writer, var _) in _bufferedRpcs.Values)
+            foreach (var (writer, _) in _bufferedRpcs.Values)
                 writer.Dispose();
             _bufferedRpcs.Clear();
         }

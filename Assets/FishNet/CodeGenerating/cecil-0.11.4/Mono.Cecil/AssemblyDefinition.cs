@@ -34,7 +34,7 @@ namespace MonoFN.Cecil
 
         public MetadataToken MetadataToken
         {
-            get => new MetadataToken(TokenType.Assembly, 1);
+            get => new(TokenType.Assembly, 1);
             set { }
         }
 

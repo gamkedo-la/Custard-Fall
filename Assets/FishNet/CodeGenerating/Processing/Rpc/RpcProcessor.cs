@@ -172,7 +172,7 @@ namespace FishNet.CodeGenerating.Processing.Rpc
         /// </summary>
         internal void RedirectBaseCalls()
         {
-            foreach ((var logicMd, var originalMd) in _virtualRpcs)
+            foreach (var (logicMd, originalMd) in _virtualRpcs)
                 RedirectBaseCall(logicMd, originalMd);
         }
 

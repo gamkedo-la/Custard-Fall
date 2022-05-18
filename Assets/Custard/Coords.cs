@@ -21,18 +21,18 @@ public struct Coords
 
     private Coords(byte x, byte y)
     {
-        this.X = x;
-        this.Y = y;
+        X = x;
+        Y = y;
     }
 
     public Coords Add(byte dx, byte dy)
     {
-        return new Coords((byte) (this.X + dx), (byte) (this.Y + dy));
+        return new Coords((byte) (X + dx), (byte) (Y + dy));
     }
 
     public Coords Add(int dx, int dy)
     {
-        return new Coords((byte) (this.X + dx), (byte) (this.Y + dy));
+        return new Coords((byte) (X + dx), (byte) (Y + dy));
     }
 
     private sealed class XYEqualityComparer : IEqualityComparer<Coords>
