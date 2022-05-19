@@ -11,12 +11,12 @@ namespace Custard
         public GameObject custardBlockPrefab;
 
         private GameObject _custardBlocksParent;
-        private CustardBlock[,] _custardRenderBlocks;
+        public CustardBlock[,] CustardRenderBlocks;
 
         private void Start()
         {
-            _custardBlocksParent = GameObject.Find("Custard");
-            _custardRenderBlocks = new CustardBlock[WorldCells.BlocksWidth, WorldCells.BlocksHeight];
+            _custardBlocksParent = gameObject;
+            CustardRenderBlocks = new CustardBlock[WorldCells.BlocksWidth, WorldCells.BlocksHeight];
 
             InitCustardBlocks();
         }
@@ -53,27 +53,21 @@ namespace Custard
 
         private CustardBlock FindRenderBlock(Coords coords)
         {
-            return _custardRenderBlocks[coords.X, coords.Y];
+            return CustardRenderBlocks[coords.X, coords.Y];
         }
 
         private void InitCustardBlocks()
         {
-            for (byte i = 0; i < WorldCells.BlocksWidth; i++)
-            for (byte j = 0; j < WorldCells.BlocksHeight; j++)
+            for (byte x = 0; x < WorldCells.BlocksWidth; x++)
+            for (byte y = 0; y < WorldCells.BlocksHeight; y++)
             {
-                var custardPosition = GetCustardPosition(i, j);
+                var custardPosition = CustardManager.GetCustardPosition(x, y);
                 var custardCell = Instantiate(custardBlockPrefab,
                     new Vector3(custardPosition.x, 1.5f, custardPosition.y),
                     Quaternion.identity, _custardBlocksParent.transform);
                 var custardRenderBlock = custardCell.GetComponent<CustardBlock>();
-                _custardRenderBlocks[i, j] = custardRenderBlock;
+                CustardRenderBlocks[x, y] = custardRenderBlock;
             }
         }
-
-        private static Vector2 GetCustardPosition(byte x, byte y)
-        {
-            return new Vector2(x - WorldCells.BlocksWidth / 2, y - WorldCells.BlocksHeight / 2);
-        }
-
     }
 }

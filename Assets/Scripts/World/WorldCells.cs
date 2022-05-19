@@ -22,6 +22,10 @@ public class WorldCells : ScriptableObject
     {
         return _heightMap[x, y];
     }
+    public byte GetHeightAt(Coords coords)
+    {
+        return _heightMap[coords.X, coords.Y];
+    }
     
     private void LoadTerrainMap()
     {
