@@ -15,7 +15,7 @@ namespace Custard
         public CustardVisualizer custardVisualizer;
         public GameObject custardBlockPrefab;
 
-        public bool pauseCalculations;
+        public bool pauseIterationCountDown;
 
 
         public float custardCrawlDuration = .4f;
@@ -37,13 +37,12 @@ namespace Custard
             for (byte x = 0; x < WorldCells.BlocksWidth; x++)
             for (byte y = 0; y < WorldCells.BlocksHeight; y++)
             {
-                // TODO use real show update instead
                 if (IsInitialWorldCustard(x, y))
                 {
                     custardState.RegisterUpdate(x, y, initialCustardLevel);
                     custardState.QueueCellForNextIteration(x, y);
-                    // // apply and proceed to next iteration
-                    custardState.ApplyAllUpdatesAndStartNewIteration();
+                    // apply and proceed to next iteration
+                    _custardUpdateCountdown = 0;
                 }
             }
         }
@@ -58,37 +57,53 @@ namespace Custard
 
         private void FixedUpdate()
         {
-            if (pauseCalculations)
-                return;
-            
-            _custardUpdateCountdown -= Time.deltaTime;
+            if (!pauseIterationCountDown)
+                _custardUpdateCountdown -= Time.deltaTime;
+
             if (custardState.CellsToProcessInCurrentIteration.Count == 0)
             {
                 if (_custardUpdateCountdown <= 0.001f)
                 {
                     // reset the countdown
                     _custardUpdateCountdown = custardCrawlDuration;
-
-                    // render all changes we got
-                    custardVisualizer.RenderChangedCustard();
-                    // proceed to next custard iteration
-                    custardState.ApplyAllUpdatesAndStartNewIteration();
+                    
+                    NextCustardIteration();
                 }
             }
             else
             {
+                // prepare next custard iteration
                 SimulateCustard();
             }
         }
 
-        private void TogglePause()
+        private void NextCustardIteration()
         {
-            pauseCalculations = !pauseCalculations;
+            // render all changes we got
+            custardVisualizer.RenderChangedCustard();
+            // proceed to next custard iteration
+            custardState.ApplyAllUpdatesAndStartNewIteration();
         }
-        
-        private void ForceNextIteration()
+
+        public bool TogglePause()
         {
-            _custardUpdateCountdown = 0;
+            pauseIterationCountDown = !pauseIterationCountDown;
+            return pauseIterationCountDown;
+        }
+
+        public void ForceNextIterationHalfStep()
+        {
+            if (pauseIterationCountDown)
+                if (_custardUpdateCountdown == 0)
+                {
+                    _custardUpdateCountdown = custardCrawlDuration;
+                }
+                else
+                {
+                    _custardUpdateCountdown = 0;
+                }
+            else
+                _custardUpdateCountdown = 0;
         }
 
         private void SimulateCustard()

@@ -150,7 +150,6 @@ GameObject:
   m_Component:
   - component: {fileID: 118745343}
   - component: {fileID: 118745345}
-  - component: {fileID: 118745344}
   m_Layer: 6
   m_Name: Custard
   m_TagString: Untagged
@@ -173,25 +172,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &118745344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 118745342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcfdad332b5da1049965bbea51c368de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
-  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
-  showCustardDebugInfo: 0
-  showQueue: 0
-  previewScheduledUpdate: 0
-  showLastUpdate: 0
-  displayOnWorldCells: 0
 --- !u!114 &118745345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,6 +389,7 @@ GameObject:
   - component: {fileID: 809281209}
   - component: {fileID: 809281208}
   - component: {fileID: 809281210}
+  - component: {fileID: 809281211}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -459,9 +440,27 @@ MonoBehaviour:
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   custardVisualizer: {fileID: 118745345}
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
-  pauseCalculations: 0
   custardCrawlDuration: 0.3
   initialCustardLevel: 4
+--- !u!114 &809281211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809281207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcfdad332b5da1049965bbea51c368de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  showCustardDebugInfo: 0
+  showQueue: 0
+  previewScheduledUpdate: 0
+  showLastUpdate: 0
+  displayOnWorldCells: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
