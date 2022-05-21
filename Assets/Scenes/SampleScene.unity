@@ -277,8 +277,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 649613732}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.0029488, y: -9.626244, z: -26.250065}
-  m_LocalScale: {x: 9, y: 0.7, z: 9}
+  m_LocalPosition: {x: -4.0029488, y: -9.28, z: -26.250065}
+  m_LocalScale: {x: 9, y: 2, z: 9}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1116589921}
@@ -458,7 +458,7 @@ MonoBehaviour:
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   showCustardDebugInfo: 0
-  showQueue: 0
+  showQueue: 1
   showNextQueue: 1
   previewScheduledUpdate: 0
   showLastUpdate: 0

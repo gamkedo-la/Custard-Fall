@@ -152,6 +152,8 @@ namespace Custard
                     custardState.QueueForNextIteration(pivot);
                     // cells above should flow into me
                     custardState.QueueCellsForNextIteration(info.CustardFromAbove);
+                    // I stay at the same level but maybe my neighbors need to be checked
+                    custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                     if (pivotCustardAmount > 0)
                     {
                         // next iteration: check all cells where I might flow down into
@@ -161,7 +163,7 @@ namespace Custard
                 else if (info.CellsBelow.Count != 0)
                 {
                     // we flow downwards
-                    newPivotCustardAmount = pivotCustardAmount - 1;
+                    newPivotCustardAmount = Math.Max(pivotCustardAmount - 1, 0);
                     if (custardState.GlobalTideLevel < newPivotCustardAmount + pivotTerrainHeight)
                         custardState.QueueForNextIteration(pivot);
                     // next iteration: check all cells that might get affected by this change
@@ -171,8 +173,7 @@ namespace Custard
                         // next iteration: check all cells where I might flow down into
                         custardState.QueueCellsForNextIteration(info.CellsBelow);
                     }
-                }
-                else if(pivotCustardAmount > 1)
+                } else if(pivotCustardAmount > 1)
                 {
                     // custard is trapped,
                     // so we simply shrink up to a single layer
@@ -181,7 +182,13 @@ namespace Custard
                         custardState.QueueForNextIteration(pivot);
                     // next iteration: check all cells that now might flow into me
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
-                }
+                } else if (custardState.GlobalTideLevel == 0 && pivotTerrainHeight == 0)
+                {
+                    // custard is trapped at bottom most level
+                    newPivotCustardAmount = pivotCustardAmount - 1;
+                    // next iteration: check all cells that should also dissolve/shrink
+                    custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
+                } 
             }
             else if (pivotTotalHeight == custardState.GlobalTideLevel)
             {

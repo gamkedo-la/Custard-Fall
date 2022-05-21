@@ -32,7 +32,7 @@ public class WorldCells : ScriptableObject
         for (byte i = 0; i < BlocksWidth; i++)
         for (byte j = 0; j < BlocksHeight; j++)
             if (i is > 30 and < 40 && j is > 30 and < 40)
-                _heightMap[i, j] = 1;
+                _heightMap[i, j] = 2;
     }
     
     public void CopyFromInto(byte[,] fromArea, byte[,] toArea)
