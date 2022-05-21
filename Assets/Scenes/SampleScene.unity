@@ -440,6 +440,7 @@ MonoBehaviour:
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   custardVisualizer: {fileID: 118745345}
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
+  pauseIterationCountDown: 0
   custardCrawlDuration: 0.3
   initialCustardLevel: 4
 --- !u!114 &809281211
@@ -458,9 +459,10 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   showCustardDebugInfo: 0
   showQueue: 0
+  showNextQueue: 1
   previewScheduledUpdate: 0
   showLastUpdate: 0
-  displayOnWorldCells: 0
+  displayOnWorldCells: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

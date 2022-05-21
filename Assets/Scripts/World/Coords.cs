@@ -25,14 +25,9 @@ public struct Coords
         Y = y;
     }
 
-    public Coords Add(byte dx, byte dy)
-    {
-        return new Coords((byte) (X + dx), (byte) (Y + dy));
-    }
-
     public Coords Add(int dx, int dy)
     {
-        return new Coords((byte) (X + dx), (byte) (Y + dy));
+        return Coords.Of((byte) (X + dx), (byte) (Y + dy));
     }
 
     private sealed class XYEqualityComparer : IEqualityComparer<Coords>

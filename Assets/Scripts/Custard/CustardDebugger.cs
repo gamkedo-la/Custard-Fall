@@ -13,6 +13,7 @@ public class CustardDebugger : MonoBehaviour
     
     public bool showCustardDebugInfo = false;
     public bool showQueue = false;
+    public bool showNextQueue = false;
     public bool previewScheduledUpdate = false;
     public bool showLastUpdate = false;
     public bool displayOnWorldCells = true;
@@ -30,7 +31,10 @@ public class CustardDebugger : MonoBehaviour
         if (showQueue)
         {
             Visualize(custardState.CellsToProcessInCurrentIteration, Color.cyan);
-            Visualize(custardState.CellsThatMightCauseChangeNextIteration, Color.yellow);
+        }
+        if (showNextQueue)
+        {
+            Visualize(custardState.CellsThatMightCauseChangeNextIteration, Color.black);
         }
         
     }

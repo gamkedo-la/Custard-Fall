@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace Custard
         public readonly HashSet<CellUpdate> BufferFromPreviousIteration = new();
 
         public byte[,] CustardArea;
+        public byte GlobalTideLevel = 1;
 
         public void Init()
         {
@@ -38,6 +40,11 @@ namespace Custard
             QueueCellForCurrentIteration(Coords.Of(x, y));
         }
 
+        public void QueueCellsForCurrentIteration(IEnumerable<Coords> coords)
+        {
+            CellsToProcessInCurrentIteration.AddRange(coords);
+        }
+        
         public void QueueCellForCurrentIteration(Coords coords)
         {
             CellsToProcessInCurrentIteration.Add(coords);
@@ -45,11 +52,16 @@ namespace Custard
 
         public void QueueCellForNextIteration(byte x, byte y)
         {
-            QueueCellForNextIteration(Coords.Of(x, y));
+            QueueForNextIteration(Coords.Of(x, y));
         }
 
 
-        public void QueueCellForNextIteration(Coords coords)
+        public void QueueCellsForNextIteration(IEnumerable<Coords> coords)
+        {
+            CellsThatMightCauseChangeNextIteration.AddRange(coords);
+        }
+        
+        public void QueueForNextIteration(Coords coords)
         {
             CellsThatMightCauseChangeNextIteration.Add(coords);
         }
