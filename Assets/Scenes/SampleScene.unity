@@ -346,8 +346,8 @@ MonoBehaviour:
   custardVisualizer: {fileID: 118745345}
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
   pauseIterationCountDown: 0
-  custardCrawlDuration: 0.5
-  globalCustardLevel: 2
+  custardCrawlDuration: 0.3
+  globalCustardLevel: 4
 --- !u!114 &809281211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,7 +367,7 @@ MonoBehaviour:
   showNextQueue: 0
   previewScheduledUpdate: 0
   showLastUpdate: 0
-  showTerrainInfo: 1
+  showTerrainInfo: 0
   displayOnWorldCells: 1
 --- !u!1 &963194225
 GameObject:

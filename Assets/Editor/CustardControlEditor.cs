@@ -1,3 +1,4 @@
+using System;
 using Custard;
 using UnityEditor;
 using UnityEngine;
@@ -18,6 +19,14 @@ namespace Editor
                 manager.custardState.GlobalTideLevel = manager.globalCustardLevel;
             }
             
+            if (GUILayout.Button("apply with noise"))
+            {
+                manager.custardState.GlobalTideLevel = manager.globalCustardLevel;
+                manager.SeedCustardUpdate((int)Math.Floor(Time.time * 1000));
+                manager.SeedCustardUpdate(((int)Math.Floor(Time.time * 1000))/2);
+                manager.SeedCustardUpdate(((int)Math.Floor(Time.time * 1000))/4);
+            }            
+            
             var togglePlayPause = new GUIContent("Pause");
             if (GUILayout.Button(togglePlayPause))
             {
@@ -28,8 +37,7 @@ namespace Editor
             if (GUILayout.Button("Next half step"))
             {
                 manager.ForceNextIterationHalfStep();
-            }            
-            
+            }    
         }
     }
 }

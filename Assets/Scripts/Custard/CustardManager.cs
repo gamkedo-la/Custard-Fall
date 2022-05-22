@@ -5,6 +5,7 @@ using System.Net;
 using Custard;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Custard
 {
@@ -91,6 +92,24 @@ namespace Custard
             return pauseIterationCountDown;
         }
 
+        public void SeedCustardUpdate(int seed)
+        {
+            var random = new System.Random(seed);
+            const int numWindows = 8;
+            var windowNoX = random.Next(0, numWindows / 2);
+            var windowNoY = random.Next(0, numWindows / 2);
+            const int windowSize = WorldCells.BlocksWidth / numWindows * 2;
+            const float gate = .4f;
+            for (int i = 0; i < windowSize; i++)
+            for (int j = 0; j < windowSize; j++)
+            {
+                float pX = (i + windowSize * windowNoX) / (float) WorldCells.BlocksWidth;
+                float pY = (j + windowSize * windowNoY) / (float) WorldCells.BlocksWidth;
+                if (Mathf.PerlinNoise(pX, pY) > gate)
+                    custardState.QueueCellForNextIteration(i + windowSize * windowNoX, j + windowSize * windowNoY);
+            }
+        }
+
         public void ForceNextIterationHalfStep()
         {
             if (pauseIterationCountDown)
@@ -166,6 +185,7 @@ namespace Custard
                         // next iteration: check all cells that might get affected by this change
                         custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                     }
+
                     // next iteration: check all cells where I might flow down into
                     custardState.QueueCellsForNextIteration(info.CellsBelow);
                 }
@@ -303,7 +323,7 @@ namespace Custard
 
         public static Vector2 GetWorldPosition(byte x, byte y)
         {
-            return new Vector2(x - (WorldCells.BlocksWidth / 2 - 1) , y - (WorldCells.BlocksHeight / 2 - 1));
+            return new Vector2(x - (WorldCells.BlocksWidth / 2 - 1), y - (WorldCells.BlocksHeight / 2 - 1));
         }
 
         public static Vector2 GetWorldPosition(Coords coords)

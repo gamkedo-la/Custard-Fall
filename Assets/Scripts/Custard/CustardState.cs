@@ -50,6 +50,11 @@ namespace Custard
             CellsToProcessInCurrentIteration.Add(coords);
         }
 
+        public void QueueCellForNextIteration(int x, int y)
+        {
+            QueueForNextIteration(Coords.Of(x, y));
+        }
+        
         public void QueueCellForNextIteration(byte x, byte y)
         {
             QueueForNextIteration(Coords.Of(x, y));
