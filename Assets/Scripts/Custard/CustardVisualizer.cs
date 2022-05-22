@@ -31,7 +31,7 @@ namespace Custard
             foreach (var cellUpdate in cellsToUpdate)
             {
                 CustardBlock custardRenderBlock = FindRenderBlock(cellUpdate.Coords);
-                var newCustardLevel = cellUpdate.AbsoluteCustardLevel;
+                var newCustardLevel = cellUpdate.Value;
                 if (newCustardLevel > 0)
                 {
                     var blockGameObject = custardRenderBlock.gameObject;
@@ -61,7 +61,7 @@ namespace Custard
             for (byte x = 0; x < WorldCells.BlocksWidth; x++)
             for (byte y = 0; y < WorldCells.BlocksHeight; y++)
             {
-                var custardPosition = CustardManager.GetCustardPosition(x, y);
+                var custardPosition = CustardManager.GetWorldPosition(x, y);
                 var custardCell = Instantiate(custardBlockPrefab,
                     new Vector3(custardPosition.x, 1.5f, custardPosition.y),
                     Quaternion.identity, _custardBlocksParent.transform);

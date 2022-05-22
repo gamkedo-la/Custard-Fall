@@ -1,15 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Custard;
 using UnityEngine;
+using World;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public TerrainLoader terrainLoader;
+    public CustardManager custardManager;
+    
     private void Start()
     {
+        terrainLoader.LoadWorld();
+        custardManager.InitCustardState();
     }
 
-    // Update is called once per frame
+    
     private void Update()
     {
     }

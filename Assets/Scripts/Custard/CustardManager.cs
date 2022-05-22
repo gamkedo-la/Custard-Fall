@@ -20,28 +20,26 @@ namespace Custard
 
 
         public float custardCrawlDuration = .4f;
-        public byte initialCustardLevel = 2;
+        public byte globalCustardLevel = 2;
         private float _custardUpdateCountdown;
 
 
         private void Start()
         {
-            _custardUpdateCountdown = 0;
-            custardState.Init();
-            custardState.GlobalTideLevel = initialCustardLevel;
-            worldCells.Init();
-            InitCustardState();
+            _custardUpdateCountdown = custardCrawlDuration;
         }
 
-        private void InitCustardState()
+        public void InitCustardState()
         {
+            custardState.GlobalTideLevel = globalCustardLevel;
+            custardState.Init();
             // iteration 0 for custardState
             for (byte x = 0; x < WorldCells.BlocksWidth; x++)
             for (byte y = 0; y < WorldCells.BlocksHeight; y++)
             {
                 if (IsInitialWorldCustard(x, y))
                 {
-                    custardState.RegisterUpdate(x, y, initialCustardLevel);
+                    custardState.RegisterUpdate(x, y, globalCustardLevel);
                     custardState.QueueCellForNextIteration(x, y);
                     // apply and proceed to next iteration
                     _custardUpdateCountdown = 0;
@@ -135,10 +133,7 @@ namespace Custard
             var pivotTerrainHeight = terrainAreaAroundPivot[1, 1];
             var pivotTotalHeight = pivotCustardAmount + pivotTerrainHeight;
 
-            // will be applied to the cell at the end
-            // custard amount of 0 means no custard
             int newPivotCustardAmount = pivotCustardAmount;
-            
             if (pivotTotalHeight > custardState.GlobalTideLevel)
             {
                 // # custard is above tide level => we need to shrink, flow down or even dissolve if possible
@@ -162,18 +157,19 @@ namespace Custard
                 }
                 else if (info.CellsBelow.Count != 0)
                 {
-                    // we flow downwards
-                    newPivotCustardAmount = Math.Max(pivotCustardAmount - 1, 0);
-                    if (custardState.GlobalTideLevel < newPivotCustardAmount + pivotTerrainHeight)
-                        custardState.QueueForNextIteration(pivot);
-                    // next iteration: check all cells that might get affected by this change
-                    custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                     if (pivotCustardAmount > 0)
                     {
-                        // next iteration: check all cells where I might flow down into
-                        custardState.QueueCellsForNextIteration(info.CellsBelow);
+                        // we flow downwards
+                        newPivotCustardAmount = pivotCustardAmount - 1;
+                        if (custardState.GlobalTideLevel < newPivotCustardAmount + pivotTerrainHeight)
+                            custardState.QueueForNextIteration(pivot);
+                        // next iteration: check all cells that might get affected by this change
+                        custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                     }
-                } else if(pivotCustardAmount > 1)
+                    // next iteration: check all cells where I might flow down into
+                    custardState.QueueCellsForNextIteration(info.CellsBelow);
+                }
+                else if (pivotCustardAmount > 1)
                 {
                     // custard is trapped,
                     // so we simply shrink up to a single layer
@@ -182,19 +178,20 @@ namespace Custard
                         custardState.QueueForNextIteration(pivot);
                     // next iteration: check all cells that now might flow into me
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
-                } else if (custardState.GlobalTideLevel == 0 && pivotTerrainHeight == 0)
+                }
+                else if (custardState.GlobalTideLevel == 0 && pivotTerrainHeight == 0)
                 {
                     // custard is trapped at bottom most level
                     newPivotCustardAmount = pivotCustardAmount - 1;
                     // next iteration: check all cells that should also dissolve/shrink
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
-                } 
+                }
             }
             else if (pivotTotalHeight == custardState.GlobalTideLevel)
             {
                 // # custard is at tide level => we should stay at this level
                 var info = RetrieveCustardInfo(pivot, custardAreaAroundPivot, terrainAreaAroundPivot);
-                
+
                 // stay at same level
                 newPivotCustardAmount = pivotCustardAmount;
                 // cells above should flow into me
@@ -206,7 +203,7 @@ namespace Custard
             {
                 // # custard is below tide level => we should grow
                 var info = RetrieveCustardInfo(pivot, custardAreaAroundPivot, terrainAreaAroundPivot);
-                
+
                 newPivotCustardAmount = pivotCustardAmount + 1;
                 if (custardState.GlobalTideLevel > newPivotCustardAmount + pivotTerrainHeight)
                     custardState.QueueForNextIteration(pivot);
@@ -220,12 +217,12 @@ namespace Custard
             // prepare value for byte range
             if (newPivotCustardAmount < 0)
                 newPivotCustardAmount = 0;
-            else if(newPivotCustardAmount > 255)
+            else if (newPivotCustardAmount > 255)
             {
                 // don't change then
                 newPivotCustardAmount = pivotCustardAmount;
             }
-            
+
             if (newPivotCustardAmount != pivotCustardAmount)
             {
                 custardState.RegisterUpdate(pivot, (byte) newPivotCustardAmount);
@@ -238,16 +235,18 @@ namespace Custard
             List<Coords> custardCellsAbove = new List<Coords>();
             List<Coords> sameLevelCells = new List<Coords>();
             List<Coords> cellsBelow = new List<Coords>();
-           
+
 
             int pivotCustardAmount = custardAreaAroundPivot[1, 1];
             var pivotTerrainHeight = terrainAreaAroundPivot[1, 1];
             var pivotTotalHeight = pivotCustardAmount + pivotTerrainHeight;
-            
+
             for (byte x = 0; x < 3; x++)
             for (byte y = 0; y < 3; y++)
             {
-                if (pivot.X == 0 && x == 0)
+                if (x == 1 && y == 1)
+                    continue;
+                else if (pivot.X == 0 && x == 0)
                     continue;
                 else if (pivot.Y == 0 && y == 0)
                     continue;
@@ -302,22 +301,22 @@ namespace Custard
             return localNeighborhood;
         }
 
-        public static Vector2 GetCustardPosition(byte x, byte y)
+        public static Vector2 GetWorldPosition(byte x, byte y)
         {
-            return new Vector2(x - WorldCells.BlocksWidth / 2, y - WorldCells.BlocksHeight / 2);
+            return new Vector2(x - (WorldCells.BlocksWidth / 2 - 1) , y - (WorldCells.BlocksHeight / 2 - 1));
         }
 
-        public static Vector2 GetCustardPosition(Coords coords)
+        public static Vector2 GetWorldPosition(Coords coords)
         {
-            return GetCustardPosition(coords.X, coords.Y);
+            return GetWorldPosition(coords.X, coords.Y);
         }
 
 
         private struct CustardAreaInfo
         {
-            public List<Coords> CustardFromAbove;
-            public List<Coords> CellsAtSameLevel;
-            public List<Coords> CellsBelow;
+            public readonly List<Coords> CustardFromAbove;
+            public readonly List<Coords> CellsAtSameLevel;
+            public readonly List<Coords> CellsBelow;
 
 
             public CustardAreaInfo(List<Coords> custardFromAbove, List<Coords> cellsAtSameLevel,

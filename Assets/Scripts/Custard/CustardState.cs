@@ -11,9 +11,9 @@ namespace Custard
     {
         public readonly HashSet<Coords> CellsToProcessInCurrentIteration = new();
         public readonly HashSet<Coords> CellsThatMightCauseChangeNextIteration = new();
-        public readonly HashSet<CellUpdate> Buffer = new();
+        public readonly HashSet<CellValue> Buffer = new();
         // just in case we need them
-        public readonly HashSet<CellUpdate> BufferFromPreviousIteration = new();
+        public readonly HashSet<CellValue> BufferFromPreviousIteration = new();
 
         public byte[,] CustardArea;
         public byte GlobalTideLevel = 1;
@@ -27,12 +27,12 @@ namespace Custard
 
         public void RegisterUpdate(byte x, byte y, byte newCustardLevel)
         {
-            Buffer.Add(new CellUpdate(x, y, newCustardLevel));
+            Buffer.Add(new CellValue(x, y, newCustardLevel));
         }
         
         public void RegisterUpdate(Coords coords, byte newCustardLevel)
         {
-            Buffer.Add(new CellUpdate(coords, newCustardLevel));
+            Buffer.Add(new CellValue(coords, newCustardLevel));
         }
 
         public void QueueCellForCurrentIteration(byte x, byte y)
@@ -70,7 +70,7 @@ namespace Custard
         {
             foreach (var cellUpdate in Buffer)
             {
-                CustardArea[cellUpdate.Coords.X, cellUpdate.Coords.Y] = cellUpdate.AbsoluteCustardLevel;
+                CustardArea[cellUpdate.Coords.X, cellUpdate.Coords.Y] = cellUpdate.Value;
             }
             BufferFromPreviousIteration.Clear();
             BufferFromPreviousIteration.AddRange(Buffer);

@@ -9,6 +9,11 @@ public struct Coords
     public readonly byte Y;
 
 
+    public static Coords Of(int x, int y)
+    {
+        return Coords.Of((byte)x, (byte)y);
+    }
+
     public static Coords Of(byte x, byte y)
     {
         return new Coords(x, y);

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27194abc73ad4010b78d64065975aa4a, type: 3}
   m_Name: CustardState
   m_EditorClassIdentifier: 
-  GlobalTideLevel: 0
+  GlobalTideLevel: 7
