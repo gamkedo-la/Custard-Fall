@@ -50,7 +50,6 @@ namespace Custard
 
         private bool IsInitialWorldCustard(byte x, byte y)
         {
-            // TODO replace with algorithm based on levels of the worldCells
             return x == 0 || y == 0 || x == WorldCells.BlocksWidth - 1 || y == WorldCells.BlocksHeight - 1 ||
                    (x == 55 && y == 55) ||
                    (x is > 90 and < 93 && y is > 90 and < 93);
@@ -224,14 +223,19 @@ namespace Custard
                 // # custard is below tide level => we should grow
                 var info = RetrieveCustardInfo(pivot, custardAreaAroundPivot, terrainAreaAroundPivot);
 
-                newPivotCustardAmount = pivotCustardAmount + 1;
-                if (custardState.GlobalTideLevel > newPivotCustardAmount + pivotTerrainHeight)
-                    custardState.QueueForNextIteration(pivot);
-                // cells above should flow into me
-                custardState.QueueCellsForNextIteration(info.CustardFromAbove);
-                // spread: next iteration: check all cells below me or currently at same level should grow next as well
-                custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
-                custardState.QueueCellsForNextIteration(info.CellsBelow);
+                bool shouldRise = pivotCustardAmount > 0 || info.CustardFromAbove.Count > 0 ||
+                                  info.CustardAtSameLevel.Count > 0 || ;
+                if (shouldRise)
+                {
+                    newPivotCustardAmount = pivotCustardAmount + 1;
+                    if (custardState.GlobalTideLevel > newPivotCustardAmount + pivotTerrainHeight)
+                        custardState.QueueForNextIteration(pivot);
+                    // cells above should flow into me
+                    custardState.QueueCellsForNextIteration(info.CustardFromAbove);
+                    // spread: next iteration: check all cells below me or currently at same level should grow next as well
+                    custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
+                    custardState.QueueCellsForNextIteration(info.CellsBelow);
+                }
             }
 
             // prepare value for byte range
@@ -253,6 +257,7 @@ namespace Custard
             byte[,] terrainAreaAroundPivot)
         {
             List<Coords> custardCellsAbove = new List<Coords>();
+            List<Coords> custardtAtSameLevel = new List<Coords>();
             List<Coords> sameLevelCells = new List<Coords>();
             List<Coords> cellsBelow = new List<Coords>();
 
@@ -288,6 +293,8 @@ namespace Custard
                 else if (neighborTotalHeight == pivotTotalHeight)
                 {
                     sameLevelCells.Add(coord);
+                    if(neighborCustardAmount != 0)
+                        custardtAtSameLevel.Add(coord);
                 }
                 else
                 {
@@ -299,7 +306,7 @@ namespace Custard
                 }
             }
 
-            return new CustardAreaInfo(custardCellsAbove, sameLevelCells, cellsBelow);
+            return new CustardAreaInfo(custardCellsAbove, custardtAtSameLevel, sameLevelCells, cellsBelow);
         }
 
         private byte[,] GetLocalNeighborhood(Coords coords, Func<int, int, byte> getValueAt)
@@ -335,14 +342,16 @@ namespace Custard
         private struct CustardAreaInfo
         {
             public readonly List<Coords> CustardFromAbove;
+            public readonly List<Coords> CustardAtSameLevel;
             public readonly List<Coords> CellsAtSameLevel;
             public readonly List<Coords> CellsBelow;
 
 
-            public CustardAreaInfo(List<Coords> custardFromAbove, List<Coords> cellsAtSameLevel,
+            public CustardAreaInfo(List<Coords> custardFromAbove, List<Coords> custardAtSameLevel, List<Coords> cellsAtSameLevel,
                 List<Coords> cellsBelow)
             {
                 CustardFromAbove = custardFromAbove;
+                CustardAtSameLevel = custardAtSameLevel;
                 CellsBelow = cellsBelow;
                 CellsAtSameLevel = cellsAtSameLevel;
             }
