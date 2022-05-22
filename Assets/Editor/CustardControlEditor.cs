@@ -27,11 +27,11 @@ namespace Editor
                 manager.SeedCustardUpdate(((int)Math.Floor(Time.time * 1000))/4);
             }            
             
-            var togglePlayPause = new GUIContent("Pause");
+            
+            var togglePlayPause = new GUIContent(manager.pauseIterationCountDown ? "Play" : "Pause");
             if (GUILayout.Button(togglePlayPause))
             {
-                var isPaused = manager.TogglePause();
-                togglePlayPause.text = isPaused ? "Play" : "Pause";
+                manager.TogglePause();
             }
             
             if (GUILayout.Button("Next half step"))
