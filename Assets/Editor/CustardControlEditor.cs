@@ -34,7 +34,7 @@ namespace Editor
                 manager.TogglePause();
             }
             
-            if (GUILayout.Button("Next half step"))
+            if (manager.pauseIterationCountDown && GUILayout.Button("Next half step"))
             {
                 manager.ForceNextIterationHalfStep();
             }    
