@@ -17,6 +17,8 @@ namespace Custard
 
         public byte[,] CustardArea;
         public byte GlobalTideLevel = 1;
+        // if there is no custard on a cell and it has not custard neighbors, add custard if scheduled for update
+        public bool CreationalMode = false;
 
         public void Init()
         {

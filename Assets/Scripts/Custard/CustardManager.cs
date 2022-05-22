@@ -224,7 +224,7 @@ namespace Custard
                 var info = RetrieveCustardInfo(pivot, custardAreaAroundPivot, terrainAreaAroundPivot);
 
                 bool shouldRise = pivotCustardAmount > 0 || info.CustardFromAbove.Count > 0 ||
-                                  info.CustardAtSameLevel.Count > 0 || ;
+                                  info.CustardAtSameLevel.Count > 0 || custardState.CreationalMode;
                 if (shouldRise)
                 {
                     newPivotCustardAmount = pivotCustardAmount + 1;
