@@ -13,6 +13,11 @@ namespace Editor
 
             CustardManager manager = (CustardManager) target;
 
+            if (GUILayout.Button("apply tide level"))
+            {
+                manager.custardState.GlobalTideLevel = manager.globalCustardLevel;
+            }
+            
             var togglePlayPause = new GUIContent("Pause");
             if (GUILayout.Button(togglePlayPause))
             {
@@ -23,7 +28,8 @@ namespace Editor
             if (GUILayout.Button("Next half step"))
             {
                 manager.ForceNextIterationHalfStep();
-            }
+            }            
+            
         }
     }
 }

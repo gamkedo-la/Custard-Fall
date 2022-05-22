@@ -5,7 +5,7 @@ using Custard;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class CustardDebugger : MonoBehaviour
+public class VisualDebugger : MonoBehaviour
 {
     public CustardState custardState;
     public WorldCells worldCells;
@@ -16,6 +16,7 @@ public class CustardDebugger : MonoBehaviour
     public bool showNextQueue = false;
     public bool previewScheduledUpdate = false;
     public bool showLastUpdate = false;
+    public bool showTerrainInfo;
     public bool displayOnWorldCells = true;
     
     void FixedUpdate()
@@ -36,15 +37,35 @@ public class CustardDebugger : MonoBehaviour
         {
             Visualize(custardState.CellsThatMightCauseChangeNextIteration, Color.black);
         }
+        if (showTerrainInfo)
+        {
+            Visualize(worldCells.GetTerrainList());
+        }
         
     }
     
-    private void Visualize(HashSet<Coords> coords)
+    private void Visualize(IEnumerable<CellValue> cellValues)
+    {
+        foreach (var coord in cellValues)
+        {
+            Visualize(coord.Coords, coord.Value, Color.Lerp(Color.black, Color.magenta, coord.Value / 9f));
+        }
+    }
+
+    private void Visualize(IEnumerable<CellValue> cellValues, Color color)
+    {
+        foreach (var coord in cellValues)
+        {
+            Visualize(coord.Coords, coord.Value, color);
+        }
+    }
+
+    private void Visualize(IEnumerable<Coords> coords)
     {
         Visualize(coords, Random.ColorHSV());
     }
 
-    private void Visualize(HashSet<Coords> coords, Color color)
+    private void Visualize(IEnumerable<Coords> coords, Color color)
     {
         foreach (var coord in coords)
         {
@@ -52,11 +73,11 @@ public class CustardDebugger : MonoBehaviour
         }
     }
     
-    private void Visualize(HashSet<CellUpdate> cellUpdates)
+    private void Visualize(HashSet<CellValue> cellUpdates)
     {
         foreach (var cellUpdate in cellUpdates)
         {
-            Visualize(cellUpdate.Coords, cellUpdate.AbsoluteCustardLevel);
+            Visualize(cellUpdate.Coords, cellUpdate.Value);
         }
     }
 
@@ -67,9 +88,9 @@ public class CustardDebugger : MonoBehaviour
 
     private void Visualize(Coords coords, byte level, Color color)
     {
-        var custardPosition = CustardManager.GetCustardPosition(coords);
+        var custardPosition = CustardManager.GetWorldPosition(coords);
         var from = new Vector3(custardPosition.x, (displayOnWorldCells? worldCells.GetHeightAt(coords):0) + 1f, custardPosition.y);
         var to = new Vector3(custardPosition.x, (displayOnWorldCells? worldCells.GetHeightAt(coords):0) + 4f, custardPosition.y);
-        Debug.DrawLine(from , to, color);
+        Debug.DrawLine(from , to, color, Time.deltaTime);
     }
 }
