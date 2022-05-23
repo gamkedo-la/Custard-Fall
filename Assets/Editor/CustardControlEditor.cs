@@ -13,28 +13,26 @@ namespace Editor
             base.OnInspectorGUI();
 
             CustardManager manager = (CustardManager) target;
-
-            if (GUILayout.Button("apply tide level"))
-            {
-                manager.custardState.GlobalTideLevel = manager.globalCustardLevel;
-            }
             
-            if (GUILayout.Button("apply with noise"))
+            if (GUILayout.Button("Press to scatter tide activity"))
             {
-                manager.custardState.GlobalTideLevel = manager.globalCustardLevel;
+                manager.custardState.GlobalTideLevel = manager.targetTideLevel;
                 manager.SeedCustardUpdate((int)Math.Floor(Time.time * 1000));
                 manager.SeedCustardUpdate(((int)Math.Floor(Time.time * 1000))/2);
                 manager.SeedCustardUpdate(((int)Math.Floor(Time.time * 1000))/4);
-            }            
+            }
             
+            if (GUILayout.Button(manager.custardState.CreationalMode ? "Creation Mode On" : "Creation Mode Off"))
+            {
+                manager.custardState.CreationalMode = !manager.custardState.CreationalMode;
+            }
             
-            var togglePlayPause = new GUIContent(manager.pauseIterationCountDown ? "Play" : "Pause");
-            if (GUILayout.Button(togglePlayPause))
+            if (GUILayout.Button(manager.pauseIterationCountDown ? "Play" : "Pause"))
             {
                 manager.TogglePause();
             }
             
-            if (manager.pauseIterationCountDown && GUILayout.Button("Next half step"))
+            if (manager.pauseIterationCountDown && GUILayout.Button("Next Half Step"))
             {
                 manager.ForceNextIterationHalfStep();
             }    

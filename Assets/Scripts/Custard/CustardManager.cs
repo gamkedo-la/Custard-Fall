@@ -21,7 +21,7 @@ namespace Custard
 
 
         public float custardCrawlDuration = .4f;
-        public byte globalCustardLevel = 2;
+        public byte targetTideLevel = 2;
         private float _custardUpdateCountdown;
 
 
@@ -32,7 +32,7 @@ namespace Custard
 
         public void InitCustardState()
         {
-            custardState.GlobalTideLevel = globalCustardLevel;
+            custardState.GlobalTideLevel = targetTideLevel;
             custardState.Init();
             // iteration 0 for custardState
             for (byte x = 0; x < WorldCells.BlocksWidth; x++)
@@ -40,7 +40,7 @@ namespace Custard
             {
                 if (IsInitialWorldCustard(x, y))
                 {
-                    custardState.RegisterUpdate(x, y, globalCustardLevel);
+                    custardState.RegisterUpdate(x, y, targetTideLevel);
                     custardState.QueueCellForNextIteration(x, y);
                     // apply and proceed to next iteration
                     _custardUpdateCountdown = 0;
@@ -293,7 +293,7 @@ namespace Custard
                 else if (neighborTotalHeight == pivotTotalHeight)
                 {
                     sameLevelCells.Add(coord);
-                    if(neighborCustardAmount != 0)
+                    if (neighborCustardAmount != 0)
                         custardtAtSameLevel.Add(coord);
                 }
                 else
@@ -347,7 +347,8 @@ namespace Custard
             public readonly List<Coords> CellsBelow;
 
 
-            public CustardAreaInfo(List<Coords> custardFromAbove, List<Coords> custardAtSameLevel, List<Coords> cellsAtSameLevel,
+            public CustardAreaInfo(List<Coords> custardFromAbove, List<Coords> custardAtSameLevel,
+                List<Coords> cellsAtSameLevel,
                 List<Coords> cellsBelow)
             {
                 CustardFromAbove = custardFromAbove;
