@@ -347,7 +347,7 @@ MonoBehaviour:
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
   pauseIterationCountDown: 0
   custardCrawlDuration: 0.3
-  globalCustardLevel: 4
+  targetTideLevel: 3
 --- !u!114 &809281211
 MonoBehaviour:
   m_ObjectHideFlags: 0
