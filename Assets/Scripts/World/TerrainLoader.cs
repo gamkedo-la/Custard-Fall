@@ -27,7 +27,7 @@ namespace World
                     var from = new Vector3(cellMid.x,20,cellMid.y);
                     if(Physics.Raycast(from, Vector3.down, out hit, 30, layerMask))
                     {
-                        var terrainHeight = Math.Floor(hit.point.y);
+                        var terrainHeight = Math.Round(hit.point.y);
                         worldCells.WriteHeightAt(Coords.Of(x,y), (byte)terrainHeight);
                     }
                 }
