@@ -88,7 +88,7 @@ public class VisualDebugger : MonoBehaviour
 
     private void Visualize(Coords coords, byte level, Color color)
     {
-        var custardPosition = CustardManager.GetWorldPosition(coords);
+        var custardPosition = WorldCells.GetWorldPosition(coords);
         var from = new Vector3(custardPosition.x, (displayOnWorldCells? worldCells.GetHeightAt(coords):0) + 1f, custardPosition.y);
         var to = new Vector3(custardPosition.x, (displayOnWorldCells? worldCells.GetHeightAt(coords):0) + 4f, custardPosition.y);
         Debug.DrawLine(from , to, color, Time.deltaTime);

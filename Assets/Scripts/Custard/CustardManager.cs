@@ -328,16 +328,6 @@ namespace Custard
             return localNeighborhood;
         }
 
-        public static Vector2 GetWorldPosition(byte x, byte y)
-        {
-            return new Vector2(x - (WorldCells.BlocksWidth / 2f - .5f), y - (WorldCells.BlocksHeight / 2f - .5f));
-        }
-
-        public static Vector2 GetWorldPosition(Coords coords)
-        {
-            return GetWorldPosition(coords.X, coords.Y);
-        }
-
 
         private struct CustardAreaInfo
         {
@@ -345,7 +335,6 @@ namespace Custard
             public readonly List<Coords> CustardAtSameLevel;
             public readonly List<Coords> CellsAtSameLevel;
             public readonly List<Coords> CellsBelow;
-
 
             public CustardAreaInfo(List<Coords> custardFromAbove, List<Coords> custardAtSameLevel,
                 List<Coords> cellsAtSameLevel,
