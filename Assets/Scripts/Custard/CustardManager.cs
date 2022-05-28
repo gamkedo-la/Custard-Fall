@@ -330,7 +330,7 @@ namespace Custard
 
         public static Vector2 GetWorldPosition(byte x, byte y)
         {
-            return new Vector2(x - (WorldCells.BlocksWidth / 2 - 1), y - (WorldCells.BlocksHeight / 2 - 1));
+            return new Vector2(x - (WorldCells.BlocksWidth / 2f - .5f), y - (WorldCells.BlocksHeight / 2f - .5f));
         }
 
         public static Vector2 GetWorldPosition(Coords coords)

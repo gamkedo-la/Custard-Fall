@@ -40,7 +40,7 @@ namespace Custard
                     var position = blockGameObject.transform.position;
                     // TODO interpolate change
                     blockGameObject.transform.position = new Vector3(position.x,
-                        worldCells.GetHeightAt(cellUpdate.Coords.X, cellUpdate.Coords.Y) +newCustardLevel * .5f, position.z);
+                        worldCells.GetHeightAt(cellUpdate.Coords.X, cellUpdate.Coords.Y) +newCustardLevel  - .5f, position.z);
 
                     custardRenderBlock.Show();
                 }
