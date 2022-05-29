@@ -8,15 +8,16 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-
     public WorldCells worldCells;
 
-    private bool moveForwards = false;
+    private bool _moveForwards = false;
+
     public float movementSpeed = 4;
+
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     private float yOffset = -.05f;
     private Collider _collider;
-    
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -40,18 +41,30 @@ public class Player : MonoBehaviour
     {
         var currentTransform = transform;
         var result = currentTransform.position;
-        result += Time.deltaTime * movementSpeed * currentTransform.forward;
-        Coords coords = worldCells.GetCellPosition(result.x, result.z);
-        var terrainHeight = worldCells.GetHeightAt(coords);
-
         var colliderBounds = _collider.bounds;
-        result += (terrainHeight - colliderBounds.min.y + colliderBounds.extents.y/2 + yOffset) * Time.deltaTime * 18 * Vector3.up;
+
+        var tracePoint = result + currentTransform.forward * colliderBounds.extents.x / 2;
+
+        Coords coords = worldCells.GetCellPosition(tracePoint.x, tracePoint.z);
+        var terrainHeight = worldCells.GetHeightAt(coords);
+        var heightDifference = terrainHeight - colliderBounds.min.y;
+        // the player cannot scale high ground
+        if (heightDifference < 1.75f)
+        {
+            result += Time.deltaTime * movementSpeed * currentTransform.forward;
+            if (Math.Abs(heightDifference) > .02f)
+            {
+                result += (heightDifference + colliderBounds.extents.y / 2 + yOffset) * Time.deltaTime * 18 *
+                          Vector3.up;
+            }
+        }
+
         currentTransform.position = result;
     }
 
     public void OnMoveForward(InputValue input)
     {
-        moveForwards = input.isPressed;
+        _moveForwards = input.isPressed;
     }
 
     public void OnMove(InputValue context)
@@ -59,7 +72,7 @@ public class Player : MonoBehaviour
         var val = context.Get<Vector2>();
         var position = transform.position;
         Vector3 playerPos = Camera.main.WorldToScreenPoint(position);
-        var lookAtPoint = Camera.main.ScreenToWorldPoint(new Vector3(val.x,val.y, playerPos.z));
+        var lookAtPoint = Camera.main.ScreenToWorldPoint(new Vector3(val.x, val.y, playerPos.z));
         lookAtPoint.y = position.y;
         transform.LookAt(lookAtPoint);
     }
