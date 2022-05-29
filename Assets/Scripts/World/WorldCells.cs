@@ -52,19 +52,19 @@ public class WorldCells : ScriptableObject
         return _terrainList;
     }
 
-    public void CopyFromInto(byte[,] fromArea, byte[,] toArea)
+    public Coords GetCellPosition(double x, double y)
     {
-        for (var i = 0; i < BlocksWidth; i++)
-        for (var j = 0; j < BlocksHeight; j++)
-            toArea[i, j] = fromArea[i, j];
+        var cellX = Math.Floor(x) + WorldCells.BlocksWidth / 2f;
+        var cellY = Math.Floor(y) + WorldCells.BlocksHeight / 2f;
+        return Coords.Of((byte) cellX, (byte) cellY);
     }
-
+    
     public static Vector2 GetWorldPosition(byte x, byte y)
     {
-        return new Vector2(x - (WorldCells.BlocksWidth / 2f - .5f), y - (WorldCells.BlocksHeight / 2f - .5f));
+        return new Vector2(x - WorldCells.BlocksWidth / 2f + .5f, y - WorldCells.BlocksHeight / 2f + .5f);
     }
 
-    public static Vector2 GetWorldPosition(Coords coords)
+    public Vector2 GetWorldPosition(Coords coords)
     {
         return GetWorldPosition(coords.X, coords.Y);
     }
