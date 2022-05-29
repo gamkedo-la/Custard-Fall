@@ -46,10 +46,11 @@ public class Player : MonoBehaviour
         var tracePoint = result + currentTransform.forward * colliderBounds.extents.x / 2;
 
         Coords coords = worldCells.GetCellPosition(tracePoint.x, tracePoint.z);
+        // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (byte max)
         var terrainHeight = worldCells.GetHeightAt(coords);
         var heightDifference = terrainHeight - colliderBounds.min.y;
         // the player cannot scale high ground
-        if (heightDifference < 1.75f)
+        if (terrainHeight != 255 && heightDifference < 2.75f)
         {
             result += Time.deltaTime * movementSpeed * currentTransform.forward;
             if (Math.Abs(heightDifference) > .02f)

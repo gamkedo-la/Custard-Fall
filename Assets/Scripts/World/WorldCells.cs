@@ -28,6 +28,8 @@ public class WorldCells : ScriptableObject
 
     public byte GetHeightAt(Coords coords)
     {
+        if (coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight)
+            return 255;
         return _heightMap[coords.X, coords.Y];
     }
 
