@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
         if (terrainHeight != 255 && heightDifference < 2.75f)
         {
             result += Time.deltaTime * movementSpeed * currentTransform.forward;
-            if (Math.Abs(heightDifference) > .02f)
+            if (Math.Abs(heightDifference) > .0001f)
             {
                 result += (heightDifference + colliderBounds.extents.y / 2 + yOffset) * Time.deltaTime * 18 *
                           Vector3.up;
