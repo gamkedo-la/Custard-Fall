@@ -663,7 +663,7 @@ MonoBehaviour:
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
   pauseIterationCountDown: 0
   custardCrawlDuration: 0.3
-  targetTideLevel: 3
+  targetTideLevel: 2
 --- !u!114 &809281211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1079,7 +1079,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.05
+      value: 3.8
       objectReference: {fileID: 0}
     - target: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_LocalPosition.z
