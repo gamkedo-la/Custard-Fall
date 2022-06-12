@@ -59,8 +59,8 @@ namespace Custard
 
         private void InitCustardBlocks()
         {
-            for (byte x = 0; x < WorldCells.BlocksWidth; x++)
-            for (byte y = 0; y < WorldCells.BlocksHeight; y++)
+            for (int x = 0; x < WorldCells.BlocksWidth; x++)
+            for (int y = 0; y < WorldCells.BlocksHeight; y++)
             {
                 var custardPosition = WorldCells.GetWorldPosition(x, y);
                 var custardCell = Instantiate(custardBlockPrefab,

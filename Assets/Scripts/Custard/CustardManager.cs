@@ -21,7 +21,7 @@ namespace Custard
 
 
         public float custardCrawlDuration = .4f;
-        public byte targetTideLevel = 2;
+        public int targetTideLevel = 2;
         private float _custardUpdateCountdown;
 
 
@@ -35,8 +35,8 @@ namespace Custard
             custardState.GlobalTideLevel = targetTideLevel;
             custardState.Init();
             // iteration 0 for custardState
-            for (byte x = 0; x < WorldCells.BlocksWidth; x++)
-            for (byte y = 0; y < WorldCells.BlocksHeight; y++)
+            for (int x = 0; x < WorldCells.BlocksWidth; x++)
+            for (int y = 0; y < WorldCells.BlocksHeight; y++)
             {
                 if (IsInitialWorldCustard(x, y))
                 {
@@ -48,7 +48,7 @@ namespace Custard
             }
         }
 
-        private bool IsInitialWorldCustard(byte x, byte y)
+        private bool IsInitialWorldCustard(int x, int y)
         {
             return x == 0 || y == 0 || x == WorldCells.BlocksWidth - 1 || y == WorldCells.BlocksHeight - 1 ||
                    (x == 55 && y == 55) ||
@@ -57,6 +57,7 @@ namespace Custard
 
         private void FixedUpdate()
         {
+            custardState.GlobalTideLevel = targetTideLevel;
             if (!pauseIterationCountDown)
                 _custardUpdateCountdown -= Time.deltaTime;
 
@@ -140,7 +141,7 @@ namespace Custard
         }
 
 
-        private void UpdateCustardState(Coords pivot, byte[,] custardAreaAroundPivot, byte[,] terrainAreaAroundPivot)
+        private void UpdateCustardState(Coords pivot, int[,] custardAreaAroundPivot, int[,] terrainAreaAroundPivot)
         {
             if (pivot.X is < 0 or > WorldCells.BlocksWidth - 1 && pivot.Y is < 0 or > WorldCells.BlocksHeight - 1)
                 // out of bounds of world area
@@ -238,7 +239,7 @@ namespace Custard
                 }
             }
 
-            // prepare value for byte range
+            // prepare value for int range
             if (newPivotCustardAmount < 0)
                 newPivotCustardAmount = 0;
             else if (newPivotCustardAmount > 255)
@@ -249,12 +250,12 @@ namespace Custard
 
             if (newPivotCustardAmount != pivotCustardAmount)
             {
-                custardState.RegisterUpdate(pivot, (byte) newPivotCustardAmount);
+                custardState.RegisterUpdate(pivot,  newPivotCustardAmount);
             }
         }
 
-        private CustardAreaInfo RetrieveCustardInfo(Coords pivot, byte[,] custardAreaAroundPivot,
-            byte[,] terrainAreaAroundPivot)
+        private CustardAreaInfo RetrieveCustardInfo(Coords pivot, int[,] custardAreaAroundPivot,
+            int[,] terrainAreaAroundPivot)
         {
             List<Coords> custardCellsAbove = new List<Coords>();
             List<Coords> custardtAtSameLevel = new List<Coords>();
@@ -266,8 +267,8 @@ namespace Custard
             var pivotTerrainHeight = terrainAreaAroundPivot[1, 1];
             var pivotTotalHeight = pivotCustardAmount + pivotTerrainHeight;
 
-            for (byte x = 0; x < 3; x++)
-            for (byte y = 0; y < 3; y++)
+            for (int x = 0; x < 3; x++)
+            for (int y = 0; y < 3; y++)
             {
                 if (x == 1 && y == 1)
                     continue;
@@ -309,10 +310,10 @@ namespace Custard
             return new CustardAreaInfo(custardCellsAbove, custardtAtSameLevel, sameLevelCells, cellsBelow);
         }
 
-        private byte[,] GetLocalNeighborhood(Coords coords, Func<int, int, byte> getValueAt)
+        private int[,] GetLocalNeighborhood(Coords coords, Func<int, int, int> getValueAt)
 
         {
-            var localNeighborhood = new byte[3, 3];
+            var localNeighborhood = new int[3, 3];
 
             var leftClamp = coords.X - 1 < 0;
             var topClamp = coords.Y - 1 < 0;

@@ -5,24 +5,24 @@ namespace Custard
     public struct CellValue
     {
         public readonly Coords Coords;
-        public byte Value;
+        public int Value;
 
-        public CellValue(byte x, byte y, byte absoluteCustardLevel) : this(Coords.Of(x, y), absoluteCustardLevel)
+        public CellValue(int x, int y, int absoluteCustardLevel) : this(Coords.Of(x, y), absoluteCustardLevel)
         {
         }
 
-        public CellValue(Coords coords, byte value)
+        public CellValue(Coords coords, int value)
         {
             Coords = coords;
             Value = value;
         }
 
-        public static CellValue Of(byte x, byte y, byte value)
+        public static CellValue Of(int x, int y, int value)
         {
             return new CellValue(Coords.Of(x,y), value);
         }
         
-        public static CellValue Of(Coords coords, byte value)
+        public static CellValue Of(Coords coords, int value)
         {
             return new CellValue(coords, value);
         }

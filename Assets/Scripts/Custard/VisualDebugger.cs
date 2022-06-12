@@ -81,12 +81,12 @@ public class VisualDebugger : MonoBehaviour
         }
     }
 
-    private void Visualize(Coords coords, byte level)
+    private void Visualize(Coords coords, int level)
     {
         Visualize(coords, level, Color.Lerp(Color.blue, Color.red, 1f/(7f - level)));
     }
 
-    private void Visualize(Coords coords, byte level, Color color)
+    private void Visualize(Coords coords, int level, Color color)
     {
         var custardPosition = worldCells.GetWorldPosition(coords);
         var from = new Vector3(custardPosition.x, (displayOnWorldCells? worldCells.GetHeightAt(coords):0) + 1f, custardPosition.y);

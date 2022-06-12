@@ -4,17 +4,12 @@ using Unity.VisualScripting;
 
 public struct Coords
 {
-    public readonly byte X;
+    public readonly int X;
 
-    public readonly byte Y;
+    public readonly int Y;
 
 
     public static Coords Of(int x, int y)
-    {
-        return Coords.Of((byte)x, (byte)y);
-    }
-
-    public static Coords Of(byte x, byte y)
     {
         return new Coords(x, y);
     }
@@ -24,7 +19,7 @@ public struct Coords
         return "(" + X + "," + Y + ")";
     }
 
-    private Coords(byte x, byte y)
+    private Coords(int x, int y)
     {
         X = x;
         Y = y;
@@ -32,7 +27,7 @@ public struct Coords
 
     public Coords Add(int dx, int dy)
     {
-        return Coords.Of((byte) (X + dx), (byte) (Y + dy));
+        return Coords.Of( (X + dx),  (Y + dy));
     }
 
     private sealed class XYEqualityComparer : IEqualityComparer<Coords>

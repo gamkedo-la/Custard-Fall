@@ -15,29 +15,29 @@ namespace Custard
         // just in case we need them
         public readonly HashSet<CellValue> BufferFromPreviousIteration = new();
 
-        public byte[,] CustardArea;
-        public byte GlobalTideLevel = 1;
+        public int[,] CustardArea;
+        public int GlobalTideLevel = 1;
         // if there is no custard on a cell and it has not custard neighbors, add custard if scheduled for update
         public bool CreationalMode = false;
 
         public void Init()
         {
             Debug.Log("initialize custard state model");
-            CustardArea = new byte[WorldCells.BlocksWidth, WorldCells.BlocksHeight];
+            CustardArea = new int[WorldCells.BlocksWidth, WorldCells.BlocksHeight];
         }
         
 
-        public void RegisterUpdate(byte x, byte y, byte newCustardLevel)
+        public void RegisterUpdate(int x, int y, int newCustardLevel)
         {
             Buffer.Add(new CellValue(x, y, newCustardLevel));
         }
         
-        public void RegisterUpdate(Coords coords, byte newCustardLevel)
+        public void RegisterUpdate(Coords coords, int newCustardLevel)
         {
             Buffer.Add(new CellValue(coords, newCustardLevel));
         }
 
-        public void QueueCellForCurrentIteration(byte x, byte y)
+        public void QueueCellForCurrentIteration(int x, int y)
         {
             QueueCellForCurrentIteration(Coords.Of(x, y));
         }
@@ -56,12 +56,6 @@ namespace Custard
         {
             QueueForNextIteration(Coords.Of(x, y));
         }
-        
-        public void QueueCellForNextIteration(byte x, byte y)
-        {
-            QueueForNextIteration(Coords.Of(x, y));
-        }
-
 
         public void QueueCellsForNextIteration(IEnumerable<Coords> coords)
         {
@@ -87,7 +81,7 @@ namespace Custard
             CellsThatMightCauseChangeNextIteration.Clear();
         }
 
-        public byte GetCurrentCustardLevelAt(int x, int y)
+        public int GetCurrentCustardLevelAt(int x, int y)
         {
             return CustardArea[x, y];
         }

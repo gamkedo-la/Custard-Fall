@@ -6,11 +6,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WorldCells", menuName = "CustardFall/WorldCells", order = 0)]
 public class WorldCells : ScriptableObject
 {
-    // using byte to make sure network transfer is always minimal, for performance reasons this also means max value is 255
-    public const byte BlocksWidth = 128;
-    public const byte BlocksHeight = 128;
+    // using int to make sure network transfer is always minimal, for performance reasons this also means max value is 255
+    public const int BlocksWidth = 128;
+    public const int BlocksHeight = 128;
 
-    private byte[,] _heightMap;
+    private int[,] _heightMap;
 
     private List<CellValue> _terrainList = new List<CellValue>(BlocksWidth * BlocksHeight);
     private bool updateDebugVisualization = false;
@@ -18,22 +18,22 @@ public class WorldCells : ScriptableObject
     public void Init()
     {
         Debug.Log("Initiating world cells");
-        _heightMap ??= new byte[BlocksWidth, BlocksHeight];
+        _heightMap ??= new int[BlocksWidth, BlocksHeight];
     }
 
-    public byte GetHeightAt(int x, int y)
+    public int GetHeightAt(int x, int y)
     {
         return _heightMap[x, y];
     }
 
-    public byte GetHeightAt(Coords coords)
+    public int GetHeightAt(Coords coords)
     {
         if (coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight)
             return 255;
         return _heightMap[coords.X, coords.Y];
     }
 
-    public void WriteHeightAt(Coords coords, byte value)
+    public void WriteHeightAt(Coords coords, int value)
     {
         _heightMap[coords.X, coords.Y] = value;
         updateDebugVisualization = true;
@@ -45,8 +45,8 @@ public class WorldCells : ScriptableObject
         {
             _terrainList.Clear();
 
-            for (byte x = 0; x < BlocksWidth; x++)
-            for (byte y = 0; y < BlocksHeight; y++)
+            for (int x = 0; x < BlocksWidth; x++)
+            for (int y = 0; y < BlocksHeight; y++)
                 _terrainList.Add(CellValue.Of(x, y, _heightMap[x, y]));
             updateDebugVisualization = false;
         }
@@ -58,10 +58,10 @@ public class WorldCells : ScriptableObject
     {
         var cellX = Math.Floor(x) + WorldCells.BlocksWidth / 2f;
         var cellY = Math.Floor(y) + WorldCells.BlocksHeight / 2f;
-        return Coords.Of((byte) cellX, (byte) cellY);
+        return Coords.Of( (int)cellX,  (int)cellY);
     }
     
-    public static Vector2 GetWorldPosition(byte x, byte y)
+    public static Vector2 GetWorldPosition(int x, int y)
     {
         return new Vector2(x - WorldCells.BlocksWidth / 2f + .5f, y - WorldCells.BlocksHeight / 2f + .5f);
     }
