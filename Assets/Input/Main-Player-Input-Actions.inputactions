@@ -110,7 +110,7 @@
                 {
                     "name": "",
                     "id": "5ef36bdc-802d-48b8-9045-5b636af6bbe4",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
