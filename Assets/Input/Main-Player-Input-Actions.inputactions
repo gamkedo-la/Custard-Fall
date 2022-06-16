@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Soak",
+                    "name": "Inhale",
                     "type": "Button",
                     "id": "9658ab5b-b3ca-4d95-9ec9-ad97104780b8",
                     "expectedControlType": "Button",
@@ -103,7 +103,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Soak",
+                    "action": "Inhale",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -114,7 +114,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Soak",
+                    "action": "Inhale",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
