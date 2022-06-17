@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public WorldCells worldCells;
+    public Inhaler inhaler;
 
     private bool _moveForwards = false;
 
@@ -76,5 +77,17 @@ public class Player : MonoBehaviour
         var lookAtPoint = Camera.main.ScreenToWorldPoint(new Vector3(val.x, val.y, playerPos.z));
         lookAtPoint.y = position.y;
         transform.LookAt(lookAtPoint);
+    }
+
+    public void OnInhale(InputValue context)
+    {
+        if (context.isPressed)
+        {
+            inhaler.BeginInhaleInTransformDirection(4f);
+        }
+        else
+        {
+            inhaler.StopInhale();
+        }
     }
 }

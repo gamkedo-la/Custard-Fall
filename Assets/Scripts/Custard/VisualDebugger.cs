@@ -9,8 +9,12 @@ public class VisualDebugger : MonoBehaviour
 {
     public CustardState custardState;
     public WorldCells worldCells;
+    public Player player;
 
+    private Inhaler _inhaler;
     
+    
+
     public bool showCustardDebugInfo = false;
     public bool showQueue = false;
     public bool showNextQueue = false;
@@ -18,7 +22,13 @@ public class VisualDebugger : MonoBehaviour
     public bool showLastUpdate = false;
     public bool showTerrainInfo;
     public bool displayOnWorldCells = true;
-    
+    public bool showInhaleArea;
+
+    private void Start()
+    {
+        _inhaler = player.GetComponent<Inhaler>();
+    }
+
     void FixedUpdate()
     {
         if (showLastUpdate)
@@ -41,10 +51,19 @@ public class VisualDebugger : MonoBehaviour
         {
             Visualize(worldCells.GetTerrainList());
         }
+        if (showInhaleArea)
+        {
+            List<Coords> positions = new List<Coords>();
+            foreach (var coneCell in _inhaler.affectedCells)
+            {
+                positions.Add(coneCell.Value.GetCoords());
+            }
+            Visualize(positions,Color.blue);
+        }
         
     }
     
-    private void Visualize(IEnumerable<CellValue> cellValues)
+    public void Visualize(IEnumerable<CellValue> cellValues)
     {
         foreach (var coord in cellValues)
         {
@@ -52,7 +71,7 @@ public class VisualDebugger : MonoBehaviour
         }
     }
 
-    private void Visualize(IEnumerable<CellValue> cellValues, Color color)
+    public void Visualize(IEnumerable<CellValue> cellValues, Color color)
     {
         foreach (var coord in cellValues)
         {
@@ -60,12 +79,12 @@ public class VisualDebugger : MonoBehaviour
         }
     }
 
-    private void Visualize(IEnumerable<Coords> coords)
+    public void Visualize(IEnumerable<Coords> coords)
     {
         Visualize(coords, Random.ColorHSV());
     }
 
-    private void Visualize(IEnumerable<Coords> coords, Color color)
+    public void Visualize(IEnumerable<Coords> coords, Color color)
     {
         foreach (var coord in coords)
         {
@@ -73,7 +92,7 @@ public class VisualDebugger : MonoBehaviour
         }
     }
     
-    private void Visualize(HashSet<CellValue> cellUpdates)
+    public void Visualize(HashSet<CellValue> cellUpdates)
     {
         foreach (var cellUpdate in cellUpdates)
         {
@@ -81,12 +100,12 @@ public class VisualDebugger : MonoBehaviour
         }
     }
 
-    private void Visualize(Coords coords, int level)
+    public void Visualize(Coords coords, int level)
     {
         Visualize(coords, level, Color.Lerp(Color.blue, Color.red, 1f/(7f - level)));
     }
 
-    private void Visualize(Coords coords, int level, Color color)
+    public void Visualize(Coords coords, int level, Color color)
     {
         var custardPosition = worldCells.GetWorldPosition(coords);
         var from = new Vector3(custardPosition.x, (displayOnWorldCells? worldCells.GetHeightAt(coords):0) + 1f, custardPosition.y);

@@ -359,6 +359,7 @@ MonoBehaviour:
   CustardManager: {fileID: 809281210}
   Player: {fileID: 2979677134486089421}
   speedFactor: 1
+  pause: 0
   currentTideStep: 0
 --- !u!4 &330129289 stripped
 Transform:
@@ -695,6 +696,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  player: {fileID: 2979677134486089421}
   showCustardDebugInfo: 0
   showQueue: 0
   showNextQueue: 0
@@ -702,6 +704,7 @@ MonoBehaviour:
   showLastUpdate: 0
   showTerrainInfo: 0
   displayOnWorldCells: 1
+  showInhaleArea: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,7 +783,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.23021138, y: -0.6685826, z: 0.23021138, w: 0.6685826}
-  m_LocalPosition: {x: 25, y: 20, z: 0}
+  m_LocalPosition: {x: 25.68, y: 20.53, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1074,6 +1077,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 61404448290581716, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: custardManager
+      value: 
+      objectReference: {fileID: 809281210}
     - target: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1139,6 +1146,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: d8707887f57d4704ab53743552de0ee6, type: 2}
     - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: inhaler
+      value: 
+      objectReference: {fileID: 2979677134486089422}
+    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: WorldCells
       value: 
       objectReference: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
@@ -1161,6 +1172,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c3cf9fe2e9ae7e46bead6e59c3c8406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2979677134486089422 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 61404448290581716, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+  m_PrefabInstance: {fileID: 2979677134486089420}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 46743172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea0ec57816094fe99b818c982bf5f80f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &8246299519227370223
