@@ -10,7 +10,7 @@ public class Inhaler : MonoBehaviour
 {
     public WorldCells worldCells;
     public CustardManager custardManager;
-    public ParticleSystem particleSystem;
+    public ParticleSystem inhalingParticleSystem;
     public Dictionary<Vector3, InhaleCell> affectedCells = new Dictionary<Vector3, InhaleCell>();
     private float _distance;
     public bool IsInhale;
@@ -32,6 +32,7 @@ public class Inhaler : MonoBehaviour
         {
             // TODO move logic to CustardManager to manage custard crawl towards player
             var coords = keyValuePair.Value.GetCoords();
+            // custardManager.reduceCustard()
             CellValue presentCell;
             if (!custardManager.custardState.Buffer.TryGetValue(new CellValue(coords, 0), out presentCell))
             {
@@ -110,14 +111,14 @@ public class Inhaler : MonoBehaviour
     {
         _distance = coneLength;
         if(!IsInhale)
-            particleSystem.gameObject.SetActive(true);
+            inhalingParticleSystem.gameObject.SetActive(true);
         IsInhale = true;
     }
 
     public void StopInhale()
     {
         IsInhale = false;
-        particleSystem.gameObject.SetActive(true);
+        inhalingParticleSystem.gameObject.SetActive(true);
         affectedCells.Clear();
     }
 

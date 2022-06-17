@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!198 &18724704 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 5274499824466673004, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-  m_PrefabInstance: {fileID: 2979677134486089420}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &46743172 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2707271701656813138, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
@@ -1013,6 +1008,11 @@ Transform:
   m_Father: {fileID: 1116589921}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!198 &1695448748 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5274499824466673004, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+  m_PrefabInstance: {fileID: 2979677134486089420}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1781280731
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1087,9 +1087,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 809281210}
     - target: {fileID: 61404448290581716, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-      propertyPath: particleSystem
+      propertyPath: inhalingParticleSystem
       value: 
-      objectReference: {fileID: 18724704}
+      objectReference: {fileID: 1695448748}
     - target: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1191,21 +1191,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: d8707887f57d4704ab53743552de0ee6, type: 2}
     - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-      propertyPath: inhaler
-      value: 
-      objectReference: {fileID: 2979677134486089422}
-    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: WorldCells
       value: 
       objectReference: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
-    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-      propertyPath: worldCells
-      value: 
-      objectReference: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
-    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-      propertyPath: movementSpeed
-      value: 6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
 --- !u!114 &2979677134486089421 stripped
@@ -1217,17 +1205,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c3cf9fe2e9ae7e46bead6e59c3c8406, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2979677134486089422 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 61404448290581716, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-  m_PrefabInstance: {fileID: 2979677134486089420}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 46743172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea0ec57816094fe99b818c982bf5f80f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &8246299519227370223

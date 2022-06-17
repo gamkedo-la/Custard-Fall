@@ -221,7 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   custardManager: {fileID: 0}
-  particleSystem: {fileID: 5274499824466673004}
+  inhalingParticleSystem: {fileID: 5274499824466673004}
   IsInhale: 0
 --- !u!1 &3600208504748121475
 GameObject:
