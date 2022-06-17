@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!198 &18724704 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5274499824466673004, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+  m_PrefabInstance: {fileID: 2979677134486089420}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &46743172 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2707271701656813138, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
@@ -1081,6 +1086,10 @@ PrefabInstance:
       propertyPath: custardManager
       value: 
       objectReference: {fileID: 809281210}
+    - target: {fileID: 61404448290581716, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: particleSystem
+      value: 
+      objectReference: {fileID: 18724704}
     - target: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1170,8 +1179,12 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 7083028927858524638, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_Name
+      value: InhaleCustardEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083028927858524638, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8241182356326129374, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_Materials.Array.data[0]

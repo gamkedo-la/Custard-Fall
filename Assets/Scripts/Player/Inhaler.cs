@@ -10,6 +10,7 @@ public class Inhaler : MonoBehaviour
 {
     public WorldCells worldCells;
     public CustardManager custardManager;
+    public ParticleSystem particleSystem;
     public Dictionary<Vector3, InhaleCell> affectedCells = new Dictionary<Vector3, InhaleCell>();
     private float _distance;
     public bool IsInhale;
@@ -107,13 +108,16 @@ public class Inhaler : MonoBehaviour
 
     public void BeginInhaleInTransformDirection(float coneLength)
     {
-        this._distance = coneLength;
-        this.IsInhale = true;
+        _distance = coneLength;
+        if(!IsInhale)
+            particleSystem.gameObject.SetActive(true);
+        IsInhale = true;
     }
 
     public void StopInhale()
     {
-        this.IsInhale = false;
+        IsInhale = false;
+        particleSystem.gameObject.SetActive(true);
         affectedCells.Clear();
     }
 

@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
-  inhaler: {fileID: 0}
+  inhaler: {fileID: 61404448290581716}
   movementSpeed: 6
 --- !u!114 &4078713960622899494
 MonoBehaviour:
@@ -221,6 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   custardManager: {fileID: 0}
+  particleSystem: {fileID: 5274499824466673004}
   IsInhale: 0
 --- !u!1 &3600208504748121475
 GameObject:
