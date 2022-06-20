@@ -165,8 +165,8 @@
                 {
                     "name": "",
                     "id": "f6516f79-3d5a-42f0-81ca-0f2164e389b3",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Run",

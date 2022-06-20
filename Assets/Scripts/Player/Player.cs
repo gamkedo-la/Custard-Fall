@@ -15,6 +15,9 @@ public class Player : MonoBehaviour
 
     public float movementSpeed = 4;
 
+    public bool isRunning = false;
+    public float runningMultiplier;
+
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     private float yOffset = -.05f;
     private Collider _collider;
@@ -38,7 +41,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void MovePlayerForward()
+private void MovePlayerForward()
     {
         var currentTransform = transform;
         var result = currentTransform.position;
@@ -67,9 +70,15 @@ public class Player : MonoBehaviour
     public void OnMoveForward(InputValue input)
     {
         _moveForwards = input.isPressed;
+
+
+        /*if (isRunning == true)
+        {
+            movementSpeed *= runningMultiplier;
+        }*/
     }
 
-    public void OnMove(InputValue context)
+public void OnMove(InputValue context)
     {
         var val = context.Get<Vector2>();
         var position = transform.position;
@@ -79,7 +88,7 @@ public class Player : MonoBehaviour
         transform.LookAt(lookAtPoint);
     }
 
-    public void OnInhale(InputValue context)
+public void OnInhale(InputValue context)
     {
         if (context.isPressed)
         {
@@ -88,6 +97,20 @@ public class Player : MonoBehaviour
         else
         {
             inhaler.StopInhale();
+        }
+    }
+   
+public void OnRun(InputValue context)
+    {
+        if (context.isPressed)
+        {
+            isRunning = true;
+            movementSpeed *= runningMultiplier;
+        }
+        else
+        {
+            isRunning = false;
+            movementSpeed = 6;
         }
     }
 }
