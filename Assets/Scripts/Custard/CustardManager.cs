@@ -13,6 +13,7 @@ namespace Custard
     {
         public WorldCells worldCells;
         public CustardState custardState;
+        private Dictionary<Coords, ImpededCell> _impededCells;
 
         public CustardVisualizer custardVisualizer;
         public GameObject custardBlockPrefab;
@@ -28,6 +29,7 @@ namespace Custard
         private void Start()
         {
             _custardUpdateCountdown = custardCrawlDuration;
+            _impededCells = new Dictionary<Coords, ImpededCell>();
         }
 
         public void InitCustardState()
@@ -347,5 +349,60 @@ namespace Custard
                 CellsAtSameLevel = cellsAtSameLevel;
             }
         }
+
+        public void ImpedeCustardCell(Coords coords, int originY, float strength)
+        {
+            if (!custardState.Buffer.TryGetValue(new CellValue(coords, 0), out var presentCell))
+            {
+                var cell = custardState.CustardArea[coords.X, coords.Y];
+                custardState.Buffer.Add(new CellValue(coords, Math.Max(cell - 1,0)));
+            }
+            else
+            {
+                custardState.Buffer.Add(new CellValue(coords, Math.Max(presentCell.Value - 1,0)));
+            }
+            custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
+
+            // check, is actually custard at impeded point?
+            if (custardState.CustardArea[coords.X, coords.Y] + worldCells.GetHeightAt(coords) < originY)
+                return;
+
+            if (!_impededCells.TryGetValue(coords, out var alreadyImpeded))
+            {
+                _impededCells.Add(coords, new ImpededCell(coords, strength));
+            }
+            else if(alreadyImpeded.GetStrength() < strength)
+            {
+                alreadyImpeded.SetStrength(strength);
+            }
+        }
     }
+    
+    public class ImpededCell
+    {
+        private readonly Coords _coords;
+        private float _strength;
+
+        public ImpededCell(Coords coords, float strength)
+        {
+            this._coords = coords;
+            this._strength = strength;
+        }
+
+        public Coords GetCoords()
+        {
+            return _coords;
+        }
+        
+        public float GetStrength()
+        {
+            return _strength;
+        }
+
+        public void SetStrength(float strength)
+        {
+            this._strength = strength;
+        }
+    }
+
 }

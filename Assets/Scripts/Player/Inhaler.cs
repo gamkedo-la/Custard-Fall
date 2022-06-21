@@ -30,20 +30,8 @@ public class Inhaler : MonoBehaviour
     {
         foreach (var keyValuePair in affectedCells)
         {
-            // TODO move logic to CustardManager to manage custard crawl towards player
-            var coords = keyValuePair.Value.GetCoords();
-            // custardManager.reduceCustard()
-            CellValue presentCell;
-            if (!custardManager.custardState.Buffer.TryGetValue(new CellValue(coords, 0), out presentCell))
-            {
-                var cell = custardManager.custardState.CustardArea[coords.X, coords.Y];
-                custardManager.custardState.Buffer.Add(new CellValue(coords, Math.Max(cell - 1,0)));
-            }
-            else
-            {
-                custardManager.custardState.Buffer.Add(new CellValue(coords, Math.Max(presentCell.Value - 1,0)));
-            }
-            custardManager.custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
+            var inhaleCell = keyValuePair.Value;
+            custardManager.ImpedeCustardCell(inhaleCell.GetCoords(), inhaleCell.GetWorldY(), inhaleCell.GetStrength());
         }
     }
 
@@ -140,7 +128,7 @@ public class Inhaler : MonoBehaviour
             return _coords;
         }
 
-        public int GetWorldZ()
+        public int GetWorldY()
         {
             return _worldY;
         }
