@@ -58,7 +58,9 @@ public class Inhaler : MonoBehaviour
         addConeRow(localConePoints, 5, 1, 0);
         addConeRow(localConePoints, 5, 2, 0);
         addConeRow(localConePoints, 5, 3, 0);
-        addConeRow(localConePoints, 3, 4, 0);
+        addConeRow(localConePoints, 5, 4, 0);
+        addConeRow(localConePoints, 3, 5, 0);
+        addConeRow(localConePoints, 3, 6, 0);
         // lower pane
         addConeRow(localConePoints, 3, 1, -1);
         addConeRow(localConePoints, 1, 2, -1);
