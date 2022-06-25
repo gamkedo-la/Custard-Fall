@@ -18,6 +18,9 @@ public class Player : MonoBehaviour
     public bool isRunning = false;
     public float runningMultiplier;
 
+    public float cooldownTime = 2; 
+    private float nextRunningTime = 0;
+
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     private float yOffset = -.05f;
     private Collider _collider;
@@ -70,12 +73,6 @@ private void MovePlayerForward()
     public void OnMoveForward(InputValue input)
     {
         _moveForwards = input.isPressed;
-
-
-        /*if (isRunning == true)
-        {
-            movementSpeed *= runningMultiplier;
-        }*/
     }
 
 public void OnMove(InputValue context)
@@ -102,10 +99,15 @@ public void OnInhale(InputValue context)
    
 public void OnRun(InputValue context)
     {
-        if (context.isPressed)
+        if (Time.time > nextRunningTime)
         {
-            isRunning = true;
-            movementSpeed *= runningMultiplier;
+            if (context.isPressed)
+            {
+                isRunning = true;
+                movementSpeed *= runningMultiplier;
+                print("ability used, cooldownstarted");
+                nextRunningTime = Time.time + cooldownTime; //running cooldown
+            }
         }
         else
         {
