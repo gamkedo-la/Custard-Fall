@@ -18,9 +18,14 @@ public class Player : MonoBehaviour
     public bool isRunning = false;
     public float runningMultiplier;
 
+    public float cooldownTime = 2; 
+    private float nextRunningTime = 0;
+
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     private float yOffset = -.05f;
     private Collider _collider;
+
+    public InputControlScheme gameplayScheme;
 
     // Start is called before the first frame update
     private void Start()
@@ -35,7 +40,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Mouse.current.leftButton.isPressed)
+        if (_moveForwards)
         {
             MovePlayerForward();
         }
@@ -70,15 +75,22 @@ private void MovePlayerForward()
     public void OnMoveForward(InputValue input)
     {
         _moveForwards = input.isPressed;
-
-
-        /*if (isRunning == true)
-        {
-            movementSpeed *= runningMultiplier;
-        }*/
     }
 
-public void OnMove(InputValue context)
+    public void OnMoveForwardGamepad(InputValue input)
+    {
+        Vector2 vector = input.Get<Vector2>();
+        if (vector != new Vector2(0, 0))
+        {
+            _moveForwards = true;
+        }
+        else
+        {
+            _moveForwards = false;
+        }
+    }
+
+    public void OnMove(InputValue context)
     {
         var val = context.Get<Vector2>();
         var position = transform.position;
@@ -88,7 +100,17 @@ public void OnMove(InputValue context)
         transform.LookAt(lookAtPoint);
     }
 
-public void OnInhale(InputValue context)
+    public void OnLookAroundGamepad(InputValue context)
+    {
+        var val = context.Get<Vector2>();
+        float angle = Mathf.Atan2(val.x, val.y) * Mathf.Rad2Deg;
+        if (angle != 0)
+        {
+            transform.localRotation = Quaternion.Euler(new Vector3(0, angle - 90, 0));
+        }
+        
+    }
+    public void OnInhale(InputValue context)
     {
         if (context.isPressed)
         {
@@ -102,10 +124,15 @@ public void OnInhale(InputValue context)
    
 public void OnRun(InputValue context)
     {
-        if (context.isPressed)
+        if (Time.time > nextRunningTime)
         {
-            isRunning = true;
-            movementSpeed *= runningMultiplier;
+            if (context.isPressed)
+            {
+                isRunning = true;
+                movementSpeed *= runningMultiplier;
+                print("ability used, cooldownstarted");
+                nextRunningTime = Time.time + cooldownTime; //running cooldown
+            }
         }
         else
         {
