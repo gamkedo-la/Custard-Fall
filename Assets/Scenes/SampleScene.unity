@@ -359,7 +359,7 @@ MonoBehaviour:
   CustardManager: {fileID: 809281210}
   Player: {fileID: 2979677134486089421}
   speedFactor: 1
-  pause: 0
+  pause: 1
   currentTideStep: 0
 --- !u!4 &330129289 stripped
 Transform:
@@ -584,7 +584,7 @@ MonoBehaviour:
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
   pauseIterationCountDown: 0
   custardCrawlDuration: 0.3
-  targetTideLevel: 2
+  targetTideLevel: 1
 --- !u!114 &809281211
 MonoBehaviour:
   m_ObjectHideFlags: 0
