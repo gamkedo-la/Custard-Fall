@@ -108,7 +108,7 @@ public class Inhaler : MonoBehaviour
     public void StopInhale()
     {
         IsInhale = false;
-        inhalingParticleSystem.gameObject.SetActive(true);
+        inhalingParticleSystem.gameObject.SetActive(false);
         affectedCells.Clear();
     }
 
