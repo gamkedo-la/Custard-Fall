@@ -11,18 +11,19 @@ public class Inhaler : MonoBehaviour
     public WorldCells worldCells;
     public CustardManager custardManager;
     public ParticleSystem inhalingParticleSystem;
-    public Dictionary<Vector3, InhaleCell> affectedCells = new Dictionary<Vector3, InhaleCell>();
+    public readonly Dictionary<Vector3, InhaleCell> affectedCells = new Dictionary<Vector3, InhaleCell>();
     private float _distance;
-    public bool IsInhale;
+    public bool isInhale;
 
-    private Quaternion previousRotation;
+    private Quaternion _previousRotation;
 
     private void FixedUpdate()
     {
-        if (IsInhale)
+        if (isInhale)
         {
-            UpdateAffectedCells();
+            UpdateInhaleConeCells();
             InhaleCustard();
+            InhaleResources();
         }
     }
 
@@ -34,18 +35,41 @@ public class Inhaler : MonoBehaviour
             custardManager.ImpedeCustardCell(inhaleCell.GetCoords(), inhaleCell.GetWorldY(), inhaleCell.GetStrength());
         }
     }
+    
+        
+    private void InhaleResources()
+    {
+        foreach (var keyValuePair in affectedCells)
+        {
+            var inhaleCell = keyValuePair.Value;
 
-    private void UpdateAffectedCells()
+            List<WorldItem> worldCellItems;
+            if(WorldItems.itemsInCell.TryGetValue(inhaleCell.GetCoords(), out worldCellItems))
+            {
+                for(int i = 0; i < worldCellItems.Count; i++)
+                {
+                    var item = worldCellItems[i];
+                    if (item is InhaleListener listener)
+                    {
+                        Debug.Log("inhaling " + inhaleCell.GetCoords());
+                        listener.Inhale(this, inhaleCell.GetStrength());
+                    }
+                }
+            }
+        }
+    }
+
+    private void UpdateInhaleConeCells()
     {
         var gameObjectTransform = gameObject.transform;
         var rotation = gameObjectTransform.rotation;
 
-        if (rotation.Equals(previousRotation))
+        if (rotation.Equals(_previousRotation))
         {
             return;
         }
 
-        previousRotation = rotation;
+        _previousRotation = rotation;
 
         var coneOrigin = gameObjectTransform.position;
 
@@ -89,6 +113,7 @@ public class Inhaler : MonoBehaviour
         }
     }
 
+
     private void addConeRow(List<Vector3> localConePoints, float width, int row, int relativeY)
     {
         const float stepSize = 0.25f;
@@ -100,16 +125,22 @@ public class Inhaler : MonoBehaviour
     public void BeginInhaleInTransformDirection(float coneLength)
     {
         _distance = coneLength;
-        if(!IsInhale)
+        if(!isInhale)
             inhalingParticleSystem.gameObject.SetActive(true);
-        IsInhale = true;
+        isInhale = true;
     }
 
     public void StopInhale()
     {
-        IsInhale = false;
+        isInhale = false;
         inhalingParticleSystem.gameObject.SetActive(false);
         affectedCells.Clear();
+    }
+    
+    
+    public void OnResourceInhaled(Resource resource)
+    {
+        Debug.Log("inhaled " + resource.Name);
     }
 
     public class InhaleCell
@@ -145,4 +176,5 @@ public class Inhaler : MonoBehaviour
             this._strength = strength;
         }
     }
+
 }
