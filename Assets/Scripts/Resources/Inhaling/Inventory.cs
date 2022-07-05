@@ -5,24 +5,34 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private SortedSet<InventorySlot> slots = new SortedSet<InventorySlot>(Comparer<InventorySlot>.Default);
+    private readonly SortedSet<InventorySlot> _slots = new SortedSet<InventorySlot>(Comparer<InventorySlot>.Default);
 
-    public void AddResourceAmount(Resource resource, int amount)
+    public int AddOrSubResourceAmount(Resource resource, int amount)
     {
-        var item = new InventorySlot(resource, amount, slots.Count);
+        var slot = new InventorySlot(resource, amount, _slots.Count);
         
-        if (slots.TryGetValue(item, out InventorySlot slot))
+        if (_slots.TryGetValue(slot, out slot))
         {
-            slot.Amount = item.Amount + slot.Amount;
+            slot.Amount = amount + slot.Amount;
             if (slot.Amount <= 0)
             {
-                slots.Remove(slot);
+                _slots.Remove(slot);
             }
         }
         else if(amount > 0)
         {
-            slots.Add(item);
+            _slots.Add(slot);
         }
+
+        return slot.Amount;
+    }
+
+    public int GetResourceAmount(Resource resource)
+    {
+        if (_slots.TryGetValue(InventorySlot.Of(resource), out InventorySlot slot))
+            return slot.Amount;
+        else
+            return 0;
     }
 
 
