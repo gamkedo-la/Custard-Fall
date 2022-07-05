@@ -9,22 +9,23 @@ public class Inventory : MonoBehaviour
 
     public int AddOrSubResourceAmount(Resource resource, int amount)
     {
-        var slot = new InventorySlot(resource, amount, _slots.Count);
-        
-        if (_slots.TryGetValue(slot, out slot))
+        if (_slots.TryGetValue(InventorySlot.Of(resource), out var slot))
         {
             slot.Amount = amount + slot.Amount;
             if (slot.Amount <= 0)
             {
+                slot.Amount = 0;
                 _slots.Remove(slot);
             }
         }
         else if(amount > 0)
         {
+            slot = new InventorySlot(resource, amount, _slots.Count);
             _slots.Add(slot);
         }
 
         return slot.Amount;
+
     }
 
     public int GetResourceAmount(Resource resource)
