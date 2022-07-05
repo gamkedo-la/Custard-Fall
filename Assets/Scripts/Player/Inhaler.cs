@@ -10,6 +10,7 @@ public class Inhaler : MonoBehaviour
 {
     public WorldCells worldCells;
     public CustardManager custardManager;
+    public Inventory inventory;
     public ParticleSystem inhalingParticleSystem;
     public readonly Dictionary<Vector3, InhaleCell> affectedCells = new Dictionary<Vector3, InhaleCell>();
     private float _distance;
@@ -51,7 +52,7 @@ public class Inhaler : MonoBehaviour
                     var item = worldCellItems[i];
                     if (item is InhaleListener listener)
                     {
-                        Debug.Log("inhaling " + inhaleCell.GetCoords());
+                        // Debug.Log("inhaling " + inhaleCell.GetCoords());
                         listener.Inhale(this, inhaleCell.GetStrength());
                     }
                 }
@@ -138,9 +139,10 @@ public class Inhaler : MonoBehaviour
     }
     
     
-    public void OnResourceInhaled(Resource resource)
+    public void OnResourceInhaled(Resource resource, int amount)
     {
-        Debug.Log("inhaled " + resource.Name);
+        var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
+        Debug.Log("inhaled " +newAmount+ "th "+ resource.Name);
     }
 
     public class InhaleCell

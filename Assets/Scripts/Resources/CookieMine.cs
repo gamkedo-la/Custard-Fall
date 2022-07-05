@@ -16,9 +16,9 @@ public class CookieMine : InhaleListener
         AddToInhaleQueue(new Resource("Cookie shard"), 3f);
     }
 
-    public override void OnResourceInhaled(Inhaler inhaler, Resource resource)
+    public override void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
     {
-        base.OnResourceInhaled(inhaler, resource);
+        base.OnResourceInhaled(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
             gameObject.SetActive(false);

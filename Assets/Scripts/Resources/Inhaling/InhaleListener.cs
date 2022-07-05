@@ -53,7 +53,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
             if (item.inhaleThresholdSeconds <= 0)
             {
                 _inhaleQueue.RemoveAt(0);
-                OnResourceInhaled(_currentInhaler, item.resource);
+                OnResourceInhaled(_currentInhaler, item.resource, item.amount);
             }
 
             // inhaler needs to be present next update (keep calling Inhale)
@@ -73,9 +73,9 @@ public class InhaleListener : MonoBehaviour, WorldItem
         return strength > 0;
     }
 
-    public virtual void OnResourceInhaled(Inhaler inhaler, Resource resource)
+    public virtual void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
     {
-        inhaler.OnResourceInhaled(resource);
+        inhaler.OnResourceInhaled(resource, amount);
     }
 
     public int GetRemainingResourcesCount()
@@ -91,12 +91,20 @@ public class InhaleListener : MonoBehaviour, WorldItem
     class InhaleQueueItem
     {
         public Resource resource;
+        public int amount = 1;
         public float inhaleThresholdSeconds;
 
         public InhaleQueueItem(float inhaleThresholdSeconds, Resource resource)
         {
             this.resource = resource;
             this.inhaleThresholdSeconds = inhaleThresholdSeconds;
+        }
+        
+        public InhaleQueueItem(float inhaleThresholdSeconds, Resource resource, int amount)
+        {
+            this.resource = resource;
+            this.inhaleThresholdSeconds = inhaleThresholdSeconds;
+            this.amount = amount;
         }
     }
 }

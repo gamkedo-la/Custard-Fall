@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 9001336511291437872}
   - component: {fileID: 4078713960622899494}
   - component: {fileID: 61404448290581716}
+  - component: {fileID: 1966580447810109878}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -121,6 +122,13 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   inhaler: {fileID: 61404448290581716}
   movementSpeed: 6
+  isRunning: 0
+  runningMultiplier: 0
+  cooldownTime: 2
+  gameplayScheme:
+    m_Name: 
+    m_BindingGroup: 
+    m_DeviceRequirements: []
 --- !u!114 &4078713960622899494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,8 +229,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   custardManager: {fileID: 0}
+  inventory: {fileID: 1966580447810109878}
   inhalingParticleSystem: {fileID: 5274499824466673004}
-  IsInhale: 0
+  isInhale: 0
+--- !u!114 &1966580447810109878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15bcf1c64fee45a6882c10979baab4a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3600208504748121475
 GameObject:
   m_ObjectHideFlags: 0
