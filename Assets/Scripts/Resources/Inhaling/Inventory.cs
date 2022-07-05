@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
 
 public class Inventory : MonoBehaviour
 {
-    private readonly SortedSet<InventorySlot> _slots = new SortedSet<InventorySlot>(Comparer<InventorySlot>.Default);
+    private readonly SortedSet<InventorySlot> _slots = new SortedSet<InventorySlot>(InventorySlot.SortIndexComparer);
 
     public int AddOrSubResourceAmount(Resource resource, int amount)
     {
@@ -75,23 +76,17 @@ public class Inventory : MonoBehaviour
             return (Resource != null ? Resource.GetHashCode() : 0);
         }
 
-        private sealed class SortIndexEqualityComparer : IEqualityComparer<InventorySlot>
+        private sealed class SortIndexEqualityComparer : IComparer<InventorySlot>
         {
-            public bool Equals(InventorySlot x, InventorySlot y)
+            public int Compare(InventorySlot x, InventorySlot y)
             {
-                if (ReferenceEquals(x, y)) return true;
-                if (ReferenceEquals(x, null)) return false;
-                if (ReferenceEquals(y, null)) return false;
-                if (x.GetType() != y.GetType()) return false;
-                return x.SortIndex == y.SortIndex;
-            }
-
-            public int GetHashCode(InventorySlot obj)
-            {
-                return obj.SortIndex;
+                if (ReferenceEquals(x, y)) return 0;
+                if (ReferenceEquals(null, y)) return 1;
+                if (ReferenceEquals(null, x)) return -1;
+                return x.SortIndex.CompareTo(y.SortIndex);
             }
         }
 
-        public static IEqualityComparer<InventorySlot> SortIndexComparer { get; } = new SortIndexEqualityComparer();
+        public static IComparer<InventorySlot> SortIndexComparer { get; } = new SortIndexEqualityComparer();
     }
 }
