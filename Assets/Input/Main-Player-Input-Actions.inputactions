@@ -67,6 +67,15 @@
                     "processors": "StickDeadzone(min=0.325)",
                     "interactions": "Press(behavior=2)",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "DebugHealthUp",
+                    "type": "Button",
+                    "id": "fb112523-f350-4afc-9d9f-a362de206cb6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -210,6 +219,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "MoveForwardGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4d36ea37-f345-4465-b9fe-8072c119737f",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "DebugHealthUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

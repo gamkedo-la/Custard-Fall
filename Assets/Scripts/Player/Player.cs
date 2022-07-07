@@ -155,4 +155,10 @@ public void OnRun(InputValue context)
             movementSpeed = 6;
         }
     }
+
+public void OnDebugHealthUp(InputValue context)
+{
+    Debug.Log("health up "+context.isPressed);
+}
+
 }
