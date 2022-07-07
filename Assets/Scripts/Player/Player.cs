@@ -27,15 +27,29 @@ public class Player : MonoBehaviour
 
     public InputControlScheme gameplayScheme;
 
+    //health bar
+    public int maxHealth = 3;
+    public int currentHealth;
+    public Healthbar healthbar;
+
     // Start is called before the first frame update
     private void Start()
     {
         _collider = GetComponent<Collider>();
+
+        currentHealth = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
     private void Update()
     {
+    }
+
+    void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        healthbar.SetHealth(currentHealth);
     }
 
     private void FixedUpdate()
@@ -115,6 +129,7 @@ private void MovePlayerForward()
         if (context.isPressed)
         {
             inhaler.BeginInhaleInTransformDirection(4f);
+            TakeDamage(1); ////////
         }
         else
         {
