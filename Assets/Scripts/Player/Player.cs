@@ -52,6 +52,12 @@ public class Player : MonoBehaviour
         healthbar.SetHealth(currentHealth);
     }
 
+    void GainHealth(int health)
+    {
+        currentHealth += health;
+        healthbar.SetHealth(currentHealth);
+    }
+
     private void FixedUpdate()
     {
         if (_moveForwards)
@@ -129,7 +135,6 @@ private void MovePlayerForward()
         if (context.isPressed)
         {
             inhaler.BeginInhaleInTransformDirection(4f);
-            TakeDamage(1); ////////
         }
         else
         {
@@ -157,8 +162,24 @@ public void OnRun(InputValue context)
     }
 
 public void OnDebugHealthUp(InputValue context)
-{
-    Debug.Log("health up "+context.isPressed);
-}
+    {
+        //Debug.Log("health up "+context.isPressed);
 
+        if (currentHealth <= 3)
+        {
+            Debug.Log("health up");
+            GainHealth(1);
+        } 
+    }
+
+    public void OnDebugHealthDown(InputValue context)
+    {
+        //Debug.Log("health up "+context.isPressed);
+
+        if (currentHealth >= 0)
+        {
+            Debug.Log("health down");
+            TakeDamage(1);
+        }
+    }
 }

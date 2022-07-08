@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DebugHealthDown",
+                    "type": "Button",
+                    "id": "785f4eda-d0ee-4bdf-b061-68bf197083d6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -225,11 +234,22 @@
                 {
                     "name": "",
                     "id": "4d36ea37-f345-4465-b9fe-8072c119737f",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "DebugHealthUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0b68cc08-c1af-407c-bf8d-4a9a9cf727cc",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DebugHealthDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
