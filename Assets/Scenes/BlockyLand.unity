@@ -363,7 +363,7 @@ MonoBehaviour:
   CustardManager: {fileID: 809281210}
   Player: {fileID: 2979677134486089421}
   speedFactor: 1
-  pause: 1
+  pause: 0
   currentTideStep: 0
 --- !u!1 &142139527
 GameObject:
