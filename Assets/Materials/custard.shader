@@ -5,6 +5,8 @@ Shader "custard"
 	Properties
 	{
 		_SpecularColor("Specular Color", Color) = (0.3921569,0.3921569,0.3921569,1)
+		_BaseColor("Base Color", Color) = (1,0.634656,0.008487141,1)
+		_BaseColorGammaSpace("Base Color Gamma Space", Color) = (1,0.8179246,0.08962268,1)
 		_Shininess("Shininess", Range( 0.01 , 1)) = 0.1
 		_Power("Power", Float) = 1
 		_scale("scale", Float) = 1
@@ -51,6 +53,8 @@ Shader "custard"
 		};
 
 		uniform float4 _SpecularColor;
+		uniform float4 _BaseColor;
+		uniform float4 _BaseColorGammaSpace;
 		uniform float _Shininess;
 		uniform float _SSSstrength;
 		uniform float _Power;
@@ -97,7 +101,9 @@ Shader "custard"
 			float3 diffNorm34_g2 = normalizeResult64_g2;
 			gi34_g2 = UnityGI_Base( data, 1, diffNorm34_g2 );
 			float3 indirectDiffuse34_g2 = gi34_g2.indirect.diffuse + diffNorm34_g2 * 0.0001;
-			float4 color16 = IsGammaSpace() ? float4(1,0.8179246,0.08962268,1) : float4(1,0.634656,0.008487141,1);
+			float4 tmp_base_color = _BaseColor;
+			float4 tmp_base_color_gamma_space = _BaseColorGammaSpace;
+			float4 color16 = IsGammaSpace() ? tmp_base_color_gamma_space : tmp_base_color;
 			float4 temp_output_42_0_g2 = color16;
 			float4 color4 = IsGammaSpace() ? float4(1,0.9911436,0.8915095,1) : float4(1,0.9799712,0.7707154,1);
 			float3 ase_worldNormal = WorldNormalVector( i, float3( 0, 0, 1 ) );
