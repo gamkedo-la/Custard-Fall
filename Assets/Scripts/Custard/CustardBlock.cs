@@ -5,9 +5,13 @@ using UnityEngine;
 
 public class CustardBlock : MonoBehaviour
 {
+    private float _targetHeight = 0;
+    private Renderer _renderer;
+    
     private void Awake()
     {
         gameObject.SetActive(false);
+        _renderer = gameObject.GetComponent<Renderer>();
     }
 
     public void Show()
@@ -18,5 +22,10 @@ public class CustardBlock : MonoBehaviour
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    public void ChangeMaterial(Material material)
+    {
+        _renderer.material = material;
     }
 }

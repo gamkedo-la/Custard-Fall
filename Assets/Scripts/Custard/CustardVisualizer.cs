@@ -8,6 +8,10 @@ namespace Custard
         public WorldCells worldCells;
         public CustardState custardState;
 
+        public Material shallowCustard;
+        public Material normalCustard;
+        public Material deadlyCustard;
+
         public GameObject custardBlockPrefab;
 
         private GameObject _custardBlocksParent;
@@ -27,6 +31,8 @@ namespace Custard
 
         public void RenderChangedCustard()
         {
+            
+            
             var cellsToUpdate = custardState.Buffer;
             foreach (var cellUpdate in cellsToUpdate)
             {
@@ -40,9 +46,23 @@ namespace Custard
                     var position = blockGameObject.transform.position;
                     // TODO interpolate change
                     // custard blocks origin point currently is at object center
+                    var representedCustardHeight = worldCells.GetHeightAt(cellUpdate.Coords.X, cellUpdate.Coords.Y) + newCustardLevel * .5f;
                     blockGameObject.transform.position = new Vector3(position.x,
-                        worldCells.GetHeightAt(cellUpdate.Coords.X, cellUpdate.Coords.Y) + newCustardLevel * .5f, position.z);
+                        representedCustardHeight, position.z);
 
+                    if (newCustardLevel <= 1)
+                    {
+                        custardRenderBlock.ChangeMaterial(shallowCustard);
+                    }
+                    else if(newCustardLevel <= 2)
+                    {
+                        custardRenderBlock.ChangeMaterial(normalCustard);
+                    }
+                    else
+                    {
+                        custardRenderBlock.ChangeMaterial(deadlyCustard);
+                    }
+                    
                     custardRenderBlock.Show();
                 }
                 else
