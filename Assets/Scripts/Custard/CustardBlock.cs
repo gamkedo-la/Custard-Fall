@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CustardBlock : MonoBehaviour
 {
-    private float _targetHeight = 0;
     private Renderer _renderer;
     
     private void Awake()
