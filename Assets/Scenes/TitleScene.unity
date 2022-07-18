@@ -451,6 +451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggledOffImageWindow: {fileID: 1603149461}
   toggledOnImageWindow: {fileID: 2135788183}
+  custardTransitionImage: {fileID: 397206725}
 --- !u!114 &151248257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -852,6 +853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggledOffImageWindow: {fileID: 2135788183}
   toggledOnImageWindow: {fileID: 1956140225}
+  custardTransitionImage: {fileID: 397206725}
 --- !u!114 &293705004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -977,6 +979,119 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &397206722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 397206723}
+  - component: {fileID: 397206726}
+  - component: {fileID: 397206725}
+  - component: {fileID: 397206724}
+  - component: {fileID: 397206727}
+  m_Layer: 5
+  m_Name: CustardTransitionImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &397206723
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397206722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1310491074}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &397206724
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397206722}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4fb9ab91a5e9307418fc8f6b1d403b3e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &397206725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397206722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.972549, g: 0.6948718, b: 0.17647055, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &397206726
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397206722}
+  m_CullTransparentMesh: 1
+--- !u!114 &397206727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397206722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc5c8aaa09445044d854b5a8b458e103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggledOffImageWindow: {fileID: 0}
+  toggledOnImageWindow: {fileID: 0}
+  currentButtonName: 
 --- !u!1 &456386608
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,6 +1150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggledOffImageWindow: {fileID: 1956140225}
   toggledOnImageWindow: {fileID: 2135788183}
+  custardTransitionImage: {fileID: 397206725}
 --- !u!114 &456386611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1530,6 +1646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggledOffImageWindow: {fileID: 2135788183}
   toggledOnImageWindow: {fileID: 1603149461}
+  custardTransitionImage: {fileID: 397206725}
 --- !u!114 &784962832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2368,6 +2485,7 @@ RectTransform:
   - {fileID: 2135788182}
   - {fileID: 1603149460}
   - {fileID: 1956140224}
+  - {fileID: 397206723}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3390,6 +3508,7 @@ GameObject:
   - component: {fileID: 1971841523}
   - component: {fileID: 1971841528}
   - component: {fileID: 1971841527}
+  - component: {fileID: 1971841529}
   m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
@@ -3475,8 +3594,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1971841523}
-        m_TargetAssemblyTypeName: PlayButtonTitleScreenScript, Assembly-CSharp
+      - m_Target: {fileID: 1971841529}
+        m_TargetAssemblyTypeName: ToggleImageWindowsScript, Assembly-CSharp
         m_MethodName: HandleButtonClick
         m_Mode: 1
         m_Arguments:
@@ -3583,6 +3702,21 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1971841529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971841521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5fa77c999f098144a67f7521e32ac5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggledOffImageWindow: {fileID: 0}
+  toggledOnImageWindow: {fileID: 0}
+  custardTransitionImage: {fileID: 397206725}
 --- !u!1 &2135788181
 GameObject:
   m_ObjectHideFlags: 0
