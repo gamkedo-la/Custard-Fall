@@ -53,10 +53,11 @@ public class DayNightCycle : MonoBehaviour
         moon.color = moonColor.Evaluate(time);
 
         // enable / disable the sun
-        if(sun.intensity == 0 && sun.gameObject.activeInHierarchy)
-            sun.gameObject.SetActive(false);
-        else if(sun.intensity > 0 && !sun.gameObject.activeInHierarchy)
-            sun.gameObject.SetActive(true);
+        bool showSun = sun.intensity > 0;
+        if(sun.gameObject.activeInHierarchy != showSun)
+        {
+            sun.gameObject.SetActive(showSun);
+        }
 
         // enable / disable the moon
         if (moon.intensity == 0 && moon.gameObject.activeInHierarchy)
