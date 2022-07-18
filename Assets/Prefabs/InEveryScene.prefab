@@ -936,6 +936,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DayNightCycle
       objectReference: {fileID: 0}
+    - target: {fileID: 8448847965412073321, guid: ee41674af3d634c4cb54492f5a080e1e, type: 3}
+      propertyPath: fullDayLength
+      value: 600
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee41674af3d634c4cb54492f5a080e1e, type: 3}
 --- !u!4 &8634744846712422463 stripped
