@@ -31,9 +31,12 @@ namespace Custard
 
         public void RenderChangedCustard()
         {
-            
-            
             var cellsToUpdate = custardState.Buffer;
+            RenderCustard(cellsToUpdate);
+        }
+
+        public void RenderCustard(IEnumerable<CellValue> cellsToUpdate)
+        {
             foreach (var cellUpdate in cellsToUpdate)
             {
                 CustardBlock custardRenderBlock = FindRenderBlock(cellUpdate.Coords);
@@ -46,7 +49,8 @@ namespace Custard
                     var position = blockGameObject.transform.position;
                     // TODO interpolate change
                     // custard blocks origin point currently is at object center
-                    var representedCustardHeight = worldCells.GetHeightAt(cellUpdate.Coords.X, cellUpdate.Coords.Y) + newCustardLevel * .5f;
+                    var representedCustardHeight =
+                        worldCells.GetHeightAt(cellUpdate.Coords.X, cellUpdate.Coords.Y) + newCustardLevel * .5f;
                     blockGameObject.transform.position = new Vector3(position.x,
                         representedCustardHeight, position.z);
 
@@ -54,7 +58,7 @@ namespace Custard
                     {
                         custardRenderBlock.ChangeMaterial(shallowCustard);
                     }
-                    else if(newCustardLevel <= 2)
+                    else if (newCustardLevel <= 2)
                     {
                         custardRenderBlock.ChangeMaterial(normalCustard);
                     }
@@ -62,7 +66,7 @@ namespace Custard
                     {
                         custardRenderBlock.ChangeMaterial(deadlyCustard);
                     }
-                    
+
                     custardRenderBlock.Show();
                 }
                 else

@@ -57,6 +57,20 @@ namespace Custard
                    (x is > 90 and < 93 && y is > 90 and < 93);
         }
 
+        private void Update()
+        {
+            UpdateWhichCellsAreImpeded();
+            List<CellValue> valuesOfImpededCells = new List<CellValue>();
+            foreach (var cell in  custardState.Buffer)
+            {
+                if (_impededCells.ContainsKey(cell.Coords))
+                {
+                    valuesOfImpededCells.Add(cell);
+                }
+            }
+            custardVisualizer.RenderCustard(valuesOfImpededCells);
+        }
+
         private void FixedUpdate()
         {
             custardState.GlobalTideLevel = targetTideLevel;
