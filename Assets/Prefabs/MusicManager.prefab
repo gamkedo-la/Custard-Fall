@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4339408314736491872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4339408314736491874}
+  - component: {fileID: 4339408314736491873}
+  - component: {fileID: 774143550}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4339408314736491874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4339408314736491872}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4339408314736491873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4339408314736491872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435f27e2a290bdc418aa5a44a8d1019f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicSourcePrefab: {fileID: -3829548200560104043, guid: d81ee3d0f2d720741a248df32c9157ef, type: 3}
+  playMusicOnStart: 1
+  currentTrack:
+    clips:
+    - clip:
+        clip: {fileID: 8300000, guid: 395eadd53a9a9aa4e999b40e46ef95aa, type: 3}
+        underClip: {fileID: 8300000, guid: 395eadd53a9a9aa4e999b40e46ef95aa, type: 3}
+        endTime: 21.333
+        BeatInEightNotes: 2
+      weight: 0
+    - clip:
+        clip: {fileID: 8300000, guid: 395eadd53a9a9aa4e999b40e46ef95aa, type: 3}
+        underClip: {fileID: 8300000, guid: 395eadd53a9a9aa4e999b40e46ef95aa, type: 3}
+        endTime: 21.33333
+        BeatInEightNotes: 2
+      weight: 1
+    - clip:
+        clip: {fileID: 8300000, guid: 43ec0091b2213fd429a30641af6bba83, type: 3}
+        underClip: {fileID: 8300000, guid: 43ec0091b2213fd429a30641af6bba83, type: 3}
+        endTime: 21.33333
+        BeatInEightNotes: 2
+      weight: 0.5
+  currentTime: 0
+--- !u!114 &774143550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4339408314736491872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f49273001f65e4a82a1a0e5bc2c4c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dayTrack:
+    clips: []
+  nightTrack:
+    clips: []
+  twilightTrack:
+    clips: []
+  custardUpClip: {fileID: 0}
+  custardDownClip: {fileID: 0}
