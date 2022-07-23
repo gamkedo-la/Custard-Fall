@@ -27,4 +27,16 @@ public class CustardBlock : MonoBehaviour
     {
         _renderer.material = material;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // TODO: change sound to be underwater
+        Debug.Log("INSIDE CUSTARD!");
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // TODO: change sound to be above water
+        Debug.Log("OUTSIDE CUSTARD!");
+    }
 }
