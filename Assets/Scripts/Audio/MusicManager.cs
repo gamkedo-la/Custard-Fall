@@ -82,9 +82,11 @@ public class MusicManager : MonoBehaviour {
 			if (isUnder) {
 				StartCoroutine(FadeOut(currentBaseSource, fadeTime));
 				StartCoroutine(FadeIn(currentUnderSource, fadeTime));
+				musicUnder = isUnder;
 			} else {
 				StartCoroutine(FadeOut(currentUnderSource, fadeTime));
 				StartCoroutine(FadeIn(currentBaseSource, fadeTime));
+				musicUnder = isUnder;
 			}
 		}
 	}
@@ -93,7 +95,7 @@ public class MusicManager : MonoBehaviour {
 		currentTime = AudioSettings.dspTime;
 		currentClip = currentTrack.GetMusicClip();
 
-		Debug.Log("<<< " + currentTime + " " + nextTrackTime + " " + (nextTrackTime - currentTime));
+		//Debug.Log("<<< " + currentTime + " " + nextTrackTime + " " + (nextTrackTime - currentTime));
 
 		trackStartTime = currentTime + delay;
 		nextTrackTime = trackStartTime + currentClip.endTime;
@@ -112,8 +114,8 @@ public class MusicManager : MonoBehaviour {
 		if (musicUnder) currentBaseSource.volume = 0f;
 		else currentUnderSource.volume = 0f;
 
-		Debug.Log(">>> " + currentTime + " " + trackStartTime + " " + (trackStartTime - currentTime));
-		Debug.Log("vvv " + trackStartTime + " " + nextTrackTime + " " + (nextTrackTime - trackStartTime));
+		//Debug.Log(">>> " + currentTime + " " + trackStartTime + " " + (trackStartTime - currentTime));
+		//Debug.Log("vvv " + trackStartTime + " " + nextTrackTime + " " + (nextTrackTime - trackStartTime));
 	}
 
 	private void CalculateBeatTime() {

@@ -30,13 +30,13 @@ public class CustardBlock : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // TODO: change sound to be underwater
-        Debug.Log("INSIDE CUSTARD!");
+        MusicManager.Instance.SetUnder(true);
+        //Debug.Log("INSIDE CUSTARD!");
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other) 
     {
-        // TODO: change sound to be above water
-        Debug.Log("OUTSIDE CUSTARD!");
+        MusicManager.Instance.SetUnder(false);
+        //Debug.Log("OUTSIDE CUSTARD!");
     }
 }
