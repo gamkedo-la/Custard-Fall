@@ -27,16 +27,4 @@ public class CustardBlock : MonoBehaviour
     {
         _renderer.material = material;
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        MusicManager.Instance.SetUnder(true);
-        //Debug.Log("INSIDE CUSTARD!");
-    }
-
-    private void OnTriggerExit(Collider other) 
-    {
-        MusicManager.Instance.SetUnder(false);
-        //Debug.Log("OUTSIDE CUSTARD!");
-    }
 }

@@ -81,6 +81,11 @@ namespace Custard
             CellsThatMightCauseChangeNextIteration.Clear();
         }
 
+        public int GetCurrentCustardLevelAt(Coords coords)
+        {
+            return CustardArea[coords.X, coords.Y];
+        }
+        
         public int GetCurrentCustardLevelAt(int x, int y)
         {
             return CustardArea[x, y];
