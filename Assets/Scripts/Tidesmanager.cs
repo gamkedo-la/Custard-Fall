@@ -12,6 +12,7 @@
         public List<TideStep> tidesPlan = new List<TideStep>();
         public float speedFactor = 1f;
         public bool pause = false;
+        public bool realCustardFallCycle;
 
         public int currentTideStep;
         private float _updateCountdown;
@@ -54,15 +55,30 @@
         protected void InitPlannedTideBehavior()
         {
             // targeting a 8min day like in Don't Starve
-            var baseDuration = 45f;
-            tidesPlan.Add(new TideStep(3, baseDuration));
-            tidesPlan.Add(new TideStep(2, baseDuration *2));
-            tidesPlan.Add(new TideStep(1, baseDuration));
-            tidesPlan.Add(new TideStep(2, baseDuration *2));
-            tidesPlan.Add(new TideStep(3, baseDuration));
-            tidesPlan.Add(new TideStep(4, baseDuration));
-            // supposed to be a nice shocker
-            tidesPlan.Add(new TideStep(5, 15f));
+            if (realCustardFallCycle)
+            {
+                var baseDuration = 45f;
+                tidesPlan.Add(new TideStep(7, baseDuration));
+                tidesPlan.Add(new TideStep(5, baseDuration));
+                tidesPlan.Add(new TideStep(3, baseDuration * 2));
+                tidesPlan.Add(new TideStep(7, baseDuration));
+                tidesPlan.Add(new TideStep(8, baseDuration));
+                tidesPlan.Add(new TideStep(9, baseDuration * 2));
+                // supposed to be a nice shocker
+                tidesPlan.Add(new TideStep(10, 30f));
+            }
+            else
+            {
+                var baseDuration = 45f;
+                tidesPlan.Add(new TideStep(3, baseDuration));
+                tidesPlan.Add(new TideStep(2, baseDuration *2));
+                tidesPlan.Add(new TideStep(1, baseDuration));
+                tidesPlan.Add(new TideStep(2, baseDuration *2));
+                tidesPlan.Add(new TideStep(3, baseDuration));
+                tidesPlan.Add(new TideStep(4, baseDuration));
+                // supposed to be a nice shocker
+                tidesPlan.Add(new TideStep(5, 15f));
+            }
         }
 
 
