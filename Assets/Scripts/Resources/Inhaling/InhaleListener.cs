@@ -52,7 +52,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
         {
             var item = _inhaleQueue[0];
             item.inhaleThresholdSeconds -= Time.deltaTime;
-            if (item.inhaleThresholdSeconds <= 0 && (!_wobble || _wobble.IsAtMaxWobble()))
+            if (item.inhaleThresholdSeconds <= 0 && (_wobble == null || _wobble.IsAtMaxWobble()))
             {
                 _inhaleQueue.RemoveAt(0);
                 OnResourceInhaled(_currentInhaler, item.resource, item.amount);
