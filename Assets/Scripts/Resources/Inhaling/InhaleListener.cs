@@ -9,6 +9,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
     private readonly List<InhaleQueueItem> _inhaleQueue = new List<InhaleQueueItem>();
     private Inhaler _currentInhaler = null;
     private float _currentInhaleStrength;
+    private Wobble _wobble;
 
     public void Inhale(Inhaler inhaler, float strength)
     {
@@ -23,6 +24,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
 
     private void Start()
     {
+        _wobble = GetComponent<Wobble>();
         Init();
     }
 
@@ -50,7 +52,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
         {
             var item = _inhaleQueue[0];
             item.inhaleThresholdSeconds -= Time.deltaTime;
-            if (item.inhaleThresholdSeconds <= 0)
+            if (item.inhaleThresholdSeconds <= 0 && (!_wobble || _wobble.IsAtMaxWobble()))
             {
                 _inhaleQueue.RemoveAt(0);
                 OnResourceInhaled(_currentInhaler, item.resource, item.amount);
@@ -59,6 +61,12 @@ public class InhaleListener : MonoBehaviour, WorldItem
             // inhaler needs to be present next update (keep calling Inhale)
             _currentInhaler = null;
             _currentInhaleStrength = 0;
+
+            if (_wobble && hasInhaleFocus)
+            {
+                _wobble.DoWobble();
+            }
+
         }
         else if (hasInhaleFocus)
         {

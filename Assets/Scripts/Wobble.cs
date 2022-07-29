@@ -8,8 +8,9 @@ public class Wobble : MonoBehaviour
 {
     public float wobbleStrength = 0f;
     private Vector3 startShakePosition;
-    private float shakeScale = 0.3f;
-    private float decayValue = .95f; 
+    private float shakeScale = 0.2f;
+    private float decayValue = .85f;
+    private bool increasingWobble = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,26 @@ public class Wobble : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-            transform.position = startShakePosition + Random.insideUnitSphere * (wobbleStrength * shakeScale);
+        transform.position = startShakePosition + Random.insideUnitSphere * (wobbleStrength * shakeScale);
+        if (increasingWobble)
+        {
+            increasingWobble = false;
+        }
+        else
+        {
             wobbleStrength *= decayValue;
+        }
+    }
+
+    public bool IsAtMaxWobble()
+    {
+        return wobbleStrength >= decayValue;
+    }
+
+    public void DoWobble()
+    {
+        increasingWobble = true;
+        wobbleStrength += .1f;
+        wobbleStrength = Mathf.Min(wobbleStrength, 1f);
     }
 }
