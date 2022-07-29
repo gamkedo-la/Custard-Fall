@@ -211,6 +211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 274989982990206081}
   - component: {fileID: 3343993881124649203}
+  - component: {fileID: 5048714788798354512}
   m_Layer: 0
   m_Name: Single-Cookie-Shard
   m_TagString: Untagged
@@ -248,6 +249,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+--- !u!114 &5048714788798354512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3343993881124649202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94aa7582687e3d4ab0e8f97b571f55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wobbleStrength: 0
 --- !u!1 &7092343330896372520
 GameObject:
   m_ObjectHideFlags: 0
