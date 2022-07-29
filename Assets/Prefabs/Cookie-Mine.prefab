@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1660399673514829389}
   - component: {fileID: 728165699860010337}
+  - component: {fileID: 3163973215154773292}
   m_Layer: 0
   m_Name: Cookie-Mine
   m_TagString: Untagged
@@ -47,6 +48,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+--- !u!114 &3163973215154773292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4229541877690997310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94aa7582687e3d4ab0e8f97b571f55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &510538350640039534
 PrefabInstance:
   m_ObjectHideFlags: 0
