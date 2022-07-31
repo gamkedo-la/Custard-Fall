@@ -824,6 +824,9 @@ MonoBehaviour:
   HeightTillCovered: 2
   InsideCustard: 0
   CoveredByCustard: 0
+  timeBeforePlayerTakesDamageFromDrawning: 0.7
+  timeBetweenDamageTicks: 1.5
+  drowningDamage: 1
 --- !u!1 &1336719744
 GameObject:
   m_ObjectHideFlags: 0
