@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4078713960622899494}
   - component: {fileID: 61404448290581716}
   - component: {fileID: 1966580447810109878}
+  - component: {fileID: 3116627243590945611}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -129,6 +130,9 @@ MonoBehaviour:
     m_Name: 
     m_BindingGroup: 
     m_DeviceRequirements: []
+  maxHealth: 3
+  currentHealth: 0
+  healthbar: {fileID: 0}
 --- !u!114 &4078713960622899494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +248,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15bcf1c64fee45a6882c10979baab4a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3116627243590945611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62c46e90b1991b84e8c34fea5f0f5970, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 4
+  outlineColor: {r: 0.2627451, g: 0.7803922, b: 0.7137255, a: 1}
+  outlineWidth: 2
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &3600208504748121475
 GameObject:
   m_ObjectHideFlags: 0
