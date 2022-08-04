@@ -63,7 +63,8 @@
                 tidesPlan.Add(new TideStep(3, baseDuration * 2));
                 tidesPlan.Add(new TideStep(7, baseDuration));
                 tidesPlan.Add(new TideStep(8, baseDuration));
-                tidesPlan.Add(new TideStep(9, baseDuration * 2));
+                tidesPlan.Add(new TideStep(9, baseDuration));
+                tidesPlan.Add(new TideStep(10, baseDuration));
                 // supposed to be a nice shocker
                 tidesPlan.Add(new TideStep(10, 30f));
             }
