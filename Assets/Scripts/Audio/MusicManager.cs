@@ -15,7 +15,6 @@ public class MusicManager : MonoBehaviour {
 	public MusicTrack currentTrack;
 	private MusicClip currentClip;
 	private AudioSource currentBaseSource, currentUnderSource;
-	[Space(150)]
 
 	public double currentTime = 0.0;
 	private double trackStartTime = 0.0, nextTrackTime = 0.0, beatTime = 0.0, nextBeatTime = 0.0, bufferTime = 0.25;

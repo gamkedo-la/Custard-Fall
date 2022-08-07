@@ -80,11 +80,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f49273001f65e4a82a1a0e5bc2c4c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayTrack:
-    clips: []
-  nightTrack:
-    clips: []
-  twilightTrack:
-    clips: []
+  dayNightTracks:
+  - musicTrack:
+      clips:
+      - clip:
+          clip: {fileID: 0}
+          underClip: {fileID: 0}
+          endTime: 0
+          BeatInEightNotes: 0
+        weight: 0
+      - clip:
+          clip: {fileID: 8300000, guid: 43ec0091b2213fd429a30641af6bba83, type: 3}
+          underClip: {fileID: 8300000, guid: 573c0f12542a7e740811de3928121e37, type: 3}
+          endTime: 21.333330154418945
+          BeatInEightNotes: 2
+        weight: 1
+    time: 0.2
+  - musicTrack:
+      clips:
+      - clip:
+          clip: {fileID: 0}
+          underClip: {fileID: 0}
+          endTime: 0
+          BeatInEightNotes: 0
+        weight: 0
+      - clip:
+          clip: {fileID: 8300000, guid: 395eadd53a9a9aa4e999b40e46ef95aa, type: 3}
+          underClip: {fileID: 8300000, guid: 314a0547974c66542bc6d572e4d585e9, type: 3}
+          endTime: 21.333330154418945
+          BeatInEightNotes: 2
+        weight: 1
+    time: 0.7
   custardUpClip: {fileID: 0}
   custardDownClip: {fileID: 0}
