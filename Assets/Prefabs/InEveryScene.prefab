@@ -2521,6 +2521,10 @@ PrefabInstance:
       propertyPath: inhalingParticleSystem
       value: 
       objectReference: {fileID: 1711367326711025375}
+    - target: {fileID: 61404448290581716, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: inhalingConeParticleSystem
+      value: 
+      objectReference: {fileID: 4350948566413775869}
     - target: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2577,6 +2581,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 634481626215235167, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_Name
+      value: InhaleConeEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 634481626215235167, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 805916483395958161, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -2617,10 +2629,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8241182356326129374, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: d8707887f57d4704ab53743552de0ee6, type: 2}
+    - target: {fileID: 8254776607773620037, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: healthbar
       value: 
@@ -2671,6 +2695,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c3cf9fe2e9ae7e46bead6e59c3c8406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!198 &4350948566413775869 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+  m_PrefabInstance: {fileID: 6813161327211590579}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6893568250330546002 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}

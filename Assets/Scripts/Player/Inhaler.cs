@@ -12,6 +12,7 @@ public class Inhaler : MonoBehaviour
     public CustardManager custardManager;
     public Inventory inventory;
     public ParticleSystem inhalingParticleSystem;
+    public ParticleSystem inhalingConeParticleSystem;
     public readonly Dictionary<Vector3, InhaleCell> affectedCells = new Dictionary<Vector3, InhaleCell>();
     private float _distance;
     public bool isInhale;
@@ -24,6 +25,7 @@ public class Inhaler : MonoBehaviour
         {
             UpdateInhaleConeCells();
             InhaleCustard();
+            InhaleCone();
             InhaleResources();
         }
     }
@@ -36,8 +38,16 @@ public class Inhaler : MonoBehaviour
             custardManager.ImpedeCustardCell(inhaleCell.GetCoords(), inhaleCell.GetWorldY(), inhaleCell.GetStrength());
         }
     }
-    
-        
+
+    private void InhaleCone()
+    {
+        foreach (var keyValuePair in affectedCells)
+        {
+            var inhaleCell = keyValuePair.Value;
+            custardManager.ImpedeCustardCell(inhaleCell.GetCoords(), inhaleCell.GetWorldY(), inhaleCell.GetStrength());
+        }
+    }
+
     private void InhaleResources()
     {
         foreach (var keyValuePair in affectedCells)
@@ -128,6 +138,7 @@ public class Inhaler : MonoBehaviour
         _distance = coneLength;
         if(!isInhale)
             inhalingParticleSystem.gameObject.SetActive(true);
+            inhalingConeParticleSystem.gameObject.SetActive(true);
         isInhale = true;
     }
 
@@ -135,6 +146,7 @@ public class Inhaler : MonoBehaviour
     {
         isInhale = false;
         inhalingParticleSystem.gameObject.SetActive(false);
+        inhalingConeParticleSystem.gameObject.SetActive(false);
         affectedCells.Clear();
     }
     
