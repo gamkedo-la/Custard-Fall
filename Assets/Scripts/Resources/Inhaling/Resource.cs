@@ -11,7 +11,7 @@ public class Resource : WorldItem
         Name = name;
     }
 
-    protected bool Equals(Resource other)
+    private bool Equals(Resource other)
     {
         return Name == other.Name;
     }
