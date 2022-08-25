@@ -10,6 +10,7 @@ public class InventoryUI : MonoBehaviour
 
 	public Transform itemsParent;   // The parent object of all the items
 	public GameObject inventoryUI;  // The entire UI
+	private InventorySlot[] iconList;
 
 	private bool isShowHideInventoryUi;
 
@@ -17,6 +18,7 @@ public class InventoryUI : MonoBehaviour
 	{
 		inventory = Inventory.instance;
 		inventory.onItemChangedCallback += UpdateUI;
+		iconList = GetComponentsInChildren<InventorySlot>();
 	}
 
 	void Update()
