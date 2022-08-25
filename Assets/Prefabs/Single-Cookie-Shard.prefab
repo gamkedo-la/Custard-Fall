@@ -440,6 +440,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ParticleItemPickup
       objectReference: {fileID: 0}
+    - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3203314172375432171, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_RootOrder
       value: 1

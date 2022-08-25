@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class InventoryUI : MonoBehaviour
 {
+	Inventory inventory;
 
 	public Transform itemsParent;   // The parent object of all the items
 	public GameObject inventoryUI;  // The entire UI
@@ -14,7 +15,8 @@ public class InventoryUI : MonoBehaviour
 
 	void Start()
 	{
-		
+		inventory = Inventory.instance;
+		inventory.onItemChangedCallback += UpdateUI;
 	}
 
 	void Update()
@@ -37,6 +39,6 @@ public class InventoryUI : MonoBehaviour
 	
 	void UpdateUI()
 	{
-		
+		Debug.Log("UPDATING UI");
 	}
 }

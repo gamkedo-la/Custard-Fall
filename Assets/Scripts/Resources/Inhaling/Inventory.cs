@@ -6,6 +6,25 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    #region Singleton
+
+    public static Inventory instance;
+
+    void Awake ()
+    {
+        if (instance != null)
+        {
+            Debug.LogWarning("More than one instance of Inventory found!");
+            return;
+        }
+        instance = this;
+    }
+
+    #endregion
+
+    public delegate void OnItemChanged();
+    public OnItemChanged onItemChangedCallback;
+
     private readonly SortedSet<InventorySlot> _slots = new SortedSet<InventorySlot>(InventorySlot.SortIndexComparer);
 
     public int AddOrSubResourceAmount(Resource resource, int amount)
@@ -17,12 +36,21 @@ public class Inventory : MonoBehaviour
             {
                 slot.Amount = 0;
                 _slots.Remove(slot);
+
+                if (onItemChangedCallback != null)
+                    onItemChangedCallback.Invoke();
             }
         }
         else if(amount > 0)
         {
             slot = new InventorySlot(resource, amount, _slots.Count);
             _slots.Add(slot);
+
+            Debug.Log("ResourceAdded");
+
+            if (onItemChangedCallback != null)
+                onItemChangedCallback.Invoke();
+
         }
 
         return slot.Amount;
