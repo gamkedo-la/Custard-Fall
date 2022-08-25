@@ -8,6 +8,13 @@ public class CollectibleManager : MonoBehaviour
     public static CollectibleManager Instance;
     Collectible[] collectiblesInScene;
     int numCollected;
+
+    public int NumCollectibles { get {
+        return collectiblesInScene.Length;
+    } }
+
+    public int NumCollected { get => numCollected; set => numCollected = value; }
+
     void Awake() {
 
 		if (Instance == null) {
@@ -30,9 +37,9 @@ public class CollectibleManager : MonoBehaviour
 
     private void CollectiblePickedUp(object sender, int e)
     {
-        numCollected++;
+        NumCollected++;
 
-        if(numCollected == collectiblesInScene.Length){
+        if(NumCollected == collectiblesInScene.Length){
             onAllCollectiblesInhaled?.Invoke(this, EventArgs.Empty);
             Debug.Log("Congratulations, all collectibles inhaled");
         }
