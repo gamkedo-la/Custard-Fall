@@ -37,4 +37,10 @@ public class CollectibleManager : MonoBehaviour
             Debug.Log("Congratulations, all collectibles inhaled");
         }
     }
+    
+    [ContextMenu("Fire Collectible Event")]
+    public void DBG_FireCollectibleEvent(){
+        onAllCollectiblesInhaled?.Invoke(this, EventArgs.Empty);
+    }
+
 }
