@@ -182,4 +182,14 @@ public void OnDebugHealthUp(InputValue context)
             TakeDamage(1);
         }
     }
+    
+    public void OnUseItem(InputValue context)
+    {
+        if (context.isPressed)
+        {
+            Debug.Log("using item");
+        }
+    }
+    
+    
 }
