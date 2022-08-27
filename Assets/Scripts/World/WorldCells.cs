@@ -13,7 +13,9 @@ public class WorldCells : ScriptableObject
     private int[,] _heightMap;
 
     private List<CellValue> _terrainList = new List<CellValue>(BlocksWidth * BlocksHeight);
-    private bool updateDebugVisualization = false;
+    private Dictionary<Coords, int> _worldItems = new Dictionary<Coords, int>();
+    private bool _updateDebugVisualization = false;
+    public bool isDebugMode = false;
 
     public void Init()
     {
@@ -23,32 +25,70 @@ public class WorldCells : ScriptableObject
 
     public int GetHeightAt(int x, int y)
     {
-        return _heightMap[x, y];
+        return GetHeightAt(Coords.Of(x, y));
     }
-
+    
     public int GetHeightAt(Coords coords)
+    {
+        if (coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight)
+            return 255;
+        return _heightMap[coords.X, coords.Y] +  _worldItems.GetValueOrDefault(coords,0);
+    }
+    
+    public int GetTerrainHeightAt(int x, int y)
+    {
+        return GetTerrainHeightAt(Coords.Of(x, y));
+    }
+    
+    public int GetTerrainHeightAt(Coords coords)
     {
         if (coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight)
             return 255;
         return _heightMap[coords.X, coords.Y];
     }
+    
+    public int GetWorldItemHeightAt(int x, int y)
+    {
+        return GetWorldItemHeightAt(Coords.Of(x, y));
+    }
+    
+    public int GetWorldItemHeightAt(Coords coords)
+    {
+        if (coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight)
+            return 255;
+        return _worldItems.GetValueOrDefault(coords, 0);
+    }
 
     public void WriteHeightAt(Coords coords, int value)
     {
         _heightMap[coords.X, coords.Y] = value;
-        updateDebugVisualization = true;
+        _updateDebugVisualization = isDebugMode;
+    }
+
+    public void WriteWorldItemHeight(Coords coords, int value)
+    {
+        if (value > 0)
+        {
+            _worldItems.TryAdd(coords, value);
+            _worldItems[coords] = value;
+        }
+        else
+        {
+            _worldItems.Remove(coords);
+        }
+        _updateDebugVisualization = isDebugMode;
     }
 
     public List<CellValue> GetTerrainList()
     {
-        if (updateDebugVisualization)
+        if (_updateDebugVisualization)
         {
             _terrainList.Clear();
 
             for (int x = 0; x < BlocksWidth; x++)
             for (int y = 0; y < BlocksHeight; y++)
-                _terrainList.Add(CellValue.Of(x, y, _heightMap[x, y]));
-            updateDebugVisualization = false;
+                _terrainList.Add(CellValue.Of(x, y, GetHeightAt(x,y)));
+            _updateDebugVisualization = false;
         }
 
         return _terrainList;
