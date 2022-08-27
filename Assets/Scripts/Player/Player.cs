@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
 
     public InputControlScheme gameplayScheme;
 
+    public GameObject itemInHand;
+
     //health bar
     public int maxHealth = 3;
     public int currentHealth;
@@ -185,11 +187,31 @@ public void OnDebugHealthUp(InputValue context)
     
     public void OnUseItem(InputValue context)
     {
-        if (context.isPressed)
+        if (!context.isPressed && itemInHand != null)
         {
-            Debug.Log("using item");
+            PlaceItemInHand();
         }
     }
-    
-    
+
+    private void PlaceItemInHand()
+    {
+        var currentTransform = transform;
+        var result = currentTransform.position;
+        var colliderBounds = _collider.bounds;
+
+        var tracePoint = result + currentTransform.forward * colliderBounds.extents.x / 2;
+
+        Coords coords = worldCells.GetCellPosition(tracePoint.x, tracePoint.z);
+        // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
+        var terrainHeight = worldCells.GetHeightAt(coords);
+        var heightDifference = terrainHeight - colliderBounds.min.y;
+        // the player cannot scale high ground
+        if (terrainHeight != 255 && heightDifference < 1.5f && itemInHand != null)
+        {
+            var cellWorldPosition = worldCells.GetWorldPosition(coords);
+            // only if no other item at target position
+            if(worldCells.GetWorldItemHeightAt(coords) == 0)
+                 Instantiate(itemInHand, new Vector3(cellWorldPosition.x,terrainHeight + 0.2f,cellWorldPosition.y),Quaternion.Euler (90f, 0, 90f));
+        }
+    }
 }

@@ -4974,6 +4974,7 @@ MonoBehaviour:
     m_Name: 
     m_BindingGroup: 
     m_DeviceRequirements: []
+  itemInHand: {fileID: 8821145956041889501, guid: f4ae8062929c4f348964e896bf3f0c03, type: 3}
   maxHealth: 3
   currentHealth: 0
   healthbar: {fileID: 0}
