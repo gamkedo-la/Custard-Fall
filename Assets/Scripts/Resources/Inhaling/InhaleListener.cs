@@ -11,6 +11,8 @@ public class InhaleListener : MonoBehaviour, WorldItem
     private float _currentInhaleStrength;
     private Wobble _wobble;
 
+    public string interactionMessage;
+
     public void Inhale(Inhaler inhaler, float strength)
     {
         // sub classes can decide if strength is enough

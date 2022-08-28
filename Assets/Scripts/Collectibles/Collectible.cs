@@ -6,6 +6,7 @@ public class Collectible : InhaleListener
 
     public static EventHandler<int> onCollectiblePickup;
 
+
     static int ID = 0;
 
     int id;

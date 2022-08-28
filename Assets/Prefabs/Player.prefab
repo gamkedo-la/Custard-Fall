@@ -4885,6 +4885,7 @@ Transform:
   - {fileID: 2026095700548969589}
   - {fileID: 2602185639936851925}
   - {fileID: 6713574407888306948}
+  - {fileID: 575572231524268801}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10051,6 +10052,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119338e3402c434438fafef9216a6a18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7938322248355192729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 575572231524268801}
+  - component: {fileID: 227355403516020515}
+  - component: {fileID: 8685261012155980988}
+  m_Layer: 0
+  m_Name: ItemCollision
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &575572231524268801
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7938322248355192729}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 83292326176017633}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &227355403516020515
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7938322248355192729}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.1300018, y: 2.0387802, z: 1.2800026}
+  m_Center: {x: 0.089103244, y: 0.5193902, z: -0.062287197}
+--- !u!114 &8685261012155980988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7938322248355192729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18006dc4fcd5b5448931ce6adc95c8e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textForItemDisplay: {fileID: 0}
 --- !u!1 &8254776607773620037
 GameObject:
   m_ObjectHideFlags: 0
