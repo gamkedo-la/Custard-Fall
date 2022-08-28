@@ -6,12 +6,16 @@ using UnityEngine;
 public class WaffleWall1x1 : InhaleListener
 {
     private WorldCells _worldCells;
-    
+
     public override void Init()
     {
         base.Init();
 
         AddToInhaleQueue(new Resource("Waffle wall"), 2f);
+    }
+
+    private void Awake()
+    {
         AddObstacleToWorld(2);
     }
 
