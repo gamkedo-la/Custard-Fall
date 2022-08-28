@@ -12,7 +12,7 @@ public class WaffleWall1x1 : InhaleListener
         base.Init();
 
         AddToInhaleQueue(new Resource("Waffle wall"), 2f);
-        AddObstacleToWorld(1);
+        AddObstacleToWorld(2);
     }
 
     private void AddObstacleToWorld(int height)
