@@ -27,7 +27,7 @@ public class WaffleWall1x1 : InhaleListener
         base.OnResourceInhaled(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
-            AddObstacleToWorld(-1);
+            AddObstacleToWorld(-2);
             gameObject.SetActive(false);
             Debug.Log("got the waffle wall piece");
         }
