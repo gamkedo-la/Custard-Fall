@@ -81,7 +81,7 @@ private void MovePlayerForward()
         var terrainHeight = worldCells.GetHeightAt(coords);
         var heightDifference = terrainHeight - colliderBounds.min.y;
         // the player cannot scale high ground
-        if (terrainHeight != 255 && heightDifference < 2.75f)
+        if (terrainHeight != 255 && heightDifference < 2.75f && worldCells.GetWorldItemHeightAt(coords) == 0)
         {
             result += Time.deltaTime * movementSpeed * currentTransform.forward;
             if (Math.Abs(heightDifference) > .0001f)
