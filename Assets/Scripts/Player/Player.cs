@@ -199,7 +199,7 @@ public void OnDebugHealthUp(InputValue context)
         var result = currentTransform.position;
         var colliderBounds = _collider.bounds;
 
-        var tracePoint = result + currentTransform.forward * colliderBounds.extents.x / 2;
+        var tracePoint = result + currentTransform.forward * 1.1f ;
 
         Coords coords = worldCells.GetCellPosition(tracePoint.x, tracePoint.z);
         // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
