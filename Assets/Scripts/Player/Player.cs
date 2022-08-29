@@ -5,6 +5,7 @@ using System.Threading;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -52,6 +53,17 @@ public class Player : MonoBehaviour
     {
         currentHealth -= damage;
         healthbar.SetHealth(currentHealth);
+
+        if (currentHealth <= 0)
+        {
+            Respawn();
+        }
+    }
+
+    void Respawn()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.name);
     }
 
     void GainHealth(int health)
