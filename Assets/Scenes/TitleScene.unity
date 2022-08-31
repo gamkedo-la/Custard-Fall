@@ -1898,9 +1898,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'What''s going on?
+  m_text: 'At the dawn of apocalypse there was custard rain. The the remains of our
+    world are covered in food with a mind of its own. The custard lives by the tides.
+    When the mood is up it growth.
 
-    What should I be doing?'
+
+    Explore the world, inhale custard and resources
+    and recover the last keep sakes of mankind.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3067,7 +3071,18 @@ MonoBehaviour:
   m_text: 'Hold Left Mouse Button - Walk to cursor
 
 
-    Hold Ctrl - Inhale'
+    Hold Ctrl - Inhale
+
+
+    Press
+    E Button - Use selected item / enter place mode
+
+
+    Press Shift - Activate
+    short sprint
+
+
+    Press I Button - Toggle inventory ON/OFF'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
