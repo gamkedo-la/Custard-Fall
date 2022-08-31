@@ -63,6 +63,7 @@ public class Player : MonoBehaviour
     void Respawn()
     {
         Scene currentScene = SceneManager.GetActiveScene();
+        worldCells.ResetChanges();
         SceneManager.LoadScene(currentScene.name);
     }
 

@@ -12,8 +12,8 @@ public class WorldCells : ScriptableObject
 
     private int[,] _heightMap;
 
-    private List<CellValue> _terrainList = new List<CellValue>(BlocksWidth * BlocksHeight);
-    private Dictionary<Coords, int> _worldItems = new Dictionary<Coords, int>();
+    private readonly List<CellValue> _terrainList = new List<CellValue>(BlocksWidth * BlocksHeight);
+    private readonly Dictionary<Coords, int> _worldItems = new Dictionary<Coords, int>();
     private bool _updateDebugVisualization = false;
     public bool isDebugMode = false;
     
@@ -112,5 +112,10 @@ public class WorldCells : ScriptableObject
     public Vector2 GetWorldPosition(Coords coords)
     {
         return GetWorldPosition(coords.X, coords.Y);
+    }
+
+    public void ResetChanges()
+    {
+        _worldItems.Clear();
     }
 }

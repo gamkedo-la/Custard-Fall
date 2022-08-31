@@ -32,6 +32,8 @@ namespace Custard
             _custardUpdateCountdown = custardCrawlDuration;
             _impededCells = new Dictionary<Coords, ImpededCell>();
         }
+        
+        
 
         public void InitCustardState()
         {
