@@ -1875,8 +1875,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: 230}
+  m_SizeDelta: {x: 230, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &958924690
 MonoBehaviour:
@@ -1901,6 +1901,8 @@ MonoBehaviour:
   m_text: 'At the dawn of apocalypse there was custard rain. The the remains of our
     world are covered in food with a mind of its own. The custard lives by the tides.
     When the mood is up it growth. Do not let it get you.
+
+
 
 
     Explore the world,
