@@ -1900,11 +1900,12 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'At the dawn of apocalypse there was custard rain. The the remains of our
     world are covered in food with a mind of its own. The custard lives by the tides.
-    When the mood is up it growth.
+    When the mood is up it growth. Do not let it get you.
 
 
-    Explore the world, inhale custard and resources
-    and recover the last keep sakes of mankind.'
+    Explore the world,
+    inhale the deadly custard, gather crafting resources and recover the last keep
+    sakes of mankind.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
