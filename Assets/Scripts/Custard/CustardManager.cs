@@ -28,6 +28,7 @@ namespace Custard
 
         private void Start()
         {
+            worldCells.onItemHeightChanged += OnHeihgtChanged;
             _custardUpdateCountdown = custardCrawlDuration;
             _impededCells = new Dictionary<Coords, ImpededCell>();
         }
@@ -432,7 +433,14 @@ namespace Custard
                 alreadyImpeded.SetDuration(2f);
             }
         }
+
+        private void OnHeihgtChanged(Coords coords)
+        {
+            custardState.QueueCellForCurrentIteration(coords);
+        }
     }
+   
+
 
     public class ImpededCell
     {

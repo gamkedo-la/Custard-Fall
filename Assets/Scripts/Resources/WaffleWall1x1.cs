@@ -6,6 +6,7 @@ using UnityEngine;
 public class WaffleWall1x1 : InhaleListener
 {
     private WorldCells _worldCells;
+    private const int Height = 2;
 
     public override void Init()
     {
@@ -16,7 +17,7 @@ public class WaffleWall1x1 : InhaleListener
 
     private void Awake()
     {
-        AddObstacleToWorld(2);
+        AddObstacleToWorld(Height);
     }
 
     private void AddObstacleToWorld(int height)
@@ -31,7 +32,7 @@ public class WaffleWall1x1 : InhaleListener
         base.OnResourceInhaled(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
-            AddObstacleToWorld(-2);
+            AddObstacleToWorld(-Height);
             gameObject.SetActive(false);
             Debug.Log("got the waffle wall piece");
         }

@@ -16,6 +16,8 @@ public class WorldCells : ScriptableObject
     private Dictionary<Coords, int> _worldItems = new Dictionary<Coords, int>();
     private bool _updateDebugVisualization = false;
     public bool isDebugMode = false;
+    
+    public event Action<Coords> onItemHeightChanged;
 
     public void Init()
     {
@@ -76,6 +78,7 @@ public class WorldCells : ScriptableObject
         {
             _worldItems.Remove(coords);
         }
+        onItemHeightChanged?.Invoke(coords);
         _updateDebugVisualization = isDebugMode;
     }
 
