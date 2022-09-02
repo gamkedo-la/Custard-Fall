@@ -22,13 +22,15 @@ public class MusicManager : MonoBehaviour {
 	private int beatLength = 2;
 
 	void Awake() {
+		transform.parent = null;
 		currentTime = AudioSettings.dspTime;
 
 		if (Instance == null) {
 			Instance = this;
 		} else {
-			Destroy(this);
+			Destroy(gameObject);
 		}
+		DontDestroyOnLoad(gameObject);
 	}
 
 	void Start() {
@@ -107,11 +109,16 @@ public class MusicManager : MonoBehaviour {
 		currentUnderSource.clip = currentClip.underClip;
 		currentBaseSource.transform.parent = gameObject.transform;
 		currentUnderSource.transform.parent = gameObject.transform;
+		currentBaseSource.name = currentClip.clip.name;
+		currentUnderSource.name = currentClip.underClip.name;
 		currentBaseSource.PlayScheduled(trackStartTime);
 		currentUnderSource.PlayScheduled(trackStartTime);
 
 		if (musicUnder) currentBaseSource.volume = 0f;
 		else currentUnderSource.volume = 0f;
+
+		Destroy(currentBaseSource.gameObject, currentBaseSource.clip.length);
+		Destroy(currentUnderSource.gameObject, currentUnderSource.clip.length);
 
 		//Debug.Log(">>> " + currentTime + " " + trackStartTime + " " + (trackStartTime - currentTime));
 		//Debug.Log("vvv " + trackStartTime + " " + nextTrackTime + " " + (nextTrackTime - trackStartTime));
