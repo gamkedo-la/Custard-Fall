@@ -141,5 +141,5 @@ MonoBehaviour:
           BeatInEightNotes: 2
         weight: 2
     time: 0.7
-  custardUpClip: {fileID: 0}
-  custardDownClip: {fileID: 0}
+  custardUpClip: {fileID: 8300000, guid: 6e93058b3c259644eb546514a3dad405, type: 3}
+  custardDownClip: {fileID: 8300000, guid: c33d1b8ec2ea8c149b929f5ac97fe3f8, type: 3}

@@ -69,6 +69,7 @@ public class MusicManager : MonoBehaviour {
 	public AudioSource SchedualTop(AudioClip topClip) {
 		AudioSource freshSource = Instantiate(musicSourcePrefab).GetComponent<AudioSource>();
 		freshSource.clip = topClip;
+		freshSource.loop = true;
 		freshSource.PlayScheduled(currentTime + nextBeatTime - currentTime);
 		return freshSource;
 	}
@@ -130,7 +131,7 @@ public class MusicManager : MonoBehaviour {
 	}
 
     //--//Automation
-    IEnumerator FadeIn(AudioSource source, float fadeTime) {
+    public IEnumerator FadeIn(AudioSource source, float fadeTime) {
 		float startTime = Time.unscaledTime;
 		float currentTime = 0f;
 
@@ -146,7 +147,7 @@ public class MusicManager : MonoBehaviour {
 		source.volume = 1f;
 	}
 
-	IEnumerator FadeOut(AudioSource source, float fadeTime) {
+	public IEnumerator FadeOut(AudioSource source, float fadeTime) {
 		float startTime = Time.unscaledTime;
 		float currentTime = 0f;
 
