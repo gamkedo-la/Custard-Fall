@@ -19,8 +19,18 @@ public class Player : MonoBehaviour
     public bool isRunning = false;
     public float runningMultiplier;
 
-    public float cooldownTime = 2; 
+    public float cooldownTime = 2;
     private float nextRunningTime = 0;
+
+    public float grappleCooldownTime = 2;
+    private float nextGrappleTime = 2;
+    [SerializeField]
+    private float grappleDistance = 7f;
+    [SerializeField]
+    private float grappleSpeed = 8f;
+    private Vector3 grapplePoint;
+
+    bool grappling;
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     private float yOffset = -.05f;
@@ -75,13 +85,24 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        nextGrappleTime += Time.fixedDeltaTime;
+        if (grappling)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
+            if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
+            {
+                grappling = false;
+            }
+            return;
+        }
+
         if (_moveForwards)
         {
             MovePlayerForward();
         }
     }
 
-private void MovePlayerForward()
+    private void MovePlayerForward()
     {
         var currentTransform = transform;
         var result = currentTransform.position;
@@ -143,7 +164,7 @@ private void MovePlayerForward()
         {
             transform.localRotation = Quaternion.Euler(new Vector3(0, angle - 90, 0));
         }
-        
+
     }
     public void OnInhale(InputValue context)
     {
@@ -156,8 +177,8 @@ private void MovePlayerForward()
             inhaler.StopInhale();
         }
     }
-   
-public void OnRun(InputValue context)
+
+    public void OnRun(InputValue context)
     {
         if (Time.time > nextRunningTime)
         {
@@ -176,7 +197,7 @@ public void OnRun(InputValue context)
         }
     }
 
-public void OnDebugHealthUp(InputValue context)
+    public void OnDebugHealthUp(InputValue context)
     {
         //Debug.Log("health up "+context.isPressed);
 
@@ -184,7 +205,7 @@ public void OnDebugHealthUp(InputValue context)
         {
             Debug.Log("health up");
             GainHealth(1);
-        } 
+        }
     }
 
     public void OnDebugHealthDown(InputValue context)
@@ -197,7 +218,7 @@ public void OnDebugHealthUp(InputValue context)
             TakeDamage(1);
         }
     }
-    
+
     public void OnUseItem(InputValue context)
     {
         if (!context.isPressed && itemInHand != null)
@@ -206,13 +227,55 @@ public void OnDebugHealthUp(InputValue context)
         }
     }
 
+    public void OnGrapple(InputValue context)
+    {
+        if (grappling)
+        {
+            return;
+        }
+
+        if (nextGrappleTime < grappleCooldownTime)
+        {
+            return;
+        }
+
+        //On Right Click Raycast from mouse to find collider
+
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward, grappleDistance);
+        bool hitSuccess = false;
+
+        if (hits.Length > 0)
+        {
+            foreach (var hit in hits)
+            {
+                if (hit.transform.gameObject.name == "ItemCollision")
+                {
+                    continue;
+                }
+                grapplePoint = hit.point;
+                hitSuccess = true;
+                grapplePoint = new Vector3(grapplePoint.x, transform.position.y, grapplePoint.z);
+                break;
+
+            }
+        }
+
+        if (!hitSuccess)
+        {
+            return;
+        }
+
+        grappling = true;
+        nextGrappleTime = 0;
+    }
+
     private void PlaceItemInHand()
     {
         var currentTransform = transform;
         var result = currentTransform.position;
         var colliderBounds = _collider.bounds;
 
-        var tracePoint = result + currentTransform.forward * 1.1f ;
+        var tracePoint = result + currentTransform.forward * 1.1f;
 
         Coords coords = worldCells.GetCellPosition(tracePoint.x, tracePoint.z);
         // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
@@ -223,8 +286,8 @@ public void OnDebugHealthUp(InputValue context)
         {
             var cellWorldPosition = worldCells.GetWorldPosition(coords);
             // only if no other item at target position
-            if(worldCells.GetWorldItemHeightAt(coords) == 0)
-                 Instantiate(itemInHand, new Vector3(cellWorldPosition.x,terrainHeight + 0.2f,cellWorldPosition.y),Quaternion.Euler (90f, 0, 90f));
+            if (worldCells.GetWorldItemHeightAt(coords) == 0)
+                Instantiate(itemInHand, new Vector3(cellWorldPosition.x, terrainHeight + 0.2f, cellWorldPosition.y), Quaternion.Euler(90f, 0, 90f));
         }
     }
 }
