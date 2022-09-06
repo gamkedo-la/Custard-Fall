@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour
 {
-    [Range(0.0f, 1.0f)]
+    /* [Range(0.0f, 1.0f)]
     public float time;
     public float fullDayLength;
     public float startTime = 0.4f;
-    private float timeRate;
+    private float timeRate; */
     public Vector3 noon;
 
+    float time;
 
     [Header("Sun")]
     public Light sun;
@@ -28,14 +29,14 @@ public class DayNightCycle : MonoBehaviour
 
     void Start ()
     {
-        timeRate = 1.0f / fullDayLength;
-        time = startTime;
+        /* timeRate = 1.0f / fullDayLength;
+        time = startTime; */
     }
 
     void Update ()
     {
         //increment time
-        time += timeRate * Time.deltaTime;
+        time = TimeManager.Instance.time;
 
         if(time >= 1.0f)
             time = 0.0f;

@@ -19,16 +19,16 @@ public class MusicBrain : MonoBehaviour {
 	void Update() {
 		// Day Night music logic
 		if (dayNightCycle != null) {
-			if (dayNightCycle.time < lastTime) holdForLoop = false;
+			if (TimeManager.Instance.time < lastTime) holdForLoop = false;
 
-			if (dayNightCycle.time >= dayNightTracks[nextTimeIndex].time && !holdForLoop) {
+			if (TimeManager.Instance.time >= dayNightTracks[nextTimeIndex].time && !holdForLoop) {
 				MusicManager.Instance.StartTrack(dayNightTracks[nextTimeIndex].musicTrack);
 				nextTimeIndex = (nextTimeIndex + 1) % dayNightTracks.Count;
 				if (nextTimeIndex == 0) holdForLoop = true;
-				lastTime = dayNightCycle.time;
+				lastTime = TimeManager.Instance.time;
 			}
 
-			lastTime = dayNightCycle.time;
+			lastTime = TimeManager.Instance.time;
 		} else {
 			dayNightCycle = FindObjectOfType<DayNightCycle>();
 		}
