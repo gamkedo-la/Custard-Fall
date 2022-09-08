@@ -141,5 +141,110 @@ MonoBehaviour:
           BeatInEightNotes: 2
         weight: 2
     time: 0.7
+  - musicTrack:
+      clips:
+      - clip:
+          clip: {fileID: 8300000, guid: 9bc8c156d2cd4794d9d96ce3eddd8548, type: 3}
+          underClip: {fileID: 8300000, guid: 768d4906fb0be3b44a391c0c1e6cd4de, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 91febb4ff35a91b4083212f3f8e69075, type: 3}
+          underClip: {fileID: 8300000, guid: 6d873fdcf35a16e4aab0d2b470e13013, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 5fedd1590bd6f9a4fb662b01b672c8e5, type: 3}
+          underClip: {fileID: 8300000, guid: cb0fc1ffce9d88d49a6861d13fa89996, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 8ebf8dc4736b44d4e9bf2d9b5ff403f9, type: 3}
+          underClip: {fileID: 8300000, guid: 5a9aa624dd1710a4ba9592e1f285fead, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: cb45ab69cf82eb34287add00c9fa54f9, type: 3}
+          underClip: {fileID: 8300000, guid: ecab06d16b46e8d4c9b493ac832c4d4c, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 6b8af1757919d924ab94472105c5675d, type: 3}
+          underClip: {fileID: 8300000, guid: 672037e4922b3bb42bcdea2a6a20c8bd, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 59b85f53b8eaf044e958d94ada74a9f7, type: 3}
+          underClip: {fileID: 8300000, guid: c46530ce248404a41b0d407fdbb240dc, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 322645ff3b9f92844b75465d93a548e8, type: 3}
+          underClip: {fileID: 8300000, guid: ffd9c95f594e3744e9f3f0d00e817a08, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 17bc512b09d77cb43b64e9954688dfb3, type: 3}
+          underClip: {fileID: 8300000, guid: 4cf938da320ba41488f4d37f357ded6d, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 25bc629b92117d0479652c2e71e8ad09, type: 3}
+          underClip: {fileID: 8300000, guid: 9bbca95da02ba8a429570b2d4698ad1a, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 89657b83b23e8de4c8161d810303d23e, type: 3}
+          underClip: {fileID: 8300000, guid: 053c280ed88d03f42814b79ea4480123, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 8629aac2b2060e74795890b5e45a810a, type: 3}
+          underClip: {fileID: 8300000, guid: beaca15445034d143be354f376a4c039, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 962be5a50fe2b2e40a04903a84b1e737, type: 3}
+          underClip: {fileID: 8300000, guid: 193ae04bb58d9f54fa95f5584842c2b4, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 8e6942540f6638945832e61002debbba, type: 3}
+          underClip: {fileID: 8300000, guid: 089d546b62c72104989641229c10aea0, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: fcf7fbba8ec8e4f40872f0a3694f7913, type: 3}
+          underClip: {fileID: 8300000, guid: 323c5ec4ba8c9b44aa429a076ce2f7c0, type: 3}
+          endTime: 8
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: bb0c5e2a7663ea549a49d1cb98e7aace, type: 3}
+          underClip: {fileID: 8300000, guid: 2dd1478fcb1836747b55c5db525edc5c, type: 3}
+          endTime: 8
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: c8ed3e6822f2b224283d0ad09ed98c4e, type: 3}
+          underClip: {fileID: 8300000, guid: 70634de6a9e99c5448cfc222622d1424, type: 3}
+          endTime: 8
+          BeatInEightNotes: 2
+        weight: 1
+    time: 0.75
   custardUpClip: {fileID: 8300000, guid: 6e93058b3c259644eb546514a3dad405, type: 3}
   custardDownClip: {fileID: 8300000, guid: c33d1b8ec2ea8c149b929f5ac97fe3f8, type: 3}
