@@ -10,7 +10,7 @@ public class InventoryUI : MonoBehaviour
 
 	public Transform itemsParent;   // The parent object of all the items
 	public GameObject inventoryUI;  // The entire UI
-	private InventorySlot[] iconList;
+	public InventorySlot[] iconList;
 
 	private bool isShowHideInventoryUi;
 
