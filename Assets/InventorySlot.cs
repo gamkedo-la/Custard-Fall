@@ -5,9 +5,9 @@ public class InventorySlot : MonoBehaviour
 {
     public Image icon;
 
-    public void AddItem ()
+    public void AddItem (Sprite newIcon)
      {
-        //icon.sprite = item.icon;
+        icon.sprite = newIcon;
         Debug.Log("Item");
     }
 

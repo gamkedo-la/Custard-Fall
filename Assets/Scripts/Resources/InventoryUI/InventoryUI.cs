@@ -10,7 +10,8 @@ public class InventoryUI : MonoBehaviour
 
 	public Transform itemsParent;   // The parent object of all the items
 	public GameObject inventoryUI;  // The entire UI
-	public InventorySlot[] iconList;
+	public Sprite[] iconArt;
+	private InventorySlot[] iconList;
 
 	private bool isShowHideInventoryUi;
 
@@ -42,5 +43,9 @@ public class InventoryUI : MonoBehaviour
 	void UpdateUI()
 	{
 		Debug.Log("UPDATING UI");
+		for (int i = 0; i < iconList.Length; i++)
+        {
+			iconList[i].AddItem(iconArt[i % iconArt.Length]);
+        }
 	}
 }
