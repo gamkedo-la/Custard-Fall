@@ -45,6 +45,7 @@ public class InventoryUI : MonoBehaviour
 		Debug.Log("UPDATING UI");
 		for (int i = 0; i < iconList.Length; i++)
         {
+			//To Do: Display Icons Based on inventory, currently just shows putting images on slots
 			iconList[i].AddItem(iconArt[i % iconArt.Length]);
         }
 	}
