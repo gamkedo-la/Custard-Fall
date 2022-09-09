@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 5945145062334894385}
+  SingleCookieShard: {fileID: 0}
 --- !u!1 &5945145062203618959
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +362,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 4601739395d23834c95826f83b3f3ec5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

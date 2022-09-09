@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour
 {
     public Image icon;
+    public Sprite SingleCookieShard;
 
     public void AddItem ()
      {
