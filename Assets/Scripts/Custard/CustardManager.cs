@@ -305,7 +305,7 @@ namespace Custard
 
         private static bool IsOutOfBounds(Coords coords)
         {
-            return coords.X is < 0 or >= WorldCells.BlocksWidth && coords.Y is < 0 or >= WorldCells.BlocksHeight;
+            return coords.X is < 0 or >= WorldCells.BlocksWidth || coords.Y is < 0 or >= WorldCells.BlocksHeight;
         }
 
         private CustardAreaInfo RetrieveCustardInfo(Coords pivot, int[,] custardAreaAroundPivot,
