@@ -10,24 +10,36 @@ public class EyeballManager : MonoBehaviour
   [SerializeField] private List<Eyeball> eyeballs;
   [SerializeField] private GameObject EyeballPrefab;
 
+
   [Tooltip("Minimum distance from player that eyeballs will surface. They will dive back down if the player gets too close.")]
   [SerializeField] private float minDistanceToPlayer = 2.5f;
+
   [Tooltip("Maximum distance from player that eyeballs will surface. They will dive back down if the player gets too far.")]
   [SerializeField] private float maxDistanceToPlayer = 10f;
+
   [Tooltip("Minimum depth of custard that eyeballs will surface.")]
   [SerializeField] private int minCustardDepth = 2;
+
   [Tooltip("Maximum number of eyeballs that will gaze up at you.")]
   [SerializeField] private int numberOfEyeballs = 3;
+
   [Tooltip("When an eyeball dives, it will stay under the custard for at least this amount of time before surfacing again.")]
   [SerializeField] private float timeBeforeResurface = 2f;
+
   [Tooltip("Minimum amount of time between any eyeball surfacing.")]
   [SerializeField] private float timeBetweenSurfaces = 3f;
-  [Tooltip("The time of day when eyeballs \"wake up\" and start surfacing.")]
-  [SerializeField] private float startTimeOfDay = .65f;
-  [Tooltip("The time of day when eyeballs \"go to sleep\" and stop surfacing.")]
-  [SerializeField] private float endTimeOfDay = .35f;
+
+  [Tooltip("Check this to use the custom \"awake\" times below for eyeballs. Otherwise, they will only surface at night based on the TimeManager.")]
+  [SerializeField] private bool useCustomAwakeTimes = false;
+
+  [Tooltip("The time of day when eyeballs \"wake up\" and start surfacing. (\"Use Custom Awake Times\" must be checked)")]
+  [SerializeField] private float wakeupTime = .65f;
+
+  [Tooltip("The time of day when eyeballs \"go to sleep\" and stop surfacing. (\"Use Custom Awake Times\" must be checked)")]
+  [SerializeField] private float fallAsleepTime = .35f;
 
   private float timeUntilNextSurface = 0f;
+
 
   void Start()
   {
@@ -52,9 +64,14 @@ public class EyeballManager : MonoBehaviour
     }
   }
 
+  private bool IsNight()
+  {
+    return !timeManager.IsDayTime;
+  }
+
   private void SurfaceEyeballsIfPossible()
   {
-    if (IsAwakeTimeOfDay())
+    if (EyeballsAreAwake())
     {
       timeUntilNextSurface -= Time.deltaTime;
 
@@ -108,7 +125,7 @@ public class EyeballManager : MonoBehaviour
         int custardAmount = custardManager.custardState.GetCurrentCustardLevelAt(eyeball.coords);
         bool custardAmountHasChanged = custardAmount != eyeball.custardAmount;
 
-        if (playerIsTooCloseOrTooFar || !IsAwakeTimeOfDay())
+        if (playerIsTooCloseOrTooFar || !EyeballsAreAwake())
         {
           eyeball.Dive();
         }
@@ -129,16 +146,21 @@ public class EyeballManager : MonoBehaviour
     return player.position + randomVector;
   }
 
-  private bool IsAwakeTimeOfDay()
+  private bool EyeballsAreAwake()
   {
-    if (startTimeOfDay < endTimeOfDay)
+    if (useCustomAwakeTimes)
     {
-      return timeManager.time >= startTimeOfDay && timeManager.time <= endTimeOfDay;
+      if (wakeupTime < fallAsleepTime)
+      {
+        return timeManager.time >= wakeupTime && timeManager.time <= fallAsleepTime;
+      }
+      else
+      {
+        return timeManager.time >= wakeupTime || timeManager.time <= fallAsleepTime;
+      }
     }
-    else
-    {
-      return timeManager.time >= startTimeOfDay || timeManager.time <= endTimeOfDay;
-    }
+
+    return IsNight();
   }
 
   private bool DoveLongEnoughAgo(Eyeball eyeball)
