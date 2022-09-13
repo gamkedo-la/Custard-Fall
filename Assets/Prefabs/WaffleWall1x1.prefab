@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 5112332919866577380}
   - component: {fileID: 3175943349639599931}
   - component: {fileID: 835317256470959598}
+  - component: {fileID: -1744009046040958364}
   m_Layer: 0
   m_Name: WaffleWall1x1
   m_TagString: Untagged
@@ -245,6 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  interactionMessage: 
 --- !u!114 &835317256470959598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,3 +260,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+--- !u!114 &-1744009046040958364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821145956041889501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ba2639956186d41a0e44c05b66f8c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: 1625da46ae74dec498128c511f58a24a, type: 3}
