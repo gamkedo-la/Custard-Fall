@@ -105,27 +105,28 @@ public class Player : MonoBehaviour
     private void MovePlayerForward()
     {
         var currentTransform = transform;
-        var result = currentTransform.position;
+        var currentPosition = currentTransform.position;
         var colliderBounds = _collider.bounds;
 
-        var tracePoint = result + currentTransform.forward * colliderBounds.extents.x / 2;
+        var tracePoint = currentPosition + currentTransform.forward * colliderBounds.extents.x / 2;
 
-        Coords coords = worldCells.GetCellPosition(tracePoint.x, tracePoint.z);
+        Coords coords = worldCells.GetCellPosition(tracePoint);
         // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
         var terrainHeight = worldCells.GetHeightAt(coords);
         var heightDifference = terrainHeight - colliderBounds.min.y;
-        // the player cannot scale high ground
-        if (terrainHeight != 255 && heightDifference < 2.75f && worldCells.GetWorldItemHeightAt(coords) == 0)
+        // player cannot scale high ground
+        // player can only leap from a high point if running
+        if (terrainHeight != 255 && (isRunning?heightDifference:Math.Abs(heightDifference)) < 2.75f && worldCells.GetWorldItemHeightAt(coords) == 0)
         {
-            result += Time.deltaTime * movementSpeed * currentTransform.forward;
+            currentPosition += Time.deltaTime * movementSpeed * currentTransform.forward;
             if (Math.Abs(heightDifference) > .0001f)
             {
-                result += (heightDifference + colliderBounds.extents.y / 2 + yOffset) * Time.deltaTime * 18 *
+                currentPosition += (heightDifference + colliderBounds.extents.y / 2 + yOffset) * Time.deltaTime * 18 *
                           Vector3.up;
             }
         }
 
-        currentTransform.position = result;
+        currentTransform.position = currentPosition;
     }
 
     public void OnMoveForward(InputValue input)
