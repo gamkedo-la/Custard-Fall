@@ -15,6 +15,8 @@ namespace Custard
         public CustardState custardState;
         private Dictionary<Coords, ImpededCell> _impededCells;
 
+        private CustardSpawn[] _initialSpawns;
+
         public CustardVisualizer custardVisualizer;
         public GameObject custardBlockPrefab;
 
@@ -31,46 +33,91 @@ namespace Custard
             worldCells.onItemHeightChanged += OnHeihgtChanged;
             _custardUpdateCountdown = custardCrawlDuration;
             _impededCells = new Dictionary<Coords, ImpededCell>();
+
+            _initialSpawns = FindObjectsOfType<CustardSpawn>();
         }
-        
-        
+
 
         public void InitCustardState()
         {
             custardState.GlobalTideLevel = targetTideLevel;
             custardState.Init();
+
+            if (_initialSpawns != null)
+                foreach (var custardSpawn in _initialSpawns)
+                {
+                    var spawnPosition = worldCells.GetCellPosition(custardSpawn.transform.position);
+                    if (custardSpawn.fillUp)
+                    {
+                        FillUp(spawnPosition);
+                    }
+                    else
+                    {
+                        custardState.RegisterUpdate(spawnPosition, 1);
+                        custardState.QueueForNextIteration(spawnPosition);
+                    }
+                }
+
             // iteration 0 for custardState
             for (int x = 0; x < WorldCells.BlocksWidth; x++)
             for (int y = 0; y < WorldCells.BlocksHeight; y++)
             {
                 if (IsInitialWorldCustard(x, y))
                 {
-                    custardState.RegisterUpdate(x, y, targetTideLevel);
+                    custardState.RegisterUpdate(x, y, 1);
                     custardState.QueueCellForNextIteration(x, y);
-                    // apply and proceed to next iteration
-                    _custardUpdateCountdown = 0;
                 }
+            }
+
+            // apply and proceed to next iteration
+            _custardUpdateCountdown = 0;
+        }
+
+        private void FillUp(Coords spawnPosition)
+        {
+            HashSet<Coords> alreadyHandled = new HashSet<Coords>();
+            Queue<Coords> fillUpCandidates = new Queue<Coords>();
+            fillUpCandidates.Enqueue(spawnPosition);
+            var targetHeight = worldCells.GetHeightAt(spawnPosition) + 1;
+            while (fillUpCandidates.Count != 0)
+            {
+                var coords = fillUpCandidates.Dequeue();
+                
+                if (!alreadyHandled.Contains(coords)&&!IsOutOfBounds(coords))
+                {
+                    var currentHeight = worldCells.GetHeightAt(coords);
+                    if (currentHeight < targetHeight)
+                    {
+                        custardState.RegisterUpdate(coords,
+                            Math.Max(custardState.GetCurrentCustardLevelAt(coords), targetHeight - currentHeight));
+                        var info = RetrieveCustardInfo(coords,
+                            GetLocalNeighborhood(coords, (x, y) => 0),
+                            GetLocalNeighborhood(coords, (x, y) => worldCells.GetHeightAt(x, y)));
+                        info.CellsBellow.ForEach(fillUpCandidates.Enqueue);
+                        info.CellsAtSameLevel.ForEach(fillUpCandidates.Enqueue);
+                    }
+                }
+                alreadyHandled.Add(coords);
             }
         }
 
         private bool IsInitialWorldCustard(int x, int y)
         {
-            return x == 0 || y == 0 || x == WorldCells.BlocksWidth - 1 || y == WorldCells.BlocksHeight - 1 ||
-                   (x == 55 && y == 55) ||
-                   (x is > 90 and < 93 && y is > 90 and < 93);
+            return x == 0 || y == 0 || x == WorldCells.BlocksWidth - 1 || y == WorldCells.BlocksHeight - 1;
         }
 
         private void Update()
         {
             UpdateWhichCellsAreImpeded();
             List<CellValue> valuesOfImpededCells = new List<CellValue>();
-            foreach (var cell in  custardState.Buffer)
+            foreach (var cell in custardState.Buffer)
             {
                 if (_impededCells.ContainsKey(cell.Coords))
                 {
                     valuesOfImpededCells.Add(cell);
                 }
             }
+
             custardVisualizer.RenderCustard(valuesOfImpededCells);
         }
 
@@ -169,22 +216,20 @@ namespace Custard
             var processing = new HashSet<Coords>(custardState.CellsToProcessInCurrentIteration);
             foreach (var pivot in processing)
             {
+                custardState.MarkAsProcessed(pivot);
+                if(IsOutOfBounds(pivot))
+                    continue;
                 var custardAreaAroundPivot =
                     GetLocalNeighborhood(pivot, (i, j) => custardState.GetCurrentCustardLevelAt(i, j));
                 var terrainAreaAroundPivot = GetLocalNeighborhood(pivot, (i, j) => worldCells.GetHeightAt(i, j));
 
                 UpdateCustardState(pivot, custardAreaAroundPivot, terrainAreaAroundPivot);
-                custardState.MarkAsProcessed(pivot);
             }
         }
 
 
         private void UpdateCustardState(Coords pivot, int[,] custardAreaAroundPivot, int[,] terrainAreaAroundPivot)
         {
-            if (IsOutOfBounds(pivot))
-                // out of bounds of world area
-                return;
-
             _impededCells.TryGetValue(pivot, out var impededCell);
 
             // note: for now let us ignore the case of a corner-on-corner block setup, where the neighboring custard is only adjacent through the corner edge
@@ -211,10 +256,10 @@ namespace Custard
                     if (pivotCustardAmount > 0)
                     {
                         // next iteration: check all cells where I might flow down into
-                        custardState.QueueCellsForNextIteration(info.CellsBelow);
+                        custardState.QueueCellsForNextIteration(info.CellsBellow);
                     }
                 }
-                else if (info.CellsBelow.Count != 0)
+                else if (info.CellsBellow.Count != 0)
                 {
                     if (pivotCustardAmount > 0)
                     {
@@ -227,7 +272,7 @@ namespace Custard
                     }
 
                     // next iteration: check all cells where I might flow down into
-                    custardState.QueueCellsForNextIteration(info.CellsBelow);
+                    custardState.QueueCellsForNextIteration(info.CellsBellow);
                 }
                 else if (pivotCustardAmount > 1)
                 {
@@ -238,6 +283,12 @@ namespace Custard
                         custardState.QueueForNextIteration(pivot);
                     // next iteration: check all cells that now might flow into me
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
+                }
+                else if (pivotCustardAmount == 1 && info.CellsBellow.Count == 0 &&
+                         info.CellsAtSameLevel.Count + info.CustardFromAbove.Count == 8)
+                {
+                    // custard is trapped
+                    newPivotCustardAmount = 1;
                 }
                 else if (custardState.GlobalTideLevel == 0 && pivotTerrainHeight == 0)
                 {
@@ -257,7 +308,7 @@ namespace Custard
                 // cells above should flow into me
                 custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                 // spread: next iteration: check all cells below me as they should come up
-                custardState.QueueCellsForNextIteration(info.CellsBelow);
+                custardState.QueueCellsForNextIteration(info.CellsBellow);
             }
             else
             {
@@ -275,7 +326,7 @@ namespace Custard
                     custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                     // spread: next iteration: check all cells below me or currently at same level should grow next as well
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
-                    custardState.QueueCellsForNextIteration(info.CellsBelow);
+                    custardState.QueueCellsForNextIteration(info.CellsBellow);
                 }
             }
 
@@ -314,7 +365,7 @@ namespace Custard
             List<Coords> custardCellsAbove = new List<Coords>();
             List<Coords> custardtAtSameLevel = new List<Coords>();
             List<Coords> sameLevelCells = new List<Coords>();
-            List<Coords> cellsBelow = new List<Coords>();
+            List<Coords> cellsBellow = new List<Coords>();
 
 
             int pivotCustardAmount = custardAreaAroundPivot[1, 1];
@@ -324,18 +375,20 @@ namespace Custard
             for (int x = 0; x < 3; x++)
             for (int y = 0; y < 3; y++)
             {
+                var coord = pivot.Add(x - 1, y - 1);
                 if (x == 1 && y == 1)
+                {
                     continue;
-                else if (pivot.X == 0 && x == 0)
+                }
+                else if (pivot.X == 0 && x == 0 || pivot.Y == 0 && y == 0 ||
+                         pivot.X == WorldCells.BlocksWidth - 1 && x == 2 ||
+                         pivot.Y == WorldCells.BlocksHeight - 1 && y == 2)
+                {
+                    sameLevelCells.Add(coord);
                     continue;
-                else if (pivot.Y == 0 && y == 0)
-                    continue;
-                else if (pivot.X == WorldCells.BlocksWidth - 1 && x == 2)
-                    continue;
-                else if (pivot.Y == WorldCells.BlocksHeight - 1 && y == 2) continue;
+                }
 
                 // convert relative offset to coord
-                var coord = pivot.Add(x - 1, y - 1);
                 int neighborCustardAmount = custardAreaAroundPivot[x, y];
                 var neighborTotalHeight = neighborCustardAmount + terrainAreaAroundPivot[x, y];
 
@@ -357,11 +410,13 @@ namespace Custard
                     // or be removed entirely
                     var heightDifference = pivotTotalHeight - neighborTotalHeight;
                     if (heightDifference != 0)
-                        cellsBelow.Add(coord);
+                    {
+                        cellsBellow.Add(coord);
+                    }
                 }
             }
 
-            return new CustardAreaInfo(custardCellsAbove, custardtAtSameLevel, sameLevelCells, cellsBelow);
+            return new CustardAreaInfo(custardCellsAbove, custardtAtSameLevel, sameLevelCells, cellsBellow);
         }
 
         private int[,] GetLocalNeighborhood(Coords coords, Func<int, int, int> getValueAt)
@@ -377,7 +432,7 @@ namespace Custard
             for (var j = 0; j < 3; j++)
                 if ((i == 0 && leftClamp) || (i == 2 && rightClamp) || (j == 0 && topClamp) || (j == 2 && bottomClamp))
                     localNeighborhood[i, j] = 0;
-                else
+                else if (getValueAt != null)
                     localNeighborhood[i, j] = getValueAt.Invoke(coords.X + i - 1, coords.Y + j - 1);
 
             return localNeighborhood;
@@ -389,15 +444,15 @@ namespace Custard
             public readonly List<Coords> CustardFromAbove;
             public readonly List<Coords> CustardAtSameLevel;
             public readonly List<Coords> CellsAtSameLevel;
-            public readonly List<Coords> CellsBelow;
+            public readonly List<Coords> CellsBellow;
 
             public CustardAreaInfo(List<Coords> custardFromAbove, List<Coords> custardAtSameLevel,
                 List<Coords> cellsAtSameLevel,
-                List<Coords> cellsBelow)
+                List<Coords> cellsBellow)
             {
                 CustardFromAbove = custardFromAbove;
                 CustardAtSameLevel = custardAtSameLevel;
-                CellsBelow = cellsBelow;
+                CellsBellow = cellsBellow;
                 CellsAtSameLevel = cellsAtSameLevel;
             }
         }
@@ -441,7 +496,6 @@ namespace Custard
             custardState.QueueCellForCurrentIteration(coords);
         }
     }
-   
 
 
     public class ImpededCell

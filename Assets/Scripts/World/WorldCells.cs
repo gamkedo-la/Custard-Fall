@@ -97,6 +97,10 @@ public class WorldCells : ScriptableObject
         return _terrainList;
     }
 
+    public Coords GetCellPosition(Vector3 position)
+    {
+        return GetCellPosition(position.x, position.z);
+    }
     public Coords GetCellPosition(double x, double y)
     {
         var cellX = Math.Floor(x) + WorldCells.BlocksWidth / 2f;
