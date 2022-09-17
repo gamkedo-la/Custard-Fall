@@ -12,6 +12,8 @@ public class ToggleImageWindowsScript : MonoBehaviour
     private Animator custardTransitionAnimatorComponent;
     private CustardTransitionToggleWindowScript custardTransitionToggleWindowScript;
 
+    [SerializeField] Animator custard; 
+
     private void Awake()
     {
         custardTransitionAnimatorComponent = custardTransitionImage.GetComponent<Animator>();
@@ -30,6 +32,8 @@ public class ToggleImageWindowsScript : MonoBehaviour
 
     public void TurnOnCustardTransitionImageAndAnimation()
     {
+        custard.SetTrigger("Move");
+
         custardTransitionToggleWindowScript.toggledOffImageWindow = toggledOffImageWindow;
         custardTransitionToggleWindowScript.toggledOnImageWindow = toggledOnImageWindow;
         custardTransitionToggleWindowScript.currentButtonName = gameObject.name;
