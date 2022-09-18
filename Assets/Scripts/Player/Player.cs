@@ -19,15 +19,14 @@ public class Player : MonoBehaviour
     public bool isRunning = false;
     public float runningMultiplier;
 
-    public float cooldownTime = 2;
+    public float cooldownTime = 2.5f;
+    public float runningDuration = .7f;
     private float nextRunningTime = 0;
 
     public float grappleCooldownTime = 2;
     private float nextGrappleTime = 2;
-    [SerializeField]
-    private float grappleDistance = 7f;
-    [SerializeField]
-    private float grappleSpeed = 8f;
+    [SerializeField] private float grappleDistance = 7f;
+    [SerializeField] private float grappleSpeed = 8f;
     private Vector3 grapplePoint;
 
     bool grappling;
@@ -57,6 +56,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (Time.time > nextRunningTime - cooldownTime + runningDuration)
+        {
+            isRunning = false;
+            movementSpeed = 6;
+        }
     }
 
     public void TakeDamage(int damage)
@@ -88,11 +92,13 @@ public class Player : MonoBehaviour
         nextGrappleTime += Time.fixedDeltaTime;
         if (grappling)
         {
-            transform.position = Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
+            transform.position =
+                Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
             if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
             {
                 grappling = false;
             }
+
             return;
         }
 
@@ -116,13 +122,14 @@ public class Player : MonoBehaviour
         var heightDifference = terrainHeight - colliderBounds.min.y;
         // player cannot scale high ground
         // player can only leap from a high point if running
-        if (terrainHeight != 255 && (isRunning?heightDifference:Math.Abs(heightDifference)) < 2.75f && worldCells.GetWorldItemHeightAt(coords) == 0)
+        if (terrainHeight != 255 && (isRunning ? heightDifference : Math.Abs(heightDifference)) < 2.75f &&
+            worldCells.GetWorldItemHeightAt(coords) == 0)
         {
             currentPosition += Time.deltaTime * movementSpeed * currentTransform.forward;
             if (Math.Abs(heightDifference) > .0001f)
             {
                 currentPosition += (heightDifference + colliderBounds.extents.y / 2 + yOffset) * Time.deltaTime * 18 *
-                          Vector3.up;
+                                   Vector3.up;
             }
         }
 
@@ -165,8 +172,8 @@ public class Player : MonoBehaviour
         {
             transform.localRotation = Quaternion.Euler(new Vector3(0, angle - 90, 0));
         }
-
     }
+
     public void OnInhale(InputValue context)
     {
         if (context.isPressed)
@@ -181,7 +188,7 @@ public class Player : MonoBehaviour
 
     public void OnRun(InputValue context)
     {
-        if (Time.time > nextRunningTime)
+        if (!isRunning && Time.time > nextRunningTime)
         {
             if (context.isPressed)
             {
@@ -190,11 +197,6 @@ public class Player : MonoBehaviour
                 print("ability used, cooldownstarted");
                 nextRunningTime = Time.time + cooldownTime; //running cooldown
             }
-        }
-        else
-        {
-            isRunning = false;
-            movementSpeed = 6;
         }
     }
 
@@ -253,11 +255,11 @@ public class Player : MonoBehaviour
                 {
                     continue;
                 }
+
                 grapplePoint = hit.point;
                 hitSuccess = true;
                 grapplePoint = new Vector3(grapplePoint.x, transform.position.y, grapplePoint.z);
                 break;
-
             }
         }
 
@@ -288,7 +290,8 @@ public class Player : MonoBehaviour
             var cellWorldPosition = worldCells.GetWorldPosition(coords);
             // only if no other item at target position
             if (worldCells.GetWorldItemHeightAt(coords) == 0)
-                Instantiate(itemInHand, new Vector3(cellWorldPosition.x, terrainHeight + 0.2f, cellWorldPosition.y), Quaternion.Euler(90f, 0, 90f));
+                Instantiate(itemInHand, new Vector3(cellWorldPosition.x, terrainHeight + 0.2f, cellWorldPosition.y),
+                    Quaternion.Euler(90f, 0, 90f));
         }
     }
 }

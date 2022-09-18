@@ -4968,13 +4968,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   inhaler: {fileID: 61404448290581716}
-  movementSpeed: 6
+  movementSpeed: 5
   isRunning: 0
-  runningMultiplier: 0
+  runningMultiplier: 1.5
   cooldownTime: 2
+  runningDuration: 1.5
   grappleCooldownTime: 2
-  grappleDistance: 7
-  grappleSpeed: 8
+  grappleDistance: 10
+  grappleSpeed: 10
   gameplayScheme:
     m_Name: 
     m_BindingGroup: 
