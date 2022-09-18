@@ -1233,7 +1233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7991727253976907592
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1269,7 +1269,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8234934358961691265}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -3717,6 +3717,10 @@ PrefabInstance:
       propertyPath: inhalingConeParticleSystem
       value: 
       objectReference: {fileID: 4350948566413775869}
+    - target: {fileID: 74465695373766138, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: textForItemDisplay
+      value: 
+      objectReference: {fileID: 4695250287222826384}
     - target: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -3772,6 +3776,10 @@ PrefabInstance:
     - target: {fileID: 83292326176017633, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 227355403516020515, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 634481626215235167, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_Name
