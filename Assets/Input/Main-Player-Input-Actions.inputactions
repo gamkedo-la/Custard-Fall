@@ -184,7 +184,7 @@
                 {
                     "name": "",
                     "id": "7260a84c-fc43-4686-b38a-e59b3f7ea3c9",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -196,17 +196,6 @@
                     "name": "",
                     "id": "2982a04f-751d-47ac-9f97-e0c1143f8270",
                     "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Run",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c2b63f7f-5057-435a-929f-a45eda4a11d0",
-                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -321,6 +310,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "UseItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c2b63f7f-5057-435a-929f-a45eda4a11d0",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Grapple",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -51,7 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
-  interactionMessage: Collectible
+  interactionMessage: Mankind's true treasure
 --- !u!54 &1723292341381968490
 Rigidbody:
   m_ObjectHideFlags: 0
