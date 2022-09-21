@@ -7,6 +7,6 @@ public class PlayButtonTitleScreenScript : MonoBehaviour
 {
     public void HandleButtonClick()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Tutorial-World");
     }    
 }
