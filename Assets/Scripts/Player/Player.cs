@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     public WorldCells worldCells;
     public Inhaler inhaler;
 
+    private AudioSource inhaleSFX;
+
     private bool _moveForwards = false;
 
     public float movementSpeed = 4;
@@ -47,6 +49,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _collider = GetComponent<Collider>();
+        inhaleSFX = GetComponent<AudioSource>();
 
         currentHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
@@ -178,10 +181,12 @@ public class Player : MonoBehaviour
         if (context.isPressed)
         {
             inhaler.BeginInhaleInTransformDirection(4f);
+            inhaleSFX.Play();
         }
         else
         {
             inhaler.StopInhale();
+            inhaleSFX.Stop();
         }
     }
 
