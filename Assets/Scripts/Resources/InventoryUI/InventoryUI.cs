@@ -1,6 +1,8 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
+
 
 /* This object updates the inventory UI. */
 
@@ -43,6 +45,12 @@ public class InventoryUI : MonoBehaviour
 	void UpdateUI()
 	{
 		Debug.Log("UPDATING UI");
+		List<Resource> items=inventory.GetResourceList();
+		//var newAmount = inventory.GetResourceAmount(resource);
+		for(int ii = 0; ii < items.Count; ii++)
+        {
+			Debug.Log("have:"+items[ii].Name);
+        }
 		for (int i = 0; i < iconList.Length; i++)
         {
 			//To Do: Display Icons Based on inventory, currently just shows putting images on slots
