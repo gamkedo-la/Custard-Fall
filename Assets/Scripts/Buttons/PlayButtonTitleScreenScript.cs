@@ -7,6 +7,7 @@ public class PlayButtonTitleScreenScript : MonoBehaviour
 {
     public void HandleButtonClick()
     {
+        // not used at the moment, see CustardTransitionToggleWindowScript.InvokeWindowToggle
         SceneManager.LoadScene("Tutorial-World");
     }    
 }
