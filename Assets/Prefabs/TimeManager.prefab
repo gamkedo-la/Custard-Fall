@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a88278af4be85a448ae0c672e163d198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
   time: 0
-  fullDayLength: 600
-  startTime: 0.4
+  fullDayLength: 300
+  startTime: 0.25
