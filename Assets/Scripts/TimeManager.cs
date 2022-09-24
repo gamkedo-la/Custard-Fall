@@ -48,16 +48,14 @@ public class TimeManager : MonoBehaviour
             return;
         }
         Instance = this;
-        previousDay = 0;
+        previousDay = -1;
+        currentDay = 0;
 
         if (state == DayNightState.Daytime && startTime >= nightStart) {
             startTime = dayStart;
-            currentDay = 1;
         }
         if (state == DayNightState.Nightime && startTime < nightStart) {
             startTime = nightStart;
-            currentDay = 0;
-            previousDay = -1;
         }
     }
 
