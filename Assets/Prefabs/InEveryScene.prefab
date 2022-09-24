@@ -1969,8 +1969,14 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   shallowCustard: {fileID: 2100000, guid: 047dc3c1522c87c4eadacba5a7a4eb97, type: 2}
+  shallowCustardDefault: {fileID: 2100000, guid: 30db30ba9bfdab0499830dcca12b92e9, type: 2}
+  shallowCustardRising: {fileID: 2100000, guid: 3e2f39bdca9de2e4fa8f286835d8088f, type: 2}
   normalCustard: {fileID: 2100000, guid: ef5a16b7f9ec78d4886370f110c01486, type: 2}
+  normalCustardDefault: {fileID: 2100000, guid: f3d3dfb2f433dc1499f33528763a2184, type: 2}
+  normalCustardRising: {fileID: 2100000, guid: ff5f64c06f51ad541ae3417f14c91dfd, type: 2}
   deadlyCustard: {fileID: 2100000, guid: 12deeb7361bc40145b476c363592981c, type: 2}
+  deadlyCustardDefault: {fileID: 2100000, guid: 2f87f617002671b42916a5a600746723, type: 2}
+  deadlyCustardRising: {fileID: 2100000, guid: f02b878ad74570443a301f3a6e0e0755, type: 2}
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
 --- !u!114 &8634744845809120381
 MonoBehaviour:

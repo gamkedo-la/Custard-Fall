@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +10,20 @@ namespace Custard
         public CustardState custardState;
 
         public Material shallowCustard;
+        public Material shallowCustardDefault;
+        public Material shallowCustardRising;
+        private Color shallowColor;
+        private Color shallowColorRising;
         public Material normalCustard;
+        public Material normalCustardDefault;
+        public Material normalCustardRising;
+        private Color normalColor;
+        private Color normalColorRising;
         public Material deadlyCustard;
+        public Material deadlyCustardDefault;
+        public Material deadlyCustardRising;
+        private Color deadlyColor;
+        private Color deadlyColorRising;
 
         public GameObject custardBlockPrefab;
 
@@ -22,11 +35,47 @@ namespace Custard
             _custardBlocksParent = gameObject;
             CustardRenderBlocks = new CustardBlock[WorldCells.BlocksWidth, WorldCells.BlocksHeight];
 
+            shallowColor = GetShaderColor(shallowCustardDefault);
+            normalColor = GetShaderColor(normalCustardDefault);
+            deadlyColor = GetShaderColor(deadlyCustardDefault);
+
+            shallowColorRising = GetShaderColor(shallowCustardRising);
+            normalColorRising = GetShaderColor(normalCustardRising);
+            deadlyColorRising = GetShaderColor(deadlyCustardRising);
+
             InitCustardBlocks();
         }
-    
+
+        private Color GetShaderColor(Material material)
+        {
+            var shaderColor = material.GetColor("_BaseColorGammaSpace");
+            Debug.Log(shaderColor);
+            return shaderColor;
+        }
+
+        private void SetShaderColor(Material material, Color color)
+        {
+            material.SetColor("_BaseColorGammaSpace", color);
+        }
+
         private void Update()
         {
+        }
+
+        private void FixedUpdate()
+        {
+            if (custardState.Rising)
+            {
+                SetShaderColor(shallowCustard, shallowColorRising);
+                SetShaderColor(normalCustard, normalColorRising);
+                SetShaderColor(deadlyCustard, deadlyColorRising);
+            }
+            else
+            {
+                shallowCustard.color = shallowColor;
+                normalCustard.color = normalColor;
+                deadlyCustard.color = deadlyColor;
+            }
         }
 
         public void RenderChangedCustard()

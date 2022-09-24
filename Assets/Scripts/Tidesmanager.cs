@@ -43,7 +43,8 @@
                     _updateCountdown = tideStep.getSecondsToLast();
 
                     // custard ai
-                    CustardManager.targetTideLevel = tideStep.getLevel();
+                    var nextTideLevel = tideStep.getLevel();
+                    CustardManager.targetTideLevel = nextTideLevel;
                     // TODO center custard update roughly at some distance around the player
                     CustardManager.SeedCustardUpdate((int)Math.Floor(Time.time * 1000));
                     CustardManager.SeedCustardUpdate(((int)Math.Floor(Time.time * 1000))/2);

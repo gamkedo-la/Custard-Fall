@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: deadlyCustard
+  m_Name: shallowCustard
   m_Shader: {fileID: 4800000, guid: e833d1da6a9db0d479e8d4a073f0d200, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -80,9 +80,9 @@ Material:
     - __dirty: 1
     - _scale: 0.67
     m_Colors:
-    - _BaseColor: {r: 0.9433962, g: 0.4432803, b: 0.10234961, a: 1}
+    - _BaseColor: {r: 0.90588236, g: 0.8392157, b: 0.38039216, a: 1}
     - _BaseColorGamaSpace: {r: 1, g: 0.8179246, b: 0.08962268, a: 1}
-    - _BaseColorGammaSpace: {r: 0.8396226, g: 0.5352492, b: 0.122774996, a: 1}
+    - _BaseColorGammaSpace: {r: 0.86300004, g: 0.64340967, b: 0.23559901, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 0.3773585, g: 0.18333928, b: 0.19042791, a: 1}

@@ -17,6 +17,7 @@ namespace Custard
 
         public int[,] CustardArea;
         public int GlobalTideLevel = 1;
+        public bool Rising = false;
         // if there is no custard on a cell and it has not custard neighbors, add custard if scheduled for update
         public bool CreationalMode = false;
 
