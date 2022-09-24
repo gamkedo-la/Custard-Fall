@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-
     public static TimeManager Instance;
 
     public static EventHandler<int> onDayComplete;
@@ -16,6 +16,8 @@ public class TimeManager : MonoBehaviour
     public enum DayNightState { Daytime, Nightime };
 
     public DayNightState state;
+    public TextMeshProUGUI dayCountText;
+    public Animator dayCountAnimatorController;
 
     [Range(0.0f, 1.0f)]
     public float time;
@@ -36,8 +38,6 @@ public class TimeManager : MonoBehaviour
         return dayStart <= time && time < nightStart;
     }}
 
-
-
     public float TimeRate { get => timeRate; }
     public int CurrentDay { get => currentDay; }
 
@@ -50,6 +50,7 @@ public class TimeManager : MonoBehaviour
         Instance = this;
         currentDay = 1;
         previousDay = 0;
+        dayCountText.SetText("Day " + currentDay.ToString());
 
         if (state == DayNightState.Daytime && startTime >= nightStart) {
             startTime = dayStart;
@@ -64,6 +65,7 @@ public class TimeManager : MonoBehaviour
         timeRate = 1.0f / fullDayLength;
         time = startTime;
         state = IsDayTime ? DayNightState.Daytime : DayNightState.Nightime;
+        dayCountAnimatorController.SetTrigger("NewDayTrigger");
     }
 
     private void OnValidate() {
@@ -80,6 +82,8 @@ public class TimeManager : MonoBehaviour
 
         if (time >= dayStart && previousDay >= currentDay) {
             currentDay++;
+            dayCountText.SetText("Day " + currentDay.ToString());
+            dayCountAnimatorController.SetTrigger("NewDayTrigger");
             noonPassed = false;
             onDayComplete?.Invoke(this, currentDay);
         }

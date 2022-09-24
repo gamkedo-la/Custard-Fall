@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  dayCountText: {fileID: 0}
+  dayCountAnimatorController: {fileID: 0}
   time: 0
-  fullDayLength: 300
+  fullDayLength: 15
   startTime: 0.25
