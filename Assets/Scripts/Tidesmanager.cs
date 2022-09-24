@@ -96,13 +96,12 @@ public class Tidesmanager : MonoBehaviour
 
     private void InitPlannedTideBehavior()
     {
-        // targeting a 8min day like in Don't Starve
         if (realCustardFallCycle)
         {
             _tidesPlan.Add(0f, new TideStep(11));
             _tidesPlan.Add(2 / 16f, new TideStep(9));
-            _tidesPlan.Add(3 / 16f, new TideStep(7));
-            _tidesPlan.Add(4 / 16f, new TideStep(5));
+            _tidesPlan.Add(4 / 16f, new TideStep(7));
+            _tidesPlan.Add(5 / 16f, new TideStep(5));
             _tidesPlan.Add(7 / 16f, new TideStep(3));
             _tidesPlan.Add(9 / 16f, new TideStep(4));
             _tidesPlan.Add(11 / 16f, new TideStep(6));
