@@ -27,6 +27,7 @@ public class TimeManager : MonoBehaviour
     float nightStart = 0.75f;
 
     int currentDay;
+    int previousDay;
     bool noonPassed;
     bool eveningStarted;
     bool morningStarted;
@@ -48,6 +49,7 @@ public class TimeManager : MonoBehaviour
         }
         Instance = this;
         currentDay = 1;
+        previousDay = 0;
     }
 
     void Start ()
@@ -66,9 +68,12 @@ public class TimeManager : MonoBehaviour
 
         if(time >= 1.0f){
             time = 0.0f;
+            previousDay = currentDay;
+        }
+
+        if (time >= dayStart && previousDay >= currentDay) {
             currentDay++;
             noonPassed = false;
-
             onDayComplete?.Invoke(this, currentDay);
         }
 
