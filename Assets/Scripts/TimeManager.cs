@@ -48,15 +48,16 @@ public class TimeManager : MonoBehaviour
             return;
         }
         Instance = this;
-        currentDay = 1;
         previousDay = 0;
-        dayCountText.SetText("Day " + currentDay.ToString());
 
         if (state == DayNightState.Daytime && startTime >= nightStart) {
             startTime = dayStart;
+            currentDay = 1;
         }
         if (state == DayNightState.Nightime && startTime < nightStart) {
             startTime = nightStart;
+            currentDay = 0;
+            previousDay = -1;
         }
     }
 
@@ -65,6 +66,7 @@ public class TimeManager : MonoBehaviour
         timeRate = 1.0f / fullDayLength;
         time = startTime;
         state = IsDayTime ? DayNightState.Daytime : DayNightState.Nightime;
+        dayCountText.SetText("Day " + currentDay.ToString());
         dayCountAnimatorController.SetTrigger("NewDayTrigger");
     }
 

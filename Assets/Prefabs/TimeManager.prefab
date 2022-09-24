@@ -48,5 +48,5 @@ MonoBehaviour:
   dayCountText: {fileID: 0}
   dayCountAnimatorController: {fileID: 0}
   time: 0
-  fullDayLength: 15
+  fullDayLength: 300
   startTime: 0.25
