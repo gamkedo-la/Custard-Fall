@@ -48,8 +48,8 @@ public class TimeManager : MonoBehaviour
             return;
         }
         Instance = this;
-        previousDay = -1;
-        currentDay = 0;
+        previousDay = 0;
+        currentDay = 1;
 
         if (state == DayNightState.Daytime && startTime >= nightStart) {
             startTime = dayStart;
