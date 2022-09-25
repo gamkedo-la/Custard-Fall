@@ -55,12 +55,6 @@ MonoBehaviour:
         endTime: 11
         BeatInEightNotes: 2
       weight: 1
-    - clip:
-        clip: {fileID: 8300000, guid: 7c719d73b85f7d44f979efd819dd474b, type: 3}
-        underClip: {fileID: 8300000, guid: cebe208288addd84d9d2b6e2a67951e1, type: 3}
-        endTime: 11
-        BeatInEightNotes: 2
-      weight: 1
   currentTime: 0
 --- !u!114 &774143550
 MonoBehaviour:
@@ -102,6 +96,87 @@ MonoBehaviour:
           BeatInEightNotes: 2
         weight: 1
     time: 0.2
+  - musicTrack:
+      clips:
+      - clip:
+          clip: {fileID: 8300000, guid: 40546870ee9ddbd4fae0c0de8a02156d, type: 3}
+          underClip: {fileID: 8300000, guid: 31e7ba778086bfc4dad41606d8a31ec9, type: 3}
+          endTime: 16
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: a8af64ca468594e47a37ba6bb43bba08, type: 3}
+          underClip: {fileID: 8300000, guid: 75aadfd4be50fe449be78d98f1b1b4e0, type: 3}
+          endTime: 16
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 9caa07802ccc2e843b1af87dca63bf9c, type: 3}
+          underClip: {fileID: 8300000, guid: 84ede1493de3f1449b1f8245612a6848, type: 3}
+          endTime: 16
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: d6c89f7305da06e469788c229373360c, type: 3}
+          underClip: {fileID: 8300000, guid: 815044c7bb84c8c4d863474b0bafaf09, type: 3}
+          endTime: 16
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 89f07ae480a312348b6c110c880fe8ab, type: 3}
+          underClip: {fileID: 8300000, guid: 53d515b387b2d8c47974dd65c17c2324, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 51f08b42e278de1478e486066b454974, type: 3}
+          underClip: {fileID: 8300000, guid: 8e33b9aa6cfa0bf4694b66e93e1bed76, type: 3}
+          endTime: 10.666
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: d52f4df2b13e0f448a8e18885b24d6b8, type: 3}
+          underClip: {fileID: 8300000, guid: cb5599706bc1f544fa77d52247fe965a, type: 3}
+          endTime: 8
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: ec441bf00eb7bd045aab7c0f38b0f745, type: 3}
+          underClip: {fileID: 8300000, guid: bbfaec594658bcc4cbaa317fa8138fcd, type: 3}
+          endTime: 8
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 3051611cdd2fcb44fac7c770b4ff427a, type: 3}
+          underClip: {fileID: 8300000, guid: 2ba253a90f2a8e4418bf8c52d729e01a, type: 3}
+          endTime: 21.333
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 5cff6a717673eff479f0ca0621e86d9a, type: 3}
+          underClip: {fileID: 8300000, guid: 426bcda95a91938448bf6f5b67c9127f, type: 3}
+          endTime: 21.333
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 9f25cb028c29c69499edf9901c3ef5b0, type: 3}
+          underClip: {fileID: 8300000, guid: 0badf47d8fbaaa6429876b3e4f6441da, type: 3}
+          endTime: 21.333
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: c6d818b4114ebc540a3c97682f19fa70, type: 3}
+          underClip: {fileID: 8300000, guid: 7127275f49d018846b310e81a7044743, type: 3}
+          endTime: 21.333
+          BeatInEightNotes: 2
+        weight: 1
+      - clip:
+          clip: {fileID: 8300000, guid: 036e14d18c15f2d4ba80b08bc27e4d9c, type: 3}
+          underClip: {fileID: 8300000, guid: 7009f1a4f970aa447bdd07b1f3fba4ff, type: 3}
+          endTime: 21.333
+          BeatInEightNotes: 2
+        weight: 1
+    time: 0.3
   - musicTrack:
       clips:
       - clip:
