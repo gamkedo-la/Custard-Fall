@@ -73,7 +73,7 @@ public class TimeManager : MonoBehaviour
     }
 
     private void Update() {     
-        time += TimeManager.Instance.TimeRate * Time.deltaTime;
+        time += Math.Clamp(TimeManager.Instance.TimeRate * Time.deltaTime, 0.0f, 1.0f);
 
         if(time >= 1.0f){
             time = 0.0f;
