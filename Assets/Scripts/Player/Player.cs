@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     public GameObject itemInHand;
 
     //health bar
-    public int maxHealth = 3;
+    public int maxHealth = 90;
     public int currentHealth;
     public Healthbar healthbar;
 
