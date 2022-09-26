@@ -181,6 +181,7 @@ public class MusicClipWeightPair {
 
 [System.Serializable]
 public class MusicTrack {
+	[NonReorderable]
 	public List<MusicClipWeightPair> clips;
 
 	public MusicClip GetMusicClip() {

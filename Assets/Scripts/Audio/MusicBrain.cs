@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 public class MusicBrain : MonoBehaviour {
+	[NonReorderable]
 	public List<MusicTrackTimePair> dayNightTracks;
 	public AudioClip custardUpClip, custardDownClip;
 
@@ -30,6 +32,8 @@ public class MusicBrain : MonoBehaviour {
 
 			lastTime = TimeManager.Instance.time;
 		} else {
+			if (SceneManager.GetActiveScene().name == "TitleScene")
+				MusicManager.Instance.StartTrack(dayNightTracks[0].musicTrack);
 			dayNightCycle = FindObjectOfType<DayNightCycle>();
 		}
 	}
