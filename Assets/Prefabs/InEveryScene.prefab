@@ -4034,7 +4034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2204919602310028358, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_LengthScale
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2204919602310028358, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_MaskInteraction
@@ -4042,7 +4042,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2204919602310028358, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_MaxParticleSize
-      value: 0.5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2204919602310028358, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_NormalDirection
@@ -4066,7 +4066,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 32be94357fa1e0b46bfca3f809211f95, type: 2}
     - target: {fileID: 2204919602310028358, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_RotateWithStretchDirection
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2602185639936851925, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4118,55 +4118,55 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: ColorModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.size3D
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: ColorBySpeedModule.enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.05
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.startSizeY.scalar
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.startSizeZ.scalar
-      value: 0.05
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 50
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.startRotation.scalar
-      value: 1.5707963
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 1
+      value: 0.66847634
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 1
+      value: 0.66847634
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
+      value: 0.6981132
       objectReference: {fileID: 0}
     - target: {fileID: 7128242228135632974, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: InitialModule.randomizeRotationDirection
-      value: 0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8062830763387158949, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_Enabled
