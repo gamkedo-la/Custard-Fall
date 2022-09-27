@@ -13,7 +13,7 @@ namespace Custard
     {
         public WorldCells worldCells;
         public CustardState custardState;
-        private Dictionary<Coords, ImpededCell> _impededCells;
+        private Dictionary<Coords, List<ImpededCell>> _impededCells;
 
         private CustardSpawn[] _initialSpawns;
 
@@ -32,7 +32,7 @@ namespace Custard
         {
             worldCells.onItemHeightChanged += OnHeihgtChanged;
             _custardUpdateCountdown = custardCrawlDuration;
-            _impededCells = new Dictionary<Coords, ImpededCell>();
+            _impededCells = new Dictionary<Coords, List<ImpededCell>>();
 
             _initialSpawns = FindObjectsOfType<CustardSpawn>();
         }
@@ -148,18 +148,32 @@ namespace Custard
 
         private void UpdateWhichCellsAreImpeded()
         {
-            List<Coords> _timedOut = new List<Coords>();
+            List<Coords> emptyCellLists = new List<Coords>();
 
-            foreach (var impededCell in _impededCells.Values)
+            foreach (var impededCellList in _impededCells.Values)
             {
-                impededCell.SetDuration(impededCell.GetDuration() - Time.deltaTime);
-                if (impededCell.GetDuration() < 0)
-                    _timedOut.Add(impededCell.GetCoords());
+                List<ImpededCell> timedOutCells = new List<ImpededCell>();
+                foreach (var impededCell in impededCellList)
+                {
+                    impededCell.SetDuration(impededCell.GetDuration() - Time.deltaTime);
+                    if (impededCell.GetDuration() <= 0)
+                    {
+                        Coords coords = impededCell.GetCoords();
+                        timedOutCells.Add(impededCell);
+                        if (impededCellList.Count == 1)
+                            emptyCellLists.Add(coords);
+                    }
+                }
+
+                foreach (var timedOutCell in timedOutCells)
+                {
+                    impededCellList.Remove(timedOutCell);
+                }
             }
 
-            foreach (var timedOut in _timedOut)
+            foreach (var emptyCellList in emptyCellLists)
             {
-                _impededCells.Remove(timedOut);
+                _impededCells.Remove(emptyCellList);
             }
         }
 
@@ -230,7 +244,9 @@ namespace Custard
 
         private void UpdateCustardState(Coords pivot, int[,] custardAreaAroundPivot, int[,] terrainAreaAroundPivot)
         {
-            _impededCells.TryGetValue(pivot, out var impededCell);
+            if (IsOutOfBounds(pivot))
+                // out of bounds of world area
+                return;
 
             // note: for now let us ignore the case of a corner-on-corner block setup, where the neighboring custard is only adjacent through the corner edge
             int pivotCustardAmount = custardAreaAroundPivot[1, 1];
@@ -330,14 +346,18 @@ namespace Custard
                 }
             }
 
-            if (impededCell != null)
-            {
-                var strength = impededCell.GetStrength();
-                if (newPivotCustardAmount <= 1)
-                    newPivotCustardAmount = 0;
-                else if (newPivotCustardAmount == 2 && strength > .33f)
-                    newPivotCustardAmount = 1;
-            }
+            _impededCells.TryGetValue(pivot, out var impededCellList);
+            if (impededCellList != null)
+                foreach (var impededCell in impededCellList)
+                {
+                    var strength = impededCell.GetStrength();
+                    var impededWorldY = impededCell.GetWorldY();
+                    var custardAmountFromImpededHeight = worldCells.GetHeightAt(pivot) + newPivotCustardAmount;
+                    if(custardAmountFromImpededHeight == impededWorldY && strength > .33f)
+                    {
+                        newPivotCustardAmount--;
+                    }
+                }
 
             // prepare value for int range
             if (newPivotCustardAmount < 0)
@@ -457,37 +477,38 @@ namespace Custard
             }
         }
 
-        public void ImpedeCustardCell(Coords coords, int originY, float strength)
+        public void ImpedeCustardCell(Coords coords, int worldY, float strength)
         {
             if (IsOutOfBounds(coords))
                 return;
-            // if (!custardState.Buffer.TryGetValue(new CellValue(coords, 0), out var presentCell))
-            // {
-            //     var cell = custardState.CustardArea[coords.X, coords.Y];
-            //     custardState.Buffer.Add(new CellValue(coords, Math.Max(cell - 1,0)));
-            // }
-            // else
-            // {
-            //     custardState.Buffer.Add(new CellValue(coords, Math.Max(presentCell.Value - 1,0)));
-            // }
+      
             custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
 
             // check, is actually custard at impeded point?
-            if (custardState.CustardArea[coords.X, coords.Y] + worldCells.GetHeightAt(coords) < originY)
+            if (custardState.CustardArea[coords.X, coords.Y] + worldCells.GetHeightAt(coords) < worldY)
                 return;
 
-            if (!_impededCells.TryGetValue(coords, out var alreadyImpeded))
+            if (!_impededCells.TryGetValue(coords, out var knownImpededCells))
             {
-                _impededCells.Add(coords, new ImpededCell(coords, strength));
-            }
-            else if (alreadyImpeded.GetStrength() < strength)
-            {
-                alreadyImpeded.SetStrength(strength);
-                alreadyImpeded.SetDuration(2f);
+                var impededCells = new List<ImpededCell>();
+                impededCells.Add(new ImpededCell(coords, strength, worldY));
+                _impededCells.Add(coords, impededCells);
             }
             else
             {
-                alreadyImpeded.SetDuration(2f);
+                bool isPresent = false;
+                foreach (var impededCell in knownImpededCells)
+                {
+                    if (impededCell.GetWorldY() == worldY)
+                    {
+                        isPresent = true;
+                        if (impededCell.GetStrength() < strength)
+                            impededCell.SetStrength(strength);
+                    }
+                    impededCell.SetDuration(1.5f);
+                }
+                if(!isPresent)
+                    knownImpededCells.Add(new ImpededCell(coords, strength, worldY));
             }
         }
 
@@ -501,13 +522,15 @@ namespace Custard
     public class ImpededCell
     {
         private readonly Coords _coords;
+        private readonly int _worldY;
         private float _strength;
-        private float durationLeft = 1f;
+        private float durationLeft = 1.5f;
 
-        public ImpededCell(Coords coords, float strength)
+        public ImpededCell(Coords coords, float strength, int worldY)
         {
             this._coords = coords;
             this._strength = strength;
+            this._worldY = worldY;
         }
 
         public Coords GetCoords()
@@ -518,6 +541,11 @@ namespace Custard
         public float GetStrength()
         {
             return _strength;
+        }
+        
+        public int GetWorldY()
+        {
+            return _worldY;
         }
 
         public float GetDuration()
