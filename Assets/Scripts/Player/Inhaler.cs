@@ -110,7 +110,7 @@ public class Inhaler : MonoBehaviour
             var worldPoint = gameObjectTransform.TransformPoint(localPosition);
             var coords = worldCells.GetCellPosition(worldPoint.x, worldPoint.z);
             var worldPointY = worldCells.GetHeightAt(coords) + 1;
-            var strength = 1f - (worldPoint - coneOrigin).magnitude / _distance;
+            var strength = worldPointY <0?1f - (worldPoint - coneOrigin).magnitude / _distance: 1;
             var key = new Vector3(coords.X, worldPointY, coords.Y);
             if (affectedCells.TryGetValue(key, out var cell))
             {
