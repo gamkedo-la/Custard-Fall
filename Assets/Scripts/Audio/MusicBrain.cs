@@ -9,14 +9,17 @@ using UnityEditor;
 public class MusicBrain : MonoBehaviour {
 	[NonReorderable]
 	public List<MusicTrackTimePair> dayNightTracks;
-	public AudioClip custardUpClip, custardDownClip;
+	public AudioClip custardDangerClip, up1Clip, up2Clip, up3Clip, down1Clip, down2Clip, down3Clip;
 
     private AudioSource currentCustardLevelSource;
 	private int nextTimeIndex = 0;
 	private bool holdForLoop = false;
 	private float lastTime = 0f;
 
+	private int currentLevel = 2;
+
     private DayNightCycle dayNightCycle;
+	private Tidesmanager custardManager;
 
 	void Update() {
 		// Day Night music logic
@@ -36,22 +39,53 @@ public class MusicBrain : MonoBehaviour {
 				MusicManager.Instance.StartTrack(dayNightTracks[0].musicTrack);
 			dayNightCycle = FindObjectOfType<DayNightCycle>();
 		}
+
+		if (custardManager != null) {
+			if (currentLevel != custardManager.currentTideIndex) {
+				//Debug.Log(custardManager.currentTideIndex + " " + currentLevel);
+				AudioClip clipToPlay = null;
+
+				//if (custardManager.currentTideIndex - currentLevel == 1) {
+				//	clipToPlay = up1Clip;
+				//} else if (custardManager.currentTideIndex - currentLevel == 2) {
+				//	clipToPlay = up2Clip;
+				//} else if (custardManager.currentTideIndex - currentLevel >= 3) {
+				//	clipToPlay = up3Clip;
+				//} else if (custardManager.currentTideIndex - currentLevel == -1) {
+				//	clipToPlay = down1Clip;
+				//} else if (custardManager.currentTideIndex - currentLevel == -2) {
+				//	clipToPlay = down2Clip;
+				//} else if (custardManager.currentTideIndex - currentLevel <= -3) {
+				//	clipToPlay = down3Clip;
+				//}
+
+				if (custardManager.currentTideIndex - currentLevel >= 1) {
+					clipToPlay = up1Clip;
+					if (custardManager.currentTideIndex >= 3) clipToPlay = up2Clip;
+					if (custardManager.currentTideIndex >= 6) clipToPlay = up3Clip;
+				} else if (custardManager.currentTideIndex - currentLevel <= -1) {
+					clipToPlay = down1Clip;
+					if (custardManager.currentTideIndex <= 5) clipToPlay = down2Clip;
+					if (custardManager.currentTideIndex <= 3) clipToPlay = down3Clip;
+				}
+
+				MusicManager.Instance.SchedualTop(clipToPlay, false);
+
+				currentLevel = custardManager.currentTideIndex;
+			}
+		} else {
+			custardManager = FindObjectOfType<Tidesmanager>();
+			currentLevel = custardManager.currentTideIndex;
+        }
 	}
 
-	public void CustardMusic(int level) {
-		if (currentCustardLevelSource != null) {
+	public void Danger(bool value) {
+		if (value) {
+			currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDangerClip);
+		} else if (currentCustardLevelSource != null) {
 			StartCoroutine(MusicManager.Instance.FadeOut(currentCustardLevelSource, 0.25f));
 			Destroy(currentCustardLevelSource.gameObject, 0.26f);
 		}
-
-		if (level == 1) {
-			currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardUpClip);
-		}
-
-		if (level == 2) {
-			currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDownClip);
-		}
-
 	}
 
 }
@@ -74,15 +108,11 @@ public class MusicBrainEditor : Editor {
 		if (!EditorApplication.isPlaying) return;
 
 		if (GUILayout.Button("Stop Custard")) {
-			(target as MusicBrain).CustardMusic(0);
+			(target as MusicBrain).Danger(false);
 		}
 
 		if (GUILayout.Button("Play Custard Up")) {
-			(target as MusicBrain).CustardMusic(1);
-		}
-
-		if (GUILayout.Button("Play Custard Down")) {
-			(target as MusicBrain).CustardMusic(2);
+			(target as MusicBrain).Danger(true);
 		}
 	}
 }

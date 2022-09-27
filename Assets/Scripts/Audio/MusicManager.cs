@@ -66,10 +66,10 @@ public class MusicManager : MonoBehaviour {
 		}
 	}
 
-	public AudioSource SchedualTop(AudioClip topClip) {
+	public AudioSource SchedualTop(AudioClip topClip, bool loop = true) {
 		AudioSource freshSource = Instantiate(musicSourcePrefab).GetComponent<AudioSource>();
 		freshSource.clip = topClip;
-		freshSource.loop = true;
+		freshSource.loop = loop;
 		freshSource.PlayScheduled(currentTime + nextBeatTime - currentTime);
 		return freshSource;
 	}

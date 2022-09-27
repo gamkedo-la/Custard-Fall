@@ -80,6 +80,7 @@ public class Player : MonoBehaviour
     {
         Scene currentScene = SceneManager.GetActiveScene();
         worldCells.ResetChanges();
+        MusicManager.Instance.SetUnder(false);
         SceneManager.LoadScene(currentScene.name);
     }
 
