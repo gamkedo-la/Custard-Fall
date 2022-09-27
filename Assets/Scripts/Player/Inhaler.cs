@@ -36,6 +36,7 @@ public class Inhaler : MonoBehaviour
         {
             var inhaleCell = keyValuePair.Value;
             custardManager.ImpedeCustardCell(inhaleCell.GetCoords(), inhaleCell.GetWorldY(), inhaleCell.GetStrength());
+            //inhalingParticleSystem.gameObject.SetActive(true);
         }
     }
 
@@ -137,7 +138,7 @@ public class Inhaler : MonoBehaviour
     {
         _distance = coneLength;
         if(!isInhale)
-            inhalingParticleSystem.gameObject.SetActive(true);
+            //inhalingParticleSystem.gameObject.SetActive(true);
             inhalingConeParticleSystem.gameObject.SetActive(true);
         isInhale = true;
     }
