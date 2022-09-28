@@ -42,7 +42,8 @@ public class Inhaler : MonoBehaviour
                 var coords = keyValuePair.Value.GetCoords();
                 var custardLevelAt = custardManager.custardState.GetCurrentCustardLevelAt(coords);
                 var worldHeight = custardManager.worldCells.GetHeightAt(coords);
-                isCustardInCone |= worldHeight < inhaleCell.GetWorldY() && worldHeight + custardLevelAt >= inhaleCell.GetWorldY();
+                isCustardInCone |= worldHeight < inhaleCell.GetWorldY() &&
+                                   worldHeight + custardLevelAt >= inhaleCell.GetWorldY();
             }
         }
 
@@ -79,7 +80,9 @@ public class Inhaler : MonoBehaviour
                     var item = worldCellItems[i];
                     if (item is InhaleListener listener)
                     {
-                        listener.Inhale(this, inhaleCell.GetStrength());
+                        var worldHeight = worldCells.GetTerrainHeightAt(inhaleCell.GetCoords());
+                        if (inhaleCell.GetWorldY() == worldHeight + 1)
+                            listener.Inhale(this, inhaleCell.GetStrength());
                     }
                 }
             }
@@ -103,7 +106,7 @@ public class Inhaler : MonoBehaviour
 
         affectedCells.Clear();
         List<Vector3> localConePoints = new List<Vector3>();
-        
+
         // construct a cone
         // central pane
         addConeRow(localConePoints, 3, 0, 0);
