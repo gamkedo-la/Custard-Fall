@@ -79,7 +79,6 @@ public class Inhaler : MonoBehaviour
                     var item = worldCellItems[i];
                     if (item is InhaleListener listener)
                     {
-                        // Debug.Log("inhaling " + inhaleCell.GetCoords());
                         listener.Inhale(this, inhaleCell.GetStrength());
                     }
                 }
@@ -104,8 +103,8 @@ public class Inhaler : MonoBehaviour
 
         affectedCells.Clear();
         List<Vector3> localConePoints = new List<Vector3>();
-        // construct a cone with 3 layers
-
+        
+        // construct a cone
         // central pane
         addConeRow(localConePoints, 3, 0, 0);
         addConeRow(localConePoints, 5, 1, 0);

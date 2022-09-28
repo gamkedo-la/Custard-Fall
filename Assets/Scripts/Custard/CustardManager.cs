@@ -505,7 +505,13 @@ namespace Custard
             if (IsOutOfBounds(coords))
                 return;
 
-            custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
+            // check is there actually custard at inhale position and y-height
+            var custardLevelAt = custardState.GetCurrentCustardLevelAt(coords);
+            if (custardLevelAt == 0)
+                return;
+            var worldHeight = worldCells.GetHeightAt(coords);
+            if (worldHeight >= worldY || worldHeight + custardLevelAt < worldY)
+                return;
 
             // check, is actually custard at impeded point?
             if (custardState.CustardArea[coords.X, coords.Y] + worldCells.GetHeightAt(coords) < worldY)
@@ -535,6 +541,8 @@ namespace Custard
                 if (!isPresent)
                     knownImpededCells.Add(new ImpededCell(coords, strength, worldY));
             }
+            
+            custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
         }
 
         private void OnHeightChanged(Coords coords)
