@@ -75,6 +75,8 @@ public class Inhaler : MonoBehaviour
     {
         var gameObjectTransform = gameObject.transform;
         var rotation = gameObjectTransform.rotation;
+        var coneOrigin = gameObjectTransform.position;
+        var coneOriginCoords = worldCells.GetCellPosition(coneOrigin);
 
         if (rotation.Equals(_previousRotation))
         {
@@ -83,7 +85,6 @@ public class Inhaler : MonoBehaviour
 
         _previousRotation = rotation;
 
-        var coneOrigin = gameObjectTransform.position;
 
         affectedCells.Clear();
         List<Vector3> localConePoints = new List<Vector3>();
@@ -95,22 +96,29 @@ public class Inhaler : MonoBehaviour
         addConeRow(localConePoints, 5, 2, 0);
         addConeRow(localConePoints, 5, 3, 0);
         addConeRow(localConePoints, 5, 4, 0);
-        addConeRow(localConePoints, 3, 5, 0);
-        addConeRow(localConePoints, 3, 6, 0);
+        addConeRow(localConePoints, 5, 5, 0);
+        addConeRow(localConePoints, 5, 6, 0);
+        addConeRow(localConePoints, 3, 7, 0);
+        addConeRow(localConePoints, 3, 8, 0);
         // lower pane
         addConeRow(localConePoints, 3, 1, -1);
-        addConeRow(localConePoints, 1, 2, -1);
+        addConeRow(localConePoints, 5, 2, -1);
+        addConeRow(localConePoints, 3, 3, -1);
+        addConeRow(localConePoints, 1, 4, -1);
         // higher pane
         addConeRow(localConePoints, 3, 1, 1);
-        addConeRow(localConePoints, 1, 2, 1);
+        addConeRow(localConePoints, 5, 2, 1);
+        addConeRow(localConePoints, 3, 3, 1);
+        addConeRow(localConePoints, 1, 4, 1);
         
 
         foreach (var localPosition in localConePoints)
         {
             var worldPoint = gameObjectTransform.TransformPoint(localPosition);
-            var coords = worldCells.GetCellPosition(worldPoint.x, worldPoint.z);
-            var worldPointY = worldCells.GetHeightAt(coords) + 1;
-            var strength = worldPointY <0?1f - (worldPoint - coneOrigin).magnitude / _distance: 1;
+            var coords = worldCells.GetCellPosition(worldPoint);
+
+            var worldPointY = worldCells.GetHeightAt(coneOriginCoords) + 1 + (int)localPosition.y;
+            var strength = 1;//(int)localPosition.y <0?1f - (worldPoint - coneOrigin).magnitude / _distance: 1;
             var key = new Vector3(coords.X, worldPointY, coords.Y);
             if (affectedCells.TryGetValue(key, out var cell))
             {

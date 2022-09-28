@@ -30,7 +30,7 @@ namespace Custard
 
         private void Start()
         {
-            worldCells.onItemHeightChanged += OnHeihgtChanged;
+            worldCells.onItemHeightChanged += OnHeightChanged;
             _custardUpdateCountdown = custardCrawlDuration;
             _impededCells = new Dictionary<Coords, List<ImpededCell>>();
 
@@ -155,6 +155,7 @@ namespace Custard
             foreach (var impededCellList in _impededCells.Values)
             {
                 List<ImpededCell> timedOutCells = new List<ImpededCell>();
+                
                 foreach (var impededCell in impededCellList)
                 {
                     impededCell.SetDuration(impededCell.GetDuration() - Time.deltaTime);
@@ -162,6 +163,8 @@ namespace Custard
                     {
                         Coords coords = impededCell.GetCoords();
                         timedOutCells.Add(impededCell);
+                        custardState.QueueForNextIteration(impededCell.GetCoords());
+                        // clean up memory
                         if (impededCellList.Count == 1)
                             emptyCellLists.Add(coords);
                     }
@@ -374,6 +377,7 @@ namespace Custard
                         strength > .2f)
                     {
                         newPivotCustardAmount--;
+                        // ensure only one layer is removed
                         break;
                     }
                 }
@@ -533,7 +537,7 @@ namespace Custard
             }
         }
 
-        private void OnHeihgtChanged(Coords coords)
+        private void OnHeightChanged(Coords coords)
         {
             custardState.QueueCellForCurrentIteration(coords);
         }
@@ -545,7 +549,7 @@ namespace Custard
         private readonly Coords _coords;
         private readonly int _worldY;
         private float _strength;
-        private float durationLeft = 1.5f;
+        private float durationLeft = 2.5f;
 
         public ImpededCell(Coords coords, float strength, int worldY)
         {
