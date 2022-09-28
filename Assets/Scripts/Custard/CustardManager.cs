@@ -82,14 +82,15 @@ namespace Custard
             while (fillUpCandidates.Count != 0)
             {
                 var coords = fillUpCandidates.Dequeue();
-                
-                if (!alreadyHandled.Contains(coords)&&!IsOutOfBounds(coords))
+
+                if (!alreadyHandled.Contains(coords) && !IsOutOfBounds(coords))
                 {
                     var currentHeight = worldCells.GetHeightAt(coords);
                     if (currentHeight < targetHeight)
                     {
                         custardState.RegisterUpdate(coords,
                             Math.Max(custardState.GetCurrentCustardLevelAt(coords), targetHeight - currentHeight));
+                        custardState.MarkAsTrapped(coords);
                         var info = RetrieveCustardInfo(coords,
                             GetLocalNeighborhood(coords, (x, y) => 0),
                             GetLocalNeighborhood(coords, (x, y) => worldCells.GetHeightAt(x, y)));
@@ -97,6 +98,7 @@ namespace Custard
                         info.CellsAtSameLevel.ForEach(fillUpCandidates.Enqueue);
                     }
                 }
+
                 alreadyHandled.Add(coords);
             }
         }
@@ -231,7 +233,7 @@ namespace Custard
             foreach (var pivot in processing)
             {
                 custardState.MarkAsProcessed(pivot);
-                if(IsOutOfBounds(pivot))
+                if (IsOutOfBounds(pivot))
                     continue;
                 var custardAreaAroundPivot =
                     GetLocalNeighborhood(pivot, (i, j) => custardState.GetCurrentCustardLevelAt(i, j));
@@ -263,13 +265,19 @@ namespace Custard
                 {
                     // custard from above flows down, so we stay
                     newPivotCustardAmount = pivotCustardAmount;
+                    if (pivotCustardAmount == 0 && custardState.IsTrapped(pivot))
+                    {
+                        // custard is trapped spreads in thin layer
+                        newPivotCustardAmount = 1;
+                    }
+
                     // very likely level is not going to stay next iteration as we are still above the global tide level
                     custardState.QueueForNextIteration(pivot);
                     // cells above should flow into me
                     custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                     // I stay at the same level but maybe my neighbors need to be checked
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
-                    if (pivotCustardAmount > 0)
+                    if (pivotCustardAmount > 0 || pivotCustardAmount == 0 && custardState.IsTrapped(pivot))
                     {
                         // next iteration: check all cells where I might flow down into
                         custardState.QueueCellsForNextIteration(info.CellsBellow);
@@ -277,12 +285,15 @@ namespace Custard
                 }
                 else if (info.CellsBellow.Count != 0)
                 {
-                    if (pivotCustardAmount > 0)
+                    if (pivotCustardAmount > 0 && (pivotCustardAmount != 1 || !custardState.IsTrapped(pivot)))
                     {
                         // we flow downwards
                         newPivotCustardAmount = pivotCustardAmount - 1;
                         if (custardState.GlobalTideLevel < newPivotCustardAmount + pivotTerrainHeight)
+                        {
                             custardState.QueueForNextIteration(pivot);
+                        }
+
                         // next iteration: check all cells that might get affected by this change
                         custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                     }
@@ -300,8 +311,8 @@ namespace Custard
                     // next iteration: check all cells that now might flow into me
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                 }
-                else if (pivotCustardAmount == 1 && info.CellsBellow.Count == 0 &&
-                         info.CellsAtSameLevel.Count + info.CustardFromAbove.Count == 8)
+                else if (pivotCustardAmount == 1 && (custardState.IsTrapped(pivot)  ||  info.CellsBellow.Count == 0 &&
+                         info.CellsAtSameLevel.Count + info.CustardFromAbove.Count == 8))
                 {
                     // custard is trapped
                     newPivotCustardAmount = 1;
@@ -309,7 +320,7 @@ namespace Custard
                 else if (custardState.GlobalTideLevel == 0 && pivotTerrainHeight == 0)
                 {
                     // custard is trapped at bottom most level
-                    newPivotCustardAmount = pivotCustardAmount - 1;
+                    newPivotCustardAmount = pivotCustardAmount == 1 ? 1 : pivotCustardAmount - 1;
                     // next iteration: check all cells that should also dissolve/shrink
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                 }
@@ -321,6 +332,11 @@ namespace Custard
 
                 // stay at same level
                 newPivotCustardAmount = pivotCustardAmount;
+                if (pivotCustardAmount == 0 && info.CustardFromAbove.Count != 0 && custardState.IsTrapped(pivot))
+                {
+                    // if in sink and has neighbor custard flowing downwards
+                    newPivotCustardAmount = 1;
+                }
                 // cells above should flow into me
                 custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                 // spread: next iteration: check all cells below me as they should come up
@@ -352,10 +368,13 @@ namespace Custard
                 {
                     var strength = impededCell.GetStrength();
                     var impededWorldY = impededCell.GetWorldY();
-                    var custardAmountFromImpededHeight = worldCells.GetHeightAt(pivot) + newPivotCustardAmount;
-                    if(custardAmountFromImpededHeight == impededWorldY && strength > .33f)
+                    var worldHeight = worldCells.GetHeightAt(pivot);
+                    var custardAmountFromImpededHeight = worldHeight + newPivotCustardAmount;
+                    if (impededWorldY > worldHeight && custardAmountFromImpededHeight >= impededWorldY &&
+                        strength > .2f)
                     {
                         newPivotCustardAmount--;
+                        break;
                     }
                 }
 
@@ -481,7 +500,7 @@ namespace Custard
         {
             if (IsOutOfBounds(coords))
                 return;
-      
+
             custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
 
             // check, is actually custard at impeded point?
@@ -505,9 +524,11 @@ namespace Custard
                         if (impededCell.GetStrength() < strength)
                             impededCell.SetStrength(strength);
                     }
+
                     impededCell.SetDuration(1.5f);
                 }
-                if(!isPresent)
+
+                if (!isPresent)
                     knownImpededCells.Add(new ImpededCell(coords, strength, worldY));
             }
         }
@@ -542,7 +563,7 @@ namespace Custard
         {
             return _strength;
         }
-        
+
         public int GetWorldY()
         {
             return _worldY;

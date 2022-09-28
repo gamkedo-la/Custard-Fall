@@ -14,6 +14,8 @@ namespace Custard
         public readonly HashSet<CellValue> Buffer = new();
         // just in case we need them
         public readonly HashSet<CellValue> BufferFromPreviousIteration = new();
+        //sinks where the custard could never flow away on its own
+        private readonly HashSet<Coords> TrappedCells = new();
 
         public int[,] CustardArea;
         public int GlobalTideLevel = 1;
@@ -95,6 +97,16 @@ namespace Custard
         public void MarkAsProcessed(Coords coords)
         {
             CellsToProcessInCurrentIteration.Remove(coords);
+        }
+
+        public void MarkAsTrapped(Coords coords)
+        {
+            TrappedCells.Add(coords);
+        }
+
+        public bool IsTrapped(Coords coords)
+        {
+            return TrappedCells.Contains(coords);
         }
     }
 }
