@@ -43,20 +43,7 @@ namespace Custard
             custardState.GlobalTideLevel = targetTideLevel;
             custardState.Init();
 
-            if (_initialSpawns != null)
-                foreach (var custardSpawn in _initialSpawns)
-                {
-                    var spawnPosition = worldCells.GetCellPosition(custardSpawn.transform.position);
-                    if (custardSpawn.fillUp)
-                    {
-                        FillUp(spawnPosition);
-                    }
-                    else
-                    {
-                        custardState.RegisterUpdate(spawnPosition, 1);
-                        custardState.QueueForNextIteration(spawnPosition);
-                    }
-                }
+            InitCustardSpawns();
 
             // iteration 0 for custardState
             for (int x = 0; x < WorldCells.BlocksWidth; x++)
@@ -73,6 +60,24 @@ namespace Custard
             _custardUpdateCountdown = 0;
         }
 
+        private void InitCustardSpawns()
+        {
+            if (_initialSpawns != null)
+                foreach (var custardSpawn in _initialSpawns)
+                {
+                    var spawnPosition = worldCells.GetCellPosition(custardSpawn.transform.position);
+                    if (custardSpawn.fillUp)
+                    {
+                        FillUp(spawnPosition);
+                    }
+                    else
+                    {
+                        custardState.RegisterUpdate(spawnPosition, 1);
+                        custardState.QueueForNextIteration(spawnPosition);
+                    }
+                }
+        }
+
         private void FillUp(Coords spawnPosition)
         {
             HashSet<Coords> alreadyHandled = new HashSet<Coords>();
@@ -83,7 +88,7 @@ namespace Custard
             {
                 var coords = fillUpCandidates.Dequeue();
 
-                if (!alreadyHandled.Contains(coords) && !IsOutOfBounds(coords))
+                if (!alreadyHandled.Contains(coords) && !WorldCells.IsOutOfBounds(coords))
                 {
                     var currentHeight = worldCells.GetHeightAt(coords);
                     if (currentHeight < targetHeight)
@@ -236,7 +241,7 @@ namespace Custard
             foreach (var pivot in processing)
             {
                 custardState.MarkAsProcessed(pivot);
-                if (IsOutOfBounds(pivot))
+                if (WorldCells.IsOutOfBounds(pivot))
                     continue;
                 var custardAreaAroundPivot =
                     GetLocalNeighborhood(pivot, (i, j) => custardState.GetCurrentCustardLevelAt(i, j));
@@ -249,7 +254,7 @@ namespace Custard
 
         private void UpdateCustardState(Coords pivot, int[,] custardAreaAroundPivot, int[,] terrainAreaAroundPivot)
         {
-            if (IsOutOfBounds(pivot))
+            if (WorldCells.IsOutOfBounds(pivot))
                 // out of bounds of world area
                 return;
 
@@ -397,11 +402,6 @@ namespace Custard
             }
         }
 
-        private static bool IsOutOfBounds(Coords coords)
-        {
-            return coords.X is < 0 or >= WorldCells.BlocksWidth || coords.Y is < 0 or >= WorldCells.BlocksHeight;
-        }
-
         private CustardAreaInfo RetrieveCustardInfo(Coords pivot, int[,] custardAreaAroundPivot,
             int[,] terrainAreaAroundPivot)
         {
@@ -502,7 +502,7 @@ namespace Custard
 
         public void ImpedeCustardCell(Coords coords, int worldY, float strength)
         {
-            if (IsOutOfBounds(coords))
+            if (WorldCells.IsOutOfBounds(coords))
                 return;
 
             // check is there actually custard at inhale position and y-height

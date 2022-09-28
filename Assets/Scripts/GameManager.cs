@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Custard;
@@ -14,9 +15,5 @@ public class GameManager : MonoBehaviour
         terrainLoader.LoadWorld();
         custardManager.InitCustardState();
     }
-
     
-    private void Update()
-    {
-    }
 }

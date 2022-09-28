@@ -40,8 +40,11 @@ public class Inhaler : MonoBehaviour
             if (!isCustardInCone)
             {
                 var coords = keyValuePair.Value.GetCoords();
-                var custardLevelAt = custardManager.custardState.GetCurrentCustardLevelAt(coords);
                 var worldHeight = custardManager.worldCells.GetHeightAt(coords);
+                // out of bounds
+                if (worldHeight == WorldCells.OutOufBoundsHeight)
+                    continue;
+                var custardLevelAt = custardManager.custardState.GetCurrentCustardLevelAt(coords);
                 isCustardInCone |= worldHeight < inhaleCell.GetWorldY() &&
                                    worldHeight + custardLevelAt >= inhaleCell.GetWorldY();
             }
@@ -179,8 +182,15 @@ public class Inhaler : MonoBehaviour
 
     public void OnResourceInhaled(Resource resource, int amount)
     {
-        var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
-        Debug.Log("inhaled " + newAmount + "th " + resource.Name);
+        try
+        {
+            var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
+            Debug.Log("inhaled " + newAmount + "th " + resource.Name);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     public void OnCustardInhale()

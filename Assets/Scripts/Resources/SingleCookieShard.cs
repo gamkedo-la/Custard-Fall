@@ -17,7 +17,6 @@ public class SingleCookieShard : InhaleListener
         base.OnResourceInhaled(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
-            gameObject.SetActive(false);
             Debug.Log("got the cookie shard");
         }
     }

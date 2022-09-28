@@ -12,6 +12,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
     private Wobble _wobble;
 
     public string interactionMessage;
+    private Coords cellPosition;
 
     public void Inhale(Inhaler inhaler, float strength)
     {
@@ -34,7 +35,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
     {
         // register as world item
         var transformPosition = gameObject.transform.position;
-        Coords cellPosition = worldCells.GetCellPosition(transformPosition.x, transformPosition.z);
+        cellPosition = worldCells.GetCellPosition(transformPosition);
         List<WorldItem> worldItemsInCell;
         if (!WorldItems.itemsInCell.TryGetValue(cellPosition, out worldItemsInCell))
         {
@@ -64,7 +65,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
             _currentInhaler = null;
             _currentInhaleStrength = 0;
 
-            if (_wobble && hasInhaleFocus)
+            if (_wobble)
             {
                 _wobble.DoWobble();
             }
@@ -86,6 +87,12 @@ public class InhaleListener : MonoBehaviour, WorldItem
     public virtual void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
     {
         inhaler.OnResourceInhaled(resource, amount);
+        
+        if (GetRemainingResourcesCount() == 0)
+        {
+            Debug.Log("Removing item from world...");
+            Remove();
+        }
     }
 
     public int GetRemainingResourcesCount()
@@ -116,5 +123,19 @@ public class InhaleListener : MonoBehaviour, WorldItem
             this.inhaleThresholdSeconds = inhaleThresholdSeconds;
             this.amount = amount;
         }
+    }
+
+    protected void Remove()
+    {
+        // cleanup
+        List<WorldItem> worldItemsInCell;
+        if (WorldItems.itemsInCell.TryGetValue(cellPosition, out worldItemsInCell))
+        {
+            worldItemsInCell.Remove(this);
+        }
+
+        GameObject go = gameObject;
+        go.SetActive(false);
+        Destroy(go);
     }
 }

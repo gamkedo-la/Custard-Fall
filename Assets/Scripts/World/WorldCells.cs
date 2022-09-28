@@ -6,6 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WorldCells", menuName = "CustardFall/WorldCells", order = 0)]
 public class WorldCells : ScriptableObject
 {
+    public const int OutOufBoundsHeight = 255;
+
     // using int to make sure network transfer is always minimal, for performance reasons this also means max value is 255
     public const int BlocksWidth = 128;
     public const int BlocksHeight = 128;
@@ -32,8 +34,8 @@ public class WorldCells : ScriptableObject
     
     public int GetHeightAt(Coords coords)
     {
-        if (coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight)
-            return 255;
+        if (IsOutOfBounds(coords))
+            return OutOufBoundsHeight;
         return _heightMap[coords.X, coords.Y] +  _worldItems.GetValueOrDefault(coords,0);
     }
     
@@ -44,8 +46,8 @@ public class WorldCells : ScriptableObject
     
     public int GetTerrainHeightAt(Coords coords)
     {
-        if (coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight)
-            return 255;
+        if (IsOutOfBounds(coords))
+            return OutOufBoundsHeight;
         return _heightMap[coords.X, coords.Y];
     }
     
@@ -56,8 +58,8 @@ public class WorldCells : ScriptableObject
     
     public int GetWorldItemHeightAt(Coords coords)
     {
-        if (coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight)
-            return 255;
+        if (IsOutOfBounds(coords))
+            return OutOufBoundsHeight;
         return _worldItems.GetValueOrDefault(coords, 0);
     }
 
@@ -121,5 +123,9 @@ public class WorldCells : ScriptableObject
     public void ResetChanges()
     {
         _worldItems.Clear();
+    }
+
+    public static bool IsOutOfBounds(Coords coords){
+        return coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight;
     }
 }
