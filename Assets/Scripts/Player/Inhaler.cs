@@ -32,11 +32,27 @@ public class Inhaler : MonoBehaviour
 
     private void InhaleCustard()
     {
+        bool isCustardInCone = false;
         foreach (var keyValuePair in affectedCells)
         {
             var inhaleCell = keyValuePair.Value;
             custardManager.ImpedeCustardCell(inhaleCell.GetCoords(), inhaleCell.GetWorldY(), inhaleCell.GetStrength());
-            //inhalingParticleSystem.gameObject.SetActive(true);
+            if (!isCustardInCone)
+            {
+                var coords = keyValuePair.Value.GetCoords();
+                var custardLevelAt = custardManager.custardState.GetCurrentCustardLevelAt(coords);
+                var worldHeight = custardManager.worldCells.GetHeightAt(coords);
+                isCustardInCone |= worldHeight < inhaleCell.GetWorldY() && worldHeight + custardLevelAt >= inhaleCell.GetWorldY();
+            }
+        }
+
+        if (isCustardInCone)
+        {
+            OnCustardInhale();
+        }
+        else
+        {
+            OnCustardInhaleStopped();
         }
     }
 
@@ -56,9 +72,9 @@ public class Inhaler : MonoBehaviour
             var inhaleCell = keyValuePair.Value;
 
             List<WorldItem> worldCellItems;
-            if(WorldItems.itemsInCell.TryGetValue(inhaleCell.GetCoords(), out worldCellItems))
+            if (WorldItems.itemsInCell.TryGetValue(inhaleCell.GetCoords(), out worldCellItems))
             {
-                for(int i = 0; i < worldCellItems.Count; i++)
+                for (int i = 0; i < worldCellItems.Count; i++)
                 {
                     var item = worldCellItems[i];
                     if (item is InhaleListener listener)
@@ -89,7 +105,7 @@ public class Inhaler : MonoBehaviour
         affectedCells.Clear();
         List<Vector3> localConePoints = new List<Vector3>();
         // construct a cone with 3 layers
-        
+
         // central pane
         addConeRow(localConePoints, 3, 0, 0);
         addConeRow(localConePoints, 5, 1, 0);
@@ -110,15 +126,15 @@ public class Inhaler : MonoBehaviour
         addConeRow(localConePoints, 5, 2, 1);
         addConeRow(localConePoints, 3, 3, 1);
         addConeRow(localConePoints, 1, 4, 1);
-        
+
 
         foreach (var localPosition in localConePoints)
         {
             var worldPoint = gameObjectTransform.TransformPoint(localPosition);
             var coords = worldCells.GetCellPosition(worldPoint);
 
-            var worldPointY = worldCells.GetHeightAt(coneOriginCoords) + 1 + (int)localPosition.y;
-            var strength = 1;//(int)localPosition.y <0?1f - (worldPoint - coneOrigin).magnitude / _distance: 1;
+            var worldPointY = worldCells.GetHeightAt(coneOriginCoords) + 1 + (int) localPosition.y;
+            var strength = 1; //(int)localPosition.y <0?1f - (worldPoint - coneOrigin).magnitude / _distance: 1;
             var key = new Vector3(coords.X, worldPointY, coords.Y);
             if (affectedCells.TryGetValue(key, out var cell))
             {
@@ -145,8 +161,7 @@ public class Inhaler : MonoBehaviour
     public void BeginInhaleInTransformDirection(float coneLength)
     {
         _distance = coneLength;
-        if(!isInhale)
-            //inhalingParticleSystem.gameObject.SetActive(true);
+        if (!isInhale)
             inhalingConeParticleSystem.gameObject.SetActive(true);
         isInhale = true;
     }
@@ -154,16 +169,26 @@ public class Inhaler : MonoBehaviour
     public void StopInhale()
     {
         isInhale = false;
-        inhalingParticleSystem.gameObject.SetActive(false);
+        OnCustardInhaleStopped();
         inhalingConeParticleSystem.gameObject.SetActive(false);
         affectedCells.Clear();
     }
-    
-    
+
+
     public void OnResourceInhaled(Resource resource, int amount)
     {
         var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
-        Debug.Log("inhaled " +newAmount+ "th "+ resource.Name);
+        Debug.Log("inhaled " + newAmount + "th " + resource.Name);
+    }
+
+    public void OnCustardInhale()
+    {
+        inhalingParticleSystem.gameObject.SetActive(true);
+    }
+
+    public void OnCustardInhaleStopped()
+    {
+        inhalingParticleSystem.gameObject.SetActive(false);
     }
 
     public class InhaleCell
@@ -199,5 +224,4 @@ public class Inhaler : MonoBehaviour
             this._strength = strength;
         }
     }
-
 }
