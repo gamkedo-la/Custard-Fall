@@ -33,7 +33,6 @@ namespace Custard
             worldCells.onItemHeightChanged += OnHeightChanged;
             _custardUpdateCountdown = custardCrawlDuration;
             _impededCells = new Dictionary<Coords, List<ImpededCell>>();
-
         }
 
         private void Awake()
