@@ -161,8 +161,9 @@ public class Player : MonoBehaviour
     {
         var val = context.Get<Vector2>();
         var position = transform.position;
-        Vector3 playerPos = Camera.main.WorldToScreenPoint(position);
-        var lookAtPoint = Camera.main.ScreenToWorldPoint(new Vector3(val.x, val.y, playerPos.z));
+        var mainCam = Camera.main;
+        Vector3 playerPos = mainCam.WorldToScreenPoint(position);
+        var lookAtPoint = mainCam.ScreenToWorldPoint(new Vector3(val.x, val.y, playerPos.z));
         lookAtPoint.y = position.y;
         transform.LookAt(lookAtPoint);
     }
