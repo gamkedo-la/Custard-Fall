@@ -22,7 +22,7 @@ public class TimeManager : MonoBehaviour
     [Range(0.0f, 1.0f)]
     public float time;
     public float fullDayLength = 300f;
-    public float startTime = 0.3f;
+    public float startTime = 0.25f;
     private float timeRate;
 
     float dayStart = 0.25f;

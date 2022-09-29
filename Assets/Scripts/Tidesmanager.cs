@@ -103,9 +103,9 @@ public class Tidesmanager : MonoBehaviour
             _tidesPlan.Add(4 / 16f, new TideStep(7));
             _tidesPlan.Add(5 / 16f, new TideStep(5));
             _tidesPlan.Add(7 / 16f, new TideStep(3));
-            _tidesPlan.Add(9 / 16f, new TideStep(4));
+            _tidesPlan.Add(10 / 16f, new TideStep(4));
             _tidesPlan.Add(11 / 16f, new TideStep(6));
-            _tidesPlan.Add(13 / 16f, new TideStep(8));
+            _tidesPlan.Add(12 / 16f, new TideStep(8));
             _tidesPlan.Add(15 / 16f, new TideStep(11));
         }
         else
