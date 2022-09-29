@@ -34,6 +34,10 @@ namespace Custard
             _custardUpdateCountdown = custardCrawlDuration;
             _impededCells = new Dictionary<Coords, List<ImpededCell>>();
 
+        }
+
+        private void Awake()
+        {
             _initialSpawns = FindObjectsOfType<CustardSpawn>();
         }
 
