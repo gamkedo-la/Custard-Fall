@@ -4281,6 +4281,7 @@ MonoBehaviour:
   HeightTillCovered: 2
   InsideCustard: 0
   CoveredByCustard: 0
+  graceTimeForBeingInsideOrOutsideCustard: 0.6
   timeBeforePlayerTakesDamageFromDrawning: 1
   timeBetweenDamageTicks: 0.03
   drowningDamage: 1

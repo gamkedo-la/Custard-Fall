@@ -2,7 +2,7 @@
 using Custard;
 using UnityEngine;
 
-public class LocalCustardListener: MonoBehaviour
+public class LocalCustardListener : MonoBehaviour
 {
     public WorldCells worldCells;
     public CustardState custardState;
@@ -11,10 +11,13 @@ public class LocalCustardListener: MonoBehaviour
     public bool InsideCustard;
     public bool CoveredByCustard;
 
+    public float graceTimeForBeingInsideOrOutsideCustard = .6f;
+
     public float timeBeforePlayerTakesDamageFromDrawning;
     public float timeBetweenDamageTicks;
     public int drowningDamage;
-    private float timePassedSinceCoveredByCustrad = 0.0f;
+    private float timePassedSinceCoveredByCustard = 0.0f;
+    private float timePassedSinceInsideCustardChange = 0.0f;
     private float timePassedSinceLastDamage = 0.0f;
 
     private void Update()
@@ -23,33 +26,58 @@ public class LocalCustardListener: MonoBehaviour
         Coords cellPosition = worldCells.GetCellPosition(transformPosition.x, transformPosition.z);
         var custardAmount = custardState.GetCurrentCustardLevelAt(cellPosition);
 
-        InsideCustard = custardAmount > 0;
+        var insideCustard = custardAmount > 0;
         var coveredByCustard = custardAmount >= HeightTillCovered;
 
         if (CoveredByCustard != coveredByCustard)
         {
-            OnCoveredbyCustard(coveredByCustard);
-            timePassedSinceCoveredByCustrad = 0.0f;
-            timePassedSinceLastDamage = 0.0f;
+            OnCoveredByCustard(coveredByCustard);
         }
-        
+
+        if (InsideCustard != insideCustard)
+        {
+            timePassedSinceInsideCustardChange = 0f;
+        }
+
+        if (timePassedSinceInsideCustardChange >= graceTimeForBeingInsideOrOutsideCustard)
+        {
+            OnInsideCustard(insideCustard);
+        }
+
+        InsideCustard = insideCustard;
         CoveredByCustard = coveredByCustard;
 
+        CheckTimeSpentInOrOutsideCustard();
         CheckForDrownDamage();
     }
 
-    private void OnCoveredbyCustard(bool coveredByCustard)
+    private void CheckTimeSpentInOrOutsideCustard()
     {
-        MusicManager.Instance.SetUnder(coveredByCustard);
+        // we are only interested in calculating the grace time period
+        if (timePassedSinceInsideCustardChange <= 2f)
+        {
+            timePassedSinceInsideCustardChange += Time.deltaTime;
+        }
+    }
+
+    private void OnCoveredByCustard(bool coveredByCustard)
+    {
+        timePassedSinceCoveredByCustard = 0.0f;
+        timePassedSinceLastDamage = 0.0f;
+    }
+
+    private void OnInsideCustard(bool insideCustard)
+    {
+        MusicManager.Instance.SetUnder(insideCustard);
     }
 
     private void CheckForDrownDamage()
     {
         if (CoveredByCustard)
         {
-            if (timePassedSinceCoveredByCustrad < timeBeforePlayerTakesDamageFromDrawning)
+            if (timePassedSinceCoveredByCustard < timeBeforePlayerTakesDamageFromDrawning)
             {
-                timePassedSinceCoveredByCustrad += Time.deltaTime;
+                timePassedSinceCoveredByCustard += Time.deltaTime;
             }
             else
             {
@@ -65,5 +93,4 @@ public class LocalCustardListener: MonoBehaviour
             }
         }
     }
-
 }
