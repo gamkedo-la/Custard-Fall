@@ -39,7 +39,7 @@ public class LocalCustardListener : MonoBehaviour
             timePassedSinceInsideCustardChange = 0f;
         }
 
-        if (timePassedSinceInsideCustardChange >= graceTimeForBeingInsideOrOutsideCustard)
+        if (CoveredByCustard || timePassedSinceInsideCustardChange >= graceTimeForBeingInsideOrOutsideCustard)
         {
             OnInsideCustard(insideCustard);
         }
