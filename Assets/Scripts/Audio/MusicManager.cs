@@ -70,7 +70,7 @@ public class MusicManager : MonoBehaviour {
 		AudioSource freshSource = Instantiate(musicSourcePrefab).GetComponent<AudioSource>();
 		freshSource.clip = topClip;
 		freshSource.loop = loop;
-		freshSource.PlayScheduled(currentTime + nextBeatTime - currentTime);
+		freshSource.PlayScheduled(nextBeatTime);
 		return freshSource;
 	}
 
@@ -156,10 +156,12 @@ public class MusicManager : MonoBehaviour {
 		while (startTime + fadeTime > Time.unscaledTime) {
 			currentTime = Time.unscaledTime - startTime;
 
+			if (!source) yield break;
 			source.volume = Mathf.Lerp(1f, 0f, currentTime / fadeTime);
 			yield return null;
 		}
 
+		if (!source) yield break;
 		source.volume = 0f;
 	}
 

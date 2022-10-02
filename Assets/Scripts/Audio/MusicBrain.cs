@@ -17,9 +17,11 @@ public class MusicBrain : MonoBehaviour {
 	private float lastTime = 0f;
 
 	private int currentLevel = 2;
+	private bool dangerStarted = false;
 
     private DayNightCycle dayNightCycle;
 	private Tidesmanager custardManager;
+	private Player player;
 
 	void Update() {
 		// Day Night music logic
@@ -41,50 +43,51 @@ public class MusicBrain : MonoBehaviour {
 		}
 
 		if (custardManager != null) {
-			if (currentLevel != custardManager.currentTideIndex) {
+			int targetTide = custardManager.CustardManager.targetTideLevel;
+			if (currentLevel != targetTide) {
 				//Debug.Log(custardManager.currentTideIndex + " " + currentLevel);
 				AudioClip clipToPlay = null;
 
-				//if (custardManager.currentTideIndex - currentLevel == 1) {
-				//	clipToPlay = up1Clip;
-				//} else if (custardManager.currentTideIndex - currentLevel == 2) {
-				//	clipToPlay = up2Clip;
-				//} else if (custardManager.currentTideIndex - currentLevel >= 3) {
-				//	clipToPlay = up3Clip;
-				//} else if (custardManager.currentTideIndex - currentLevel == -1) {
-				//	clipToPlay = down1Clip;
-				//} else if (custardManager.currentTideIndex - currentLevel == -2) {
-				//	clipToPlay = down2Clip;
-				//} else if (custardManager.currentTideIndex - currentLevel <= -3) {
-				//	clipToPlay = down3Clip;
-				//}
-
-				if (custardManager.currentTideIndex - currentLevel >= 1) {
+				if (targetTide - currentLevel == 1) {
 					clipToPlay = up1Clip;
-					if (custardManager.currentTideIndex >= 3) clipToPlay = up2Clip;
-					if (custardManager.currentTideIndex >= 6) clipToPlay = up3Clip;
-				} else if (custardManager.currentTideIndex - currentLevel <= -1) {
+				} else if (targetTide - currentLevel == 2) {
+					clipToPlay = up2Clip;
+				} else if (targetTide - currentLevel >= 3) {
+					clipToPlay = up3Clip;
+				} else if (targetTide - currentLevel == -1) {
 					clipToPlay = down1Clip;
-					if (custardManager.currentTideIndex <= 5) clipToPlay = down2Clip;
-					if (custardManager.currentTideIndex <= 3) clipToPlay = down3Clip;
+				} else if (targetTide - currentLevel == -2) {
+					clipToPlay = down2Clip;
+				} else if (targetTide - currentLevel <= -3) {
+					clipToPlay = down3Clip;
 				}
 
 				MusicManager.Instance.SchedualTop(clipToPlay, false);
 
-				currentLevel = custardManager.currentTideIndex;
+				currentLevel = targetTide;
 			}
 		} else {
 			custardManager = FindObjectOfType<Tidesmanager>();
-			currentLevel = custardManager.currentTideIndex;
+			currentLevel = custardManager.CustardManager.targetTideLevel;
         }
+
+		if (player) {
+			Coords cellPosition = player.worldCells.GetCellPosition(player.transform.position.x, player.transform.position.z);
+			Danger(player.worldCells.GetTerrainHeightAt(cellPosition)+1 < currentLevel);
+		} else {
+			player = FindObjectOfType<Player>();
+			Danger(false);
+		}
 	}
 
 	public void Danger(bool value) {
 		if (value) {
-			currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDangerClip);
+			if (!dangerStarted) currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDangerClip);
+			dangerStarted = true;
 		} else if (currentCustardLevelSource != null) {
 			StartCoroutine(MusicManager.Instance.FadeOut(currentCustardLevelSource, 0.25f));
 			Destroy(currentCustardLevelSource.gameObject, 0.26f);
+			dangerStarted = false;
 		}
 	}
 

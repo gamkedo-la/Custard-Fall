@@ -322,9 +322,9 @@ MonoBehaviour:
         weight: 1
     time: 0.75
   custardDangerClip: {fileID: 8300000, guid: 6e93058b3c259644eb546514a3dad405, type: 3}
-  up1Clip: {fileID: 8300000, guid: 6936b3c0ca7c620409bc95985f90c41e, type: 3}
-  up2Clip: {fileID: 8300000, guid: b4f1bbddae0175745bf1c33ec51ef3d1, type: 3}
-  up3Clip: {fileID: 8300000, guid: 0ac012d342b52284793654e832bb9cdc, type: 3}
-  down1Clip: {fileID: 8300000, guid: 5696277c7c438fe48b53c14e8359b753, type: 3}
-  down2Clip: {fileID: 8300000, guid: f46231f8da018314b9cf78127ee8024e, type: 3}
-  down3Clip: {fileID: 8300000, guid: c39de5c70fa060d4f8cbbc739f1094c1, type: 3}
+  up1Clip: {fileID: 8300000, guid: 5696277c7c438fe48b53c14e8359b753, type: 3}
+  up2Clip: {fileID: 8300000, guid: f46231f8da018314b9cf78127ee8024e, type: 3}
+  up3Clip: {fileID: 8300000, guid: c39de5c70fa060d4f8cbbc739f1094c1, type: 3}
+  down1Clip: {fileID: 8300000, guid: 6936b3c0ca7c620409bc95985f90c41e, type: 3}
+  down2Clip: {fileID: 8300000, guid: b4f1bbddae0175745bf1c33ec51ef3d1, type: 3}
+  down3Clip: {fileID: 8300000, guid: 0ac012d342b52284793654e832bb9cdc, type: 3}
