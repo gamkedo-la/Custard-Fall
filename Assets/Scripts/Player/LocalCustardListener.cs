@@ -7,6 +7,7 @@ public class LocalCustardListener : MonoBehaviour
     public WorldCells worldCells;
     public CustardState custardState;
     public int HeightTillCovered;
+    private Player player;
 
     public bool InsideCustard;
     public bool CoveredByCustard;
@@ -20,7 +21,12 @@ public class LocalCustardListener : MonoBehaviour
     private float timePassedSinceInsideCustardChange = 0.0f;
     private float timePassedSinceLastDamage = 0.0f;
 
-    private void Update()
+    private void Awake()
+    {
+        player = gameObject.GetComponent<Player>();
+    }
+
+    private void FixedUpdate()
     {
         var transformPosition = transform.position;
         Coords cellPosition = worldCells.GetCellPosition(transformPosition.x, transformPosition.z);
@@ -85,9 +91,9 @@ public class LocalCustardListener : MonoBehaviour
                 {
                     timePassedSinceLastDamage += Time.deltaTime;
                 }
-                else
+                else if(player)
                 {
-                    gameObject.GetComponent<Player>().TakeDamage(drowningDamage);
+                    player.TakeDamage(drowningDamage);
                     timePassedSinceLastDamage = 0.0f;
                 }
             }
