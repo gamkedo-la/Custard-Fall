@@ -26,7 +26,7 @@ public class InventoryUI : MonoBehaviour
 		resnameToIconIndex["Creamy Cone Tree"] = 3;
 		//other tree don't have resource yet
 		resnameToIconIndex["Waffle wall"] = 4; //using tree line
-		resnameToIconIndex["Colletible"] = 6;
+		resnameToIconIndex["Collectible"] = 6;
 
 		inventory = Inventory.instance;
 		inventory.onItemChangedCallback += UpdateUI;
