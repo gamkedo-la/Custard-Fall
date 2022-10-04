@@ -61,6 +61,7 @@ public class InventoryUI : MonoBehaviour
 			Debug.Log("have:"+items[ii].Name);
 			int iconIndex = resnameToIconIndex[items[ii].Name];
 			Debug.Log("icon " + iconIndex);
+			Debug.Log(iconArt.Length);
 			iconList[ii].AddItem(iconArt[iconIndex]);
         }
 		/*for (int i = 0; i < iconList.Length; i++)
