@@ -29,6 +29,7 @@ public class InventoryUI : MonoBehaviour
 		resnameToIconIndex["Collectible"] = 6;
 
 		inventory = Inventory.instance;
+		inventory.SetUIRef(this);
 		inventory.onItemChangedCallback += UpdateUI;
 		iconList = GetComponentsInChildren<InventorySlot>();
 	}
@@ -51,18 +52,19 @@ public class InventoryUI : MonoBehaviour
 	}
 
 	
-	void UpdateUI()
+	public void UpdateUI()
 	{
 		Debug.Log("UPDATING UI");
 		List<Resource> items=inventory.GetResourceList();
 		//var newAmount = inventory.GetResourceAmount(resource);
+		int iconNum = 0;
+		Debug.Log(items.Count);
 		for(int ii = 0; ii < items.Count; ii++)
         {
 			Debug.Log("have:"+items[ii].Name);
 			int iconIndex = resnameToIconIndex[items[ii].Name];
-			Debug.Log("icon " + iconIndex);
-			Debug.Log(iconArt.Length);
-			iconList[ii].AddItem(iconArt[iconIndex]);
+			iconList[iconNum].AddItem(iconArt[iconIndex]);
+			iconNum++;
         }
 		/*for (int i = 0; i < iconList.Length; i++)
         {

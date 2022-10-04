@@ -24,8 +24,13 @@ public class Inventory : MonoBehaviour
 
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;
+    private InventoryUI UIRef;
 
     private readonly SortedSet<InventorySlot> _slots = new SortedSet<InventorySlot>(InventorySlot.SortIndexComparer);
+    public void SetUIRef(InventoryUI getRef)
+    {
+        UIRef = getRef;
+    }
 
     public int AddOrSubResourceAmount(Resource resource, int amount)
     {
@@ -52,7 +57,7 @@ public class Inventory : MonoBehaviour
                 onItemChangedCallback.Invoke();
 
         }
-
+        UIRef.UpdateUI();
         return slot.Amount;
 
     }
@@ -73,6 +78,7 @@ public class Inventory : MonoBehaviour
         while (em.MoveNext())
         {
             local.Add(em.Current.Resource); //Do we need to check amount?
+            Debug.Log(em.Current.Resource.Name);
         }
         return local;
     }
