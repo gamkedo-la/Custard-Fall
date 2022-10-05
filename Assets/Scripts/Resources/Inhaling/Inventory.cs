@@ -81,20 +81,20 @@ public class Inventory : MonoBehaviour
             return 0;
     }
 
-    public List<Resource> GetResourceList()
+    public List<InventorySlot> GetResourceList()
     {
-        List<Resource> local = new List<Resource>();
+        List<InventorySlot> local = new List<InventorySlot>();
         //_slots.ToList().ForEach(s => local.Add(s.name));
         SortedSet<InventorySlot>.Enumerator em = _slots.GetEnumerator();
         while (em.MoveNext())
         {
-            local.Add(em.Current.Resource); //Do we need to check amount?
+            local.Add(em.Current);
             // Debug.Log(" item: " + em.Current.Resource.Name + "(" + em.Current.Amount + ")");
         }
         return local;
     }
 
-    private class InventorySlot
+    public class InventorySlot
     {
         public Resource Resource { get;}
 
