@@ -185,7 +185,7 @@ public class Inhaler : MonoBehaviour
         try
         {
             var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
-            Debug.Log("inhaled " + newAmount + "th " + resource.Name);
+            // Debug.Log("inhaled " + newAmount + " number of " + resource.Name);
         }
         catch (Exception e)
         {

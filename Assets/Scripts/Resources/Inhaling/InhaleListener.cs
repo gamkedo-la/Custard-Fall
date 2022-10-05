@@ -90,7 +90,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
         
         if (GetRemainingResourcesCount() == 0)
         {
-            Debug.Log("Removing item from world...");
+            // Debug.Log("Removing item from world...");
             Remove();
         }
     }

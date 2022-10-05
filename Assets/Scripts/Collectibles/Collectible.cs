@@ -30,7 +30,7 @@ public class Collectible : InhaleListener
         if (GetRemainingResourcesCount() == 0)
         {
             gameObject.SetActive(false);
-            Debug.Log($"Got Collectible {id}");
+            // Debug.Log($"Got Collectible {id}");
             OnPickup();
         }
     }

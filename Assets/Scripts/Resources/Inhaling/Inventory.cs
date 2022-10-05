@@ -34,8 +34,19 @@ public class Inventory : MonoBehaviour
 
     public int AddOrSubResourceAmount(Resource resource, int amount)
     {
-        if (_slots.TryGetValue(InventorySlot.Of(resource), out var slot))
+        InventorySlot slot = null;
+
+        // inelegant way to do it, but correct way wasn't working, so brute force :)
+        // (not happening often enough for this to be any sort of performance snag)
+        foreach (InventorySlot val in _slots) {
+            if (val.Resource.Name == resource.Name) {
+                slot = val;
+            }
+        }
+
+        if (slot != null)
         {
+            // Debug.Log("already had: "+resource.Name);
             slot.Amount = amount + slot.Amount;
             if (slot.Amount <= 0)
             {
@@ -51,7 +62,7 @@ public class Inventory : MonoBehaviour
             slot = new InventorySlot(resource, amount, _slots.Count);
             _slots.Add(slot);
 
-            Debug.Log("ResourceAdded");
+            // Debug.Log("new resource type: " + resource.Name);
 
             if (onItemChangedCallback != null)
                 onItemChangedCallback.Invoke();
@@ -74,11 +85,11 @@ public class Inventory : MonoBehaviour
     {
         List<Resource> local = new List<Resource>();
         //_slots.ToList().ForEach(s => local.Add(s.name));
-        SortedSet<Inventory.InventorySlot>.Enumerator em = _slots.GetEnumerator();
+        SortedSet<InventorySlot>.Enumerator em = _slots.GetEnumerator();
         while (em.MoveNext())
         {
             local.Add(em.Current.Resource); //Do we need to check amount?
-            Debug.Log(em.Current.Resource.Name);
+            // Debug.Log(" item: " + em.Current.Resource.Name + "(" + em.Current.Amount + ")");
         }
         return local;
     }
@@ -105,7 +116,7 @@ public class Inventory : MonoBehaviour
 
         protected bool Equals(InventorySlot other)
         {
-            return Equals(Resource, other.Resource);
+            return Equals(Resource.Name, other.Resource.Name);
         }
 
         public override bool Equals(object obj)

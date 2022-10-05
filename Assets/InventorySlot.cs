@@ -8,7 +8,7 @@ public class InventorySlot : MonoBehaviour
     public void AddItem (Sprite newIcon)
      {
         icon.sprite = newIcon;
-        Debug.Log("Item");
+        // Debug.Log("Item");
     }
 
      public void ClearSlot ()

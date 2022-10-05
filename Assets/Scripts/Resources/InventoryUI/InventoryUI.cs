@@ -54,22 +54,22 @@ public class InventoryUI : MonoBehaviour
 	
 	public void UpdateUI()
 	{
-		Debug.Log("UPDATING UI");
+		// Debug.Log("UPDATING UI");
 		List<Resource> items=inventory.GetResourceList();
 		//var newAmount = inventory.GetResourceAmount(resource);
 		int iconNum = 0;
-		Debug.Log(items.Count);
+		// Debug.Log("items.Count: " + items.Count);
 		for(int ii = 0; ii < items.Count; ii++)
         {
-			Debug.Log("have:"+items[ii].Name);
+			// Debug.Log(ii+" have:"+items[ii].Name);
 			int iconIndex = resnameToIconIndex[items[ii].Name];
 			iconList[iconNum].AddItem(iconArt[iconIndex]);
 			iconNum++;
         }
-		/*for (int i = 0; i < iconList.Length; i++)
+        /*for (int i = 0; i < iconList.Length; i++)
         {
 			//To Do: Display Icons Based on inventory, currently just shows putting images on slots
 			iconList[i].AddItem(iconArt[i % iconArt.Length]);
         }*/
-	}
+    }
 }
