@@ -12,6 +12,7 @@ public class TimeManager : MonoBehaviour
     public static EventHandler<EventArgs> onNoonPassed;
     public static EventHandler<EventArgs> onMorningStarted;
     public static EventHandler<EventArgs> onNightStarted;
+    public static EventHandler<EventArgs> onMidnightPassed;
 
     public enum DayNightState { Daytime, Nightime };
 
@@ -78,6 +79,7 @@ public class TimeManager : MonoBehaviour
         if(time >= 1.0f){
             time = 0.0f;
             previousDay = currentDay;
+            onMidnightPassed?.Invoke(this, EventArgs.Empty);
         }
 
         if (time >= dayStart && previousDay >= currentDay) {
