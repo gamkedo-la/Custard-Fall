@@ -9,7 +9,15 @@ public class Tidesmanager : MonoBehaviour
     public TimeManager timeManager;
     public Player Player;
 
-    private SortedDictionary<float, TideStep> _tidesPlan = new SortedDictionary<float, TideStep>();
+    private SortedDictionary<float, TideStep> _tidesPlanNormal = new SortedDictionary<float, TideStep>();
+    private SortedDictionary<float, TideStep> _tidesPlanFullMoon = new SortedDictionary<float, TideStep>();
+    private SortedDictionary<float, TideStep> _tidesPlanDayAfterFullMoon = new SortedDictionary<float, TideStep>();
+
+    // a Custard Fall week has 4 days and ends always with a full moon
+    public int _dayOfWeek = -1;
+    private SortedDictionary<float, TideStep>[] _weeklyPlan;
+    private SortedDictionary<float, TideStep> _tidesPlan;
+
     private List<float> _tidesPlanIndixes;
     public float speedFactor = 1f;
     public bool pause = false;
@@ -20,9 +28,31 @@ public class Tidesmanager : MonoBehaviour
     private void Start()
     {
         InitPlannedTideBehavior();
+
+        _weeklyPlan = new[]
+            {_tidesPlanDayAfterFullMoon, _tidesPlanNormal, _tidesPlanNormal, _tidesPlanFullMoon};
+        SetDayOfWeek(0);
+
+        TimeManager.onMidnightPassed += (sender, arg) => StartNextDayOfWeek();
+        
         currentTideIndex = 0;
         var tideStep = _tidesPlan[currentTideIndex];
         CustardManager.targetTideLevel = tideStep.getLevel();
+    }
+
+    private void StartNextDayOfWeek()
+    {
+        SetDayOfWeek(++_dayOfWeek);
+    }
+
+    private void SetDayOfWeek(int dayOfWeek)
+    {
+        if (dayOfWeek >= _weeklyPlan.Length)
+            dayOfWeek = 0;
+
+        _dayOfWeek = dayOfWeek;
+        _tidesPlan = _weeklyPlan[dayOfWeek];
+        _tidesPlanIndixes = new List<float>(_tidesPlan.Keys);
     }
 
     private void FixedUpdate()
@@ -98,28 +128,47 @@ public class Tidesmanager : MonoBehaviour
     {
         if (realCustardFallCycle)
         {
-            _tidesPlan.Add(0f, new TideStep(11));
-            _tidesPlan.Add(2 / 16f, new TideStep(9));
-            _tidesPlan.Add(4 / 16f, new TideStep(7));
-            _tidesPlan.Add(5 / 16f, new TideStep(5));
-            _tidesPlan.Add(7 / 16f, new TideStep(3));
-            _tidesPlan.Add(10 / 16f, new TideStep(4));
-            _tidesPlan.Add(11 / 16f, new TideStep(6));
-            _tidesPlan.Add(12 / 16f, new TideStep(8));
-            _tidesPlan.Add(15 / 16f, new TideStep(11));
+            _tidesPlanNormal.Add(0f, new TideStep(11));
+            _tidesPlanNormal.Add(2 / 16f, new TideStep(9));
+            _tidesPlanNormal.Add(4 / 16f, new TideStep(7));
+            _tidesPlanNormal.Add(5 / 16f, new TideStep(5));
+            _tidesPlanNormal.Add(7 / 16f, new TideStep(3));
+            _tidesPlanNormal.Add(10 / 16f, new TideStep(4));
+            _tidesPlanNormal.Add(11 / 16f, new TideStep(6));
+            _tidesPlanNormal.Add(12 / 16f, new TideStep(8));
+            _tidesPlanNormal.Add(15 / 16f, new TideStep(11));
+
+            _tidesPlanFullMoon.Add(0f, new TideStep(11));
+            _tidesPlanFullMoon.Add(1 / 16f, new TideStep(12));
+            _tidesPlanFullMoon.Add(2 / 16f, new TideStep(8));
+            _tidesPlanFullMoon.Add(4 / 16f, new TideStep(6));
+            _tidesPlanFullMoon.Add(5 / 16f, new TideStep(1));
+            _tidesPlanFullMoon.Add(7 / 16f, new TideStep(2));
+            _tidesPlanFullMoon.Add(10 / 16f, new TideStep(5));
+            _tidesPlanFullMoon.Add(12 / 16f, new TideStep(8));
+            _tidesPlanFullMoon.Add(15 / 16f, new TideStep(11));
+            
+            _tidesPlanDayAfterFullMoon.Add(0f, new TideStep(11));
+            _tidesPlanDayAfterFullMoon.Add(1 / 16f, new TideStep(12));
+            _tidesPlanDayAfterFullMoon.Add(2 / 16f, new TideStep(9));
+            _tidesPlanDayAfterFullMoon.Add(4 / 16f, new TideStep(7));
+            _tidesPlanDayAfterFullMoon.Add(5 / 16f, new TideStep(5));
+            _tidesPlanDayAfterFullMoon.Add(7 / 16f, new TideStep(3));
+            _tidesPlanDayAfterFullMoon.Add(10 / 16f, new TideStep(4));
+            _tidesPlanDayAfterFullMoon.Add(11 / 16f, new TideStep(6));
+            _tidesPlanDayAfterFullMoon.Add(12 / 16f, new TideStep(8));
+            _tidesPlanDayAfterFullMoon.Add(15 / 16f, new TideStep(11));
         }
         else
         {
-            _tidesPlan.Add(0f, new TideStep(4));
-            _tidesPlan.Add(.15f, new TideStep(4));
-            _tidesPlan.Add(.25f, new TideStep(3));
-            _tidesPlan.Add(.35f, new TideStep(2));
-            _tidesPlan.Add(.45f, new TideStep(1));
-            _tidesPlan.Add(.55f, new TideStep(2));
-            _tidesPlan.Add(.75f, new TideStep(4));
+            _tidesPlanNormal.Add(0f, new TideStep(4));
+            _tidesPlanNormal.Add(.15f, new TideStep(4));
+            _tidesPlanNormal.Add(.25f, new TideStep(3));
+            _tidesPlanNormal.Add(.35f, new TideStep(2));
+            _tidesPlanNormal.Add(.45f, new TideStep(1));
+            _tidesPlanNormal.Add(.55f, new TideStep(2));
+            _tidesPlanNormal.Add(.75f, new TideStep(4));
         }
-
-        _tidesPlanIndixes = new List<float>(_tidesPlan.Keys);
     }
 
 
