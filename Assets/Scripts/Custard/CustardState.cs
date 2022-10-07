@@ -86,6 +86,8 @@ namespace Custard
 
         public int GetCurrentCustardLevelAt(Coords coords)
         {
+            if (WorldCells.IsOutOfBounds(coords))
+                return 0;
             return CustardArea[coords.X, coords.Y];
         }
         
