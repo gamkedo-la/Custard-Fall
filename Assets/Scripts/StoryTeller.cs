@@ -25,7 +25,7 @@ public class StoryTeller : MonoBehaviour
                 timeTillNextMessage = 4f;
                 messages.Enqueue("When the Custard fell, everything changed.");
                 messages.Enqueue("Midday, it crawls to the places that used to be.");
-                messages.Enqueue("At night, we flee into the mountains.");
+                messages.Enqueue("At night, we flee to the mountains.");
                 messages.Enqueue("Every day, we hunt for resources and the treasures of the past.");
             }
             else if (day == 3)
