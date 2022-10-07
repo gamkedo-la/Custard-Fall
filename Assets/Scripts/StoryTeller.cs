@@ -10,7 +10,7 @@ public class StoryTeller : MonoBehaviour
 
     private Queue<String> messages = new();
 
-    private float messageDisplayTime = 0f;
+    private float timeTillNextMessage = 0f;
 
 
 
@@ -21,6 +21,8 @@ public class StoryTeller : MonoBehaviour
         {
             if (day == 1)
             {
+                // we do not want to overwhelm the player with infos on the start of the game
+                timeTillNextMessage = 4f;
                 messages.Enqueue("When the Custard fell, everything changed.");
                 messages.Enqueue("Midday, it crawls to the places that used to be.");
                 messages.Enqueue("At night, we flee into the mountains.");
@@ -37,21 +39,21 @@ public class StoryTeller : MonoBehaviour
     private void DisplayStoryText(string message)
     {
         text.SetText(message);
-        messageDisplayTime = message.Length * .25f;
+        timeTillNextMessage = message.Length * .25f;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (messageDisplayTime > 0f)
-            messageDisplayTime -= Time.deltaTime;
+        if (timeTillNextMessage > 0f)
+            timeTillNextMessage -= Time.deltaTime;
         else if(messages.Count != 0)
         {
             DisplayStoryText(messages.Dequeue());
         }
         else
         {
-            messageDisplayTime = 0f;
+            timeTillNextMessage = 0f;
             text.SetText("");
         }
     }
