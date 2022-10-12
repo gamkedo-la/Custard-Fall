@@ -13,6 +13,7 @@ public class Inhaler : MonoBehaviour
     public Inventory inventory;
     public ParticleSystem inhalingParticleSystem;
     public ParticleSystem inhalingConeParticleSystem;
+    public GameObject plusOnePrefab;
     public readonly Dictionary<Vector3, InhaleCell> affectedCells = new Dictionary<Vector3, InhaleCell>();
     private float _distance;
     public bool isInhale;
@@ -150,6 +151,13 @@ public class Inhaler : MonoBehaviour
             {
                 cell = new InhaleCell(coords, worldPointY, strength);
                 affectedCells.Add(key, cell);
+                
+                // a +1 style feedback number
+                // fixme: this happens too often! once for every single point
+                // fixme: put inside OnResourceInhaled instead? once it works
+                // Debug.Log("+1");
+                if (plusOnePrefab) Instantiate(plusOnePrefab,new Vector3(transform.position.x,transform.position.y+1.5f,transform.position.z),Quaternion.Euler(-90f, 0f, 0f));
+
             }
         }
     }
@@ -184,8 +192,13 @@ public class Inhaler : MonoBehaviour
     {
         try
         {
+            // FIXME: this event never runs
+            // a +1 style feedback number
+            // if (plusOnePrefab) Instantiate(plusOnePrefab,this.transform.position,new Quaternion());
+
             var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
-            // Debug.Log("inhaled " + newAmount + " number of " + resource.Name);
+            Debug.Log("inhaled " + newAmount + " number of " + resource.Name);
+
         }
         catch (Exception e)
         {

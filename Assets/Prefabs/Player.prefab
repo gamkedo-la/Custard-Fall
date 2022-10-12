@@ -5290,6 +5290,7 @@ MonoBehaviour:
   inventory: {fileID: 1966580447810109878}
   inhalingParticleSystem: {fileID: 5274499824466673004}
   inhalingConeParticleSystem: {fileID: 0}
+  plusOnePrefab: {fileID: 2713394065547945622, guid: 474306a931cfbec498955a8f9d812fb1, type: 3}
   isInhale: 0
 --- !u!114 &1966580447810109878
 MonoBehaviour:
