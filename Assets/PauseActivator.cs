@@ -13,6 +13,20 @@ public class PauseActivator : MonoBehaviour
 
     public void OnPause(InputValue context)
     {
-        pauseCanvas.SetActive(!pauseCanvas.activeSelf);
+        pauseCanvas.SetActive(!IsGamePaused());
+        
+        if (IsGamePaused())
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
+    public bool IsGamePaused()
+    {
+        return pauseCanvas.activeSelf;
     }
 }
