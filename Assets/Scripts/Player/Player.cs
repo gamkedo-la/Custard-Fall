@@ -44,12 +44,16 @@ public class Player : MonoBehaviour
     public int maxHealth = 90;
     public int currentHealth;
     public Healthbar healthbar;
+    
+    private int _mouseTargetLayerMask;
 
     // Start is called before the first frame update
     private void Start()
     {
         _collider = GetComponent<Collider>();
         inhaleSFX = GetComponent<AudioSource>();
+
+        _mouseTargetLayerMask = LayerMask.GetMask("MousePointerTarget");
 
         currentHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
@@ -159,13 +163,16 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputValue context)
     {
-        var val = context.Get<Vector2>();
-        var position = transform.position;
-        var mainCam = Camera.main;
-        Vector3 playerPos = mainCam.WorldToScreenPoint(position);
-        var lookAtPoint = mainCam.ScreenToWorldPoint(new Vector3(val.x, val.y, playerPos.z));
-        lookAtPoint.y = position.y;
-        transform.LookAt(lookAtPoint);
+        var mousePosition = context.Get<Vector2>();
+
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 5000f, _mouseTargetLayerMask))
+        {
+            var lookAtPoint = hit.point;
+            lookAtPoint.y = transform.position.y;
+            transform.LookAt(lookAtPoint);
+        }
     }
 
     public void OnLookAroundGamepad(InputValue context)
@@ -238,15 +245,19 @@ public class Player : MonoBehaviour
 
     public void OnGrapple(InputValue context)
     {
-        if (grappling)
+        if (grappling || nextGrappleTime < grappleCooldownTime)
         {
             return;
         }
 
-        if (nextGrappleTime < grappleCooldownTime)
+        if (context.isPressed)
         {
-            return;
+            // when pressed the grapple hook spins, winding up for throw
         }
+        // when released the grapple is thrown towards grapplePoint
+        // grapplehook hits terrain it can stick to?
+        // Yes it stops, player moves towards hook
+        // No: it comes back to player
 
         //On Right Click Raycast from mouse to find collider
 

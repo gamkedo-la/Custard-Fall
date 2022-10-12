@@ -2111,7 +2111,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7021901739410810308}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5412,14 +5412,6 @@ PrefabInstance:
     - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: cooldownTime
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-      propertyPath: movementSpeed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-      propertyPath: runningMultiplier
-      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: sprintingMultiplier
