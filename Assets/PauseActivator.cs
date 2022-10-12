@@ -14,10 +14,18 @@ public class PauseActivator : MonoBehaviour
     public void OnPause(InputValue context)
     {
         pauseCanvas.SetActive(!IsGamePaused());
-        
+
         if (IsGamePaused())
         {
             Time.timeScale = 0;
+
+            var buttonGlowScriptComponent = pauseCanvas.GetComponentInChildren<ButtonGlowScriptComponent>();
+            Debug.Log(buttonGlowScriptComponent);
+
+            if (buttonGlowScriptComponent != null)
+            {
+                buttonGlowScriptComponent.ResetAllTriggers();
+            }
         }
         else
         {
