@@ -12,6 +12,9 @@ public class LargeCreamyConeTree : InhaleListener
         AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
         AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
         AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
         AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
         AddToInhaleQueue(new Resource("Creamy Cone Tree"), 3f);
     }
