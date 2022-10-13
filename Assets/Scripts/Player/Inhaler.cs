@@ -120,18 +120,38 @@ public class Inhaler : MonoBehaviour
         addConeRow(localConePoints, 5, 4, 0);
         addConeRow(localConePoints, 5, 5, 0);
         addConeRow(localConePoints, 5, 6, 0);
-        addConeRow(localConePoints, 3, 7, 0);
+        addConeRow(localConePoints, 5, 7, 0);
         addConeRow(localConePoints, 3, 8, 0);
         // lower pane
-        addConeRow(localConePoints, 3, 1, -1);
+        addConeRow(localConePoints, 3, 0, -1);
+        addConeRow(localConePoints, 5, 1, -1);
         addConeRow(localConePoints, 5, 2, -1);
-        addConeRow(localConePoints, 3, 3, -1);
-        addConeRow(localConePoints, 1, 4, -1);
+        addConeRow(localConePoints, 5, 3, -1);
+        addConeRow(localConePoints, 5, 4, -1);
+        addConeRow(localConePoints, 5, 5, -1);
+        addConeRow(localConePoints, 5, 6, -1);
+        addConeRow(localConePoints, 5, 7, -1);
+        addConeRow(localConePoints, 3, 8, -1);
         // higher pane
-        addConeRow(localConePoints, 3, 1, 1);
+        addConeRow(localConePoints, 3, 0, 1);
+        addConeRow(localConePoints, 5, 1, 1);
         addConeRow(localConePoints, 5, 2, 1);
-        addConeRow(localConePoints, 3, 3, 1);
-        addConeRow(localConePoints, 1, 4, 1);
+        addConeRow(localConePoints, 5, 3, 1);
+        addConeRow(localConePoints, 5, 4, 1);
+        addConeRow(localConePoints, 5, 5, 1);
+        addConeRow(localConePoints, 5, 6, 1);
+        addConeRow(localConePoints, 5, 7, 1);
+        addConeRow(localConePoints, 3, 8, 1);
+        // and even another higher pane
+        addConeRow(localConePoints, 3, 0, 2);
+        addConeRow(localConePoints, 5, 1, 2);
+        addConeRow(localConePoints, 5, 2, 2);
+        addConeRow(localConePoints, 5, 3, 2);
+        addConeRow(localConePoints, 5, 4, 2);
+        addConeRow(localConePoints, 5, 5, 2);
+        addConeRow(localConePoints, 5, 6, 2);
+        addConeRow(localConePoints, 5, 7, 2);
+        addConeRow(localConePoints, 3, 8, 2);
 
 
         foreach (var localPosition in localConePoints)
