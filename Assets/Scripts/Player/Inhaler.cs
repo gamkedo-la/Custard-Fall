@@ -186,14 +186,15 @@ public class Inhaler : MonoBehaviour
         try
         {
             // a +1 style feedback number
-            // fixme: this happens too often! once for every single point
-            // fixme: put inside OnResourceInhaled instead? once it works
-            // Debug.Log("+1");
-            if (plusOnePrefab) Instantiate(plusOnePrefab,new Vector3(transform.position.x,transform.position.y+1.5f,transform.position.z),Quaternion.Euler(-90f, 0f, 0f));
-            
-            var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
-            Debug.Log("inhaled " + newAmount + " number of " + resource.Name);
+            if (plusOnePrefab)
+            {
+                for (int i = 0; i < amount; i++)
+                    Instantiate(plusOnePrefab,
+                        new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z),
+                        Quaternion.Euler(-90f, 0f, 0f));
+            }
 
+            var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
         }
         catch (Exception e)
         {
