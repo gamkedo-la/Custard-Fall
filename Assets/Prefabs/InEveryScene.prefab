@@ -5062,6 +5062,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 091c3be7d9ccb244dad75cdadfaac51b, type: 3}
+--- !u!114 &1075501302420492559 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1232834937177171531, guid: 091c3be7d9ccb244dad75cdadfaac51b, type: 3}
+  m_PrefabInstance: {fileID: 2303338783688144708}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc6a3c0f6b9c3ba43af361520edaa3e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2287031792911444516 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 20883195769544032, guid: 091c3be7d9ccb244dad75cdadfaac51b, type: 3}
@@ -7294,6 +7305,26 @@ PrefabInstance:
     - target: {fileID: 2392171063990608178, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7830169320260410755, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7830169320260410755, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1075501302420492559}
+    - target: {fileID: 7830169320260410755, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetVolume
+      objectReference: {fileID: 0}
+    - target: {fileID: 7830169320260410755, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MixVolumeController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7830169320260410755, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}

@@ -24,11 +24,5 @@ public class ButtonGlowScriptComponent : MonoBehaviour
     {
         myGlowImagesAnimatorComponent.ResetTrigger("MouseEnterGlowTrigger");
         myGlowImagesAnimatorComponent.ResetTrigger("MouseExitDeglowTrigger");
-        
-        Debug.Log(myGlowImage.color);
-        Color tempColor = myGlowImage.color;
-        tempColor.a = 0f;
-        myGlowImage.color = tempColor;
-        Debug.Log(myGlowImage.color);
     }
 }

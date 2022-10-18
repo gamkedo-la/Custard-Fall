@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 20883195769544032}
   - component: {fileID: 1310297184652283890}
   - component: {fileID: 2552369320961053631}
+  - component: {fileID: 1232834937177171531}
   m_Layer: 0
   m_Name: PauseManager
   m_TagString: Untagged
@@ -45,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a640a8392f6b0aa42b03e214a739c1d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pauseCanvas: {fileID: 0}
 --- !u!114 &2552369320961053631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,3 +77,16 @@ MonoBehaviour:
   m_DefaultActionMap: bbd60eba-43f4-4b82-bdb9-8eaa25b300f0
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1232834937177171531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2706003043302850422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc6a3c0f6b9c3ba43af361520edaa3e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: b9af338961f104b4b91b0ca6003835cf, type: 2}

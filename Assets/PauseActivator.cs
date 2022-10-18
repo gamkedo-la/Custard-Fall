@@ -18,19 +18,27 @@ public class PauseActivator : MonoBehaviour
         if (IsGamePaused())
         {
             Time.timeScale = 0;
-
-            var buttonGlowScriptComponent = pauseCanvas.GetComponentInChildren<ButtonGlowScriptComponent>();
-            Debug.Log(buttonGlowScriptComponent);
-
-            if (buttonGlowScriptComponent != null)
-            {
-                buttonGlowScriptComponent.ResetAllTriggers();
-            }
+            ResetGlowingTriggers();
         }
         else
         {
             Time.timeScale = 1;
         }
+    }
+
+    private void ResetGlowingTriggers()
+    {
+        var buttonGlowScriptComponent = pauseCanvas.GetComponentInChildren<ButtonGlowScriptComponent>();
+        if (buttonGlowScriptComponent != null)
+        {
+            buttonGlowScriptComponent.ResetAllTriggers();
+        }
+    }
+
+    public void UnPauseGameByButton()
+    {
+        pauseCanvas.SetActive(!IsGamePaused());
+        Time.timeScale = 1;
     }
 
     public bool IsGamePaused()
