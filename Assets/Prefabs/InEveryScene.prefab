@@ -1404,7 +1404,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.7, y: -0}
   m_SizeDelta: {x: 440, y: 170}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &3339460525004253731
@@ -2840,7 +2840,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8634744844841693198}
   m_LocalRotation: {x: 0.26488683, y: -0.655618, z: 0.26488683, w: 0.655618}
-  m_LocalPosition: {x: 27.284931, y: 25, z: -4}
+  m_LocalPosition: {x: 28.84, y: 27.1, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7274,6 +7274,10 @@ PrefabInstance:
       propertyPath: InitialModule.randomizeRotationDirection
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7330138422288815188, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: custardManager
+      value: 
+      objectReference: {fileID: 8634744844989316037}
     - target: {fileID: 8062830763387158949, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -7311,8 +7315,24 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: LookAround.m_Id
+      value: e475c4c5-6afe-4224-9905-f9856db4fd16
+      objectReference: {fileID: 0}
+    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: LookAround.m_Name
+      value: Look Around
+      objectReference: {fileID: 0}
+    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: sprintingMultiplier
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: MouseLookAround.m_Id
+      value: 337ae004-4c05-43ff-815d-c088285cdcd3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: MouseLookAround.m_Name
+      value: Mouse Look Around
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}

@@ -13,9 +13,11 @@ public class Player : MonoBehaviour
     private bool _moveForwards = false;
 
     public float movementSpeed = 4;
+    private Vector3 _targetMoveDirection;
 
-    public bool isRunning = false;
+    public bool isDashing = false;
     public float runningMultiplier;
+    private float _currenRunningMultiplier = 1f;
 
     public float cooldownTime = 2.5f;
     public float runningDuration = .7f;
@@ -27,7 +29,14 @@ public class Player : MonoBehaviour
     [SerializeField] private float grappleSpeed = 8f;
     private Vector3 grapplePoint;
 
+    [SerializeField] private GameObject playerDirectional;
+    public InputAction LookAround;
+    public InputAction MouseLookAround;
+    private bool _isLookInRunDirection = true;
+    private Vector3 _currentLookTarget = Vector3.zero;
+
     bool grappling;
+
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     private float yOffset = -.05f;
@@ -37,11 +46,12 @@ public class Player : MonoBehaviour
 
     public GameObject itemInHand;
 
+
     //health bar
     public int maxHealth = 90;
     public int currentHealth;
     public Healthbar healthbar;
-    
+
     private int _mouseTargetLayerMask;
     private PauseActivator _pauseActivator;
 
@@ -63,8 +73,52 @@ public class Player : MonoBehaviour
     {
         if (Time.time > nextRunningTime - cooldownTime + runningDuration)
         {
-            isRunning = false;
-            movementSpeed = 6;
+            if (isDashing)
+            {
+                _targetMoveDirection = Vector3.zero;
+                _currenRunningMultiplier = 1f;
+            }
+            isDashing = false;
+        }
+        else if(isDashing)
+        {
+            _currenRunningMultiplier = runningMultiplier;
+        }
+
+        if (_currentLookTarget.magnitude != 0f)
+        {
+            var currentTransform = playerDirectional.transform;
+            currentTransform.LookAt(currentTransform.position + _currentLookTarget);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        nextGrappleTime += Time.fixedDeltaTime;
+        if (grappling)
+        {
+            transform.position =
+                Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
+            if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
+            {
+                grappling = false;
+            }
+
+            return;
+        }
+
+        if (!MouseLookAround.inProgress && !LookAround.inProgress)
+        {
+            _isLookInRunDirection = true;
+        }
+
+        if (isDashing)
+        {
+            MovePlayer(playerDirectional.transform.forward);
+        }
+        else if (_targetMoveDirection.magnitude != 0f)
+        {
+            MovePlayer(_targetMoveDirection);
         }
     }
 
@@ -93,34 +147,19 @@ public class Player : MonoBehaviour
         healthbar.SetHealth(currentHealth);
     }
 
-    private void FixedUpdate()
-    {
-        nextGrappleTime += Time.fixedDeltaTime;
-        if (grappling)
-        {
-            transform.position =
-                Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
-            if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
-            {
-                grappling = false;
-            }
-
-            return;
-        }
-
-        if (_moveForwards)
-        {
-            MovePlayerForward();
-        }
-    }
-
     private void MovePlayerForward()
     {
+        MovePlayer(playerDirectional.transform.forward);
+    }
+
+    private void MovePlayer(Vector3 targetDirection)
+    {
+        _targetMoveDirection = targetDirection;
         var currentTransform = transform;
         var currentPosition = currentTransform.position;
         var colliderBounds = _collider.bounds;
 
-        var tracePoint = currentPosition + currentTransform.forward * colliderBounds.extents.x / 2;
+        var tracePoint = currentPosition + targetDirection * colliderBounds.extents.x / 2;
 
         Coords coords = worldCells.GetCellPosition(tracePoint);
         // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
@@ -128,10 +167,10 @@ public class Player : MonoBehaviour
         var heightDifference = terrainHeight - colliderBounds.min.y;
         // player cannot scale high ground
         // player can only leap from a high point if running
-        if (terrainHeight != 255 && (isRunning ? heightDifference : Math.Abs(heightDifference)) < 2.75f &&
+        if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f &&
             worldCells.GetWorldItemHeightAt(coords) == 0)
         {
-            currentPosition += Time.deltaTime * movementSpeed * currentTransform.forward;
+            currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
             if (Math.Abs(heightDifference) > .0001f)
             {
                 currentPosition += (heightDifference + colliderBounds.extents.y / 2 + yOffset) * Time.deltaTime * 18 *
@@ -142,28 +181,40 @@ public class Player : MonoBehaviour
         currentTransform.position = currentPosition;
     }
 
-    public void OnMoveForward(InputValue input)
+    public void OnMoveForwardButton(InputValue input)
     {
         _moveForwards = input.isPressed;
     }
 
-    public void OnMoveForwardGamepad(InputValue input)
+    public void OnMoveForwardDirectional(InputValue input)
     {
-        Vector2 vector = input.Get<Vector2>();
-        if (vector != new Vector2(0, 0))
+        var directionalInput = input.Get<Vector2>();
+        _targetMoveDirection = new Vector3(-directionalInput.y, 0, directionalInput.x);
+        if (_isLookInRunDirection)
         {
-            _moveForwards = true;
+            _currentLookTarget = _targetMoveDirection;
+        }
+    }
+
+    public void OnLookAround(InputValue context)
+    {
+        var directionalInput = context.Get<Vector2>();
+        if (directionalInput.magnitude == 0f)
+        {
+            _isLookInRunDirection = true;
+            Debug.Log("nowhere");
         }
         else
         {
-            _moveForwards = false;
+            _isLookInRunDirection = false;
+            _currentLookTarget = new Vector3(-directionalInput.y, 0, directionalInput.x);
         }
     }
 
-    public void OnMove(InputValue context)
+    public void OnMouseLookAround(InputValue context)
     {
         if (_pauseActivator.IsGamePaused()) return;
-        
+
         var mousePosition = context.Get<Vector2>();
 
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
@@ -171,35 +222,14 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 5000f, _mouseTargetLayerMask))
         {
             var lookAtPoint = hit.point;
-            lookAtPoint.y = transform.position.y;
-            transform.LookAt(lookAtPoint);
+            var directionalTransform = playerDirectional.transform;
+            var position = directionalTransform.position;
+            lookAtPoint.y = position.y;
+            _currentLookTarget = (lookAtPoint - position).normalized;
+            directionalTransform.LookAt(lookAtPoint);
         }
-    }
-    
-    public void OnRestrictedMove(InputValue context)
-    {
-        if (_pauseActivator.IsGamePaused()) return;
-        
-        var mousePosition = context.Get<Vector2>();
 
-        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 5000f, _mouseTargetLayerMask))
-        {
-            var lookAtPoint = hit.point;
-            lookAtPoint.y = transform.position.y;
-            transform.LookAt(lookAtPoint);
-        }
-    }
-
-    public void OnLookAroundGamepad(InputValue context)
-    {
-        var val = context.Get<Vector2>();
-        float angle = Mathf.Atan2(val.x, val.y) * Mathf.Rad2Deg;
-        if (angle != 0)
-        {
-            transform.localRotation = Quaternion.Euler(new Vector3(0, angle - 90, 0));
-        }
+        _isLookInRunDirection = false;
     }
 
     public void OnInhale(InputValue context)
@@ -216,14 +246,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnRun(InputValue context)
+    public void OnDash(InputValue context)
     {
-        if (!isRunning && Time.time > nextRunningTime)
+        if (!isDashing && Time.time > nextRunningTime)
         {
             if (context.isPressed)
             {
-                isRunning = true;
-                movementSpeed *= runningMultiplier;
+                isDashing = true;
                 print("ability used, cooldownstarted");
                 nextRunningTime = Time.time + cooldownTime; //running cooldown
             }
@@ -278,7 +307,8 @@ public class Player : MonoBehaviour
 
         //On Right Click Raycast from mouse to find collider
 
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward, grappleDistance);
+        RaycastHit[] hits = Physics.RaycastAll(playerDirectional.transform.position,
+            playerDirectional.transform.forward, grappleDistance);
         bool hitSuccess = false;
 
         if (hits.Length > 0)
@@ -308,7 +338,7 @@ public class Player : MonoBehaviour
 
     private void PlaceItemInHand()
     {
-        var currentTransform = transform;
+        var currentTransform = playerDirectional.transform;
         var result = currentTransform.position;
         var colliderBounds = _collider.bounds;
 
