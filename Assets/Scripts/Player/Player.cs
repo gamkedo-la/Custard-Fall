@@ -71,6 +71,24 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+
+    }
+
+    private void FixedUpdate()
+    {
+        nextGrappleTime += Time.fixedDeltaTime;
+        if (grappling)
+        {
+            transform.position =
+                Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
+            if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
+            {
+                grappling = false;
+            }
+
+            return;
+        }
+        
         if (Time.time > nextRunningTime - cooldownTime + runningDuration)
         {
             if (isDashing)
@@ -89,22 +107,6 @@ public class Player : MonoBehaviour
         {
             var currentTransform = playerDirectional.transform;
             currentTransform.LookAt(currentTransform.position + _currentLookTarget);
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        nextGrappleTime += Time.fixedDeltaTime;
-        if (grappling)
-        {
-            transform.position =
-                Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
-            if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
-            {
-                grappling = false;
-            }
-
-            return;
         }
 
         if (!MouseLookAround.inProgress && !LookAround.inProgress)
