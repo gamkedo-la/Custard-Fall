@@ -4,6 +4,9 @@ using UnityEngine.InputSystem;
 public class PauseActivator : MonoBehaviour
 {
     [SerializeField] GameObject pauseCanvas = null;
+    [SerializeField] GameObject controlCanvas = null;
+
+    private bool isGamePaused = false;
 
     // Start is called before the first frame update
     void Start()
@@ -13,9 +16,11 @@ public class PauseActivator : MonoBehaviour
 
     public void OnPause(InputValue context)
     {
-        pauseCanvas.SetActive(!IsGamePaused());
+        if (!IsControlMenuActive()) isGamePaused = !isGamePaused;
 
-        if (IsGamePaused())
+        pauseCanvas.SetActive(isGamePaused);
+
+        if (isGamePaused)
         {
             Time.timeScale = 0;
             ResetGlowingTriggers();
@@ -24,6 +29,8 @@ public class PauseActivator : MonoBehaviour
         {
             Time.timeScale = 1;
         }
+
+        if (IsControlMenuActive()) SetControlMenuActiveOrNot(false);
     }
 
     private void ResetGlowingTriggers()
@@ -37,12 +44,42 @@ public class PauseActivator : MonoBehaviour
 
     public void UnPauseGameByButton()
     {
-        pauseCanvas.SetActive(!IsGamePaused());
+        isGamePaused = false;
+        pauseCanvas.SetActive(isGamePaused);
         Time.timeScale = 1;
+    }
+
+    public void ReturnToPauseMenu()
+    {
+        pauseCanvas.SetActive(true);
+        SetControlMenuActiveOrNot(false);
     }
 
     public bool IsGamePaused()
     {
-        return pauseCanvas.activeSelf;
+        return isGamePaused;
+    }
+    
+    public void ShowControlMenu()
+    {
+        pauseCanvas.SetActive(false);
+        controlCanvas.SetActive(true);
+    }
+
+    public void CloseControlMenu()
+    {
+        pauseCanvas.SetActive(true);
+        controlCanvas.SetActive(false);
+    }
+
+
+    public void SetControlMenuActiveOrNot(bool value)
+    {
+        controlCanvas.SetActive(value);
+    }
+
+    private bool IsControlMenuActive()
+    {
+        return controlCanvas.activeSelf;
     }
 }
