@@ -43,12 +43,14 @@ public class Player : MonoBehaviour
     public Healthbar healthbar;
     
     private int _mouseTargetLayerMask;
+    private PauseActivator _pauseActivator;
 
     // Start is called before the first frame update
     private void Start()
     {
-        _collider = GetComponent<Collider>();
         inhaleSFX = GetComponent<AudioSource>();
+        _collider = GetComponent<Collider>();
+        _pauseActivator = FindObjectOfType<PauseActivator>();
 
         _mouseTargetLayerMask = LayerMask.GetMask("MousePointerTarget");
 
@@ -160,7 +162,23 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputValue context)
     {
-        if (FindObjectOfType<PauseActivator>().IsGamePaused()) return;
+        if (_pauseActivator.IsGamePaused()) return;
+        
+        var mousePosition = context.Get<Vector2>();
+
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 5000f, _mouseTargetLayerMask))
+        {
+            var lookAtPoint = hit.point;
+            lookAtPoint.y = transform.position.y;
+            transform.LookAt(lookAtPoint);
+        }
+    }
+    
+    public void OnRestrictedMove(InputValue context)
+    {
+        if (_pauseActivator.IsGamePaused()) return;
         
         var mousePosition = context.Get<Vector2>();
 
