@@ -5223,12 +5223,12 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   inhaler: {fileID: 7330138422288815188}
   playerDirectional: {fileID: 1551700867557054575}
-  movementSpeed: 5
+  movementSpeed: 5.2
   LookAround:
     m_Name: Look Around
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 17e7433b-f50f-483a-b2cd-0112fe9ff042
+    m_Id: e475c4c5-6afe-4224-9905-f9856db4fd16
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -5237,7 +5237,7 @@ MonoBehaviour:
     m_Name: Mouse Look Around
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: d046be07-c4a4-4be2-a62c-a2a7d710228f
+    m_Id: 337ae004-4c05-43ff-815d-c088285cdcd3
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -5246,14 +5246,14 @@ MonoBehaviour:
     m_Name: Move Forward Button
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 24871e7d-717b-4535-bd25-c23b2eea37d1
+    m_Id: 437dc81b-82b0-41a1-9f98-fa34db8e53d2
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
-  lookTransitionSpeed: 0.13
+  lookTransitionSpeed: 0.12
   lookTransitionSpeedMouse: 0.08
-  moveTransitionSpeed: 0.0125
+  moveTransitionSpeed: 0.011
   dashTransitionSpeed: 0.15
   LookInMoveDirectionGraceTime: 0.3
   isDashing: 0
