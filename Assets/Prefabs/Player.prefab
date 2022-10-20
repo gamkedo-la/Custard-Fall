@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7887784913191701586}
   - component: {fileID: 8976955979321195919}
   - component: {fileID: 2755845026387934191}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MousePointerTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5223,34 +5223,7 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   inhaler: {fileID: 7330138422288815188}
   playerDirectional: {fileID: 1551700867557054575}
-  movementSpeed: 5.2
-  LookAround:
-    m_Name: Look Around
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: e475c4c5-6afe-4224-9905-f9856db4fd16
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  MouseLookAround:
-    m_Name: Mouse Look Around
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 337ae004-4c05-43ff-815d-c088285cdcd3
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  MoveForwardButton:
-    m_Name: Move Forward Button
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 437dc81b-82b0-41a1-9f98-fa34db8e53d2
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
+  movementSpeed: 5
   lookTransitionSpeed: 0.12
   lookTransitionSpeedMouse: 0.08
   moveTransitionSpeed: 0.011
@@ -10715,7 +10688,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8319882484897116342}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.12221864, z: 4.75}
+  m_LocalPosition: {x: 0, y: -0.8, z: 4.7}
   m_LocalScale: {x: 7.7712994, y: 8.411408, z: 11.111106}
   m_ConstrainProportionsScale: 0
   m_Children: []
