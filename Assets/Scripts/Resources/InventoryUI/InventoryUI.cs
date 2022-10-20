@@ -16,7 +16,7 @@ public class InventoryUI : MonoBehaviour
 	private InventorySlot[] iconList;
 	private Dictionary<string, int> resnameToIconIndex = new Dictionary<string, int>();
 
-	private bool isShowHideInventoryUi;
+	private bool _isShowHideInventoryUi;
 
 	void Start()
 	{
@@ -37,10 +37,10 @@ public class InventoryUI : MonoBehaviour
 	void Update()
 	{
 		// Check to see if we should open/close the inventory
-		if (isShowHideInventoryUi)//Input.GetButtonDown("Inventory"))
+		if (_isShowHideInventoryUi)
 		{
 			inventoryUI.SetActive(!inventoryUI.activeSelf);
-			isShowHideInventoryUi = false;
+			_isShowHideInventoryUi = false;
 		}
 	}
 	
@@ -48,7 +48,7 @@ public class InventoryUI : MonoBehaviour
 	{
 		// Check to see if we should open/close the inventory
 		// action is called twice with pressed true, so using frame based switch as a workaround
-		isShowHideInventoryUi = true;
+		_isShowHideInventoryUi = true;
 	}
 
 	
