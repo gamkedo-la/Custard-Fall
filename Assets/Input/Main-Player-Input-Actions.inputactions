@@ -83,7 +83,7 @@
                     "id": "45830cf6-901f-4cc4-90d8-f551b40cbab0",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Hold",
+                    "interactions": "",
                     "initialStateCheck": true
                 },
                 {
@@ -175,6 +175,17 @@
                     "id": "d6682dd2-5840-4e5f-a211-fa3238bad6d4",
                     "path": "<Keyboard>/space",
                     "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58023a7d-83bf-4d29-9ef4-44a78250d54e",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "MultiTap(tapTime=0.4,tapDelay=0.75)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Dash",
@@ -276,6 +287,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
+                    "action": "Grapple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06bf8c92-367c-4ef9-a26c-02b5ef138ba3",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Grapple",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -383,7 +405,7 @@
                     "name": "",
                     "id": "74ad065c-fc4c-4e58-88fd-f54311e16c1c",
                     "path": "<Mouse>/middleButton",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "MoveForwardButton",

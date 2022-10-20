@@ -13,9 +13,6 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject playerDirectional;
     public float movementSpeed = 4;
-    public InputAction LookAround;
-    public InputAction MouseLookAround;
-    public InputAction MoveForwardButton;
     private bool _isLookInMoveDirection = true;
     private Vector3 _targetMoveDirection = Vector3.zero;
     private Vector3 _currentMoveDirection = Vector3.zero;
@@ -47,6 +44,8 @@ public class Player : MonoBehaviour
 
 
     bool grappling;
+    private bool _isMoveForward;
+
 
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
@@ -134,7 +133,7 @@ public class Player : MonoBehaviour
                 lookAround ? lookTransitionSpeedMouse : lookTransitionSpeed);
         if (!isDashing)
         {
-            var targetMoveDirection = MoveForwardButton.IsPressed() ? playerDirectional.transform.forward : _targetMoveDirection;
+            var targetMoveDirection = _isMoveForward ? playerDirectional.transform.forward : _targetMoveDirection;
             _currentMoveDirection = Vector3.SmoothDamp(_currentMoveDirection, targetMoveDirection, ref _velMove,
                 moveTransitionSpeed);
         }
@@ -213,6 +212,11 @@ public class Player : MonoBehaviour
         currentTransform.position = currentPosition;
     }
 
+    public void OnMoveForwardButton(InputValue input)
+    {
+        _isMoveForward = input.Get<float>() > .8f;
+    }
+    
     public void OnMoveForwardDirectional(InputValue input)
     {
         var directionalInput = input.Get<Vector2>();
