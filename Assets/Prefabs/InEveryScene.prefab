@@ -7311,10 +7311,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
-      propertyPath: cooldownTime
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: LookAround.m_Id
       value: e475c4c5-6afe-4224-9905-f9856db4fd16
       objectReference: {fileID: 0}
@@ -7333,6 +7329,10 @@ PrefabInstance:
     - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: MouseLookAround.m_Name
       value: Mouse Look Around
+      objectReference: {fileID: 0}
+    - target: {fileID: 9001336511291437872, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: MoveForwardButton.m_Id
+      value: 437dc81b-82b0-41a1-9f98-fa34db8e53d2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}

@@ -10,10 +10,26 @@ public class Player : MonoBehaviour
 
     private AudioSource inhaleSFX;
 
-    private bool _moveForwards = false;
 
+    [SerializeField] private GameObject playerDirectional;
     public float movementSpeed = 4;
-    private Vector3 _targetMoveDirection;
+    public InputAction LookAround;
+    public InputAction MouseLookAround;
+    public InputAction MoveForwardButton;
+    private bool _isLookInMoveDirection = true;
+    private Vector3 _targetMoveDirection = Vector3.zero;
+    private Vector3 _currentMoveDirection = Vector3.zero;
+    private Vector3 _targetLookDirection = Vector3.zero;
+    private Vector3 _currentLookDirection = Vector3.zero;
+    [SerializeField] private float lookTransitionSpeed = .1f;
+    [SerializeField] private float lookTransitionSpeedMouse = .02f;
+    private Vector3 _velLook = Vector3.zero;
+    [SerializeField] private float moveTransitionSpeed = .1f;
+    private Vector3 _velMove = Vector3.zero;
+    [SerializeField] private float dashTransitionSpeed = .1f;
+    private float _velDash = 0f;
+    [SerializeField] private float LookInMoveDirectionGraceTime = .3f;
+    private float _nextLookInMoveDirectionTime;
 
     public bool isDashing = false;
     public float runningMultiplier;
@@ -29,11 +45,6 @@ public class Player : MonoBehaviour
     [SerializeField] private float grappleSpeed = 8f;
     private Vector3 grapplePoint;
 
-    [SerializeField] private GameObject playerDirectional;
-    public InputAction LookAround;
-    public InputAction MouseLookAround;
-    private bool _isLookInRunDirection = true;
-    private Vector3 _currentLookTarget = Vector3.zero;
 
     bool grappling;
 
@@ -71,7 +82,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
     }
 
     private void FixedUpdate()
@@ -88,39 +98,60 @@ public class Player : MonoBehaviour
 
             return;
         }
-        
+
         if (Time.time > nextRunningTime - cooldownTime + runningDuration)
         {
             if (isDashing)
             {
-                _targetMoveDirection = Vector3.zero;
-                _currenRunningMultiplier = 1f;
+                _currentMoveDirection = Vector3.zero;
             }
+
+            _currenRunningMultiplier =
+                Mathf.SmoothDamp(_currenRunningMultiplier, 1f, ref _velDash, dashTransitionSpeed * .1f);
             isDashing = false;
         }
-        else if(isDashing)
+
+        if (Time.time > _nextLookInMoveDirectionTime)
         {
-            _currenRunningMultiplier = runningMultiplier;
+            _isLookInMoveDirection = true;
         }
 
-        if (_currentLookTarget.magnitude != 0f)
+        if (_isLookInMoveDirection)
+        {
+            _targetLookDirection = _targetMoveDirection;
+        }
+
+        if (isDashing)
+        {
+            _currentMoveDirection = playerDirectional.transform.forward;
+            _currenRunningMultiplier = Mathf.SmoothDamp(_currenRunningMultiplier, runningMultiplier, ref _velDash,
+                dashTransitionSpeed);
+        }
+
+        bool lookAround = !_isLookInMoveDirection;
+        _currentLookDirection =
+            Vector3.SmoothDamp(_currentLookDirection, _targetLookDirection, ref _velLook,
+                lookAround ? lookTransitionSpeedMouse : lookTransitionSpeed);
+        if (!isDashing)
+        {
+            var targetMoveDirection = MoveForwardButton.IsPressed() ? playerDirectional.transform.forward : _targetMoveDirection;
+            _currentMoveDirection = Vector3.SmoothDamp(_currentMoveDirection, targetMoveDirection, ref _velMove,
+                moveTransitionSpeed);
+        }
+
+        if (_currentLookDirection.sqrMagnitude != 0f)
         {
             var currentTransform = playerDirectional.transform;
-            currentTransform.LookAt(currentTransform.position + _currentLookTarget);
-        }
-
-        if (!MouseLookAround.inProgress && !LookAround.inProgress)
-        {
-            _isLookInRunDirection = true;
+            currentTransform.LookAt(currentTransform.position + _currentLookDirection);
         }
 
         if (isDashing)
         {
             MovePlayer(playerDirectional.transform.forward);
         }
-        else if (_targetMoveDirection.magnitude != 0f)
+        else if (_currentMoveDirection.sqrMagnitude != 0f)
         {
-            MovePlayer(_targetMoveDirection);
+            MovePlayer(_currentMoveDirection);
         }
     }
 
@@ -156,7 +187,6 @@ public class Player : MonoBehaviour
 
     private void MovePlayer(Vector3 targetDirection)
     {
-        _targetMoveDirection = targetDirection;
         var currentTransform = transform;
         var currentPosition = currentTransform.position;
         var colliderBounds = _collider.bounds;
@@ -183,33 +213,28 @@ public class Player : MonoBehaviour
         currentTransform.position = currentPosition;
     }
 
-    public void OnMoveForwardButton(InputValue input)
-    {
-        _moveForwards = input.isPressed;
-    }
-
     public void OnMoveForwardDirectional(InputValue input)
     {
         var directionalInput = input.Get<Vector2>();
         _targetMoveDirection = new Vector3(-directionalInput.y, 0, directionalInput.x);
-        if (_isLookInRunDirection)
+        if (_isLookInMoveDirection)
         {
-            _currentLookTarget = _targetMoveDirection;
+            _targetLookDirection = _targetMoveDirection;
         }
     }
 
     public void OnLookAround(InputValue context)
     {
         var directionalInput = context.Get<Vector2>();
-        if (directionalInput.magnitude == 0f)
+        if (directionalInput.sqrMagnitude == 0f)
         {
-            _isLookInRunDirection = true;
-            Debug.Log("nowhere");
+            _isLookInMoveDirection = true;
         }
         else
         {
-            _isLookInRunDirection = false;
-            _currentLookTarget = new Vector3(-directionalInput.y, 0, directionalInput.x);
+            _isLookInMoveDirection = false;
+            _nextLookInMoveDirectionTime = Time.time + LookInMoveDirectionGraceTime;
+            _targetLookDirection = new Vector3(-directionalInput.y, 0, directionalInput.x);
         }
     }
 
@@ -227,11 +252,11 @@ public class Player : MonoBehaviour
             var directionalTransform = playerDirectional.transform;
             var position = directionalTransform.position;
             lookAtPoint.y = position.y;
-            _currentLookTarget = (lookAtPoint - position).normalized;
-            directionalTransform.LookAt(lookAtPoint);
+            _targetLookDirection = (lookAtPoint - position).normalized;
         }
 
-        _isLookInRunDirection = false;
+        _isLookInMoveDirection = false;
+        _nextLookInMoveDirectionTime = Time.time + LookInMoveDirectionGraceTime;
     }
 
     public void OnInhale(InputValue context)

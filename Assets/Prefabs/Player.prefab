@@ -5222,20 +5222,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   inhaler: {fileID: 7330138422288815188}
-  movementSpeed: 5
-  isDashing: 0
-  runningMultiplier: 1.5
-  cooldownTime: 2
-  runningDuration: 1.5
-  grappleCooldownTime: 2
-  grappleDistance: 10
-  grappleSpeed: 10
   playerDirectional: {fileID: 1551700867557054575}
+  movementSpeed: 5
+  LookAround:
+    m_Name: Look Around
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 17e7433b-f50f-483a-b2cd-0112fe9ff042
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  MouseLookAround:
+    m_Name: Mouse Look Around
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: d046be07-c4a4-4be2-a62c-a2a7d710228f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  MoveForwardButton:
+    m_Name: Move Forward Button
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 24871e7d-717b-4535-bd25-c23b2eea37d1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  lookTransitionSpeed: 0.13
+  lookTransitionSpeedMouse: 0.08
+  moveTransitionSpeed: 0.0125
+  dashTransitionSpeed: 0.15
+  LookInMoveDirectionGraceTime: 0.3
+  isDashing: 0
+  runningMultiplier: 6
+  cooldownTime: 0.6
+  runningDuration: 0.15
+  grappleCooldownTime: 1.5
+  grappleDistance: 11
+  grappleSpeed: 11.5
   gameplayScheme:
     m_Name: 
     m_BindingGroup: 
     m_DeviceRequirements: []
-  itemInHand: {fileID: 8821145956041889501, guid: f4ae8062929c4f348964e896bf3f0c03, type: 3}
+  itemInHand: {fileID: 0}
   maxHealth: 90
   currentHealth: 0
   healthbar: {fileID: 0}

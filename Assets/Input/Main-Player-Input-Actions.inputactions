@@ -172,17 +172,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f6516f79-3d5a-42f0-81ca-0f2164e389b3",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "d6682dd2-5840-4e5f-a211-fa3238bad6d4",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -395,17 +384,6 @@
                     "id": "74ad065c-fc4c-4e58-88fd-f54311e16c1c",
                     "path": "<Mouse>/middleButton",
                     "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MoveForwardButton",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "361c2fe9-8fb9-4216-9f31-80955e27e3e6",
-                    "path": "<Keyboard>/space",
-                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "MoveForwardButton",
