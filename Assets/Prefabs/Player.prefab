@@ -5236,6 +5236,7 @@ MonoBehaviour:
   grappleCooldownTime: 1.5
   grappleDistance: 11
   grappleSpeed: 11.5
+  ownsGrapplingHook: 0
   gameplayScheme:
     m_Name: 
     m_BindingGroup: 
