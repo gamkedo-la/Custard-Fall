@@ -3055,7 +3055,7 @@ MonoBehaviour:
   custardVisualizer: {fileID: 8634744845809120382}
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
   pauseIterationCountDown: 0
-  custardCrawlDuration: 0.36
+  custardCrawlDuration: 0.35
   targetTideLevel: 1
 --- !u!114 &8634744844989316036
 MonoBehaviour:
@@ -3078,7 +3078,7 @@ MonoBehaviour:
   previewScheduledUpdate: 0
   showLastUpdate: 0
   showTerrainInfo: 0
-  displayOnWorldCells: 1
+  displayOnWorldCells: 0
   showInhaleArea: 0
 --- !u!114 &3912554777076407078
 MonoBehaviour:
@@ -3193,7 +3193,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8634744845352651757}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.6049308, y: -0.88254833, z: 8.062049}
+  m_LocalPosition: {x: -1.5, y: -1, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7211,6 +7211,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4078713960622899494, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 8634744844841693196}
     - target: {fileID: 6713574407888306948, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 0
@@ -7369,92 +7373,6 @@ MonoBehaviour:
   timeBeforePlayerTakesDamageFromDrawning: 1
   timeBetweenDamageTicks: 0.03
   drowningDamage: 1
---- !u!114 &8634744845753951226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8871844313728323041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 2c908d0a1cf9e1f4480cd3d5529baaca, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: afc625f7-08ae-4f9e-bf9e-c13a07a2d3c8
-    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 9658ab5b-b3ca-4d95-9ec9-ad97104780b8
-    m_ActionName: Player/Soak[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 75f3094b-7fac-4a17-8e9a-18a142090f43
-    m_ActionName: Player/Interact[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 3b58f84c-af05-4be0-9577-d70beb5dffdf
-    m_ActionName: Player/Run[/Keyboard/shift]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 56ce0ba8-60e5-40d8-8967-ee38bc108ce8
-    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: b824fc9b-bead-4424-b76f-f52580baf428
-    m_ActionName: UI/Submit[/Keyboard/enter]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 37fb12d8-e3dc-4c28-8b19-be2be603c216
-    m_ActionName: UI/Cancel[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4115a9b7-14c3-4e53-adee-d354f478333f
-    m_ActionName: UI/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f8463dfd-81dc-4324-9c7c-e7b00b280b06
-    m_ActionName: UI/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 4126b547-bc79-4e1d-bf68-f4b8692a0ca8
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2ea972da-c58c-4c4b-98ed-f3d836d3c40a
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: da310ae5-e3cb-4ba1-9828-98009dfa086a
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 529ce366-d318-47f5-923f-994fba3b86c9
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: ed070bc9-5986-472e-acba-d1d369d23900
-    m_ActionName: UI/TrackedDeviceOrientation
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 8634744844841693196}
 --- !u!1001 &7546122189684422050
 PrefabInstance:
   m_ObjectHideFlags: 0
