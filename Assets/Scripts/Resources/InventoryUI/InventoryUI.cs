@@ -25,7 +25,8 @@ public class InventoryUI : MonoBehaviour
 		//Cookie Mine counts as x5 cookie shards. Not handling yet
 		resnameToIconIndex["Creamy Cone Tree"] = 3;
 		//other tree don't have resource yet
-		resnameToIconIndex["Waffle wall"] = 4; //using tree line
+		resnameToIconIndex["Waffle wall"] = 4;
+		resnameToIconIndex["Tree Tall"] = 5;
 		resnameToIconIndex["Collectible"] = 6;
 
 		inventory = Inventory.instance;

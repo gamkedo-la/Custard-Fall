@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 7089370910226208597}
   - component: {fileID: 6182697770412562672}
   - component: {fileID: 8226297047903022138}
-  m_Layer: 0
+  - component: {fileID: 4548006772022468161}
+  m_Layer: 7
   m_Name: Crusted_Custard_Volcano
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,3 +85,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4548006772022468161
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7577677890871168495}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8.461601, y: 3.7567282, z: 8.465063}
+  m_Center: {x: 1.8982688, y: 1.8283641, z: 0.45083296}
