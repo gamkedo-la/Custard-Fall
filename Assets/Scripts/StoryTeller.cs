@@ -11,7 +11,7 @@ public class StoryTeller : MonoBehaviour
     private Queue<String> messages = new();
 
     private float timeTillNextMessage = 0f;
-
+    private float _timeInbetweenMessages = 0.4f;
 
 
     // Start is called before the first frame update
@@ -22,16 +22,16 @@ public class StoryTeller : MonoBehaviour
             if (day == 1)
             {
                 // we do not want to overwhelm the player with infos on the start of the game
-                timeTillNextMessage = 4f;
-                messages.Enqueue("When the Custard fell, everything changed.");
-                messages.Enqueue("Midday, it crawls to the places that used to be.");
-                messages.Enqueue("At night, we flee to the mountains.");
-                messages.Enqueue("Every day, we hunt for resources and the treasures of the past.");
+                timeTillNextMessage = 2.5f;
+                messages.Enqueue("Since the Custard fell, it rises and falls every day.");
+                messages.Enqueue("Midday, it crawls down to the old places...");
+                messages.Enqueue("");
+                messages.Enqueue("That's when we hunt for treasures and resources!");
             }
-            else if (day == 3)
+            else if (day == 4)
             {
                 messages.Clear();
-                messages.Enqueue("Every fourth day, the moon gets strong.");
+                messages.Enqueue("The moon is strong today...");
             }
         };
     }
@@ -39,7 +39,15 @@ public class StoryTeller : MonoBehaviour
     private void DisplayStoryText(string message)
     {
         text.SetText(message);
-        timeTillNextMessage = message.Length * .25f;
+        if (message == "")
+        {
+            // rhetorical pause
+            timeTillNextMessage = 1.5f;
+        }
+        else
+        {
+            timeTillNextMessage = 6f;
+        }
     }
 
     // Update is called once per frame
@@ -47,9 +55,17 @@ public class StoryTeller : MonoBehaviour
     {
         if (timeTillNextMessage > 0f)
             timeTillNextMessage -= Time.deltaTime;
-        else if(messages.Count != 0)
+        else if (messages.Count != 0)
         {
-            DisplayStoryText(messages.Dequeue());
+            if (text.text == "")
+            {
+                DisplayStoryText(messages.Dequeue());
+            }
+            else
+            {
+                text.SetText("");
+                timeTillNextMessage = _timeInbetweenMessages;
+            }
         }
         else
         {
