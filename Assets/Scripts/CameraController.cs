@@ -7,27 +7,32 @@ namespace DefaultNamespace
     public class CameraController : MonoBehaviour
     {
         public GameObject followTarget;
-        private Vector3 offset;
-        private double angle;
+        private Vector3 _offset;
 
-        private Vector3 targetPosition = Vector3.zero;
-        private Vector3 currentPosition = Vector3.zero;
-        private Vector3 currentVelocity = Vector3.zero;
+        private Vector3 _targetPosition = Vector3.zero;
+        private Vector3 _currentPosition = Vector3.zero;
+        private Vector3 _currentVelocity = Vector3.zero;
         [SerializeField] private float followSpeed = 0.075f;
 
         private void Start()
         {
             var originalTransform = transform;
-            offset = originalTransform.position;
-            angle = originalTransform.rotation.eulerAngles.x;
+            _offset = originalTransform.position;
+            
+            transform.position = FindCameraTargetPosition();
         }
 
         private void FixedUpdate()
         {
-            targetPosition = followTarget.transform.position + offset;
+            _targetPosition = FindCameraTargetPosition();
 
-            currentPosition = Vector3.SmoothDamp(currentPosition, targetPosition, ref currentVelocity, followSpeed);
-            transform.position = currentPosition;
+            _currentPosition = Vector3.SmoothDamp(_currentPosition, _targetPosition, ref _currentVelocity, followSpeed);
+            transform.position = _currentPosition;
+        }
+
+        private Vector3 FindCameraTargetPosition()
+        {
+            return followTarget.transform.position + _offset;
         }
     }
 }
