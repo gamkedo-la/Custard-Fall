@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 5378888317639514897}
   - component: {fileID: 9010152510314894516}
   - component: {fileID: 6552327003091574910}
-  - component: {fileID: 5561698219087153350}
   - component: {fileID: -4215345412135584426}
   - component: {fileID: 6085055505605995831}
-  m_Layer: 0
+  - component: {fileID: 1980026844444731678}
+  m_Layer: 7
   m_Name: Creamy_Cone_Tree_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,20 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5561698219087153350
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4750865231341060523}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3145058497754134291, guid: 374f34165fe97a148be543e47e5cd9b4, type: 3}
 --- !u!114 &-4215345412135584426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,3 +115,16 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Little sapling, so much potential...
+--- !u!65 &1980026844444731678
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4750865231341060523}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2447274, y: 1.667342, z: 1.0794058}
+  m_Center: {x: 0, y: 0.833671, z: -0.013603896}

@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4123445163770591796}
   - component: {fileID: 1051221157804914065}
   - component: {fileID: 2986527959625941339}
-  - component: {fileID: 4518186826204740167}
   - component: {fileID: -6382225833754669015}
   - component: {fileID: 976578501932143186}
-  m_Layer: 0
+  - component: {fileID: 6433500586701100}
+  m_Layer: 7
   m_Name: Creamy_Cone_Tree_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,20 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4518186826204740167
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3635173643000569998}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3145058497754134291, guid: 001fd05347afd134eb25829fde7e4fdf, type: 3}
 --- !u!114 &-6382225833754669015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,3 +115,16 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Wow, that tree is tall!
+--- !u!65 &6433500586701100
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3635173643000569998}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.7812499, y: 2.683999, z: 1.6237977}
+  m_Center: {x: 0, y: 1.3341401, z: -0.061083585}
