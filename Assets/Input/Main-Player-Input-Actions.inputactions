@@ -381,6 +381,17 @@
                 },
                 {
                     "name": "",
+                    "id": "7681c753-df2e-4f9c-b1e8-93f3d3a69079",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Inhale",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "13fbca40-4237-4d11-bb8d-10f4e591e04e",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",

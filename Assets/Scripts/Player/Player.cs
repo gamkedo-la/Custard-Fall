@@ -43,6 +43,8 @@ public class Player : MonoBehaviour
     private Vector3 grapplePoint;
 
 
+    [SerializeField]
+    public bool ownsGrapplingHook;
     bool grappling;
     private bool _isMoveForward;
 
@@ -322,6 +324,9 @@ public class Player : MonoBehaviour
 
     public void OnGrapple(InputValue context)
     {
+        if(!ownsGrapplingHook)
+            return;
+            
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
             return;
