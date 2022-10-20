@@ -2912,6 +2912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followTarget: {fileID: 8871844313728323041}
+  followSpeed: 0.1
 --- !u!1 &8634744844870886740
 GameObject:
   m_ObjectHideFlags: 0

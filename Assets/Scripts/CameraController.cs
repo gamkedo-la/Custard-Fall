@@ -10,6 +10,11 @@ namespace DefaultNamespace
         private Vector3 offset;
         private double angle;
 
+        private Vector3 targetPosition = Vector3.zero;
+        private Vector3 currentPosition = Vector3.zero;
+        private Vector3 currentVelocity = Vector3.zero;
+        [SerializeField] private float followSpeed = 0.075f;
+
         private void Start()
         {
             var originalTransform = transform;
@@ -19,7 +24,10 @@ namespace DefaultNamespace
 
         private void FixedUpdate()
         {
-            transform.position = followTarget.transform.position + offset;
+            targetPosition = followTarget.transform.position + offset;
+
+            currentPosition = Vector3.SmoothDamp(currentPosition, targetPosition, ref currentVelocity, followSpeed);
+            transform.position = currentPosition;
         }
     }
 }

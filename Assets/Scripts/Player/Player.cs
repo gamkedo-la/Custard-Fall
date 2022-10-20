@@ -260,7 +260,7 @@ public class Player : MonoBehaviour
         }
 
         _isLookInMoveDirection = false;
-        _nextLookInMoveDirectionTime = Time.time + LookInMoveDirectionGraceTime;
+        _nextLookInMoveDirectionTime = Time.time + LookInMoveDirectionGraceTime * 2;
     }
 
     public void OnInhale(InputValue context)
