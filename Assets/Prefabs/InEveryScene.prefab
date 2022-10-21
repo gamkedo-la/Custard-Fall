@@ -3075,6 +3075,7 @@ GameObject:
   - component: {fileID: 8634744844989316037}
   - component: {fileID: 8634744844989316036}
   - component: {fileID: 3912554777076407078}
+  - component: {fileID: 377578497760066824}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -3166,6 +3167,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 2410073121318678191}
+--- !u!114 &377578497760066824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8634744844989316040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9028b5c2e4283b648ac7f3a826e674b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tidesmanager: {fileID: 8634744845809120381}
+  player: {fileID: 2478701615409234051}
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  fractionNormalDay: 0.6
+  fractionFullmoon: 1
+  resourceDensityIn16X16:
+  - prefab: {fileID: 728165699860010337, guid: 1ee2e423ad0a10f46a1223c3918fffc6, type: 3}
+    quantityIn16X16: 0
+    variance: 1
+  - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
+    quantityIn16X16: 9
+    variance: 2
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0

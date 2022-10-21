@@ -5,6 +5,7 @@ public class Resource : WorldItem
 {
 
     public readonly String Name;
+    private bool _usedUp = false;
 
     public Resource(string name)
     {
@@ -27,5 +28,20 @@ public class Resource : WorldItem
     public override int GetHashCode()
     {
         return (Name != null ? Name.GetHashCode() : 0);
+    }
+    
+    public bool IsUsedUp()
+    {
+        return _usedUp;
+    }
+
+    public void SetUsedUp(bool usedUp)
+    {
+        _usedUp = usedUp;
+    }
+
+    public void Reset()
+    {
+        _usedUp = false;
     }
 }

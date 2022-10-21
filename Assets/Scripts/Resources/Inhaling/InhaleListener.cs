@@ -13,6 +13,8 @@ public class InhaleListener : MonoBehaviour, WorldItem
 
     public string interactionMessage;
     private Coords cellPosition;
+    
+    private bool _usedUp = false;
 
     public void Inhale(Inhaler inhaler, float strength)
     {
@@ -90,7 +92,6 @@ public class InhaleListener : MonoBehaviour, WorldItem
         
         if (GetRemainingResourcesCount() == 0)
         {
-            // Debug.Log("Removing item from world...");
             Remove();
         }
     }
@@ -136,6 +137,22 @@ public class InhaleListener : MonoBehaviour, WorldItem
 
         GameObject go = gameObject;
         go.SetActive(false);
-        Destroy(go);
+        _usedUp = true;
+    }
+
+    public bool IsUsedUp()
+    {
+        return _usedUp;
+    }
+
+    public void SetUsedUp(bool usedUp)
+    {
+        _usedUp = usedUp;
+    }
+
+    public void Reset()
+    {
+        Init();
+        _usedUp = false;
     }
 }
