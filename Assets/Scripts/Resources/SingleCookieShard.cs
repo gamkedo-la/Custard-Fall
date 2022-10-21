@@ -9,11 +9,7 @@ public class SingleCookieShard : InhaleListener
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Cookie shard"), .6f);
+        AddToInhaleQueue(new Resource("Cookie shard"), .5f);
     }
-
-    public override void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
-    {
-        base.OnResourceInhaled(inhaler, resource, amount);
-    }
+    
 }
