@@ -3186,7 +3186,7 @@ MonoBehaviour:
   fractionFullmoon: 1
   resourceDensityIn16X16:
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
-    quantityIn16X16: 7
+    quantityIn16X16: 6
     variance: 3
   - prefab: {fileID: 728165699860010337, guid: 1ee2e423ad0a10f46a1223c3918fffc6, type: 3}
     quantityIn16X16: -3

@@ -9,7 +9,7 @@ public class SingleCookieShard : InhaleListener
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Cookie shard"), .5f);
+        AddToInhaleQueue(new Resource("Cookie shard"), .55f);
     }
     
 }
