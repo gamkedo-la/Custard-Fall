@@ -298,18 +298,15 @@ public class Player : MonoBehaviour
 
         if (currentHealth <= 3)
         {
-            Debug.Log("health up");
             GainHealth(1);
         }
     }
 
     public void OnDebugHealthDown(InputValue context)
     {
-        //Debug.Log("health up "+context.isPressed);
 
         if (currentHealth >= 0)
         {
-            Debug.Log("health down");
             TakeDamage(1);
         }
     }

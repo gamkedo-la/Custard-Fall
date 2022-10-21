@@ -60,7 +60,6 @@ public class Tidesmanager : MonoBehaviour
             int timeIndex = FindLowestBound(_tidesPlanIndices, timeManager.time);
             if (timeIndex == -1)
             {
-                // removed to avoid console spam
                 Debug.Log("Tide step not found... no tides update");
                 return;
             }

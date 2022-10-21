@@ -49,7 +49,6 @@ namespace Custard
         private Color GetShaderColor(Material material)
         {
             var shaderColor = material.GetColor("_BaseColorGammaSpace");
-            Debug.Log(shaderColor);
             return shaderColor;
         }
 

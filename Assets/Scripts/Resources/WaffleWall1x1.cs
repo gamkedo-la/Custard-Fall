@@ -34,7 +34,6 @@ public class WaffleWall1x1 : InhaleListener
         {
             AddObstacleToWorld(-Height);
             gameObject.SetActive(false);
-            Debug.Log("got the waffle wall piece");
         }
     }
 }

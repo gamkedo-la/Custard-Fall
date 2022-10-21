@@ -21,7 +21,6 @@ public class SmallCreamyConeTree : InhaleListener
         if (GetRemainingResourcesCount() == 0)
         {
             gameObject.SetActive(false);
-            Debug.Log("got the creamy cone tree");
         }
     }
 }

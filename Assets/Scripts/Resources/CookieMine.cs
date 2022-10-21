@@ -22,7 +22,6 @@ public class CookieMine : InhaleListener
         if (GetRemainingResourcesCount() == 0)
         {
             gameObject.SetActive(false);
-            Debug.Log("cookie mine depleted");
         }
     }
 }
