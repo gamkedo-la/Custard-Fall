@@ -146,9 +146,9 @@ public class InhaleListener : MonoBehaviour, WorldItem
         return usedUp;
     }
 
-    public void SetUsedUp(bool usedUp)
+    public void SetUsedUp(bool isUsedUp)
     {
-        this.usedUp = usedUp;
+        this.usedUp = isUsedUp;
     }
 
     public void Reset()

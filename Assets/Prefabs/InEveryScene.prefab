@@ -3185,12 +3185,12 @@ MonoBehaviour:
   fractionNormalDay: 0.6
   fractionFullmoon: 1
   resourceDensityIn16X16:
-  - prefab: {fileID: 728165699860010337, guid: 1ee2e423ad0a10f46a1223c3918fffc6, type: 3}
-    quantityIn16X16: 0
-    variance: 1
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
-    quantityIn16X16: 9
-    variance: 2
+    quantityIn16X16: 7
+    variance: 3
+  - prefab: {fileID: 728165699860010337, guid: 1ee2e423ad0a10f46a1223c3918fffc6, type: 3}
+    quantityIn16X16: -3
+    variance: 4
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0

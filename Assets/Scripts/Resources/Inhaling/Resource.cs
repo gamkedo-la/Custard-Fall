@@ -35,9 +35,9 @@ public class Resource : WorldItem
         return _usedUp;
     }
 
-    public void SetUsedUp(bool usedUp)
+    public void SetUsedUp(bool isUsedUp)
     {
-        _usedUp = usedUp;
+        _usedUp = isUsedUp;
     }
 
     public void Reset()

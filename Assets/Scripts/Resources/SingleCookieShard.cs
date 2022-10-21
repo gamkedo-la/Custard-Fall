@@ -15,9 +15,5 @@ public class SingleCookieShard : InhaleListener
     public override void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
     {
         base.OnResourceInhaled(inhaler, resource, amount);
-        if (GetRemainingResourcesCount() == 0)
-        {
-            Debug.Log("got the cookie shard");
-        }
     }
 }

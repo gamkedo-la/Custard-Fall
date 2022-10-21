@@ -23,6 +23,8 @@ public class ResourcesGenerator : MonoBehaviour
     private const int NumberOfChunksX = WorldCells.BlocksWidth / 16;
     private const int NumberOfChunksY = WorldCells.BlocksHeight / 16;
 
+    private bool initiated = false;
+
     private HashSet<Coords> activeChunks = new HashSet<Coords>();
 
     // Start is called before the first frame update
@@ -32,12 +34,12 @@ public class ResourcesGenerator : MonoBehaviour
 
         StartCoroutine(CoroutineFirstFillUpItems());
     }
-    
+
     private IEnumerator CoroutineFirstFillUpItems()
     {
         yield return new WaitForSeconds(1);
-            FillUpItems(fractionNormalDay);
-            UpdateActiveItems();
+        initiated = true;
+        FillUpItems(fractionNormalDay);
     }
 
     private void Awake()
@@ -81,6 +83,9 @@ public class ResourcesGenerator : MonoBehaviour
     public void FillUpItems(float fraction)
     {
         Debug.Log("filling up items!");
+        if (!initiated)
+            return;
+        
         TriggerHouseKeeping();
 
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
@@ -93,6 +98,9 @@ public class ResourcesGenerator : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     public void TriggerHouseKeeping()
     {
+        if (!initiated)
+            return;
+        
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
         for (int chunkY = 0; chunkY < NumberOfChunksY; chunkY++)
         {
@@ -130,7 +138,7 @@ public class ResourcesGenerator : MonoBehaviour
             if (!chunk.TryGetValue(item.Id(), out itemsInChunk))
             {
                 itemsInChunk = new HashSet<WorldItem>();
-                chunk.Add(item.Id(),itemsInChunk);
+                chunk.Add(item.Id(), itemsInChunk);
             }
 
             var availableItemsInPool = _generatedItemsPool.GetValueOrDefault(item.Id());
@@ -148,16 +156,17 @@ public class ResourcesGenerator : MonoBehaviour
     private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int max)
     {
         poolItem.Reset();
-        
-        var noiseX = Mathf.PerlinNoise(i/(float)max, chunkX/(float)NumberOfChunksX);
-        var noiseY = Mathf.PerlinNoise(i/(float)max, chunkY/(float)NumberOfChunksY);
-        var cellX = Mathf.RoundToInt((chunkX +noiseX) * 15);
+
+        var noiseX = Mathf.PerlinNoise(i / (float) max, chunkX / (float) NumberOfChunksX);
+        var noiseY = Mathf.PerlinNoise(i / (float) max, chunkY / (float) NumberOfChunksY);
+        var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
         var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
         var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
-        worldPosition += new Vector2((noiseX - .5f)*.9f, (noiseY - .5f)*.9f);
-        var newPosition = new Vector3(worldPosition.x, worldCells.GetTerrainHeightAt(cellX, cellY) + .35f, worldPosition.y);
+        worldPosition += new Vector2((noiseX - .5f) * .9f, (noiseY - .5f) * .9f);
+        var newPosition = new Vector3(worldPosition.x, worldCells.GetTerrainHeightAt(cellX, cellY) + .35f,
+            worldPosition.y);
         ((MonoBehaviour) poolItem).gameObject.transform.position = newPosition;
-        
+
         // TODO delete debug line
         Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 240);
     }
@@ -169,15 +178,26 @@ public class ResourcesGenerator : MonoBehaviour
 
     public void UpdateActiveItems()
     {
+        if (!initiated)
+            return;
+        
         var cellPosition = worldCells.GetCellPosition(player.transform.position);
         var chunkX = cellPosition.X / 16;
         var chunkY = cellPosition.Y / 16;
 
         HashSet<Coords> currentChunks = new HashSet<Coords>();
 
-        for (int x = -1; x < 1; x++)
-        for (int y = -1; y < 1; y++)
-            currentChunks.Add(Coords.Of(chunkX - x, chunkY - y));
+        var halfWindowSize = 2;
+        for (int x = -halfWindowSize; x < halfWindowSize; x++)
+        for (int y = -halfWindowSize; y < halfWindowSize; y++)
+        {
+            var currentChunkX = chunkX - x;
+            var currentChunkY = chunkY - y;
+            if (currentChunkX is >= 0 and < NumberOfChunksX && currentChunkY is >= 0 and < NumberOfChunksY)
+            {
+                currentChunks.Add(Coords.Of(currentChunkX, currentChunkY));
+            }
+        }
 
         ActivateChunks(currentChunks);
     }
@@ -187,12 +207,9 @@ public class ResourcesGenerator : MonoBehaviour
         // deactivate old, not part of current chunks
         foreach (var activeChunk in activeChunks)
         {
-            if (activeChunk.X is < 0 or >= NumberOfChunksX || activeChunk.Y is < 0 or >= NumberOfChunksX)
-                continue;
-            
             if (currentChunks.Contains(activeChunk))
                 continue;
-            
+
             foreach (var occupiedItems in _chunks[activeChunk.X, activeChunk.Y].Values)
             {
                 foreach (var occupiedItem in occupiedItems)
@@ -205,9 +222,6 @@ public class ResourcesGenerator : MonoBehaviour
         // deactivate all in current chunks
         foreach (var currentChunk in currentChunks)
         {
-            if (currentChunk.X is < 0 or >= NumberOfChunksX || currentChunk.Y is < 0 or >= NumberOfChunksX)
-                continue;
-            
             if (activeChunks.Contains(currentChunk))
                 continue;
 

@@ -3,7 +3,7 @@
     {
 
         bool IsUsedUp();
-        void SetUsedUp(bool usedUp);
+        void SetUsedUp(bool isUsedUp);
 
         void Reset();
 
