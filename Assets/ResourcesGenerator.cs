@@ -62,6 +62,7 @@ public class ResourcesGenerator : MonoBehaviour
                 for (int i = 0; i < item.quantityIn16X16 + item.variance; i++)
                 {
                     var instantiated = GameObject.Instantiate(item.prefab);
+                    instantiated.SetUsedUp(true);
                     instantiated.gameObject.SetActive(false);
                     if (!_generatedItemsPool.TryGetValue(item.Id(), out var sameTypeItems))
                     {
@@ -137,28 +138,28 @@ public class ResourcesGenerator : MonoBehaviour
             {
                 if (availableItemsInPool.TryDequeue(out WorldItem poolItem))
                 {
-                    PlaceItemRandomized(chunkX, chunkY, poolItem);
+                    PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount);
                     itemsInChunk.Add(poolItem);
                 }
             }
         }
     }
 
-    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem)
+    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int max)
     {
         poolItem.Reset();
         
-        var noiseX = Mathf.PerlinNoise(Random.value, 0);
-        var noiseY = Mathf.PerlinNoise(Random.value, 1);
-        Debug.Log(noiseX + " " + noiseY);
+        var noiseX = Mathf.PerlinNoise(i/(float)max, chunkX/(float)NumberOfChunksX);
+        var noiseY = Mathf.PerlinNoise(i/(float)max, chunkY/(float)NumberOfChunksY);
         var cellX = Mathf.RoundToInt((chunkX +noiseX) * 15);
         var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
         var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
-        // worldPosition += new Vector2((noiseX - .5f)*.9f, (noiseY - .5f)*.9f);
-        var newPosition = new Vector3(worldPosition.x, worldCells.GetTerrainHeightAt(cellX, cellY), worldPosition.y);
-        ((MonoBehaviour) poolItem).transform.position = newPosition;
+        worldPosition += new Vector2((noiseX - .5f)*.9f, (noiseY - .5f)*.9f);
+        var newPosition = new Vector3(worldPosition.x, worldCells.GetTerrainHeightAt(cellX, cellY) + .35f, worldPosition.y);
+        ((MonoBehaviour) poolItem).gameObject.transform.position = newPosition;
+        
         // TODO delete debug line
-        Debug.DrawRay(newPosition, Vector3.up * 12, Color.gray, 60);
+        Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 240);
     }
 
     private void FixedUpdate()
