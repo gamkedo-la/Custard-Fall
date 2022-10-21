@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Custard;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,6 +10,7 @@ public class ResourcesGenerator : MonoBehaviour
     [SerializeField] private Tidesmanager tidesmanager;
     [SerializeField] private Player player;
     [SerializeField] private WorldCells worldCells;
+    [SerializeField] private CustardState _custardState;
     private TimeManager _timeManager;
 
     [SerializeField] private float fractionNormalDay = .3f;
@@ -37,8 +39,10 @@ public class ResourcesGenerator : MonoBehaviour
 
     private IEnumerator CoroutineFirstFillUpItems()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(4);
         initiated = true;
+        FillUpItems(fractionNormalDay);
+        yield return new WaitForSeconds(3);
         FillUpItems(fractionNormalDay);
     }
 
@@ -85,7 +89,7 @@ public class ResourcesGenerator : MonoBehaviour
         Debug.Log("filling up items!");
         if (!initiated)
             return;
-        
+
         TriggerHouseKeeping();
 
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
@@ -93,6 +97,8 @@ public class ResourcesGenerator : MonoBehaviour
         {
             FillUpItemsForChunk(chunkX, chunkY, fraction);
         }
+
+        UpdateActiveItems(true);
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -100,7 +106,7 @@ public class ResourcesGenerator : MonoBehaviour
     {
         if (!initiated)
             return;
-        
+
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
         for (int chunkY = 0; chunkY < NumberOfChunksY; chunkY++)
         {
@@ -153,34 +159,52 @@ public class ResourcesGenerator : MonoBehaviour
         }
     }
 
-    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int max)
+    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total)
     {
         poolItem.Reset();
 
-        var noiseX = Mathf.PerlinNoise(i / (float) max, chunkX / (float) NumberOfChunksX);
-        var noiseY = Mathf.PerlinNoise(i / (float) max, chunkY / (float) NumberOfChunksY);
-        var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
-        var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
-        var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
-        worldPosition += new Vector2((noiseX - .5f) * .9f, (noiseY - .5f) * .9f);
-        var newPosition = new Vector3(worldPosition.x, worldCells.GetTerrainHeightAt(cellX, cellY) + .35f,
-            worldPosition.y);
-        ((MonoBehaviour) poolItem).gameObject.transform.position = newPosition;
+        var numTrials = 3;
+        for (int j = 0; j < numTrials; j++)
+        {
+            var noiseX = Mathf.PerlinNoise(i * 16 * 2 + Random.value, chunkX * 2);
+            var noiseY = Mathf.PerlinNoise(i * 16 * 2 + Random.value, chunkY * 2);
+            var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
+            var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
+            var coords = Coords.Of(cellX, cellY);
+            if (WorldCells.IsOutOfBounds(coords))
+                continue;
+            // only spawn items in custard
+            if (_custardState.GetCurrentCustardLevelAt(coords) == 0)
+                continue;
 
-        // TODO delete debug line
-        Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 240);
+            var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
+            worldPosition += new Vector2((noiseX - .5f) * .9f, (noiseY - .5f) * .9f);
+
+
+            var newPosition = new Vector3(worldPosition.x, worldCells.GetTerrainHeightAt(cellX, cellY) + .35f,
+                worldPosition.y);
+            ((MonoBehaviour) poolItem).gameObject.transform.position = newPosition;
+
+            // TODO delete debug line
+            Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 240);
+
+            return;
+        }
     }
 
     private void FixedUpdate()
     {
-        UpdateActiveItems();
+        UpdateActiveItems(false);
     }
 
-    public void UpdateActiveItems()
+    public void UpdateActiveItems(bool force)
     {
         if (!initiated)
             return;
-        
+
+        if (force)
+            activeChunks.Clear();
+
         var cellPosition = worldCells.GetCellPosition(player.transform.position);
         var chunkX = cellPosition.X / 16;
         var chunkY = cellPosition.Y / 16;
