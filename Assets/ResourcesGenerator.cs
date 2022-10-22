@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Custard;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
@@ -15,7 +16,7 @@ public class ResourcesGenerator : MonoBehaviour
     [SerializeField] private WorldCells worldCells;
     [SerializeField] private CustardState _custardState;
     private TimeManager _timeManager;
-    
+
     [SerializeField] private List<SpreadItemDefinition> resourceDensityIn16X16 = new List<SpreadItemDefinition>();
 
     private readonly Dictionary<String, Queue<WorldItem>> _generatedItemsPool =
@@ -43,15 +44,47 @@ public class ResourcesGenerator : MonoBehaviour
     {
         yield return new WaitForSeconds(1);
         _canBeInitiated = true;
-        FillUpItems();
+        FillUpRegularItems();
         yield return new WaitForSeconds(4);
-        FillUpItems();
+        FillUpRegularItems();
     }
 
     private void Awake()
     {
         _timeManager = TimeManager.Instance;
-        TimeManager.onMorningStarted += (sender, arg) => FillUpItems();
+        TimeManager.onMorningStarted += (sender, arg) => { FillUpRegularItems(); };
+        TimeManager.onNightStarted += (sender, arg) =>
+        {
+            StartCoroutine(FillUpNightItems());
+        };
+    }
+
+    public void FillUpRegularItems()
+    {
+        List<SpreadItemDefinition> nonSpecialtemTypes = new List<SpreadItemDefinition>();
+        foreach (var itemType in resourceDensityIn16X16)
+        {
+            if (!itemType.spawnAtNight)
+                nonSpecialtemTypes.Add(itemType);
+        }
+
+        FillUpItems(nonSpecialtemTypes);
+    }
+
+    private IEnumerator FillUpNightItems()
+    {
+        List<SpreadItemDefinition> nightItemTypes = new List<SpreadItemDefinition>();
+        foreach (var itemType in resourceDensityIn16X16)
+        {
+            if (itemType.spawnAtNight)
+                nightItemTypes.Add(itemType);
+        }
+
+        if (nightItemTypes.Count != 0)
+        {
+            yield return new WaitForSeconds(15f + Random.value*10);
+            FillUpItems(nightItemTypes);
+        }
     }
 
     private void InitItemsPool()
@@ -86,21 +119,21 @@ public class ResourcesGenerator : MonoBehaviour
         Debug.Log("item pool initialized");
     }
 
-    public void FillUpItems()
+    private void FillUpItems(List<SpreadItemDefinition> itemTypes)
     {
         if (!_canBeInitiated)
             return;
-        
+
         Debug.Log("filling up items!");
         TriggerHouseKeeping();
 
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
         for (int chunkY = 0; chunkY < NumberOfChunksY; chunkY++)
         {
-            FillUpItemsForChunk(chunkX, chunkY);
+            FillUpItemsForChunk(chunkX, chunkY, itemTypes);
         }
 
-        foreach (var itemDefinition in resourceDensityIn16X16)
+        foreach (var itemDefinition in itemTypes)
         {
             if (itemDefinition.oneTime)
                 itemDefinition.spawnAgain = false;
@@ -139,12 +172,12 @@ public class ResourcesGenerator : MonoBehaviour
         }
     }
 
-    private void FillUpItemsForChunk(int chunkX, int chunkY)
+    private void FillUpItemsForChunk(int chunkX, int chunkY, List<SpreadItemDefinition> itemTypes)
     {
         Dictionary<string, HashSet<WorldItem>> chunk = _chunks[chunkX, chunkY];
-        foreach (var item in resourceDensityIn16X16)
+        foreach (var item in itemTypes)
         {
-            if(!item.spawnAgain)
+            if (!item.spawnAgain)
                 continue;
 
             // we accept at least the fraction
@@ -158,7 +191,7 @@ public class ResourcesGenerator : MonoBehaviour
                 chunk.Add(item.Id(), itemsInChunk);
             }
 
-            var randomSeed = Random.value*100;
+            var randomSeed = Random.value * 100;
             var availableItemsInPool = _generatedItemsPool.GetValueOrDefault(item.Id());
             for (int i = itemsInChunk.Count; i < minAcceptableAmount; i++)
             {
@@ -184,12 +217,13 @@ public class ResourcesGenerator : MonoBehaviour
             var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
             var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
             var coords = Coords.Of(cellX, cellY);
-            
+
             if (WorldCells.IsOutOfBounds(coords))
                 continue;
             // some items can only spawn in custard
             var currentCustardLevel = _custardState.GetCurrentCustardLevelAt(coords);
-            if (currentCustardLevel < itemDefinition.minCustardLevel || currentCustardLevel > itemDefinition.maxCustardLevel)
+            if (currentCustardLevel < itemDefinition.minCustardLevel ||
+                currentCustardLevel > itemDefinition.maxCustardLevel)
                 continue;
 
             var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
@@ -285,9 +319,10 @@ public class ResourcesGenerator : MonoBehaviour
         public int quantityIn16X16;
         public int variance;
         public bool oneTime;
-        [NonSerialized]
-        public bool spawnAgain = true;
-        
+        [NonSerialized] public bool spawnAgain = true;
+
+        public bool spawnAtNight = false;
+
 
         public string internalName;
 
@@ -301,5 +336,4 @@ public class ResourcesGenerator : MonoBehaviour
             return string.IsNullOrEmpty(internalName) ? prefab.name : internalName;
         }
     }
-    
 }
