@@ -82,7 +82,7 @@ public class ResourcesGenerator : MonoBehaviour
 
         if (nightItemTypes.Count != 0)
         {
-            yield return new WaitForSeconds(15f + Random.value*10);
+            yield return new WaitForSeconds(12f + Random.value*12);
             FillUpItems(nightItemTypes);
         }
     }
