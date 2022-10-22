@@ -88,10 +88,10 @@ public class ResourcesGenerator : MonoBehaviour
 
     public void FillUpItems()
     {
-        Debug.Log("filling up items!");
         if (!_canBeInitiated)
             return;
-
+        
+        Debug.Log("filling up items!");
         TriggerHouseKeeping();
 
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)

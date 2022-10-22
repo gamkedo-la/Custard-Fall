@@ -3271,7 +3271,7 @@ MonoBehaviour:
     maxCustardLevel: 42
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
     quantityIn16X16: 7
-    variance: 3
+    variance: 5
     oneTime: 0
     internalName: custard-spawning-cookie
     fractionNormalDay: 0.7

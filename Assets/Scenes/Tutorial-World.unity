@@ -85438,12 +85438,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: resourceDensityIn16X16.Array.data[1].variance
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: resourceDensityIn16X16.Array.data[2].variance
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: resourceDensityIn16X16.Array.data[3].variance
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: resourceDensityIn16X16.Array.data[3].internalName
       value: custard-spawning-cookie
+      objectReference: {fileID: 0}
+    - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: resourceDensityIn16X16.Array.data[2].quantityIn16X16
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: resourceDensityIn16X16.Array.data[3].maxCustardLevel
