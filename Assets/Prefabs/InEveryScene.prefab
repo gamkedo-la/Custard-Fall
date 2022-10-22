@@ -3264,6 +3264,7 @@ MonoBehaviour:
     quantityIn16X16: -3
     variance: 4
     oneTime: 0
+    spawnAtNight: 0
     internalName: 
     fractionNormalDay: 0.7
     fractionFullmoon: 1
@@ -3273,6 +3274,7 @@ MonoBehaviour:
     quantityIn16X16: 7
     variance: 8
     oneTime: 0
+    spawnAtNight: 0
     internalName: custard-spawning-cookie
     fractionNormalDay: 0.7
     fractionFullmoon: 1
@@ -3282,7 +3284,18 @@ MonoBehaviour:
     quantityIn16X16: -1
     variance: 8
     oneTime: 1
+    spawnAtNight: 0
     internalName: land-spawning-cookie
+    fractionNormalDay: 1
+    fractionFullmoon: 1
+    minCustardLevel: 0
+    maxCustardLevel: 0
+  - prefab: {fileID: 8682344909492640671, guid: 30103aed2e20d5a45acde190082438d1, type: 3}
+    quantityIn16X16: 0
+    variance: 1
+    oneTime: 0
+    spawnAtNight: 1
+    internalName: 
     fractionNormalDay: 1
     fractionFullmoon: 1
     minCustardLevel: 0
