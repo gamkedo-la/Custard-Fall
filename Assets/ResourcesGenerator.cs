@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Custard;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+// TODO use FullmoonFraction at fullmoon
 public class ResourcesGenerator : MonoBehaviour
 {
     [SerializeField] private Tidesmanager tidesmanager;
@@ -12,10 +14,8 @@ public class ResourcesGenerator : MonoBehaviour
     [SerializeField] private WorldCells worldCells;
     [SerializeField] private CustardState _custardState;
     private TimeManager _timeManager;
-
-    [SerializeField] private float fractionNormalDay = .3f;
-    [SerializeField] private float fractionFullmoon = .8f;
-    [SerializeField] private List<SpreadItem> resourceDensityIn16X16 = new List<SpreadItem>();
+    
+    [SerializeField] private List<SpreadItemDefinition> resourceDensityIn16X16 = new List<SpreadItemDefinition>();
 
     private readonly Dictionary<String, Queue<WorldItem>> _generatedItemsPool =
         new Dictionary<string, Queue<WorldItem>>();
@@ -25,9 +25,10 @@ public class ResourcesGenerator : MonoBehaviour
     private const int NumberOfChunksX = WorldCells.BlocksWidth / 16;
     private const int NumberOfChunksY = WorldCells.BlocksHeight / 16;
 
-    private bool initiated = false;
+    private bool _initiated = false;
+    private bool _isFullMoon = false;
 
-    private HashSet<Coords> activeChunks = new HashSet<Coords>();
+    private HashSet<Coords> _activeChunks = new HashSet<Coords>();
 
     // Start is called before the first frame update
     void Start()
@@ -40,16 +41,16 @@ public class ResourcesGenerator : MonoBehaviour
     private IEnumerator CoroutineFirstFillUpItems()
     {
         yield return new WaitForSeconds(4);
-        initiated = true;
-        FillUpItems(fractionNormalDay);
-        yield return new WaitForSeconds(3);
-        FillUpItems(fractionNormalDay);
+        _initiated = true;
+        FillUpItems();
+        yield return new WaitForSeconds(2);
+        FillUpItems();
     }
 
     private void Awake()
     {
         _timeManager = TimeManager.Instance;
-        TimeManager.onMorningStarted += (sender, arg) => FillUpItems(fractionNormalDay);
+        TimeManager.onMorningStarted += (sender, arg) => FillUpItems();
     }
 
     private void InitItemsPool()
@@ -84,10 +85,10 @@ public class ResourcesGenerator : MonoBehaviour
         Debug.Log("item pool initialized");
     }
 
-    public void FillUpItems(float fraction)
+    public void FillUpItems()
     {
         Debug.Log("filling up items!");
-        if (!initiated)
+        if (!_initiated)
             return;
 
         TriggerHouseKeeping();
@@ -95,7 +96,7 @@ public class ResourcesGenerator : MonoBehaviour
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
         for (int chunkY = 0; chunkY < NumberOfChunksY; chunkY++)
         {
-            FillUpItemsForChunk(chunkX, chunkY, fraction);
+            FillUpItemsForChunk(chunkX, chunkY);
         }
 
         UpdateActiveItems(true);
@@ -104,7 +105,7 @@ public class ResourcesGenerator : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     public void TriggerHouseKeeping()
     {
-        if (!initiated)
+        if (!_initiated)
             return;
 
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
@@ -131,7 +132,7 @@ public class ResourcesGenerator : MonoBehaviour
         }
     }
 
-    private void FillUpItemsForChunk(int chunkX, int chunkY, float fraction)
+    private void FillUpItemsForChunk(int chunkX, int chunkY)
     {
         Dictionary<string, HashSet<WorldItem>> chunk = _chunks[chunkX, chunkY];
         foreach (var item in resourceDensityIn16X16)
@@ -139,7 +140,7 @@ public class ResourcesGenerator : MonoBehaviour
             // we accept at least the fraction
             int minAcceptableAmount =
                 Mathf.CeilToInt((item.quantityIn16X16 + Mathf.Round(Random.value * 2 * item.variance - item.variance)) *
-                                fraction);
+                                item.fractionNormalDay);
             HashSet<WorldItem> itemsInChunk;
             if (!chunk.TryGetValue(item.Id(), out itemsInChunk))
             {
@@ -152,14 +153,14 @@ public class ResourcesGenerator : MonoBehaviour
             {
                 if (availableItemsInPool.TryDequeue(out WorldItem poolItem))
                 {
-                    PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount);
+                    PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, item.minCustardLevel);
                     itemsInChunk.Add(poolItem);
                 }
             }
         }
     }
 
-    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total)
+    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total, int minCustardLevel)
     {
         poolItem.Reset();
 
@@ -171,10 +172,11 @@ public class ResourcesGenerator : MonoBehaviour
             var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
             var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
             var coords = Coords.Of(cellX, cellY);
+            
             if (WorldCells.IsOutOfBounds(coords))
                 continue;
-            // only spawn items in custard
-            if (_custardState.GetCurrentCustardLevelAt(coords) == 0)
+            // some items can only spawn in custard
+            if (_custardState.GetCurrentCustardLevelAt(coords) < minCustardLevel)
                 continue;
 
             var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
@@ -199,11 +201,11 @@ public class ResourcesGenerator : MonoBehaviour
 
     public void UpdateActiveItems(bool force)
     {
-        if (!initiated)
+        if (!_initiated)
             return;
 
         if (force)
-            activeChunks.Clear();
+            _activeChunks.Clear();
 
         var cellPosition = worldCells.GetCellPosition(player.transform.position);
         var chunkX = cellPosition.X / 16;
@@ -229,7 +231,7 @@ public class ResourcesGenerator : MonoBehaviour
     private void ActivateChunks(HashSet<Coords> currentChunks)
     {
         // deactivate old, not part of current chunks
-        foreach (var activeChunk in activeChunks)
+        foreach (var activeChunk in _activeChunks)
         {
             if (currentChunks.Contains(activeChunk))
                 continue;
@@ -246,7 +248,7 @@ public class ResourcesGenerator : MonoBehaviour
         // deactivate all in current chunks
         foreach (var currentChunk in currentChunks)
         {
-            if (activeChunks.Contains(currentChunk))
+            if (_activeChunks.Contains(currentChunk))
                 continue;
 
             foreach (var occupiedItems in _chunks[currentChunk.X, currentChunk.Y].Values)
@@ -259,20 +261,26 @@ public class ResourcesGenerator : MonoBehaviour
             }
         }
 
-        activeChunks = currentChunks;
+        _activeChunks = currentChunks;
     }
 
-
     [Serializable]
-    public class SpreadItem
+    public class SpreadItemDefinition
     {
         public InhaleListener prefab;
         public int quantityIn16X16;
         public int variance;
 
-        public String Id()
+        public string internalName;
+        
+        public float fractionNormalDay = .7f;
+        public float fractionFullmoon = 1f;
+        public int minCustardLevel = 1;
+
+        public string Id()
         {
-            return prefab.name;
+            return internalName ?? prefab.name;
         }
     }
+    
 }
