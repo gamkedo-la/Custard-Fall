@@ -26,7 +26,7 @@ public class ResourcesGenerator : MonoBehaviour
     private const int NumberOfChunksX = WorldCells.BlocksWidth / 16;
     private const int NumberOfChunksY = WorldCells.BlocksHeight / 16;
 
-    private bool _initiated = false;
+    private bool _canBeInitiated = false;
     private bool _isFullMoon = false;
 
     private HashSet<Coords> _activeChunks = new HashSet<Coords>();
@@ -42,9 +42,9 @@ public class ResourcesGenerator : MonoBehaviour
     private IEnumerator CoroutineFirstFillUpItems()
     {
         yield return new WaitForSeconds(1);
-        _initiated = true;
+        _canBeInitiated = true;
         FillUpItems();
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4);
         FillUpItems();
     }
 
@@ -67,7 +67,7 @@ public class ResourcesGenerator : MonoBehaviour
             // create sufficient items for the item pool
             foreach (var item in resourceDensityIn16X16)
             {
-                for (int i = 0; i < item.quantityIn16X16 + item.variance; i++)
+                for (int i = 0; i < item.quantityIn16X16 + item.variance * 2; i++)
                 {
                     var instantiated = GameObject.Instantiate(item.prefab);
                     instantiated.SetUsedUp(true);
@@ -89,7 +89,7 @@ public class ResourcesGenerator : MonoBehaviour
     public void FillUpItems()
     {
         Debug.Log("filling up items!");
-        if (!_initiated)
+        if (!_canBeInitiated)
             return;
 
         TriggerHouseKeeping();
@@ -100,13 +100,19 @@ public class ResourcesGenerator : MonoBehaviour
             FillUpItemsForChunk(chunkX, chunkY);
         }
 
+        foreach (var itemDefinition in resourceDensityIn16X16)
+        {
+            if (itemDefinition.oneTime)
+                itemDefinition.spawnAgain = false;
+        }
+
         UpdateActiveItems(true);
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
     public void TriggerHouseKeeping()
     {
-        if (!_initiated)
+        if (!_canBeInitiated)
             return;
 
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
@@ -140,10 +146,7 @@ public class ResourcesGenerator : MonoBehaviour
         {
             if(!item.spawnAgain)
                 continue;
-            
-            if (item.oneTime)
-                item.spawnAgain = false;
-            
+
             // we accept at least the fraction
             int minAcceptableAmount =
                 Mathf.CeilToInt((item.quantityIn16X16 + Mathf.Round(Random.value * 2 * item.variance - item.variance)) *
@@ -175,8 +178,8 @@ public class ResourcesGenerator : MonoBehaviour
         var numTrials = 3;
         for (int j = 0; j < numTrials; j++)
         {
-            var noiseX = Mathf.PerlinNoise(i * 16 * 2 + Random.value, chunkX * 2);
-            var noiseY = Mathf.PerlinNoise(i * 16 * 2 + Random.value, chunkY * 2);
+            var noiseX = Mathf.PerlinNoise(i * 16 * 2 + Random.value + chunkX, chunkX * 2 - i);
+            var noiseY = Mathf.PerlinNoise(i * 16 * 2 + Random.value + chunkY, chunkY * 2 - i);
             var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
             var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
             var coords = Coords.Of(cellX, cellY);
@@ -210,7 +213,7 @@ public class ResourcesGenerator : MonoBehaviour
 
     public void UpdateActiveItems(bool force)
     {
-        if (!_initiated)
+        if (!_canBeInitiated)
             return;
 
         if (force)
@@ -293,7 +296,7 @@ public class ResourcesGenerator : MonoBehaviour
 
         public string Id()
         {
-            return internalName ?? prefab.name;
+            return string.IsNullOrEmpty(internalName) ? prefab.name : internalName;
         }
     }
     
