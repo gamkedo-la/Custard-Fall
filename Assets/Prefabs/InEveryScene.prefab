@@ -3258,16 +3258,16 @@ MonoBehaviour:
   tidesmanager: {fileID: 8634744845809120381}
   player: {fileID: 2478701615409234051}
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
-  _custardState: {fileID: 0}
-  fractionNormalDay: 0.6
+  _custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
+  fractionNormalDay: 0.7
   fractionFullmoon: 1
   resourceDensityIn16X16:
-  - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
-    quantityIn16X16: 6
-    variance: 3
   - prefab: {fileID: 728165699860010337, guid: 1ee2e423ad0a10f46a1223c3918fffc6, type: 3}
     quantityIn16X16: -3
     variance: 4
+  - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
+    quantityIn16X16: 7
+    variance: 3
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0

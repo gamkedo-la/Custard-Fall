@@ -570,7 +570,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Left Click
+  m_text: WASD or Middle Click
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
   m_sharedMaterial: {fileID: 7659598306520290297, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
@@ -705,7 +705,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Right Click
+  m_text: Right Click or F Key
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
   m_sharedMaterial: {fileID: 7659598306520290297, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
@@ -1399,7 +1399,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ctrl
+  m_text: Ctrl or Left Click
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
   m_sharedMaterial: {fileID: 7659598306520290297, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
@@ -1671,7 +1671,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Left Click
+  m_text: WASD or Middle Click
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
   m_sharedMaterial: {fileID: 7659598306520290297, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
@@ -2318,7 +2318,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Right Click
+  m_text: Right Click or F Key
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
   m_sharedMaterial: {fileID: 7659598306520290297, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
@@ -2695,7 +2695,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ctrl
+  m_text: Ctrl or Left Click
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
   m_sharedMaterial: {fileID: 7659598306520290297, guid: 585f75ce4388a534abf554884ce450f9, type: 2}
