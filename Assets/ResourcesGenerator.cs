@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Custard;
+using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -40,10 +41,10 @@ public class ResourcesGenerator : MonoBehaviour
 
     private IEnumerator CoroutineFirstFillUpItems()
     {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(1);
         _initiated = true;
         FillUpItems();
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
         FillUpItems();
     }
 
@@ -137,6 +138,12 @@ public class ResourcesGenerator : MonoBehaviour
         Dictionary<string, HashSet<WorldItem>> chunk = _chunks[chunkX, chunkY];
         foreach (var item in resourceDensityIn16X16)
         {
+            if(!item.spawnAgain)
+                continue;
+            
+            if (item.oneTime)
+                item.spawnAgain = false;
+            
             // we accept at least the fraction
             int minAcceptableAmount =
                 Mathf.CeilToInt((item.quantityIn16X16 + Mathf.Round(Random.value * 2 * item.variance - item.variance)) *
@@ -153,14 +160,15 @@ public class ResourcesGenerator : MonoBehaviour
             {
                 if (availableItemsInPool.TryDequeue(out WorldItem poolItem))
                 {
-                    PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, item.minCustardLevel);
+                    PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, item);
                     itemsInChunk.Add(poolItem);
                 }
             }
         }
     }
 
-    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total, int minCustardLevel)
+    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total,
+        SpreadItemDefinition itemDefinition)
     {
         poolItem.Reset();
 
@@ -176,7 +184,8 @@ public class ResourcesGenerator : MonoBehaviour
             if (WorldCells.IsOutOfBounds(coords))
                 continue;
             // some items can only spawn in custard
-            if (_custardState.GetCurrentCustardLevelAt(coords) < minCustardLevel)
+            var currentCustardLevel = _custardState.GetCurrentCustardLevelAt(coords);
+            if (currentCustardLevel < itemDefinition.minCustardLevel || currentCustardLevel > itemDefinition.maxCustardLevel)
                 continue;
 
             var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
@@ -270,12 +279,17 @@ public class ResourcesGenerator : MonoBehaviour
         public InhaleListener prefab;
         public int quantityIn16X16;
         public int variance;
+        public bool oneTime;
+        [NonSerialized]
+        public bool spawnAgain = true;
+        
 
         public string internalName;
-        
+
         public float fractionNormalDay = .7f;
         public float fractionFullmoon = 1f;
         public int minCustardLevel = 1;
+        public int maxCustardLevel = 42;
 
         public string Id()
         {
