@@ -51,6 +51,7 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Cookie Mine
+  usedUp: 0
 --- !u!114 &3163973215154773292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +153,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: aabd2974fc822344f9370d922992ed87, type: 2}
+    - target: {fileID: 3114397458789669307, guid: f0a95728611984a499aadaef080d9672, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ae71cfee595843f4885d641c94a34d83, type: 2}
+    - target: {fileID: 5763677551321641320, guid: f0a95728611984a499aadaef080d9672, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ae71cfee595843f4885d641c94a34d83, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0a95728611984a499aadaef080d9672, type: 3}
 --- !u!4 &44880491423228293 stripped

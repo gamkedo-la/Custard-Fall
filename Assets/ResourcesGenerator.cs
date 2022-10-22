@@ -158,19 +158,20 @@ public class ResourcesGenerator : MonoBehaviour
                 chunk.Add(item.Id(), itemsInChunk);
             }
 
+            var randomSeed = Random.value*100;
             var availableItemsInPool = _generatedItemsPool.GetValueOrDefault(item.Id());
             for (int i = itemsInChunk.Count; i < minAcceptableAmount; i++)
             {
                 if (availableItemsInPool.TryDequeue(out WorldItem poolItem))
                 {
-                    PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, item);
+                    PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, randomSeed, item);
                     itemsInChunk.Add(poolItem);
                 }
             }
         }
     }
 
-    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total,
+    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total, float seed,
         SpreadItemDefinition itemDefinition)
     {
         poolItem.Reset();
@@ -178,8 +179,8 @@ public class ResourcesGenerator : MonoBehaviour
         var numTrials = 3;
         for (int j = 0; j < numTrials; j++)
         {
-            var noiseX = Mathf.PerlinNoise(i * 16 * 2 + Random.value + chunkX, chunkX * 2 - i);
-            var noiseY = Mathf.PerlinNoise(i * 16 * 2 + Random.value + chunkY, chunkY * 2 - i);
+            var noiseX = Mathf.PerlinNoise(i * 16 * 2 + Random.value + chunkX + seed, chunkX * 2 - i + seed);
+            var noiseY = Mathf.PerlinNoise(i * 16 * 2 + Random.value + chunkY + seed, chunkY * 2 - i + seed);
             var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
             var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
             var coords = Coords.Of(cellX, cellY);
@@ -192,15 +193,16 @@ public class ResourcesGenerator : MonoBehaviour
                 continue;
 
             var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
-            worldPosition += new Vector2((noiseX - .5f) * .9f, (noiseY - .5f) * .9f);
+            worldPosition += new Vector2(Random.value - .5f, Random.value - .5f);
 
 
             var newPosition = new Vector3(worldPosition.x, worldCells.GetTerrainHeightAt(cellX, cellY) + .35f,
                 worldPosition.y);
-            ((MonoBehaviour) poolItem).gameObject.transform.position = newPosition;
+            var go = ((MonoBehaviour) poolItem).gameObject;
+            go.transform.position = newPosition;
 
             // TODO delete debug line
-            Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 240);
+            Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 30);
 
             return;
         }

@@ -144,7 +144,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6629797300637803691, guid: f0a95728611984a499aadaef080d9672, type: 3}
+  - {fileID: 2100000, guid: 22fbe75d4f53b244485f3dbde96cf2b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -252,6 +252,7 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Cookie Shard
+  usedUp: 0
 --- !u!114 &5048714788798354512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,7 +423,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6922793697723135513, guid: f0a95728611984a499aadaef080d9672, type: 3}
+  - {fileID: 2100000, guid: 22fbe75d4f53b244485f3dbde96cf2b2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -451,6 +452,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 274989982990206081}
     m_Modifications:
+    - target: {fileID: 3203314172375432165, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 22fbe75d4f53b244485f3dbde96cf2b2, type: 2}
     - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Name
       value: ParticleItemPickup

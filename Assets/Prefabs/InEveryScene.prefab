@@ -3271,7 +3271,7 @@ MonoBehaviour:
     maxCustardLevel: 42
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
     quantityIn16X16: 7
-    variance: 5
+    variance: 8
     oneTime: 0
     internalName: custard-spawning-cookie
     fractionNormalDay: 0.7
@@ -3280,7 +3280,7 @@ MonoBehaviour:
     maxCustardLevel: 42
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
     quantityIn16X16: -1
-    variance: 5
+    variance: 8
     oneTime: 1
     internalName: land-spawning-cookie
     fractionNormalDay: 1
