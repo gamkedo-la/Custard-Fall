@@ -15,7 +15,7 @@ public class Bounce : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startPos = transform.position;
+        startPos = transform.localPosition;
         timeOffset = UnityEngine.Random.Range(-1f, 1f);
     }
 
@@ -26,6 +26,6 @@ public class Bounce : MonoBehaviour
         tempPos = startPos;
         tempPos.y += Mathf.Sin ((Time.fixedTime + timeOffset) * Mathf.PI * frequency) * amplitude;
  
-        transform.position = tempPos;
+        transform.localPosition = tempPos;
     }
 }
