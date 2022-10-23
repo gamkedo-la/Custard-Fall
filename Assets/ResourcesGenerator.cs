@@ -225,8 +225,8 @@ public class ResourcesGenerator : MonoBehaviour
 
         for (int j = 0; j < itemDefinition.numberRetries; j++)
         {
-            var noiseX = Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkX + seed, chunkX * 2 - i);
-            var noiseY = Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkY + seed, chunkY * 2 - i);
+            var noiseX = Mathf.Clamp(Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkX + seed, chunkX * 2 - i) * 2,0f,1f);
+            var noiseY = Mathf.Clamp(Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkY + seed, chunkY * 2 - i) * 2,0f,1f);
             var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
             var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
             var coords = Coords.Of(cellX, cellY);

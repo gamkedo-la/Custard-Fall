@@ -6,16 +6,16 @@ public class InhaleListener : MonoBehaviour, WorldItem
 {
     public WorldCells worldCells;
     public bool hasInhaleFocus;
-    private readonly List<InhaleQueueItem> _inhaleQueue = new List<InhaleQueueItem>();
+    private readonly Queue<InhaleQueueItem> _inhaleQueue = new Queue<InhaleQueueItem>();
     private Inhaler _currentInhaler = null;
     private float _currentInhaleStrength;
     private Wobble _wobble;
+    private bool _wobbleInitialized;
 
     public string interactionMessage;
     private Coords cellPosition;
-    
-    [SerializeField]
-    private bool usedUp = false;
+
+    [SerializeField] private bool usedUp = false;
 
     public void Inhale(Inhaler inhaler, float strength)
     {
@@ -31,7 +31,9 @@ public class InhaleListener : MonoBehaviour, WorldItem
     private void Start()
     {
         _wobble = GetComponent<Wobble>();
+        _wobbleInitialized = _wobble != null;
         Init();
+        usedUp = false;
     }
 
     public virtual void Init()
@@ -51,16 +53,17 @@ public class InhaleListener : MonoBehaviour, WorldItem
 
     private void FixedUpdate()
     {
-        if (_inhaleQueue.Count == 0)
+        if (IsUsedUp() || _inhaleQueue.Count == 0)
             return;
 
         if (_currentInhaler)
         {
-            var item = _inhaleQueue[0];
+            InhaleQueueItem item = _inhaleQueue.Peek();
+
             item.inhaleThresholdSeconds -= Time.deltaTime;
-            if (item.inhaleThresholdSeconds <= 0 && (_wobble == null || _wobble.IsAtMaxWobble()))
+            if (item.inhaleThresholdSeconds <= 0 && (!_wobbleInitialized || _wobble.IsAtMaxWobble()))
             {
-                _inhaleQueue.RemoveAt(0);
+                _inhaleQueue.Dequeue();
                 OnResourceInhaledAndMaybeRemove(_currentInhaler, item.resource, item.amount);
             }
 
@@ -72,7 +75,6 @@ public class InhaleListener : MonoBehaviour, WorldItem
             {
                 _wobble.DoWobble();
             }
-
         }
         else if (hasInhaleFocus)
         {
@@ -90,7 +92,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
     public virtual void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
         inhaler.OnResourceInhaled(resource, amount);
-        
+
         if (GetRemainingResourcesCount() == 0)
         {
             Remove();
@@ -104,7 +106,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
 
     public void AddToInhaleQueue(Resource resource, float inhaleThresholdSeconds)
     {
-        _inhaleQueue.Add(new InhaleQueueItem(inhaleThresholdSeconds, resource));
+        _inhaleQueue.Enqueue(new InhaleQueueItem(inhaleThresholdSeconds, resource));
     }
 
     class InhaleQueueItem
@@ -118,7 +120,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
             this.resource = resource;
             this.inhaleThresholdSeconds = inhaleThresholdSeconds;
         }
-        
+
         public InhaleQueueItem(float inhaleThresholdSeconds, Resource resource, int amount)
         {
             this.resource = resource;
@@ -153,7 +155,6 @@ public class InhaleListener : MonoBehaviour, WorldItem
 
     public void Reset()
     {
-        Init();
         usedUp = false;
     }
 }

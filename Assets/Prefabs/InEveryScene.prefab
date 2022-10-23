@@ -3289,8 +3289,8 @@ MonoBehaviour:
     dontSpawnNearPlayer: 0
     numberRetries: 3
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
-    quantityIn16X16: -1
-    variance: 8
+    quantityIn16X16: 3
+    variance: 4
     oneTime: 1
     spawnAtNight: 0
     internalName: land-spawning-cookie
@@ -3308,7 +3308,7 @@ MonoBehaviour:
     oneTime: 0
     spawnAtNight: 1
     internalName: 
-    fractionNormalDay: 1
+    fractionNormalDay: 0.7
     fractionFullmoon: 1
     minCustardLevel: 0
     maxCustardLevel: 0
