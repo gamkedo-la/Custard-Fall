@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     private Vector3 _velMove = Vector3.zero;
     [SerializeField] private float dashTransitionSpeed = .1f;
     private float _velDash = 0f;
-    [SerializeField] private float LookInMoveDirectionGraceTime = .3f;
+    [SerializeField] private float LookInMoveDirectionGraceTime = .35f;
     private float _nextLookInMoveDirectionTime;
 
     public bool isDashing = false;
@@ -263,7 +263,7 @@ public class Player : MonoBehaviour
         }
 
         _isLookInMoveDirection = false;
-        _nextLookInMoveDirectionTime = Time.time + LookInMoveDirectionGraceTime * 2;
+        _nextLookInMoveDirectionTime = Time.time + LookInMoveDirectionGraceTime * 3 + .5f;
     }
 
     public void OnInhale(InputValue context)
