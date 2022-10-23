@@ -5,6 +5,19 @@ using UnityEngine;
 
 public class SmallCreamyConeTree : InhaleListener
 {
+    
+    private void Awake()
+    {
+        AddObstacleToWorld(2);
+    }
+
+    private void AddObstacleToWorld(int height)
+    {
+        var position = gameObject.transform.position;
+        var cellPosition = worldCells.GetCellPosition(position.x, position.z);
+        worldCells.WriteWorldItemHeight(cellPosition, worldCells.GetWorldItemHeightAt(cellPosition) + height);
+    }
+    
     public override void Init()
     {
         base.Init();

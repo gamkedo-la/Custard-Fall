@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4228397273249691422}
   - component: {fileID: 8437276576491607139}
   - component: {fileID: 9201729503962541372}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Creamy_Cone_Tree_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,6 +115,7 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: How much wood would a woodchuck chuck?
+  usedUp: 0
 --- !u!65 &9201729503962541372
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -126,5 +127,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8660253, y: 2.3, z: 0.99999994}
+  m_Size: {x: 1.1, y: 2.3, z: 1.1}
   m_Center: {x: 0, y: 1.15, z: 0}

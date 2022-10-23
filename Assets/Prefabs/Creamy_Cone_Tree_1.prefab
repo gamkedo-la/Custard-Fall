@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -4215345412135584426}
   - component: {fileID: 6085055505605995831}
   - component: {fileID: 1980026844444731678}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Creamy_Cone_Tree_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,6 +115,7 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Little sapling, so much potential...
+  usedUp: 0
 --- !u!65 &1980026844444731678
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -126,5 +127,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.2447274, y: 1.667342, z: 1.0794058}
-  m_Center: {x: 0, y: 0.833671, z: -0.013603896}
+  m_Size: {x: 1.5, y: 1.667342, z: 1.5}
+  m_Center: {x: 0.03008461, y: 0.833671, z: -0.0045804977}

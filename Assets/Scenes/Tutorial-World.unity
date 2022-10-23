@@ -85254,6 +85254,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1116589921}
     m_Modifications:
+    - target: {fileID: 4548006772022468161, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -85314,10 +85318,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crusted_Custard_Volcano
       objectReference: {fileID: 0}
-    - target: {fileID: 7577677890871168495, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
 --- !u!4 &7343180993289791860 stripped
@@ -85325,6 +85325,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
   m_PrefabInstance: {fileID: 7343180993289791859}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7343180993289791861 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7577677890871168495, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+  m_PrefabInstance: {fileID: 7343180993289791859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &7343180993289791862
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7343180993289791861}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3145058497754134291, guid: 6ffb61ce6f06eb5428470de4dd2e990a, type: 3}
 --- !u!1001 &8246299519227370223
 PrefabInstance:
   m_ObjectHideFlags: 0

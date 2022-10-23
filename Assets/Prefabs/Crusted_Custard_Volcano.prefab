@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6182697770412562672}
   - component: {fileID: 8226297047903022138}
   - component: {fileID: 4548006772022468161}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Crusted_Custard_Volcano
   m_TagString: Untagged
   m_Icon: {fileID: 0}
