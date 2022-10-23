@@ -274,16 +274,17 @@ public class ResourcesGenerator : MonoBehaviour
         if (!_canBeInitiated)
             return;
 
-        if (force)
-            _activeChunks.Clear();
-
         var cellPosition = worldCells.GetCellPosition(player.transform.position);
         var chunkX = cellPosition.X / 16;
         var chunkY = cellPosition.Y / 16;
+
+        if (force)
+            _activeChunks.Clear();
+        if (!force && playerChunk.X == chunkX && playerChunk.Y == chunkY)
+            return;
         playerChunk = Coords.Of(chunkX, chunkY);
-
+        
         HashSet<Coords> currentChunks = new HashSet<Coords>();
-
         var halfWindowSize = 2;
         for (int x = -halfWindowSize; x < halfWindowSize; x++)
         for (int y = -halfWindowSize; y < halfWindowSize; y++)
