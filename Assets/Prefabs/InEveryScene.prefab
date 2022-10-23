@@ -3289,16 +3289,16 @@ MonoBehaviour:
     dontSpawnNearPlayer: 0
     numberRetries: 3
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
-    quantityIn16X16: 3
-    variance: 4
+    quantityIn16X16: 5
+    variance: 3
     oneTime: 1
     spawnAtNight: 0
     internalName: land-spawning-cookie
-    fractionNormalDay: 1
+    fractionNormalDay: 0.8
     fractionFullmoon: 1
     minCustardLevel: 0
     maxCustardLevel: 0
-    minTerrainLevel: 0
+    minTerrainLevel: 5
     maxTerrainLevel: 14
     dontSpawnNearPlayer: 0
     numberRetries: 3
@@ -3308,14 +3308,14 @@ MonoBehaviour:
     oneTime: 0
     spawnAtNight: 1
     internalName: 
-    fractionNormalDay: 0.7
-    fractionFullmoon: 1
+    fractionNormalDay: 0.42
+    fractionFullmoon: 0.42
     minCustardLevel: 0
     maxCustardLevel: 0
-    minTerrainLevel: 10
+    minTerrainLevel: 8
     maxTerrainLevel: 14
     dontSpawnNearPlayer: 1
-    numberRetries: 10
+    numberRetries: 16
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0
