@@ -15,7 +15,10 @@ public class SmallCreamyConeTree : InhaleListener
     {
         var position = gameObject.transform.position;
         var cellPosition = worldCells.GetCellPosition(position.x, position.z);
-        worldCells.WriteWorldItemHeight(cellPosition, worldCells.GetWorldItemHeightAt(cellPosition) + height);
+        for (int i = -1; i < 1; i++)
+        for (int j = -1; j < 1; j++)
+            // TODO prevent height overflow to heigher places if in corner
+            worldCells.WriteWorldItemHeight(Coords.Of(cellPosition.X + i, cellPosition.Y + j), worldCells.GetWorldItemHeightAt(cellPosition) + height);
     }
     
     public override void Init()
@@ -30,11 +33,10 @@ public class SmallCreamyConeTree : InhaleListener
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
-        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
             AddObstacleToWorld(-2);
-            gameObject.SetActive(false);
         }
+        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
     }
 }

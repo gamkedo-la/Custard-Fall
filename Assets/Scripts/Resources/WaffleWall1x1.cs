@@ -29,11 +29,10 @@ public class WaffleWall1x1 : InhaleListener
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
-        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
             AddObstacleToWorld(-Height);
-            gameObject.SetActive(false);
         }
+        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
     }
 }
