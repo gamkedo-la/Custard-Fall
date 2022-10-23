@@ -46,8 +46,6 @@ public class ResourcesGenerator : MonoBehaviour
         yield return new WaitForSeconds(1);
         _canBeInitiated = true;
         FillUpRegularItems();
-        yield return new WaitForSeconds(4);
-        FillUpRegularItems();
     }
 
     private void Awake()
@@ -80,13 +78,7 @@ public class ResourcesGenerator : MonoBehaviour
 
         if (nightItemTypes.Count != 0)
         {
-            yield return new WaitForSeconds(5f + Random.value * 9);
-            FillUpItems(nightItemTypes);
-            yield return new WaitForSeconds(12f + Random.value * 10);
-            FillUpItems(nightItemTypes);
-            yield return new WaitForSeconds(8f + Random.value * 10);
-            FillUpItems(nightItemTypes);
-            yield return new WaitForSeconds(8f + Random.value * 10);
+            yield return new WaitForSeconds(5f + Random.value * 16);
             FillUpItems(nightItemTypes);
         }
     }
@@ -184,10 +176,9 @@ public class ResourcesGenerator : MonoBehaviour
             if (!item.spawnAgain || item.dontSpawnNearPlayer && chunkX == playerChunk.X && chunkY == playerChunk.Y)
                 continue;
 
-            // we accept at least the fraction
+            // minAcceptableAmount for this round; we try to fill up complying to definition
             int minAcceptableAmount =
-                Mathf.RoundToInt((item.quantityIn16X16 + Mathf.Round((Random.value - .5f) * 2 * item.variance)) *
-                                 item.fractionNormalDay);
+                Mathf.RoundToInt(item.quantityIn16X16 + Mathf.Round((Random.value - .5f) * 2 * item.variance));
             if (minAcceptableAmount <= 0)
                 continue;
 
@@ -200,8 +191,12 @@ public class ResourcesGenerator : MonoBehaviour
 
             var randomSeed = Random.value * 16;
             var availableItemsInPool = _generatedItemsPool.GetValueOrDefault(item.Id());
+            // fill up
             for (int i = itemsInChunk.Count; i < minAcceptableAmount; i++)
             {
+                if(Random.value > getFraction(item))
+                    continue;
+                
                 if (availableItemsInPool.TryDequeue(out WorldItem poolItem))
                 {
                     if (PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, randomSeed, item))
@@ -215,6 +210,11 @@ public class ResourcesGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private static float getFraction(SpreadItemDefinition item)
+    {
+        return item.fractionNormalDay;
     }
 
     private bool PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total, float seed,
