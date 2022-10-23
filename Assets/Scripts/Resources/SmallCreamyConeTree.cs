@@ -15,9 +15,9 @@ public class SmallCreamyConeTree : InhaleListener
         AddToInhaleQueue(new Resource("Creamy Cone Tree"), .8f);
     }
 
-    public override void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
+    public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
-        base.OnResourceInhaled(inhaler, resource, amount);
+        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
             gameObject.SetActive(false);

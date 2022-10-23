@@ -3270,6 +3270,10 @@ MonoBehaviour:
     fractionFullmoon: 1
     minCustardLevel: 2
     maxCustardLevel: 42
+    minTerrainLevel: 0
+    maxTerrainLevel: 14
+    dontSpawnNearPlayer: 0
+    numberRetries: 3
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
     quantityIn16X16: 7
     variance: 8
@@ -3280,6 +3284,10 @@ MonoBehaviour:
     fractionFullmoon: 1
     minCustardLevel: 1
     maxCustardLevel: 42
+    minTerrainLevel: 0
+    maxTerrainLevel: 14
+    dontSpawnNearPlayer: 0
+    numberRetries: 3
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
     quantityIn16X16: -1
     variance: 8
@@ -3290,9 +3298,13 @@ MonoBehaviour:
     fractionFullmoon: 1
     minCustardLevel: 0
     maxCustardLevel: 0
+    minTerrainLevel: 0
+    maxTerrainLevel: 14
+    dontSpawnNearPlayer: 0
+    numberRetries: 3
   - prefab: {fileID: 8682344909492640671, guid: 30103aed2e20d5a45acde190082438d1, type: 3}
-    quantityIn16X16: 0
-    variance: 1
+    quantityIn16X16: 1
+    variance: 0
     oneTime: 0
     spawnAtNight: 1
     internalName: 
@@ -3300,6 +3312,10 @@ MonoBehaviour:
     fractionFullmoon: 1
     minCustardLevel: 0
     maxCustardLevel: 0
+    minTerrainLevel: 10
+    maxTerrainLevel: 14
+    dontSpawnNearPlayer: 1
+    numberRetries: 10
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0

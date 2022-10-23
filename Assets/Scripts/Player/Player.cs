@@ -78,6 +78,7 @@ public class Player : MonoBehaviour
 
         currentHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
+        inhaler.owner = gameObject;
     }
 
     // Update is called once per frame

@@ -18,7 +18,7 @@ public class GrapplingHookCollectible : InhaleListener
         AddToInhaleQueue(new Resource("trusty grappling hook"), .8f);
     }
 
-    public override void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
+    public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
         _player.ownsGrapplingHook = true;
         _grappleBtnUi.SetActive(true);

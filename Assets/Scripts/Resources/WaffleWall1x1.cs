@@ -27,9 +27,9 @@ public class WaffleWall1x1 : InhaleListener
         worldCells.WriteWorldItemHeight(cellPosition, worldCells.GetWorldItemHeightAt(cellPosition) + height);
     }
 
-    public override void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
+    public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
-        base.OnResourceInhaled(inhaler, resource, amount);
+        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
             AddObstacleToWorld(-Height);

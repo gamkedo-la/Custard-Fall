@@ -31,6 +31,7 @@ public class ResourcesGenerator : MonoBehaviour
     private bool _isFullMoon = false;
 
     private HashSet<Coords> _activeChunks = new HashSet<Coords>();
+    private Coords playerChunk = Coords.Of(255,255);
 
     // Start is called before the first frame update
     void Start()
@@ -82,7 +83,13 @@ public class ResourcesGenerator : MonoBehaviour
 
         if (nightItemTypes.Count != 0)
         {
-            yield return new WaitForSeconds(12f + Random.value*12);
+            yield return new WaitForSeconds(5f + Random.value*9);
+            FillUpItems(nightItemTypes);
+            yield return new WaitForSeconds(12f + Random.value*10);
+            FillUpItems(nightItemTypes);
+            yield return new WaitForSeconds(8f + Random.value*10);
+            FillUpItems(nightItemTypes);
+            yield return new WaitForSeconds(8f + Random.value*10);
             FillUpItems(nightItemTypes);
         }
     }
@@ -177,13 +184,16 @@ public class ResourcesGenerator : MonoBehaviour
         Dictionary<string, HashSet<WorldItem>> chunk = _chunks[chunkX, chunkY];
         foreach (var item in itemTypes)
         {
-            if (!item.spawnAgain)
+            if (!item.spawnAgain || item.dontSpawnNearPlayer && chunkX == playerChunk.X && chunkY == playerChunk.Y)
                 continue;
 
             // we accept at least the fraction
             int minAcceptableAmount =
-                Mathf.CeilToInt((item.quantityIn16X16 + Mathf.Round(Random.value * 2 * item.variance - item.variance)) *
+                Mathf.RoundToInt((item.quantityIn16X16 + Mathf.Round((Random.value - .5f) * 2 * item.variance)) *
                                 item.fractionNormalDay);
+            if(minAcceptableAmount <= 0)
+                continue;
+            
             HashSet<WorldItem> itemsInChunk;
             if (!chunk.TryGetValue(item.Id(), out itemsInChunk))
             {
@@ -191,7 +201,7 @@ public class ResourcesGenerator : MonoBehaviour
                 chunk.Add(item.Id(), itemsInChunk);
             }
 
-            var randomSeed = Random.value * 100;
+            var randomSeed = Random.value * 16;
             var availableItemsInPool = _generatedItemsPool.GetValueOrDefault(item.Id());
             for (int i = itemsInChunk.Count; i < minAcceptableAmount; i++)
             {
@@ -207,13 +217,13 @@ public class ResourcesGenerator : MonoBehaviour
     private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total, float seed,
         SpreadItemDefinition itemDefinition)
     {
+        // Calling Reset is important before spawning item from pool somewhere in the world!
         poolItem.Reset();
 
-        var numTrials = 3;
-        for (int j = 0; j < numTrials; j++)
+        for (int j = 0; j < itemDefinition.numberRetries; j++)
         {
-            var noiseX = Mathf.PerlinNoise(i * 16 * 2 + Random.value + chunkX + seed, chunkX * 2 - i + seed);
-            var noiseY = Mathf.PerlinNoise(i * 16 * 2 + Random.value + chunkY + seed, chunkY * 2 - i + seed);
+            var noiseX = Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkX + seed, chunkX * 2 - i);
+            var noiseY = Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8  + chunkY + seed, chunkY * 2 - i);
             var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
             var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
             var coords = Coords.Of(cellX, cellY);
@@ -225,18 +235,21 @@ public class ResourcesGenerator : MonoBehaviour
             if (currentCustardLevel < itemDefinition.minCustardLevel ||
                 currentCustardLevel > itemDefinition.maxCustardLevel)
                 continue;
+            var terrainHeight = worldCells.GetTerrainHeightAt(cellX, cellY);
+            if (terrainHeight < itemDefinition.minTerrainLevel ||
+                terrainHeight > itemDefinition.maxTerrainLevel)
+                continue;
 
             var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
             worldPosition += new Vector2(Random.value - .5f, Random.value - .5f);
-
-
-            var newPosition = new Vector3(worldPosition.x, worldCells.GetTerrainHeightAt(cellX, cellY) + .35f,
+            
+            var newPosition = new Vector3(worldPosition.x, terrainHeight + .35f,
                 worldPosition.y);
             var go = ((MonoBehaviour) poolItem).gameObject;
             go.transform.position = newPosition;
 
             // TODO delete debug line
-            Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 30);
+            Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 60);
 
             return;
         }
@@ -258,6 +271,7 @@ public class ResourcesGenerator : MonoBehaviour
         var cellPosition = worldCells.GetCellPosition(player.transform.position);
         var chunkX = cellPosition.X / 16;
         var chunkY = cellPosition.Y / 16;
+        playerChunk = Coords.Of(chunkX,chunkY);
 
         HashSet<Coords> currentChunks = new HashSet<Coords>();
 
@@ -330,6 +344,10 @@ public class ResourcesGenerator : MonoBehaviour
         public float fractionFullmoon = 1f;
         public int minCustardLevel = 1;
         public int maxCustardLevel = 42;
+        public int minTerrainLevel = 0;
+        public int maxTerrainLevel = 14;
+        public bool dontSpawnNearPlayer = false;
+        public int numberRetries = 3;
 
         public string Id()
         {

@@ -17,6 +17,7 @@ public class Inhaler : MonoBehaviour
     public readonly Dictionary<Vector3, InhaleCell> affectedCells = new Dictionary<Vector3, InhaleCell>();
     private float _distance;
     public bool isInhale;
+    [DoNotSerialize] public GameObject owner;
 
     private Quaternion _previousRotation;
 

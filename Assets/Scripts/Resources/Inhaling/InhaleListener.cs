@@ -61,7 +61,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
             if (item.inhaleThresholdSeconds <= 0 && (_wobble == null || _wobble.IsAtMaxWobble()))
             {
                 _inhaleQueue.RemoveAt(0);
-                OnResourceInhaled(_currentInhaler, item.resource, item.amount);
+                OnResourceInhaledAndMaybeRemove(_currentInhaler, item.resource, item.amount);
             }
 
             // inhaler needs to be present next update (keep calling Inhale)
@@ -87,7 +87,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
         return strength > 0;
     }
 
-    public virtual void OnResourceInhaled(Inhaler inhaler, Resource resource, int amount)
+    public virtual void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
         inhaler.OnResourceInhaled(resource, amount);
         

@@ -6,6 +6,7 @@ using UnityEngine;
 public class GlowOrbItem : InhaleListener
 {
     private bool stationary = false;
+
     
     public override void Init()
     {
@@ -14,11 +15,21 @@ public class GlowOrbItem : InhaleListener
         // exists only at night
         TimeManager.onMorningStarted += (sender, arg) =>
         {
-            if(!stationary)
+            if(!stationary){}
                 Remove();
         };
 
         AddToInhaleQueue(new Resource("glow orb"), 1f);
     }
-    
+
+    public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
+    {
+        var player = inhaler.owner.GetComponent<Player>();
+        if (player)
+        {
+            // XD
+            player.TakeDamage(-20);
+        }
+        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
+    }
 }
