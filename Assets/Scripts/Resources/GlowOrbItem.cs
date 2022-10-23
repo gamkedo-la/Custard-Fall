@@ -28,7 +28,7 @@ public class GlowOrbItem : InhaleListener
         if (player)
         {
             // XD
-            player.TakeDamage(-20);
+            player.TakeDamage(-10);
         }
         base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
     }

@@ -3308,14 +3308,14 @@ MonoBehaviour:
     oneTime: 0
     spawnAtNight: 1
     internalName: 
-    fractionNormalDay: 0.42
-    fractionFullmoon: 0.42
+    fractionNormalDay: 0.3
+    fractionFullmoon: 0.3
     minCustardLevel: 0
     maxCustardLevel: 0
-    minTerrainLevel: 8
-    maxTerrainLevel: 14
+    minTerrainLevel: 7
+    maxTerrainLevel: 15
     dontSpawnNearPlayer: 1
-    numberRetries: 16
+    numberRetries: 32
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0
