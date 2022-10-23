@@ -31,7 +31,7 @@ public class ResourcesGenerator : MonoBehaviour
     private bool _isFullMoon = false;
 
     private HashSet<Coords> _activeChunks = new HashSet<Coords>();
-    private Coords playerChunk = Coords.Of(255,255);
+    private Coords playerChunk = Coords.Of(255, 255);
 
     // Start is called before the first frame update
     void Start()
@@ -54,10 +54,7 @@ public class ResourcesGenerator : MonoBehaviour
     {
         _timeManager = TimeManager.Instance;
         TimeManager.onMorningStarted += (sender, arg) => { FillUpRegularItems(); };
-        TimeManager.onNightStarted += (sender, arg) =>
-        {
-            StartCoroutine(FillUpNightItems());
-        };
+        TimeManager.onNightStarted += (sender, arg) => { StartCoroutine(FillUpNightItems()); };
     }
 
     public void FillUpRegularItems()
@@ -83,13 +80,13 @@ public class ResourcesGenerator : MonoBehaviour
 
         if (nightItemTypes.Count != 0)
         {
-            yield return new WaitForSeconds(5f + Random.value*9);
+            yield return new WaitForSeconds(5f + Random.value * 9);
             FillUpItems(nightItemTypes);
-            yield return new WaitForSeconds(12f + Random.value*10);
+            yield return new WaitForSeconds(12f + Random.value * 10);
             FillUpItems(nightItemTypes);
-            yield return new WaitForSeconds(8f + Random.value*10);
+            yield return new WaitForSeconds(8f + Random.value * 10);
             FillUpItems(nightItemTypes);
-            yield return new WaitForSeconds(8f + Random.value*10);
+            yield return new WaitForSeconds(8f + Random.value * 10);
             FillUpItems(nightItemTypes);
         }
     }
@@ -190,10 +187,10 @@ public class ResourcesGenerator : MonoBehaviour
             // we accept at least the fraction
             int minAcceptableAmount =
                 Mathf.RoundToInt((item.quantityIn16X16 + Mathf.Round((Random.value - .5f) * 2 * item.variance)) *
-                                item.fractionNormalDay);
-            if(minAcceptableAmount <= 0)
+                                 item.fractionNormalDay);
+            if (minAcceptableAmount <= 0)
                 continue;
-            
+
             HashSet<WorldItem> itemsInChunk;
             if (!chunk.TryGetValue(item.Id(), out itemsInChunk))
             {
@@ -207,14 +204,20 @@ public class ResourcesGenerator : MonoBehaviour
             {
                 if (availableItemsInPool.TryDequeue(out WorldItem poolItem))
                 {
-                    PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, randomSeed, item);
-                    itemsInChunk.Add(poolItem);
+                    if (PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, randomSeed, item))
+                    {
+                        itemsInChunk.Add(poolItem);
+                    }
+                    else
+                    {
+                        availableItemsInPool.Enqueue(poolItem);
+                    }
                 }
             }
         }
     }
 
-    private void PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total, float seed,
+    private bool PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total, float seed,
         SpreadItemDefinition itemDefinition)
     {
         // Calling Reset is important before spawning item from pool somewhere in the world!
@@ -223,7 +226,7 @@ public class ResourcesGenerator : MonoBehaviour
         for (int j = 0; j < itemDefinition.numberRetries; j++)
         {
             var noiseX = Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkX + seed, chunkX * 2 - i);
-            var noiseY = Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8  + chunkY + seed, chunkY * 2 - i);
+            var noiseY = Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkY + seed, chunkY * 2 - i);
             var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
             var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
             var coords = Coords.Of(cellX, cellY);
@@ -241,8 +244,8 @@ public class ResourcesGenerator : MonoBehaviour
                 continue;
 
             var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
-            worldPosition += new Vector2(Random.value - .5f, Random.value - .5f);
-            
+            worldPosition += new Vector2(Random.value - .5f, Random.value - .5f) * .5f;
+
             var newPosition = new Vector3(worldPosition.x, terrainHeight + .35f,
                 worldPosition.y);
             var go = ((MonoBehaviour) poolItem).gameObject;
@@ -251,8 +254,10 @@ public class ResourcesGenerator : MonoBehaviour
             // TODO delete debug line
             Debug.DrawRay(newPosition, Vector3.up * 10, Color.gray, 60);
 
-            return;
+            return true;
         }
+
+        return false;
     }
 
     private void FixedUpdate()
@@ -271,7 +276,7 @@ public class ResourcesGenerator : MonoBehaviour
         var cellPosition = worldCells.GetCellPosition(player.transform.position);
         var chunkX = cellPosition.X / 16;
         var chunkY = cellPosition.Y / 16;
-        playerChunk = Coords.Of(chunkX,chunkY);
+        playerChunk = Coords.Of(chunkX, chunkY);
 
         HashSet<Coords> currentChunks = new HashSet<Coords>();
 
