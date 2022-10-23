@@ -3300,7 +3300,7 @@ MonoBehaviour:
     maxCustardLevel: 0
     minTerrainLevel: 5
     maxTerrainLevel: 14
-    dontSpawnNearPlayer: 0
+    dontSpawnNearPlayer: 1
     numberRetries: 3
   - prefab: {fileID: 8682344909492640671, guid: 30103aed2e20d5a45acde190082438d1, type: 3}
     quantityIn16X16: 1
