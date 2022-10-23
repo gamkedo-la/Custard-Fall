@@ -6,8 +6,9 @@ using UnityEngine;
 public class SmallCreamyConeTree : InhaleListener
 {
     
-    private void Awake()
+    protected override void Start()
     {
+        base.Start();
         AddObstacleToWorld(2);
     }
 

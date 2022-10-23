@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Volcano : InhaleListener
 {
-    private void Awake()
+    protected override void Start()
     {
+        base.Start();
         AddObstacleToWorld(2);
     }
 

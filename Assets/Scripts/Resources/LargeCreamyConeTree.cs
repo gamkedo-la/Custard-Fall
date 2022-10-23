@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class LargeCreamyConeTree : InhaleListener
 {
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         AddObstacleToWorld(2);
     }
 

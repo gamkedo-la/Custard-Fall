@@ -34,7 +34,6 @@ public class DisappearEffect : MonoBehaviour
     {
         _targetAlpha = 1;
         _textMesh.color = _color;
-        Debug.Log(_color.a);
         _textMesh.CrossFadeAlpha(_color.a,0,true);
     }
 }

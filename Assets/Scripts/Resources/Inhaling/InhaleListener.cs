@@ -28,7 +28,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
         }
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         _wobble = GetComponent<Wobble>();
         _wobbleInitialized = _wobble != null;
