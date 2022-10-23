@@ -16,8 +16,8 @@ public class LargeCreamyConeTree : InhaleListener
         var position = gameObject.transform.position;
         var cellPosition = worldCells.GetCellPosition(position.x, position.z);
         var centerTerrainHeight = worldCells.GetTerrainHeightAt(cellPosition);
-        for (int i = -2; i < 2; i++)
-        for (int j = -2; j < 2; j++)
+        for (int i = -1; i < 1; i++)
+        for (int j = -1; j < 1; j++)
         {
             var localX = cellPosition.X + i;
             var localY = cellPosition.Y + j;
