@@ -33,6 +33,7 @@ public class SmallCreamyConeTree : InhaleListener
         base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
+            AddObstacleToWorld(-2);
             gameObject.SetActive(false);
         }
     }
