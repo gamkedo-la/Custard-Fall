@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8676576831297531626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7161474476943604578}
+  - component: {fileID: 4385387227174738258}
+  m_Layer: 0
+  m_Name: Volcano
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7161474476943604578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8676576831297531626}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 21.86, y: 7.97, z: -50.71}
+  m_LocalScale: {x: 0.83206, y: 0.83206, z: 0.83206}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7252444302162263555}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4385387227174738258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8676576831297531626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff79d3615a1fbef4893551ca328edb09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  hasInhaleFocus: 0
+  interactionMessage: dangerous volcano
+  usedUp: 0
+--- !u!1001 &488459014769387862
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7161474476943604578}
+    m_Modifications:
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7577677890871168495, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_Name
+      value: Crusted_Custard_Volcano
+      objectReference: {fileID: 0}
+    - target: {fileID: 8871988095928574479, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: interactionMessage
+      value: dangerous volcano
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+--- !u!4 &7252444302162263555 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7089370910226208597, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+  m_PrefabInstance: {fileID: 488459014769387862}
+  m_PrefabAsset: {fileID: 0}
