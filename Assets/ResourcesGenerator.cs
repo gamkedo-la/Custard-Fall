@@ -233,6 +233,10 @@ public class ResourcesGenerator : MonoBehaviour
 
             if (WorldCells.IsOutOfBounds(coords))
                 continue;
+            
+            // dont spawn on other items
+            if(worldCells.GetWorldItemHeightAt(coords)!=0)
+                continue;
             // some items can only spawn in custard
             var currentCustardLevel = _custardState.GetCurrentCustardLevelAt(coords);
             if (currentCustardLevel < itemDefinition.minCustardLevel ||
