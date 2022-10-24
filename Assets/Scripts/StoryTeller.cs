@@ -27,7 +27,7 @@ public class StoryTeller : MonoBehaviour
             if (day == 1)
             {
                 // we do not want to overwhelm the player with infos on the start of the game
-                timeTillNextMessage = 1.5f;
+                timeTillNextMessage = 1f;
                 messages.Enqueue("Since the Custard fell,\nit rises with the tide every day.");
                 messages.Enqueue("");
                 messages.Enqueue("Midday, it crawls down to the old places...");
@@ -48,7 +48,7 @@ public class StoryTeller : MonoBehaviour
         // cinematicBar.gameObject.SetActive(true);
         cinematicOverlay.CrossFadeAlpha(1,0,true);
         // cinematicBar.CrossFadeAlpha(1, 0, true);
-        yield return new WaitForSeconds(7.5f);
+        yield return new WaitForSeconds(6.5f);
         cinematicOverlay.CrossFadeAlpha(0,1.5f,true);
     }
 
