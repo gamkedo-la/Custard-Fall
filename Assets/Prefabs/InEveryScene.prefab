@@ -3275,8 +3275,8 @@ MonoBehaviour:
     dontSpawnNearPlayer: 0
     numberRetries: 3
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
-    quantityIn16X16: 7
-    variance: 8
+    quantityIn16X16: 9
+    variance: 4
     oneTime: 0
     spawnAtNight: 0
     internalName: custard-spawning-cookie
@@ -3299,7 +3299,7 @@ MonoBehaviour:
     minCustardLevel: 0
     maxCustardLevel: 0
     minTerrainLevel: 5
-    maxTerrainLevel: 14
+    maxTerrainLevel: 9
     dontSpawnNearPlayer: 1
     numberRetries: 3
   - prefab: {fileID: 8682344909492640671, guid: 30103aed2e20d5a45acde190082438d1, type: 3}

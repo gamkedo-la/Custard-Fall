@@ -7,17 +7,26 @@ public class GlowOrbItem : InhaleListener
 {
     private bool stationary = false;
 
-    
+
+    protected override void Start()
+    {
+        base.Start();
+        // exists only at night
+        if(TimeManager.Instance.IsDayTime)
+            Remove();
+        
+    }
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        if(TimeManager.Instance.IsDayTime)
+            Remove();
+    }
+
     public override void Init()
     {
         base.Init();
-
-        // exists only at night
-        TimeManager.onMorningStarted += (sender, arg) =>
-        {
-            if(!stationary){}
-                Remove();
-        };
 
         AddToInhaleQueue(new Resource("glow orb"), 1f);
     }
@@ -30,6 +39,7 @@ public class GlowOrbItem : InhaleListener
             // XD
             player.TakeDamage(-10);
         }
+
         base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
     }
 }
