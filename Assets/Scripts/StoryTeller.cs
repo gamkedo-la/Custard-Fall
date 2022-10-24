@@ -51,6 +51,8 @@ public class StoryTeller : MonoBehaviour
         // cinematicBar.CrossFadeAlpha(1, 0, true);
         yield return new WaitForSeconds(6f);
         cinematicOverlay.CrossFadeAlpha(0,1.5f,true);
+        yield return new WaitForSeconds(1.6f);
+        cinematicOverlay.gameObject.SetActive(false);
     }
 
     private void DisplayStoryText(string message)
