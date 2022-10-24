@@ -31,7 +31,7 @@ public class StoryTeller : MonoBehaviour
                 messages.Enqueue("Since the Custard fell,\n\nit has been following the tides\n\never since!");
                 messages.Enqueue("");
                 messages.Enqueue("");
-                messages.Enqueue("Midday, it crawls down\n\n - back to the old places.");
+                messages.Enqueue("Midday, it crawls down,\n\nback to the old places.");
             }
             else if (day == 4)
             {
