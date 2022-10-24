@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class GrappleSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    [Header("Components")]
+    [SerializeField] public GameObject grappleHook;
+    [Header("Positioning")]
+    [SerializeField] public Transform storedTransform;
+    [SerializeField] public Transform windupTransform;
+    private void Awake() {
+        StoredState.onStateEnter += PutAwayGrappleHook;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void PutAwayGrappleHook(object sender, System.EventArgs e){
+        grappleHook.transform.SetParent(storedTransform);
     }
 }

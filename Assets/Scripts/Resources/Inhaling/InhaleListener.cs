@@ -51,7 +51,7 @@ public class InhaleListener : MonoBehaviour, WorldItem
         worldItemsInCell.Add(this);
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (IsUsedUp() || _inhaleQueue.Count == 0)
             return;

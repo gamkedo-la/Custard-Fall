@@ -3,18 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoryTeller : MonoBehaviour
 {
     public TextMeshProUGUI text;
+    public Image cinematicOverlay;
+    // public Image cinematicBar;
+    public PauseActivator pauseActivator;
 
     private Queue<String> messages = new();
 
     private float timeTillNextMessage = 0f;
-    private float _timeInbetweenMessages = 0.4f;
+    private float _timeInbetweenMessages = 1f;
 
 
     // Start is called before the first frame update
+
     void Awake()
     {
         TimeManager.onDayComplete += (sender, day) =>
@@ -22,11 +27,11 @@ public class StoryTeller : MonoBehaviour
             if (day == 1)
             {
                 // we do not want to overwhelm the player with infos on the start of the game
-                timeTillNextMessage = 2.5f;
-                messages.Enqueue("Since the Custard fell, it rises and falls every day.");
-                messages.Enqueue("Midday, it crawls down to the old places...");
+                timeTillNextMessage = 2f;
+                messages.Enqueue("Since the Custard fell,\n\nit has been following the tides\n\never since!");
                 messages.Enqueue("");
-                messages.Enqueue("That's when we hunt for treasures and resources!");
+                messages.Enqueue("");
+                messages.Enqueue("Midday, it crawls down,\n\nback to the old places.");
             }
             else if (day == 4)
             {
@@ -34,6 +39,18 @@ public class StoryTeller : MonoBehaviour
                 messages.Enqueue("The moon is strong today...");
             }
         };
+
+        StartCoroutine(DoCinematicMagic());
+    }
+
+    private IEnumerator DoCinematicMagic()
+    {
+        cinematicOverlay.gameObject.SetActive(true);
+        // cinematicBar.gameObject.SetActive(true);
+        cinematicOverlay.CrossFadeAlpha(1,0,true);
+        // cinematicBar.CrossFadeAlpha(1, 0, true);
+        yield return new WaitForSeconds(6f);
+        cinematicOverlay.CrossFadeAlpha(0,1.5f,true);
     }
 
     private void DisplayStoryText(string message)
@@ -42,11 +59,11 @@ public class StoryTeller : MonoBehaviour
         if (message == "")
         {
             // rhetorical pause
-            timeTillNextMessage = 1.5f;
+            timeTillNextMessage = 1f;
         }
         else
         {
-            timeTillNextMessage = 6f;
+            timeTillNextMessage = 4.5f;
         }
     }
 

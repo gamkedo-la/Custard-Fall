@@ -229,7 +229,6 @@ public class Player : MonoBehaviour
             _targetLookDirection = _targetMoveDirection;
         }
     }
-
     public void OnLookAround(InputValue context)
     {
         var directionalInput = context.Get<Vector2>();
@@ -319,20 +318,21 @@ public class Player : MonoBehaviour
             PlaceItemInHand();
         }
     }
-
-    public void OnGrapple(InputValue context)
+    public static EventHandler<EventArgs> grappleWindup; 
+    public static EventHandler<EventArgs> grappleThrow;
+    public void OnGrapple(InputAction.CallbackContext context)
     {
-        if(!ownsGrapplingHook)
-            return;
+        if(!ownsGrapplingHook)return; // maybe play null sound effect
             
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
             return;
         }
-
-        if (context.isPressed)
-        {
-            // when pressed the grapple hook spins, winding up for throw
+        if(context.started){
+            grappleWindup?.Invoke(this, EventArgs.Empty);
+        }
+        if(context.performed){
+            grappleThrow?.Invoke(this, EventArgs.Empty);
         }
         // when released the grapple is thrown towards grapplePoint
         // grapplehook hits terrain it can stick to?
