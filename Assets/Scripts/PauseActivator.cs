@@ -48,6 +48,12 @@ public class PauseActivator : MonoBehaviour
         pauseCanvas.SetActive(isGamePaused);
         Time.timeScale = 1;
     }
+    
+    public void PauseGameSilently()
+    {
+        Time.timeScale = 0;
+        isGamePaused = true;
+    }
 
     public void ReturnToPauseMenu()
     {
@@ -59,7 +65,7 @@ public class PauseActivator : MonoBehaviour
     {
         return isGamePaused;
     }
-    
+
     public void ShowControlMenu()
     {
         pauseCanvas.SetActive(false);
