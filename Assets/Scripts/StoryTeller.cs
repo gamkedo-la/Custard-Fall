@@ -15,7 +15,7 @@ public class StoryTeller : MonoBehaviour
     private Queue<String> messages = new();
 
     private float timeTillNextMessage = 0f;
-    private float _timeInbetweenMessages = 0.6f;
+    private float _timeInbetweenMessages = 1f;
 
 
     // Start is called before the first frame update
@@ -27,10 +27,11 @@ public class StoryTeller : MonoBehaviour
             if (day == 1)
             {
                 // we do not want to overwhelm the player with infos on the start of the game
-                timeTillNextMessage = 1f;
-                messages.Enqueue("Since the Custard fell,\nit rises with the tide every day.");
+                timeTillNextMessage = 2f;
+                messages.Enqueue("Since the Custard fell,\n\nit has been following the tides\n\never since!");
                 messages.Enqueue("");
-                messages.Enqueue("Midday, it crawls down to the old places...");
+                messages.Enqueue("");
+                messages.Enqueue("Midday, it crawls down\n\n - back to the old places.");
             }
             else if (day == 4)
             {
@@ -48,7 +49,7 @@ public class StoryTeller : MonoBehaviour
         // cinematicBar.gameObject.SetActive(true);
         cinematicOverlay.CrossFadeAlpha(1,0,true);
         // cinematicBar.CrossFadeAlpha(1, 0, true);
-        yield return new WaitForSeconds(6.5f);
+        yield return new WaitForSeconds(6f);
         cinematicOverlay.CrossFadeAlpha(0,1.5f,true);
     }
 
@@ -58,7 +59,7 @@ public class StoryTeller : MonoBehaviour
         if (message == "")
         {
             // rhetorical pause
-            timeTillNextMessage = 1.5f;
+            timeTillNextMessage = 1f;
         }
         else
         {
