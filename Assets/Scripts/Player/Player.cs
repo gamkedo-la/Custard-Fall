@@ -334,6 +334,7 @@ public class Player : MonoBehaviour
         }
         else
         {
+            // this can only run when the OnGrapple is called and the button isn't pressed => release state
             Debug.Log($"grapple released");
             grappleReleased?.Invoke(this, EventArgs.Empty);
         }

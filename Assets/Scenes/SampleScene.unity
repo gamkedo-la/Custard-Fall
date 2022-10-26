@@ -4321,6 +4321,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d56509fb84b351d4aa4a31b3825a91bf, type: 3}
+--- !u!114 &2010965181 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7999712949534219275, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+  m_PrefabInstance: {fileID: 8634744845791239551}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2033051516
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6784,6 +6795,10 @@ PrefabInstance:
       propertyPath: iconArt.Array.data[6]
       value: 
       objectReference: {fileID: 21300000, guid: 2b0b0f4c80c56a74f865d1b2ce34854b, type: 3}
+    - target: {fileID: 4367590263835698427, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_UIInputModule
+      value: 
+      objectReference: {fileID: 2010965181}
     - target: {fileID: 4379415739341402733, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -6968,6 +6983,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7119446131267767043, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7416863472951579500, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -7006,6 +7025,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7723435998295270754, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954176872424349481, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8234934358961691265, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
