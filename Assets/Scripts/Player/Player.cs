@@ -320,7 +320,7 @@ public class Player : MonoBehaviour
     }
     public static EventHandler<EventArgs> grappleWindup; 
     public static EventHandler<EventArgs> grappleThrow;
-    public void OnGrapple(InputAction.CallbackContext context)
+    public void OnGrapple(InputValue context)
     {
         if(!ownsGrapplingHook)return; // maybe play null sound effect
             
@@ -328,10 +328,12 @@ public class Player : MonoBehaviour
         {
             return;
         }
-        if(context.started){
+
+        var pressed = context.Get<float>();
+        if(pressed>0){
             grappleWindup?.Invoke(this, EventArgs.Empty);
         }
-        if(context.performed){
+        if(context.isPressed && pressed <= 0.1f){
             grappleThrow?.Invoke(this, EventArgs.Empty);
         }
         // when released the grapple is thrown towards grapplePoint
