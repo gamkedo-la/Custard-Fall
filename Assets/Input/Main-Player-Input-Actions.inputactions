@@ -110,7 +110,7 @@
                     "id": "2e0e287c-715d-4bc2-8446-1340db39cf29",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press(behavior=2)",
                     "initialStateCheck": false
                 }
             ],
@@ -286,7 +286,7 @@
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Grapple",
                     "isComposite": false,
                     "isPartOfComposite": false

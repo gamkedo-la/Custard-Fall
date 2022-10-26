@@ -7,18 +7,17 @@ public class StoredState : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Debug.Log($"Grapple, StoredState");
-        Player.grappleWindup += TriggerWindUp;
+        Player.grapplePressed += TriggerWindUp;
         stateMachine = animator;
-        // put the grapple hook away
         // listen for controller input event
         onStateEnter?.Invoke(this, EventArgs.Empty);
     }
     private void TriggerWindUp(object sender, EventArgs e)
     {
-        stateMachine.SetTrigger("WindUp");
+        stateMachine.SetBool("WindUp", true);
     }
-    private void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
+    override public void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
     {
-        Player.grappleWindup -= TriggerWindUp;
+        Player.grapplePressed -= TriggerWindUp;
     }
 }

@@ -318,21 +318,24 @@ public class Player : MonoBehaviour
             PlaceItemInHand();
         }
     }
-    public static EventHandler<EventArgs> grappleWindup; 
-    public static EventHandler<EventArgs> grappleThrow;
-    public void OnGrapple(InputAction.CallbackContext context)
+    public static EventHandler<EventArgs> grapplePressed;
+    public static EventHandler<EventArgs> grappleReleased;
+    public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
         if(!ownsGrapplingHook)return; // maybe play null sound effect
-            
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
             return;
         }
-        if(context.started){
-            grappleWindup?.Invoke(this, EventArgs.Empty);
+        if(context.isPressed)
+        {
+            Debug.Log($"grapple pressed");
+            grapplePressed?.Invoke(this, EventArgs.Empty);
         }
-        if(context.performed){
-            grappleThrow?.Invoke(this, EventArgs.Empty);
+        else
+        {
+            Debug.Log($"grapple released");
+            grappleReleased?.Invoke(this, EventArgs.Empty);
         }
         // when released the grapple is thrown towards grapplePoint
         // grapplehook hits terrain it can stick to?

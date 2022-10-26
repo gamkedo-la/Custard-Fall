@@ -127,7 +127,6 @@ namespace Custard
                     valuesOfImpededCells.Add(cell);
                 }
             }
-
             custardVisualizer.RenderCustard(valuesOfImpededCells);
         }
 

@@ -13,6 +13,7 @@ public class GrappleSystem : MonoBehaviour
         StoredState.onStateEnter += PutAwayGrappleHook;
     }
     public void PutAwayGrappleHook(object sender, System.EventArgs e){
-        grappleHook.transform.SetParent(storedTransform);
+        grappleHook.transform.position = storedTransform.position;
+        grappleHook.transform.rotation = storedTransform.rotation;
     }
 }
