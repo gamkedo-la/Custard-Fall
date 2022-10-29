@@ -303,6 +303,28 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "",
+                    "id": "d85f5344-01bb-4716-8fdb-25ca213050d1",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Grapple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "78ca9c79-5c2f-4b42-95de-04d9bab7a7aa",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Grapple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "WASD",
                     "id": "25e8728f-7bb7-4fab-8629-3e254e9b4696",
                     "path": "2DVector",
