@@ -12,6 +12,7 @@ public class Tidesmanager : MonoBehaviour
     private readonly SortedDictionary<float, TideStep> _tidesPlanFirstTime = new SortedDictionary<float, TideStep>();
     private readonly SortedDictionary<float, TideStep> _tidesPlanNormal = new SortedDictionary<float, TideStep>();
     private readonly SortedDictionary<float, TideStep> _tidesPlanFullMoon = new SortedDictionary<float, TideStep>();
+    private readonly SortedDictionary<float, TideStep> _tidesPlanCalamity = new SortedDictionary<float, TideStep>();
 
     // a Custard Fall week has 4 days and ends always with a full moon
     public int dayOfWeek = -1;
@@ -29,7 +30,7 @@ public class Tidesmanager : MonoBehaviour
         InitPlannedTideBehavior();
 
         _weeklyPlan = new[]
-            {_tidesPlanFirstTime, _tidesPlanNormal, _tidesPlanNormal, _tidesPlanFullMoon};
+            {_tidesPlanFirstTime, _tidesPlanNormal, _tidesPlanNormal, _tidesPlanFullMoon, _tidesPlanNormal, _tidesPlanNormal, _tidesPlanCalamity};
         SetTidesDayOfWeek(0);
 
         TimeManager.onMidnightPassed += (sender, arg) => StartNextTidesDayOfWeek();
@@ -157,6 +158,16 @@ public class Tidesmanager : MonoBehaviour
             _tidesPlanFullMoon.Add(13 / 16f, new TideStep(5));
             _tidesPlanFullMoon.Add(14 / 16f, new TideStep(6));
             _tidesPlanFullMoon.Add(15 / 16f, new TideStep(7));
+
+            _tidesPlanCalamity.Add(0f, new TideStep(15));
+            _tidesPlanCalamity.Add(4 / 16f, new TideStep(7));
+            _tidesPlanCalamity.Add(7 / 16f, new TideStep(1));
+            _tidesPlanCalamity.Add(10 / 16f, new TideStep(2));
+            _tidesPlanCalamity.Add(11 / 16f, new TideStep(3));
+            _tidesPlanCalamity.Add(12 / 16f, new TideStep(4));
+            _tidesPlanCalamity.Add(13 / 16f, new TideStep(5));
+            _tidesPlanCalamity.Add(14 / 16f, new TideStep(6));
+            _tidesPlanCalamity.Add(15 / 16f, new TideStep(7));
         }
         else
         {

@@ -24,7 +24,7 @@ public class CollectibleCounterUI : MonoBehaviour
             return;
         }
 
-        counterText.text = $"{CollectibleManager.Instance.NumCollected} / {CollectibleManager.Instance.NumCollectibles} Collected";
+        counterText.text = $"{CollectibleManager.Instance.NumCollected} / {CollectibleManager.Instance.NumCollectibles} reclaimed";
     }
 
 }

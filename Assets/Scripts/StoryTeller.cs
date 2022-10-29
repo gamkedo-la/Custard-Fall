@@ -15,7 +15,9 @@ public class StoryTeller : MonoBehaviour
     private Queue<String> messages = new();
 
     private float timeTillNextMessage = 0f;
-    private float _timeInbetweenMessages = 1f;
+    private float _timeInbetweenMessages = .8f;
+    private float _timeForRethoricalPause = 1f;
+    private float _timeToReadAMessage = 5f;
 
 
     // Start is called before the first frame update
@@ -27,16 +29,21 @@ public class StoryTeller : MonoBehaviour
             if (day == 1)
             {
                 // we do not want to overwhelm the player with infos on the start of the game
-                timeTillNextMessage = 2f;
-                messages.Enqueue("Since the Custard fell,\n\nit has been following the tides\n\never since!");
-                messages.Enqueue("");
-                messages.Enqueue("");
-                messages.Enqueue("Midday, it crawls down,\n\nback to the old places.");
-            }
-            else if (day == 4)
+                timeTillNextMessage = 1.5f;
+                messages.Enqueue("The world wants to nibble at you,\nso munch back and survive!");
+                messages.Enqueue("7 days left till next calamity...");
+             }
+            else if (day == 3)
             {
                 messages.Clear();
-                messages.Enqueue("The moon is strong today...");
+                timeTillNextMessage = 1.5f;
+                messages.Enqueue("The moon feels stronger today...");
+            }
+            else if (day == 6)
+            {
+                messages.Clear();
+                timeTillNextMessage = 1.5f;
+                messages.Enqueue("The world will change tonight...\nthe custard falls.");
             }
         };
 
@@ -61,11 +68,11 @@ public class StoryTeller : MonoBehaviour
         if (message == "")
         {
             // rhetorical pause
-            timeTillNextMessage = 1f;
+            timeTillNextMessage = _timeForRethoricalPause;
         }
         else
         {
-            timeTillNextMessage = 4.5f;
+            timeTillNextMessage = _timeToReadAMessage;
         }
     }
 
