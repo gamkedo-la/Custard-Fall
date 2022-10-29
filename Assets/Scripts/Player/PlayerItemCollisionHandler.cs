@@ -22,7 +22,7 @@ public class PlayerItemCollisionHandler : MonoBehaviour
         {
             textForItemDisplay.enabled = true;
             textForItemDisplay.text = collision.GetComponent<InhaleListener>().interactionMessage;
-            //_disappearEffect.Reset();
+            _disappearEffect.Reset();
             _timeSinceActivated = Time.time;
             StartCoroutine(DisappearLater());
         }
@@ -40,7 +40,7 @@ public class PlayerItemCollisionHandler : MonoBehaviour
 
     private void Hide()
     {
-        //_disappearEffect.Activate();
+        _disappearEffect.Activate();
     }
 
     private void OnTriggerExit(Collider collision)
