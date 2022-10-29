@@ -39,6 +39,12 @@ public class StoryTeller : MonoBehaviour
                 timeTillNextMessage = 1.5f;
                 messages.Enqueue("The moon feels stronger today...");
             }
+            else if (day == 4)
+            {
+                messages.Clear();
+                timeTillNextMessage = 1.5f;
+                messages.Enqueue("3 days left till next calamity...");
+            }
             else if (day == 6)
             {
                 messages.Clear();
