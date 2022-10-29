@@ -26,26 +26,33 @@ public class StoryTeller : MonoBehaviour
     {
         TimeManager.onDayComplete += (sender, day) =>
         {
-            if (day == 1)
+            var relativeDay = day % 7;
+            if (day  == 1)
             {
                 // we do not want to overwhelm the player with infos on the start of the game
                 timeTillNextMessage = 1.5f;
                 messages.Enqueue("The world wants to nibble at you,\nso munch back and survive!");
                 messages.Enqueue("7 days left till next calamity...");
              }
-            else if (day == 3)
+            else if (relativeDay == 1)
+            {
+                messages.Clear();
+                timeTillNextMessage = 1.5f;
+                messages.Enqueue("7 days left till next calamity...");
+            }
+            else if (relativeDay == 3)
             {
                 messages.Clear();
                 timeTillNextMessage = 1.5f;
                 messages.Enqueue("The moon feels stronger today...");
             }
-            else if (day == 4)
+            else if (relativeDay == 4)
             {
                 messages.Clear();
                 timeTillNextMessage = 1.5f;
                 messages.Enqueue("3 days left till next calamity...");
             }
-            else if (day == 6)
+            else if (relativeDay == 6)
             {
                 messages.Clear();
                 timeTillNextMessage = 1.5f;
