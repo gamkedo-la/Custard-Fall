@@ -41,6 +41,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float grappleDistance = 7f;
     [SerializeField] private float grappleSpeed = 8f;
     private Vector3 grapplePoint;
+    [SerializeField]
+    private LineRenderer grappleLine;
 
 
     [SerializeField]
@@ -75,6 +77,7 @@ public class Player : MonoBehaviour
         _pauseActivator = FindObjectOfType<PauseActivator>();
 
         _mouseTargetLayerMask = LayerMask.GetMask("MousePointerTarget");
+        grappleLine.gameObject.SetActive(false);
 
         currentHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
@@ -93,9 +96,11 @@ public class Player : MonoBehaviour
         {
             transform.position =
                 Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
+            grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
             if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
             {
                 grappling = false;
+                grappleLine.gameObject.SetActive(false);
             }
 
             return;
@@ -345,7 +350,8 @@ public class Player : MonoBehaviour
 
         //On Right Click Raycast from mouse to find collider
 
-        RaycastHit[] hits = Physics.RaycastAll(playerDirectional.transform.position,
+        var playerPosition = playerDirectional.transform.position;
+        RaycastHit[] hits = Physics.RaycastAll(playerPosition,
             playerDirectional.transform.forward, grappleDistance);
         bool hitSuccess = false;
 
@@ -359,10 +365,15 @@ public class Player : MonoBehaviour
                 }
 
                 grapplePoint = hit.point;
+                grappleLine.SetPosition(1,grapplePoint);
                 hitSuccess = true;
                 grapplePoint = new Vector3(grapplePoint.x, transform.position.y, grapplePoint.z);
                 break;
             }
+        }
+        else
+        {
+            grappleLine.SetPosition(1,playerPosition + playerDirectional.transform.forward * grappleDistance);
         }
 
         if (!hitSuccess)
@@ -371,6 +382,9 @@ public class Player : MonoBehaviour
         }
 
         grappling = true;
+        grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
+        grappleLine.gameObject.SetActive(true);
+        
         nextGrappleTime = 0;
     }
 
