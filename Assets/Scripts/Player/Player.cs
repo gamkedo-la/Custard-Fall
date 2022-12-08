@@ -40,16 +40,18 @@ public class Player : MonoBehaviour
     private float nextGrappleTime = 2;
     [SerializeField] private float grappleDistance = 7f;
     [SerializeField] private float grappleSpeed = 8f;
+
+    [SerializeField]
+    private GameObject grappleMarker;
     private Vector3 grapplePoint;
     [SerializeField]
-    private LineRenderer grappleLine;
+    private Vector3 grappleIndicatorPoint;
+    [SerializeField] private LineRenderer grappleLine;
 
 
-    [SerializeField]
-    public bool ownsGrapplingHook;
+    [SerializeField] public bool ownsGrapplingHook;
     bool grappling;
     private bool _isMoveForward;
-
 
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
@@ -94,6 +96,8 @@ public class Player : MonoBehaviour
         nextGrappleTime += Time.fixedDeltaTime;
         if (grappling)
         {
+            grappleMarker.SetActive(false);
+            grappleIndicatorPoint = grapplePoint;
             transform.position =
                 Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
             grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
@@ -104,6 +108,21 @@ public class Player : MonoBehaviour
             }
 
             return;
+        }
+        else if(ownsGrapplingHook)
+        {
+            var hit = UpdateGrapplePoint();
+            if (hit)
+            {
+                grappleMarker.transform.position = grapplePoint - transform.forward + Vector3.up * .5f;
+                grappleMarker.SetActive(true);
+            }
+            else
+            {
+                grappleMarker.SetActive(false);
+                var playerTransform = transform;
+                grappleIndicatorPoint = playerTransform.position + playerTransform.forward * grappleDistance;
+            }
         }
 
         if (Time.time > nextRunningTime - cooldownTime + runningDuration)
@@ -224,7 +243,7 @@ public class Player : MonoBehaviour
     {
         _isMoveForward = input.Get<float>() > .8f;
     }
-    
+
     public void OnMoveForwardDirectional(InputValue input)
     {
         var directionalInput = input.Get<Vector2>();
@@ -234,6 +253,7 @@ public class Player : MonoBehaviour
             _targetLookDirection = _targetMoveDirection;
         }
     }
+
     public void OnLookAround(InputValue context)
     {
         var directionalInput = context.Get<Vector2>();
@@ -309,7 +329,6 @@ public class Player : MonoBehaviour
 
     public void OnDebugHealthDown(InputValue context)
     {
-
         if (currentHealth >= 0)
         {
             TakeDamage(1);
@@ -323,24 +342,27 @@ public class Player : MonoBehaviour
             PlaceItemInHand();
         }
     }
+
     public static EventHandler<EventArgs> grapplePressed;
     public static EventHandler<EventArgs> grappleReleased;
+
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
-        if(!ownsGrapplingHook)return; // maybe play null sound effect
+        if (!ownsGrapplingHook) return; // maybe play null sound effect
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
             return;
         }
-        if(context.isPressed)
+
+        if (context.isPressed)
         {
-            Debug.Log($"grapple pressed");
+            Debug.Log("grapple pressed");
             grapplePressed?.Invoke(this, EventArgs.Empty);
         }
         else
         {
             // this can only run when the OnGrapple is called and the button isn't pressed => release state
-            Debug.Log($"grapple released");
+            Debug.Log("grapple released");
             grappleReleased?.Invoke(this, EventArgs.Empty);
         }
         // when released the grapple is thrown towards grapplePoint
@@ -350,6 +372,22 @@ public class Player : MonoBehaviour
 
         //On Right Click Raycast from mouse to find collider
 
+        var hitSuccess = UpdateGrapplePoint();
+
+        grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
+        grappleLine.SetPosition(1, grapplePoint);
+        grappleLine.gameObject.SetActive(true);
+
+        if (hitSuccess)
+        {
+            grappling = true;
+            nextGrappleTime = 0;
+        }
+
+    }
+
+    private bool UpdateGrapplePoint()
+    {
         var playerPosition = playerDirectional.transform.position;
         RaycastHit[] hits = Physics.RaycastAll(playerPosition,
             playerDirectional.transform.forward, grappleDistance);
@@ -364,28 +402,13 @@ public class Player : MonoBehaviour
                     continue;
                 }
 
-                grapplePoint = hit.point;
-                grappleLine.SetPosition(1,grapplePoint);
                 hitSuccess = true;
-                grapplePoint = new Vector3(grapplePoint.x, transform.position.y, grapplePoint.z);
+                grapplePoint = new Vector3(hit.point.x, transform.position.y, hit.point.z);
                 break;
             }
         }
-        else
-        {
-            grappleLine.SetPosition(1,playerPosition + playerDirectional.transform.forward * grappleDistance);
-        }
 
-        if (!hitSuccess)
-        {
-            return;
-        }
-
-        grappling = true;
-        grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
-        grappleLine.gameObject.SetActive(true);
-        
-        nextGrappleTime = 0;
+        return hitSuccess;
     }
 
     private void PlaceItemInHand()
