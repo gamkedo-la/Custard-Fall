@@ -44,13 +44,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject grappleMarker;
     private Vector3 grapplePoint;
-    [SerializeField]
-    private Vector3 grappleIndicatorPoint;
     [SerializeField] private LineRenderer grappleLine;
 
 
     [SerializeField] public bool ownsGrapplingHook;
     bool grappling;
+    private bool grappleIntoTheVoid;
     private bool _isMoveForward;
 
 
@@ -97,7 +96,6 @@ public class Player : MonoBehaviour
         if (grappling)
         {
             grappleMarker.SetActive(false);
-            grappleIndicatorPoint = grapplePoint;
             transform.position =
                 Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
             grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
@@ -117,11 +115,14 @@ public class Player : MonoBehaviour
                 grappleMarker.transform.position = grapplePoint - transform.forward + Vector3.up * .5f;
                 grappleMarker.SetActive(true);
             }
-            else
+            else if (grappleIntoTheVoid)
             {
+                grappleLine.gameObject.SetActive(true);
+                grappleIntoTheVoid = false;
+            } else
+            {
+                grappleLine.gameObject.SetActive(false);
                 grappleMarker.SetActive(false);
-                var playerTransform = transform;
-                grappleIndicatorPoint = playerTransform.position + playerTransform.forward * grappleDistance;
             }
         }
 
@@ -374,16 +375,21 @@ public class Player : MonoBehaviour
 
         var hitSuccess = UpdateGrapplePoint();
 
+        grappleIntoTheVoid = false;
         grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
-        grappleLine.SetPosition(1, grapplePoint);
         grappleLine.gameObject.SetActive(true);
 
         if (hitSuccess)
         {
             grappling = true;
             nextGrappleTime = 0;
+            grappleLine.SetPosition(1, grapplePoint);
         }
-
+        else
+        {
+            grappleIntoTheVoid = true;
+            grappleLine.SetPosition(1, transform.position + playerDirectional.transform.forward * grappleDistance);
+        }
     }
 
     private bool UpdateGrapplePoint()
