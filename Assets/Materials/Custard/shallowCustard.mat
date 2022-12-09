@@ -80,9 +80,9 @@ Material:
     - __dirty: 1
     - _scale: 0.67
     m_Colors:
-    - _BaseColor: {r: 0.90588236, g: 0.8392157, b: 0.38039216, a: 1}
+    - _BaseColor: {r: 0.90588236, g: 0.69777423, b: 0.3803922, a: 1}
     - _BaseColorGamaSpace: {r: 1, g: 0.8179246, b: 0.08962268, a: 1}
-    - _BaseColorGammaSpace: {r: 0.86300004, g: 0.64340967, b: 0.23559901, a: 1}
+    - _BaseColorGammaSpace: {r: 0.8627451, g: 0.571046, b: 0.2352941, a: 1}
     - _Color: {r: 0.9056604, g: 0.79076475, b: 0.28622285, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 0.3773585, g: 0.18333928, b: 0.19042791, a: 1}
