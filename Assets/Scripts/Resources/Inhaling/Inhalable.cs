@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class InhaleListener : MonoBehaviour, WorldItem
+public class Inhalable : MonoBehaviour, WorldItem
 {
     public WorldCells worldCells;
     public bool hasInhaleFocus;

@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class WaffleWall1x1 : InhaleListener
+public class WaffleWall1x1 : Inhalable
 {
     private WorldCells _worldCells;
     private const int Height = 2;

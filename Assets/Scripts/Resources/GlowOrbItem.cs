@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class GlowOrbItem : InhaleListener
+public class GlowOrbItem : Inhalable
 {
     private bool stationary = false;
 

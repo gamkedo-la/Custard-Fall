@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class CookieMine : InhaleListener
+public class CookieMine : Inhalable
 {
     public override void Init()
     {

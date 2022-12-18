@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class LargeCreamyConeTree : InhaleListener
+public class LargeCreamyConeTree : Inhalable
 {
     protected override void Start()
     {

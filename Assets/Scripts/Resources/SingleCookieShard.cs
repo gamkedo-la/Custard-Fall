@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class SingleCookieShard : InhaleListener
+public class SingleCookieShard : Inhalable
 {
     public override void Init()
     {

@@ -83,7 +83,7 @@ public class Inhaler : MonoBehaviour
                 for (int i = 0; i < worldCellItems.Count; i++)
                 {
                     var item = worldCellItems[i];
-                    if (item is InhaleListener listener)
+                    if (item is Inhalable listener)
                     {
                         var worldHeight = worldCells.GetTerrainHeightAt(inhaleCell.GetCoords());
                         if (inhaleCell.GetWorldY() == worldHeight + 1)

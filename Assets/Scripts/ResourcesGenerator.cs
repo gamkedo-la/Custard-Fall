@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Custard;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // TODO use FullmoonFraction at fullmoon
@@ -14,18 +15,18 @@ public class ResourcesGenerator : MonoBehaviour
     [SerializeField] private CustardState _custardState;
     private TimeManager _timeManager;
 
-    [SerializeField] private List<SpreadItemDefinition> resourceDensityIn16X16 = new List<SpreadItemDefinition>();
+    [FormerlySerializedAs("resourceDensityIn16X16")] [SerializeField]
+    private List<RandomizedItem> randomizedItems = new List<RandomizedItem>();
 
-    private readonly Dictionary<String, Queue<WorldItem>> _generatedItemsPool =
-        new Dictionary<string, Queue<WorldItem>>();
+    private readonly Dictionary<RandomizedItem, Queue<WorldItem>> _generatedItemsPool =
+        new Dictionary<RandomizedItem, Queue<WorldItem>>();
 
-    private Dictionary<String, HashSet<WorldItem>>[,] _chunks;
+    private Dictionary<RandomizedItem, HashSet<WorldItem>>[,] _chunks;
 
     private const int NumberOfChunksX = WorldCells.BlocksWidth / 16;
     private const int NumberOfChunksY = WorldCells.BlocksHeight / 16;
 
     private bool _canBeInitiated = false;
-    private bool _isFullMoon = false;
 
     private HashSet<Coords> _activeChunks = new HashSet<Coords>();
     private Coords playerChunk = Coords.Of(255, 255);
@@ -54,8 +55,8 @@ public class ResourcesGenerator : MonoBehaviour
 
     public void FillUpRegularItems()
     {
-        List<SpreadItemDefinition> nonSpecialtemTypes = new List<SpreadItemDefinition>();
-        foreach (var itemType in resourceDensityIn16X16)
+        List<RandomizedItem> nonSpecialtemTypes = new List<RandomizedItem>();
+        foreach (var itemType in randomizedItems)
         {
             if (!itemType.spawnAtNight)
                 nonSpecialtemTypes.Add(itemType);
@@ -66,8 +67,8 @@ public class ResourcesGenerator : MonoBehaviour
 
     private IEnumerator FillUpNightItems()
     {
-        List<SpreadItemDefinition> nightItemTypes = new List<SpreadItemDefinition>();
-        foreach (var itemType in resourceDensityIn16X16)
+        List<RandomizedItem> nightItemTypes = new List<RandomizedItem>();
+        foreach (var itemType in randomizedItems)
         {
             if (itemType.spawnAtNight)
                 nightItemTypes.Add(itemType);
@@ -82,26 +83,26 @@ public class ResourcesGenerator : MonoBehaviour
 
     private void InitItemsPool()
     {
-        _chunks = new Dictionary<String, HashSet<WorldItem>>[NumberOfChunksX, NumberOfChunksY];
+        _chunks = new Dictionary<RandomizedItem, HashSet<WorldItem>>[NumberOfChunksX, NumberOfChunksY];
 
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
         for (int chunkY = 0; chunkY < NumberOfChunksY; chunkY++)
         {
             // init dictionary for later
-            var chunks = new Dictionary<String, HashSet<WorldItem>>();
+            var chunks = new Dictionary<RandomizedItem, HashSet<WorldItem>>();
             _chunks[chunkX, chunkY] = chunks;
             // create sufficient items for the item pool
-            foreach (var item in resourceDensityIn16X16)
+            foreach (var item in randomizedItems)
             {
                 for (int i = 0; i < item.quantityIn16X16 + item.variance * 2; i++)
                 {
                     var instantiated = GameObject.Instantiate(item.prefab);
                     instantiated.SetUsedUp(true);
                     instantiated.gameObject.SetActive(false);
-                    if (!_generatedItemsPool.TryGetValue(item.Id(), out var sameTypeItems))
+                    if (!_generatedItemsPool.TryGetValue(item, out var sameTypeItems))
                     {
                         sameTypeItems = new Queue<WorldItem>();
-                        _generatedItemsPool.Add(item.Id(), sameTypeItems);
+                        _generatedItemsPool.Add(item, sameTypeItems);
                     }
 
                     sameTypeItems.Enqueue(instantiated);
@@ -112,14 +113,13 @@ public class ResourcesGenerator : MonoBehaviour
         Debug.Log("item pool initialized");
     }
 
-    private void FillUpItems(List<SpreadItemDefinition> itemTypes)
+    private void FillUpItems(List<RandomizedItem> itemTypes)
     {
         if (!_canBeInitiated)
             return;
-
         Debug.Log("filling up items!");
-        TriggerHouseKeeping();
 
+        DoChunkHouseKeeping();
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
         for (int chunkY = 0; chunkY < NumberOfChunksY; chunkY++)
         {
@@ -135,8 +135,7 @@ public class ResourcesGenerator : MonoBehaviour
         UpdateActiveItems(true);
     }
 
-    // ReSharper disable Unity.PerformanceAnalysis
-    public void TriggerHouseKeeping()
+    public void DoChunkHouseKeeping()
     {
         if (!_canBeInitiated)
             return;
@@ -144,9 +143,9 @@ public class ResourcesGenerator : MonoBehaviour
         for (int chunkX = 0; chunkX < NumberOfChunksX; chunkX++)
         for (int chunkY = 0; chunkY < NumberOfChunksY; chunkY++)
         {
-            var chunk = _chunks[chunkX, chunkY];
+            var chunkItems = _chunks[chunkX, chunkY];
             HashSet<WorldItem> removed = new HashSet<WorldItem>();
-            foreach (var occupiedItemsById in chunk)
+            foreach (var occupiedItemsById in chunkItems)
             {
                 var occupiedItems = occupiedItemsById.Value;
                 foreach (var occupiedItem in occupiedItems)
@@ -165,9 +164,9 @@ public class ResourcesGenerator : MonoBehaviour
         }
     }
 
-    private void FillUpItemsForChunk(int chunkX, int chunkY, List<SpreadItemDefinition> itemTypes)
+    private void FillUpItemsForChunk(int chunkX, int chunkY, List<RandomizedItem> itemTypes)
     {
-        Dictionary<string, HashSet<WorldItem>> chunk = _chunks[chunkX, chunkY];
+        Dictionary<RandomizedItem, HashSet<WorldItem>> chunk = _chunks[chunkX, chunkY];
         foreach (var item in itemTypes)
         {
             if (!item.spawnAgain || item.dontSpawnNearPlayer && chunkX == playerChunk.X && chunkY == playerChunk.Y)
@@ -180,20 +179,20 @@ public class ResourcesGenerator : MonoBehaviour
                 continue;
 
             HashSet<WorldItem> itemsInChunk;
-            if (!chunk.TryGetValue(item.Id(), out itemsInChunk))
+            if (!chunk.TryGetValue(item, out itemsInChunk))
             {
                 itemsInChunk = new HashSet<WorldItem>();
-                chunk.Add(item.Id(), itemsInChunk);
+                chunk.Add(item, itemsInChunk);
             }
 
             var randomSeed = Random.value * 16;
-            var availableItemsInPool = _generatedItemsPool.GetValueOrDefault(item.Id());
+            var availableItemsInPool = _generatedItemsPool.GetValueOrDefault(item);
             // fill up
             for (int i = itemsInChunk.Count; i < minAcceptableAmount; i++)
             {
-                if(Random.value > getFraction(item))
+                if (Random.value > getFraction(item))
                     continue;
-                
+
                 if (availableItemsInPool.TryDequeue(out WorldItem poolItem))
                 {
                     if (PlaceItemRandomized(chunkX, chunkY, poolItem, i, minAcceptableAmount, randomSeed, item))
@@ -209,39 +208,43 @@ public class ResourcesGenerator : MonoBehaviour
         }
     }
 
-    private static float getFraction(SpreadItemDefinition item)
+    private static float getFraction(RandomizedItem item)
     {
         return item.fractionNormalDay;
     }
 
     private bool PlaceItemRandomized(int chunkX, int chunkY, WorldItem poolItem, int i, int total, float seed,
-        SpreadItemDefinition itemDefinition)
+        RandomizedItem item)
     {
         // Calling Reset is important before spawning item from pool somewhere in the world!
         poolItem.Reset();
 
-        for (int j = 0; j < itemDefinition.numberRetries; j++)
+        for (int j = 0; j < item.numberRetries; j++)
         {
-            var noiseX = Mathf.Clamp(Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkX + seed, chunkX * 2 - i) * 2,0f,1f);
-            var noiseY = Mathf.Clamp(Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkY + seed, chunkY * 2 - i) * 2,0f,1f);
+            var noiseX =
+                Mathf.Clamp(Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkX + seed, chunkX * 2 - i) * 2, 0f,
+                    1f);
+            var noiseY =
+                Mathf.Clamp(Mathf.PerlinNoise(i * 16 * 3 + Random.value * 8 + chunkY + seed, chunkY * 2 - i) * 2, 0f,
+                    1f);
             var cellX = Mathf.RoundToInt((chunkX + noiseX) * 15);
             var cellY = Mathf.RoundToInt((chunkY + noiseY) * 15);
             var coords = Coords.Of(cellX, cellY);
 
             if (WorldCells.IsOutOfBounds(coords))
                 continue;
-            
+
             // dont spawn on other items
-            if(worldCells.GetWorldItemHeightAt(coords)!=0)
+            if (worldCells.GetWorldItemHeightAt(coords) != 0)
                 continue;
             // some items can only spawn in custard
             var currentCustardLevel = _custardState.GetCurrentCustardLevelAt(coords);
-            if (currentCustardLevel < itemDefinition.minCustardLevel ||
-                currentCustardLevel > itemDefinition.maxCustardLevel)
+            if (currentCustardLevel < item.minCustardLevel ||
+                currentCustardLevel > item.maxCustardLevel)
                 continue;
             var terrainHeight = worldCells.GetTerrainHeightAt(cellX, cellY);
-            if (terrainHeight < itemDefinition.minTerrainLevel ||
-                terrainHeight > itemDefinition.maxTerrainLevel)
+            if (terrainHeight < item.minTerrainLevel ||
+                terrainHeight > item.maxTerrainLevel)
                 continue;
 
             var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
@@ -280,7 +283,7 @@ public class ResourcesGenerator : MonoBehaviour
         if (!force && playerChunk.X == chunkX && playerChunk.Y == chunkY)
             return;
         playerChunk = Coords.Of(chunkX, chunkY);
-        
+
         HashSet<Coords> currentChunks = new HashSet<Coords>();
         var halfWindowSize = 2;
         for (int x = -halfWindowSize; x < halfWindowSize; x++)
@@ -334,9 +337,9 @@ public class ResourcesGenerator : MonoBehaviour
     }
 
     [Serializable]
-    public class SpreadItemDefinition
+    public class RandomizedItem
     {
-        public InhaleListener prefab;
+        public Inhalable prefab;
         public int quantityIn16X16;
         public int variance;
         public bool oneTime;
@@ -345,7 +348,7 @@ public class ResourcesGenerator : MonoBehaviour
         public bool spawnAtNight = false;
 
 
-        public string internalName;
+        private string internalName;
 
         public float fractionNormalDay = .7f;
         public float fractionFullmoon = 1f;
@@ -359,6 +362,17 @@ public class ResourcesGenerator : MonoBehaviour
         public string Id()
         {
             return string.IsNullOrEmpty(internalName) ? prefab.name : internalName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj) || obj != null && obj.GetType()
+                == typeof(RandomizedItem) && ((RandomizedItem) obj).Id() == Id();
+        }
+
+        public override int GetHashCode()
+        {
+            return Id().GetHashCode();
         }
     }
 }

@@ -17,11 +17,11 @@ public class PlayerItemCollisionHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        collision.GetComponent<InhaleListener>();
-        if (collision.GetComponent<InhaleListener>() != null)
+        collision.GetComponent<Inhalable>();
+        if (collision.GetComponent<Inhalable>() != null)
         {
             textForItemDisplay.enabled = true;
-            textForItemDisplay.text = collision.GetComponent<InhaleListener>().interactionMessage;
+            textForItemDisplay.text = collision.GetComponent<Inhalable>().interactionMessage;
             _disappearEffect.Reset();
             _timeSinceActivated = Time.time;
             StartCoroutine(DisappearLater());
@@ -45,8 +45,8 @@ public class PlayerItemCollisionHandler : MonoBehaviour
 
     private void OnTriggerExit(Collider collision)
     {
-        collision.GetComponent<InhaleListener>();
-        if (collision.GetComponent<InhaleListener>() != null)
+        collision.GetComponent<Inhalable>();
+        if (collision.GetComponent<Inhalable>() != null)
         {
             Hide();
         }

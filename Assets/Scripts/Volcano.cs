@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Volcano : InhaleListener
+public class Volcano : Inhalable
 {
     protected override void Start()
     {

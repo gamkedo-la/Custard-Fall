@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class GrapplingHookCollectible : InhaleListener
+public class GrapplingHookCollectible : Inhalable
 {
 
     [SerializeField]

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Collectible : InhaleListener
+public class Collectible : Inhalable
 {
 
     public static EventHandler<int> onCollectiblePickup;
