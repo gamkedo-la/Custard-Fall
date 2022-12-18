@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 // TODO use FullmoonFraction at fullmoon
-public class ResourcesGenerator : MonoBehaviour
+public class ItemRandomizer : MonoBehaviour
 {
     [SerializeField] private Tidesmanager tidesmanager;
     [SerializeField] private Player player;
