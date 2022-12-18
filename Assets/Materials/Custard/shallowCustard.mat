@@ -82,8 +82,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.90588236, g: 0.69777423, b: 0.3803922, a: 1}
     - _BaseColorGamaSpace: {r: 1, g: 0.8179246, b: 0.08962268, a: 1}
-    - _BaseColorGammaSpace: {r: 0.88, g: 0.55683696, b: 0.3344, a: 1}
-    - _Color: {r: 0.8627451, g: 0.57254905, b: 0.23529412, a: 1}
+    - _BaseColorGammaSpace: {r: 0.8, g: 0.5236364, b: 0.28000003, a: 1}
+    - _Color: {r: 0.8627451, g: 0.5490196, b: 0.2352941, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 0.3773585, g: 0.18333928, b: 0.19042791, a: 1}
   m_BuildTextureStacks: []

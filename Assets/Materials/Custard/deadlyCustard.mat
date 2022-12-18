@@ -82,7 +82,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 0.6392157, b: 0.007843138, a: 1}
     - _BaseColorGamaSpace: {r: 1, g: 0.8179246, b: 0.08962268, a: 1}
-    - _BaseColorGammaSpace: {r: 0.873, g: 0.5245659, b: 0.3216316, a: 1}
+    - _BaseColorGammaSpace: {r: 0.81, g: 0.46188834, b: 0.27539998, a: 1}
     - _Color: {r: 0.8980392, g: 0.5411765, b: 0.18431374, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularColor: {r: 0.3773585, g: 0.18333928, b: 0.19042791, a: 1}
