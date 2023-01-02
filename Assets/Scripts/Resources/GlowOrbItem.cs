@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class GlowOrbItem : Inhalable
 {
-    private bool stationary = false;
-
 
     protected override void Start()
     {
