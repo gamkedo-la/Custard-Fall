@@ -5271,6 +5271,7 @@ MonoBehaviour:
   grappleCooldownTime: 1.5
   grappleDistance: 11
   grappleSpeed: 11.5
+  grappleMarker: {fileID: 0}
   grappleLine: {fileID: 4890982066620614929}
   ownsGrapplingHook: 0
   gameplayScheme:
@@ -5908,7 +5909,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1
