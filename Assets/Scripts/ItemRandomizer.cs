@@ -29,7 +29,7 @@ public class ItemRandomizer : MonoBehaviour
     private bool _canBeInitiated = false;
 
     private HashSet<Coords> _activeChunks = new HashSet<Coords>();
-    private Coords playerChunk = Coords.Of(255, 255);
+    private Coords _playerChunk = Coords.Of(255, 255);
 
     // Start is called before the first frame update
     void Start()
@@ -166,10 +166,11 @@ public class ItemRandomizer : MonoBehaviour
 
     private void FillUpItemsForChunk(int chunkX, int chunkY, List<RandomizedItem> itemTypes)
     {
+        var chunkThePlayerIsIn = peekCurrentPlayerChunk();
         Dictionary<RandomizedItem, HashSet<WorldItem>> chunk = _chunks[chunkX, chunkY];
         foreach (var item in itemTypes)
         {
-            if (!item.spawnAgain || item.dontSpawnNearPlayer && chunkX == playerChunk.X && chunkY == playerChunk.Y)
+            if (!item.spawnAgain || item.dontSpawnNearPlayer &&  chunkX == chunkThePlayerIsIn.X && chunkY == chunkThePlayerIsIn.Y)
                 continue;
 
             // minAcceptableAmount for this round; we try to fill up complying to definition
@@ -274,23 +275,22 @@ public class ItemRandomizer : MonoBehaviour
         if (!_canBeInitiated)
             return;
 
-        var cellPosition = worldCells.GetCellPosition(player.transform.position);
-        var chunkX = cellPosition.X / 16;
-        var chunkY = cellPosition.Y / 16;
+        var currentPlayerChunk = peekCurrentPlayerChunk();
+        _playerChunk = currentPlayerChunk;
 
         if (force)
             _activeChunks.Clear();
-        if (!force && playerChunk.X == chunkX && playerChunk.Y == chunkY)
+        else if(currentPlayerChunk.X == _playerChunk.X && currentPlayerChunk.Y == _playerChunk.Y)
+            // still same chunk
             return;
-        playerChunk = Coords.Of(chunkX, chunkY);
 
         HashSet<Coords> currentChunks = new HashSet<Coords>();
         var halfWindowSize = 2;
         for (int x = -halfWindowSize; x < halfWindowSize; x++)
         for (int y = -halfWindowSize; y < halfWindowSize; y++)
         {
-            var currentChunkX = chunkX - x;
-            var currentChunkY = chunkY - y;
+            var currentChunkX = _playerChunk.X - x;
+            var currentChunkY = _playerChunk.Y - y;
             if (currentChunkX is >= 0 and < NumberOfChunksX && currentChunkY is >= 0 and < NumberOfChunksY)
             {
                 currentChunks.Add(Coords.Of(currentChunkX, currentChunkY));
@@ -298,6 +298,15 @@ public class ItemRandomizer : MonoBehaviour
         }
 
         ActivateChunks(currentChunks);
+    }
+
+    private Coords peekCurrentPlayerChunk()
+    {
+        var cellPosition = worldCells.GetCellPosition(player.transform.position);
+        var chunkX = cellPosition.X / 16;
+        var chunkY = cellPosition.Y / 16;
+        var currentPlayerChunk = Coords.Of(chunkX, chunkY);
+        return currentPlayerChunk;
     }
 
     private void ActivateChunks(HashSet<Coords> currentChunks)
