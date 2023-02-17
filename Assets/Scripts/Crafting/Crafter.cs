@@ -17,7 +17,7 @@ public class Crafter : MonoBehaviour
             foreach (var costForSlot in cost)
             {
                 var inventorySlot = costForSlot.Key;
-                inventorySlot.Amount -= costForSlot.Value;
+                inventory.AddOrSubResourceAmount(inventorySlot.Resource, -costForSlot.Value);
                 Debug.Log("... yeah");
             }
         }
