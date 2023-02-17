@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CraftReceiver))]
 public class Crafter : MonoBehaviour
 {
     [SerializeField] private Inventory inventory;
+    [SerializeField] private CraftReceiver craftReceiver;
 
     public void CraftItem(CraftableItem item)
     {
@@ -18,7 +20,7 @@ public class Crafter : MonoBehaviour
             {
                 var inventorySlot = costForSlot.Key;
                 inventory.AddOrSubResourceAmount(inventorySlot.Resource, -costForSlot.Value);
-                Debug.Log("... yeah");
+                craftReceiver.TakePlaceableItem(item.Item);
             }
         }
         else

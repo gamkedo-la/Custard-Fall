@@ -41,8 +41,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float grappleDistance = 7f;
     [SerializeField] private float grappleSpeed = 8f;
 
-    [SerializeField]
-    private GameObject grappleMarker;
+    [SerializeField] private GameObject grappleMarker;
     private Vector3 grapplePoint;
     [SerializeField] private LineRenderer grappleLine;
 
@@ -60,6 +59,10 @@ public class Player : MonoBehaviour
     public InputControlScheme gameplayScheme;
 
     public GameObject itemInHand;
+
+    [SerializeField] private PlaceableItem placeModeItemReference;
+
+    private Vector3 targetPoint4PlacingItem;
 
 
     //health bar
@@ -93,11 +96,29 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         nextGrappleTime += Time.fixedDeltaTime;
+
+        Vector3 playerPosition = transform.position;
+        if (!isDashing && !grappling)
+        {
+            if (placeModeItemReference)
+            {
+                // player in place mode state
+                targetPoint4PlacingItem =
+                    FindNearestPlaceModeItemPosition(playerPosition, playerDirectional.transform.forward);
+                itemInHand.transform.position = targetPoint4PlacingItem;
+                UpdatePlaceableItemState(playerPosition);
+            }
+            else if (itemInHand)
+            {
+                itemInHand.SetActive(false);
+            }
+        }
+
         if (grappling)
         {
             grappleMarker.SetActive(false);
             transform.position =
-                Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
+                Vector3.MoveTowards(playerPosition, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
             grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
             if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
             {
@@ -107,7 +128,7 @@ public class Player : MonoBehaviour
 
             return;
         }
-        else if(ownsGrapplingHook)
+        else if (ownsGrapplingHook)
         {
             var hit = UpdateGrapplePoint();
             if (hit)
@@ -119,7 +140,8 @@ public class Player : MonoBehaviour
             {
                 grappleLine.gameObject.SetActive(true);
                 grappleIntoTheVoid = false;
-            } else
+            }
+            else
             {
                 grappleLine.gameObject.SetActive(false);
                 grappleMarker.SetActive(false);
@@ -307,7 +329,7 @@ public class Player : MonoBehaviour
 
     public void OnDash(InputValue context)
     {
-        if (!isDashing && Time.time > nextRunningTime)
+        if (!isDashing && Time.time > nextRunningTime && !placeModeItemReference)
         {
             if (context.isPressed)
             {
@@ -349,7 +371,7 @@ public class Player : MonoBehaviour
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
-        if (!ownsGrapplingHook) return; // maybe play null sound effect
+        if (!ownsGrapplingHook || placeModeItemReference) return; // maybe play null sound effect
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
             return;
@@ -419,24 +441,58 @@ public class Player : MonoBehaviour
 
     private void PlaceItemInHand()
     {
-        var currentTransform = playerDirectional.transform;
-        var result = currentTransform.position;
-        var colliderBounds = _collider.bounds;
-
-        var tracePoint = result + currentTransform.forward * 1.1f;
-
-        Coords coords = worldCells.GetCellPosition(tracePoint.x, tracePoint.z);
-        // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
-        var terrainHeight = worldCells.GetHeightAt(coords);
-        var heightDifference = terrainHeight - colliderBounds.min.y;
+        var playerPosition = playerDirectional.transform.position;
         // the player cannot scale high ground
-        if (terrainHeight != 255 && heightDifference < 1.5f && itemInHand != null)
+        if (UpdatePlaceableItemState(playerPosition))
         {
-            var cellWorldPosition = worldCells.GetWorldPosition(coords);
-            // only if no other item at target position
-            if (worldCells.GetWorldItemHeightAt(coords) == 0)
-                Instantiate(itemInHand, new Vector3(cellWorldPosition.x, terrainHeight + 0.2f, cellWorldPosition.y),
-                    Quaternion.Euler(90f, 0, 90f));
+            Instantiate(placeModeItemReference.Prototype, targetPoint4PlacingItem, Quaternion.identity);
+            ExitPlaceMode();
         }
+    }
+
+    public void ExitPlaceMode()
+    {
+        Destroy(itemInHand);
+        itemInHand = null;
+        placeModeItemReference = null;
+    }
+
+    public void EnterPlaceMode(PlaceableItem item)
+    {
+        placeModeItemReference = item;
+        var playerDirectionalTransform = playerDirectional.transform;
+        var playerPosition = playerDirectionalTransform.position;
+        targetPoint4PlacingItem =
+            FindNearestPlaceModeItemPosition(playerPosition, playerDirectionalTransform.forward);
+
+        itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
+        UpdatePlaceableItemState(playerPosition);
+    }
+
+    private bool UpdatePlaceableItemState(Vector3 playerPosition)
+    {
+        var possible = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
+            new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= 1f;
+        itemInHand.SetActive(possible);
+        return possible;
+    }
+
+    private Vector3 FindNearestPlaceModeItemPosition(Vector3 position, Vector3 direction)
+    {
+        Vector3 tmpTargetPoint4PlacingItem;
+
+        var maxDistance = 3f;
+        if (Physics.Raycast(position, direction, out var hitResult, maxDistance, LayerMask.GetMask("Terrain", "Obstacles")))
+        {
+            tmpTargetPoint4PlacingItem = hitResult.point - direction * .9f;
+        }
+        else
+        {
+            tmpTargetPoint4PlacingItem = position + direction * maxDistance;
+        }
+
+        Coords coords = worldCells.GetCellPosition(tmpTargetPoint4PlacingItem.x, tmpTargetPoint4PlacingItem.z);
+        var cellBasedPosition = worldCells.GetWorldPosition(coords);
+        return new Vector3(cellBasedPosition.x,tmpTargetPoint4PlacingItem.y - .55f,cellBasedPosition.y);
     }
 }

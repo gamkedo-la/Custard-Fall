@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4228397273249691422}
   - component: {fileID: 8437276576491607139}
   - component: {fileID: 9201729503962541372}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Creamy_Cone_Tree_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
