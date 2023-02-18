@@ -5206,6 +5206,7 @@ GameObject:
   - component: {fileID: 74465695373766138}
   - component: {fileID: 4770266509914053720}
   - component: {fileID: 8279002282216483286}
+  - component: {fileID: 3490619458514794137}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5280,6 +5281,7 @@ MonoBehaviour:
     m_BindingGroup: 
     m_DeviceRequirements: []
   itemInHand: {fileID: 0}
+  placeModeItemReference: {fileID: 0}
   maxHealth: 90
   currentHealth: 0
   healthbar: {fileID: 0}
@@ -5503,6 +5505,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 1966580447810109878}
+  craftReceiver: {fileID: 3490619458514794137}
+--- !u!114 &3490619458514794137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0808212f4814f70b6104210a63345a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 9001336511291437872}
 --- !u!1 &4134362619229406679
 GameObject:
   m_ObjectHideFlags: 0

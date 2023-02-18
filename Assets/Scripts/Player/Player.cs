@@ -319,6 +319,7 @@ public class Player : MonoBehaviour
         {
             PlaceItemInHand();
         }
+
         if (context.isPressed)
         {
             inhaler.BeginInhaleInTransformDirection(4f);
@@ -378,8 +379,9 @@ public class Player : MonoBehaviour
         if (placeModeItemReference)
         {
             // cancel place mode
-           ExitPlaceMode();
+            ExitPlaceMode();
         }
+
         if (!ownsGrapplingHook) return; // maybe play null sound effect
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
@@ -491,7 +493,8 @@ public class Player : MonoBehaviour
         Vector3 tmpTargetPoint4PlacingItem;
 
         var maxDistance = 3f;
-        if (Physics.Raycast(position, direction, out var hitResult, maxDistance, LayerMask.GetMask("Terrain", "Obstacles")))
+        if (Physics.Raycast(position, direction, out var hitResult, maxDistance,
+                LayerMask.GetMask("Terrain", "Obstacles")))
         {
             tmpTargetPoint4PlacingItem = hitResult.point - direction * .9f;
         }
@@ -501,7 +504,17 @@ public class Player : MonoBehaviour
         }
 
         Coords coords = worldCells.GetCellPosition(tmpTargetPoint4PlacingItem.x, tmpTargetPoint4PlacingItem.z);
-        var cellBasedPosition = worldCells.GetWorldPosition(coords);
-        return new Vector3(cellBasedPosition.x,tmpTargetPoint4PlacingItem.y - .55f,cellBasedPosition.y);
+        var heightAtTarget = worldCells.GetHeightAt(coords);
+        Coords coordsReference = worldCells.GetCellPosition(position.x, position.z);
+        var heightAtReference = worldCells.GetHeightAt(coordsReference);
+        if (heightAtTarget == heightAtReference)
+        {
+            var cellBasedPosition = worldCells.GetWorldPosition(coords);
+            return new Vector3(cellBasedPosition.x, tmpTargetPoint4PlacingItem.y - .55f, cellBasedPosition.y);
+        }
+        else
+        {
+            return position;
+        }
     }
 }
