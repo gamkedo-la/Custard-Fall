@@ -28,6 +28,7 @@ public class InventoryUI : MonoBehaviour
 		resnameToIconIndex["Waffle wall"] = 4;
 		resnameToIconIndex["Tree Tall"] = 5;
 		resnameToIconIndex["Collectible"] = 6;
+		resnameToIconIndex["glow orb"] = 7;
 
 		inventory = Inventory.instance;
 		inventory.SetUIRef(this);
