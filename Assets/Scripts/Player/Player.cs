@@ -63,6 +63,8 @@ public class Player : MonoBehaviour
     [SerializeField] private PlaceableItem placeModeItemReference;
 
     private Vector3 targetPoint4PlacingItem;
+    private Vector3 _smoothPreviewPosition;
+    private Vector3 _velSmoothPreviewPosition = Vector3.zero;
 
 
     //health bar
@@ -105,7 +107,8 @@ public class Player : MonoBehaviour
                 // player in place mode state
                 targetPoint4PlacingItem =
                     FindNearestPlaceModeItemPosition(playerPosition, playerDirectional.transform.forward);
-                itemInHand.transform.position = targetPoint4PlacingItem;
+                _smoothPreviewPosition = Vector3.SmoothDamp(_smoothPreviewPosition, targetPoint4PlacingItem,ref _velSmoothPreviewPosition,0.042f);
+                itemInHand.transform.position = _smoothPreviewPosition;
                 UpdatePlaceableItemState(playerPosition);
             }
             else if (itemInHand)
@@ -477,6 +480,7 @@ public class Player : MonoBehaviour
             FindNearestPlaceModeItemPosition(playerPosition, playerDirectionalTransform.forward);
 
         itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
+        _smoothPreviewPosition = targetPoint4PlacingItem;
         UpdatePlaceableItemState(playerPosition);
     }
 
