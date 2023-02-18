@@ -315,6 +315,10 @@ public class Player : MonoBehaviour
 
     public void OnInhale(InputValue context)
     {
+        if (placeModeItemReference)
+        {
+            PlaceItemInHand();
+        }
         if (context.isPressed)
         {
             inhaler.BeginInhaleInTransformDirection(4f);
@@ -371,7 +375,12 @@ public class Player : MonoBehaviour
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
-        if (!ownsGrapplingHook || placeModeItemReference) return; // maybe play null sound effect
+        if (placeModeItemReference)
+        {
+            // cancel place mode
+           ExitPlaceMode();
+        }
+        if (!ownsGrapplingHook) return; // maybe play null sound effect
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
             return;
