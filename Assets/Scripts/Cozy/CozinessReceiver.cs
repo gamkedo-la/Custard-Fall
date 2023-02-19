@@ -10,7 +10,7 @@ public class CozinessReceiver : MonoBehaviour
     
 
     public float CozyLevel => cozyLevel;
-    public float DeelingCozy => feelingCozy;
+    public float FeelingCozy => feelingCozy;
 
     public void OnCozyReceive(float coziness)
     {
