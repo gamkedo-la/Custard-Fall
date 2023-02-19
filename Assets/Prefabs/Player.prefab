@@ -5533,6 +5533,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cozyLevel: 0
+  feelingCozy: 0
+  baseFillDuration: 15
 --- !u!1 &4134362619229406679
 GameObject:
   m_ObjectHideFlags: 0
