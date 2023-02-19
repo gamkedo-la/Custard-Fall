@@ -3231,6 +3231,7 @@ GameObject:
   - component: {fileID: 8634744844989316036}
   - component: {fileID: 3912554777076407078}
   - component: {fileID: 377578497760066824}
+  - component: {fileID: 8582329314383768474}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -3393,6 +3394,21 @@ MonoBehaviour:
     maxTerrainLevel: 15
     dontSpawnNearPlayer: 1
     numberRetries: 32
+--- !u!114 &8582329314383768474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8634744844989316040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c60ed10d33a821d49af467cd2fca5377, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  receivers:
+  - {fileID: 3571438178642794124}
+  searchRadius: 10
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0
@@ -6718,6 +6734,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c3cf9fe2e9ae7e46bead6e59c3c8406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3571438178642794124 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8006690096804111679, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+  m_PrefabInstance: {fileID: 6813161327211590579}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8871844313728323041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9fe7187a334b4b866edf981911376c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!198 &4350948566413775869 stripped

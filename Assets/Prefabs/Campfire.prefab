@@ -9634,6 +9634,8 @@ GameObject:
   m_Component:
   - component: {fileID: 144113269610123850}
   - component: {fileID: 144113269610123853}
+  - component: {fileID: 1910542287982107540}
+  - component: {fileID: 9132623894400947595}
   m_Layer: 0
   m_Name: Campfire
   m_TagString: Untagged
@@ -9672,6 +9674,32 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.86
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1910542287982107540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144113269610123851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 170aaf4cd5514fa4ba85ff6718404b3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: b1900b632462ff049ae11739a9ca0aa7, type: 2}
+--- !u!114 &9132623894400947595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144113269610123851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84d0bd8b37f846e41a9c0222372cf5c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coziness: 1
 --- !u!1001 &144113269750529458
 PrefabInstance:
   m_ObjectHideFlags: 0

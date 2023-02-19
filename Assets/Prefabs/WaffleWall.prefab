@@ -2070,6 +2070,8 @@ GameObject:
   - component: {fileID: 3175943349639599931}
   - component: {fileID: 835317256470959598}
   - component: {fileID: -1744009046040958364}
+  - component: {fileID: 721735576766007876}
+  - component: {fileID: 4422275303628176580}
   m_Layer: 0
   m_Name: WaffleWall
   m_TagString: Untagged
@@ -2156,6 +2158,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 1625da46ae74dec498128c511f58a24a, type: 3}
+--- !u!114 &721735576766007876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821145956041889501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 170aaf4cd5514fa4ba85ff6718404b3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: a7cb0979b2e4a054dabb80cc63e108ef, type: 2}
+--- !u!114 &4422275303628176580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8821145956041889501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84d0bd8b37f846e41a9c0222372cf5c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coziness: 0.1
 --- !u!1 &9190935558581150836
 GameObject:
   m_ObjectHideFlags: 0
