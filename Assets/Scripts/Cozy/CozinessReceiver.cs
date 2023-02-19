@@ -7,14 +7,14 @@ public class CozinessReceiver : MonoBehaviour
 
     public float CozyLevel => cozyLevel;
 
-    public void OnCozyReceive(CozyDispenser dispenser)
+    public void OnCozyReceive(float coziness)
     {
-        cozyLevel += dispenser.Coziness;
+        cozyLevel += coziness;
     }
     
-    public void OnCozyLeave(CozyDispenser dispenser)
+    public void OnCozyLeave(float coziness)
     {
-        cozyLevel -= dispenser.Coziness;
+        cozyLevel -= coziness;
         if (cozyLevel < 0)
         {
             cozyLevel = 0;

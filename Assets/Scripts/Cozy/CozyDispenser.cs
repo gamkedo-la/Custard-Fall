@@ -5,6 +5,7 @@ using UnityEngine;
 public class CozyDispenser : MonoBehaviour
 {
     [SerializeField] private float coziness;
+    [SerializeField] private int maxEffective;
 
     private CozinessManager cozinessManager;
 

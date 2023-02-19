@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +7,8 @@ public class CozinessManager : MonoBehaviour
 
     [SerializeField] private float searchRadius = 10f;
 
-    private Dictionary<CozinessReceiver, HashSet<CozyDispenser>> receivers2Dispensers = new();
-    private List<CozyDispenser> registeredDispensers = new();
+    private readonly Dictionary<CozinessReceiver, HashSet<CozyDispenser>> receivers2Dispensers = new();
+    private readonly List<CozyDispenser> registeredDispensers = new();
 
     #region Singleton
 
@@ -66,7 +64,7 @@ public class CozinessManager : MonoBehaviour
             foreach (var dispenser in leavingDispensers)
             {
                 nearDispensers.Remove(dispenser);
-                receiver.OnCozyLeave(dispenser);
+                receiver.OnCozyLeave(dispenser.Coziness);
             }
         }
 
@@ -82,7 +80,7 @@ public class CozinessManager : MonoBehaviour
                     if (!nearDispensers.Contains(dispenser))
                     {
                         nearDispensers.Add(dispenser);
-                        receiver.OnCozyReceive(dispenser);
+                        receiver.OnCozyReceive(dispenser.Coziness);
                     }
                 }
             }
