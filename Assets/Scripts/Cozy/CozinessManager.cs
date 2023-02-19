@@ -55,16 +55,22 @@ public class CozinessManager : MonoBehaviour
             var receiver = receiver2Dispensers.Key;
             var receiverPosition = receiver.transform.position;
             var nearDispensers = receiver2Dispensers.Value;
-            foreach(var dispenser in nearDispensers)
+            var leavingDispensers = new HashSet<CozyDispenser>();
+            foreach (var dispenser in nearDispensers)
             {
                 if (Vector3.Distance(receiverPosition, dispenser.transform.position) > searchRadius)
                 {
-                    nearDispensers.Remove(dispenser);
-                    receiver.OnCozyLeave(dispenser);
+                    leavingDispensers.Add(dispenser);
                 }
             }
+            foreach (var dispenser in leavingDispensers)
+            {
+                nearDispensers.Remove(dispenser);
+                receiver.OnCozyLeave(dispenser);
+            }
         }
-        
+
+
         foreach (var receiver in receivers)
         {
             var transformPosition = receiver.transform.position;
