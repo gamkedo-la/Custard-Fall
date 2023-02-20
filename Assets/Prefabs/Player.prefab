@@ -5534,7 +5534,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cozyLevel: 0
   feelingCozy: 0
-  baseFillDuration: 15
+  baseFillDuration: 30
+  cozySettings: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
 --- !u!1 &4134362619229406679
 GameObject:
   m_ObjectHideFlags: 0

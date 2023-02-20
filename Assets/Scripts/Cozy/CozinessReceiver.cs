@@ -6,7 +6,10 @@ public class CozinessReceiver : MonoBehaviour
 
     [SerializeField] private float cozyLevel;
     [SerializeField] private float feelingCozy = 0;
-    [SerializeField] private float baseFillDuration = 15f;
+    [SerializeField] private float baseFillDuration = 30f;
+    [SerializeField] private CozySettings cozySettings;
+    
+    private float _feelingCozy = 0;
     
 
     public float CozyLevel => cozyLevel;
@@ -29,14 +32,14 @@ public class CozinessReceiver : MonoBehaviour
     private void Update()
     {
         var maxValue = Mathf.Floor(cozyLevel);
-        Debug.Log(maxValue);
-        if (feelingCozy < maxValue)
+        if (_feelingCozy < maxValue)
         {
-            feelingCozy += maxValue/baseFillDuration * Time.deltaTime;
+            _feelingCozy += maxValue/baseFillDuration * Time.deltaTime;
+            feelingCozy = cozySettings.EasingFunction.Evaluate(_feelingCozy);
         }
         else
         {
-            feelingCozy = maxValue;
+            _feelingCozy = maxValue;
         }
     }
 }
