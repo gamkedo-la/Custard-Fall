@@ -1,45 +1,58 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CozinessReceiver : MonoBehaviour
 {
 
-    [SerializeField] private float cozyLevel;
-    [SerializeField] private float feelingCozy = 0;
-    [SerializeField] private float baseFillDuration = 30f;
+    [SerializeField] private float cozyLevelOfSurrounding;
+    [SerializeField] private int personalCozyLevel = 0;
+    [SerializeField] private float cozinessTillNextLevel = 0;
+    private float _cozinessTillNextLevelLinearInternal = 0;
+    [SerializeField] private float baseFillDuration = 7;
     [SerializeField] private CozySettings cozySettings;
-    
-    private float _feelingCozy = 0;
-    
 
-    public float CozyLevel => cozyLevel;
-    public float FeelingCozy => feelingCozy;
+    public float CozyLevelOfSurrounding => cozyLevelOfSurrounding;
+    public int PersonalCozyLevel => personalCozyLevel;
+    public float CozinessTillNextLevel => cozinessTillNextLevel;
+
+    private void Start()
+    {
+    }
 
     public void OnCozyReceive(float coziness)
     {
-        cozyLevel += coziness;
+        cozyLevelOfSurrounding += coziness;
     }
     
     public void OnCozyLeave(float coziness)
     {
-        cozyLevel -= coziness;
-        if (cozyLevel < 0)
+        cozyLevelOfSurrounding -= coziness;
+        if (cozyLevelOfSurrounding < 0)
         {
-            cozyLevel = 0;
+            cozyLevelOfSurrounding = 0;
         }
     }
 
     private void Update()
     {
-        var maxValue = Mathf.Floor(cozyLevel);
-        if (_feelingCozy < maxValue)
+        var possibleValue = GetEnvironmentalCoziness();
+        var maxPossibleValue = possibleValue;
+        if (personalCozyLevel < maxPossibleValue)
         {
-            _feelingCozy += maxValue/baseFillDuration * Time.deltaTime;
-            feelingCozy = cozySettings.EasingFunction.Evaluate(_feelingCozy);
+            _cozinessTillNextLevelLinearInternal += Time.deltaTime / baseFillDuration;
+            cozinessTillNextLevel = cozySettings.EasingFunction.Evaluate(_cozinessTillNextLevelLinearInternal);
+            if (cozinessTillNextLevel >= 1)
+            {
+                _cozinessTillNextLevelLinearInternal = 0;
+                cozinessTillNextLevel = 0;
+                personalCozyLevel++;
+            }
         }
-        else
-        {
-            _feelingCozy = maxValue;
-        }
+    }
+
+    private float GetEnvironmentalCoziness()
+    {
+        return Mathf.Min(Mathf.Floor(cozyLevelOfSurrounding), cozySettings.Levels.Count - 1);
     }
 }

@@ -6965,18 +6965,6 @@ PrefabInstance:
       propertyPath: cozinessReceiver
       value: 
       objectReference: {fileID: 3571438178642794124}
-    - target: {fileID: 7574857064429910964, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7574857064429910964, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7574857064429910964, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8969934920765049543, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
       propertyPath: m_Name
       value: CozyBar

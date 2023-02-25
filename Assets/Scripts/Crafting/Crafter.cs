@@ -12,8 +12,7 @@ public class Crafter : MonoBehaviour
     {
         Debug.Log("Crafting item");
         var cost = CalculateCost(item, out var craftingRequirements);
-
-        Outer:
+        
         if (craftingRequirements.Count == 0)
         {
             foreach (var costForSlot in cost)
