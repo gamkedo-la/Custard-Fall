@@ -6781,9 +6781,9 @@ MonoBehaviour:
   InsideCustard: 0
   CoveredByCustard: 0
   graceTimeForBeingInsideOrOutsideCustard: 0.6
-  timeBeforePlayerTakesDamageFromDrawning: 1
-  timeBetweenDamageTicks: 0.03
-  drowningDamage: 1
+  timeBeforePlayerTakesDamageFromDrawning: 3
+  timeBetweenDamageTicks: 2
+  drowningDamage: 30
 --- !u!114 &8634744845753951226
 MonoBehaviour:
   m_ObjectHideFlags: 0

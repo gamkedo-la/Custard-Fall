@@ -51,6 +51,8 @@ public class Player : MonoBehaviour
     private bool grappleIntoTheVoid;
     private bool _isMoveForward;
 
+    private CozinessReceiver cozinessReceiver;
+
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     private float yOffset = -.05f;
@@ -88,6 +90,8 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
         inhaler.owner = gameObject;
+
+        cozinessReceiver = GetComponent<CozinessReceiver>();
     }
 
     // Update is called once per frame
@@ -107,7 +111,8 @@ public class Player : MonoBehaviour
                 // player in place mode state
                 targetPoint4PlacingItem =
                     FindNearestPlaceModeItemPosition(playerPosition, playerDirectional.transform.forward);
-                _smoothPreviewPosition = Vector3.SmoothDamp(_smoothPreviewPosition, targetPoint4PlacingItem,ref _velSmoothPreviewPosition,0.042f);
+                _smoothPreviewPosition = Vector3.SmoothDamp(_smoothPreviewPosition, targetPoint4PlacingItem,
+                    ref _velSmoothPreviewPosition, 0.042f);
                 itemInHand.transform.position = _smoothPreviewPosition;
                 UpdatePlaceableItemState(playerPosition);
             }
@@ -209,12 +214,19 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        healthbar.SetHealth(currentHealth);
-
-        if (currentHealth <= 0)
+        if (cozinessReceiver.PersonalCozyLevel == 0 && cozinessReceiver.CozinessTillNextLevel <= 0.01f)
         {
-            Respawn();
+            currentHealth -= damage;
+            healthbar.SetHealth(currentHealth);
+
+            if (currentHealth <= 0)
+            {
+                Respawn();
+            }
+        }
+        else
+        {
+            cozinessReceiver.TakeDamage(damage / (float)maxHealth);
         }
     }
 

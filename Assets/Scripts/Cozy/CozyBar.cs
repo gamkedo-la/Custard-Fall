@@ -39,7 +39,7 @@ public class CozyBar : MonoBehaviour
         }
         else
         {
-            slider.value = Mathf.Lerp(slider.value, cozinessReceiver.CozinessTillNextLevel, Time.deltaTime);
+            slider.value = Mathf.Lerp(slider.value, cozinessReceiver.CozinessTillNextLevel, Time.deltaTime *5f);
         }
     }
 
