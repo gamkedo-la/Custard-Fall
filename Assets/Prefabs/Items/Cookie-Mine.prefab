@@ -52,6 +52,7 @@ MonoBehaviour:
   hasInhaleFocus: 0
   interactionMessage: Cookie Mine
   usedUp: 0
+  placeableItem: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
 --- !u!114 &3163973215154773292
 MonoBehaviour:
   m_ObjectHideFlags: 0
