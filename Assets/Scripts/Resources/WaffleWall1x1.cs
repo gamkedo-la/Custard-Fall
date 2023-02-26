@@ -6,18 +6,21 @@ using UnityEngine;
 public class WaffleWall1x1 : Inhalable
 {
     private WorldCells _worldCells;
+    private PlaceableItem _placeableItem;
     private const int Height = 2;
 
     public override void Init()
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Waffle wall"), 2f);
+        AddToInhaleQueue(new Resource("Waffle wall", _placeableItem), 2f);
     }
 
     private void Awake()
     {
         AddObstacleToWorld(Height);
+        var placeableItemReference = GetComponent<PlaceableItemReference>();
+        _placeableItem = placeableItemReference.Item();
     }
 
     private void AddObstacleToWorld(int height)
@@ -33,6 +36,7 @@ public class WaffleWall1x1 : Inhalable
         {
             AddObstacleToWorld(-Height);
         }
+
         base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
     }
 }

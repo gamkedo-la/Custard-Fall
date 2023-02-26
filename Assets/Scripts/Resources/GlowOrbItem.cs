@@ -26,7 +26,7 @@ public class GlowOrbItem : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("glow orb"), 1f);
+        AddToInhaleQueue(new Resource("glow orb", null), 1f);
     }
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)

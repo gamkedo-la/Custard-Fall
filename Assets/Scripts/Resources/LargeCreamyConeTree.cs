@@ -33,14 +33,14 @@ public class LargeCreamyConeTree : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 3f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", null), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", null), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", null), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", null), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", null), 2f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", null), 2f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", null), 2f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", null), 3f);
     }
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)

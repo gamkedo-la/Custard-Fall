@@ -15,7 +15,7 @@ public class Collectible : Inhalable
     {
         base.Init();
         id = ID++;
-        AddToInhaleQueue(new Resource("Collectible"), .6f);
+        AddToInhaleQueue(new Resource("Collectible", null), .6f);
     }
 
     void OnPickup()

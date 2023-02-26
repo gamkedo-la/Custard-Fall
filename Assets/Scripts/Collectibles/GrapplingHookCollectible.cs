@@ -15,7 +15,7 @@ public class GrapplingHookCollectible : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("trusty grappling hook"), .8f);
+        AddToInhaleQueue(new Resource("trusty grappling hook", null), .8f);
     }
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)

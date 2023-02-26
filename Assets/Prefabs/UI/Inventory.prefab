@@ -119,6 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2520975392906776449}
   - component: {fileID: 1549065495254942052}
+  - component: {fileID: 6245482593292846663}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -155,6 +156,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 917123785938622491}
   m_CullTransparentMesh: 1
+--- !u!114 &6245482593292846663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917123785938622491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7295d0712e50ba498cf56461a835993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsParent: {fileID: 6857067474825125989}
+  inventoryUI: {fileID: 917123785938622491}
+  iconArt:
+  - {fileID: 21300000, guid: 4601739395d23834c95826f83b3f3ec5, type: 3}
+  - {fileID: 21300000, guid: 89653693cc8bbe843b414f916ae7fbc9, type: 3}
+  - {fileID: 21300000, guid: 95c7ae88be78e4f49bd1cab75d561a25, type: 3}
+  - {fileID: 21300000, guid: db4c20e5894c16d4f8e9a42fe8acfc86, type: 3}
+  - {fileID: 21300000, guid: 1625da46ae74dec498128c511f58a24a, type: 3}
+  - {fileID: 21300000, guid: 4473b475b9c821049b0f9f851339476f, type: 3}
+  - {fileID: 21300000, guid: 554b057348f0d7a4b8ed13966db45a8e, type: 3}
+  - {fileID: 21300000, guid: f014122db5ed76949bc883a1171190a2, type: 3}
 --- !u!1001 &41974247760948901
 PrefabInstance:
   m_ObjectHideFlags: 0

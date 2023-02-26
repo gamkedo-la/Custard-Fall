@@ -10,23 +10,26 @@ public class Inventory : MonoBehaviour
 
     public static Inventory instance;
 
-    void Awake ()
+    void Awake()
     {
         if (instance != null)
         {
             Debug.LogWarning("More than one instance of Inventory found!");
             return;
         }
+
         instance = this;
     }
 
     #endregion
 
     public delegate void OnItemChanged();
+
     public OnItemChanged onItemChangedCallback;
     private InventoryUI UIRef;
 
     private readonly SortedSet<InventorySlot> _slots = new SortedSet<InventorySlot>(InventorySlot.SortIndexComparer);
+
     public void SetUIRef(InventoryUI getRef)
     {
         UIRef = getRef;
@@ -38,15 +41,16 @@ public class Inventory : MonoBehaviour
 
         // inelegant way to do it, but correct way wasn't working, so brute force :)
         // (not happening often enough for this to be any sort of performance snag)
-        foreach (InventorySlot val in _slots) {
-            if (val.Resource.Name == resource.Name) {
+        foreach (InventorySlot val in _slots)
+        {
+            if (val.Resource.Name == resource.Name)
+            {
                 slot = val;
             }
         }
 
         if (slot != null)
         {
-            // Debug.Log("already had: "+resource.Name);
             slot.Amount = amount + slot.Amount;
             if (slot.Amount <= 0)
             {
@@ -57,20 +61,17 @@ public class Inventory : MonoBehaviour
                     onItemChangedCallback.Invoke();
             }
         }
-        else if(amount > 0)
+        else if (amount > 0)
         {
             slot = new InventorySlot(resource, amount, _slots.Count);
             _slots.Add(slot);
 
-            // Debug.Log("new resource type: " + resource.Name);
-
             if (onItemChangedCallback != null)
                 onItemChangedCallback.Invoke();
-
         }
+
         UIRef.UpdateUI();
         return slot.Amount;
-
     }
 
     public int GetResourceAmount(Resource resource)
@@ -84,13 +85,12 @@ public class Inventory : MonoBehaviour
     public List<InventorySlot> GetResourceList()
     {
         List<InventorySlot> local = new List<InventorySlot>();
-        //_slots.ToList().ForEach(s => local.Add(s.name));
         SortedSet<InventorySlot>.Enumerator em = _slots.GetEnumerator();
         while (em.MoveNext())
         {
             local.Add(em.Current);
-            // Debug.Log(" item: " + em.Current.Resource.Name + "(" + em.Current.Amount + ")");
         }
+
         return local;
     }
 

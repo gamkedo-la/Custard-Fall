@@ -5,11 +5,15 @@ public class Resource : WorldItem
 {
 
     public readonly String Name;
+    [SerializeField]
+    private PlaceableItem placeableItem;
+    public PlaceableItem PlaceableItem => placeableItem;
     private bool _usedUp = false;
 
-    public Resource(string name)
+    public Resource(string name, PlaceableItem placeableItem)
     {
         Name = name;
+        this.placeableItem = placeableItem;
     }
 
     private bool Equals(Resource other)
