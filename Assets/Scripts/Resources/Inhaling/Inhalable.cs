@@ -14,7 +14,7 @@ public class Inhalable : MonoBehaviour, WorldItem
     public string interactionMessage;
     private Coords cellPosition;
 
-    [SerializeField] private bool usedUp = false;
+    private bool _usedUp = false;
 
     public void Inhale(Inhaler inhaler, float strength)
     {
@@ -32,7 +32,7 @@ public class Inhalable : MonoBehaviour, WorldItem
         _wobble = GetComponent<Wobble>();
         _wobbleInitialized = _wobble != null;
         Init();
-        usedUp = false;
+        _usedUp = false;
     }
 
     public virtual void Init()
@@ -139,21 +139,21 @@ public class Inhalable : MonoBehaviour, WorldItem
 
         GameObject go = gameObject;
         go.SetActive(false);
-        usedUp = true;
+        _usedUp = true;
     }
 
     public bool IsUsedUp()
     {
-        return usedUp;
+        return _usedUp;
     }
 
     public void SetUsedUp(bool isUsedUp)
     {
-        this.usedUp = isUsedUp;
+        this._usedUp = isUsedUp;
     }
 
     public void Reset()
     {
-        usedUp = false;
+        _usedUp = false;
     }
 }

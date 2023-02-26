@@ -37,7 +37,6 @@ public class InventorySlot : MonoBehaviour
     }
     public void AddItem(Resource newResource, int showCount)
     {
-        Debug.Log("Adding item: "+newResource.Name);
         Button.enabled = true;
         resource = newResource;
         icon.sprite = newResource.PlaceableItem.Icon;
@@ -61,7 +60,6 @@ public class InventorySlot : MonoBehaviour
 
     public void TakeItem()
     {
-        Debug.Log("taking item: "+resource.Name);
         _inventory.AddOrSubResourceAmount(resource, -1);
         Player.EnterPlaceMode(resource.PlaceableItem);
     }
