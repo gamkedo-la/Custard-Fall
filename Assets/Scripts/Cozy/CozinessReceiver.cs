@@ -57,7 +57,6 @@ public class CozinessReceiver : MonoBehaviour
 
     public void TakeDamage(float fraction)
     {
-        Debug.Log("Loosing Cozy" + fraction);
         float threshold = .01f;
         if (cozinessTillNextLevel > fraction + threshold)
         {
@@ -71,7 +70,5 @@ public class CozinessReceiver : MonoBehaviour
             personalCozyLevel--;
             cozinessTillNextLevel = 1f - fraction;
         }
-
-        Debug.Log("Result:" + personalCozyLevel + "lv and progress " + cozinessTillNextLevel);
     }
 }
