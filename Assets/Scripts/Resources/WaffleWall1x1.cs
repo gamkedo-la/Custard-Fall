@@ -7,7 +7,7 @@ public class WaffleWall1x1 : Inhalable
 {
     private WorldCells _worldCells;
     private PlaceableItem _placeableItem;
-    private const int Height = 2;
+    private const int Height = 1;
 
     public override void Init()
     {
