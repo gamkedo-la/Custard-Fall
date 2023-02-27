@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -6382225833754669015}
   - component: {fileID: 976578501932143186}
   - component: {fileID: 6433500586701100}
+  - component: {fileID: 7233577916382034024}
   m_Layer: 11
   m_Name: Creamy_Cone_Tree_2
   m_TagString: Untagged
@@ -115,7 +116,6 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Wow, that tree is tall!
-  usedUp: 0
 --- !u!65 &6433500586701100
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -129,3 +129,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2.683999, z: 2}
   m_Center: {x: 0, y: 1.3341401, z: -0.061083585}
+--- !u!114 &7233577916382034024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3635173643000569998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 170aaf4cd5514fa4ba85ff6718404b3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 6f0cc07d7c66b734e9d119b89c3467dd, type: 2}
