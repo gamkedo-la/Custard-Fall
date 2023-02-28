@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
@@ -226,7 +227,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            cozinessReceiver.TakeDamage(damage / (float)maxHealth);
+            cozinessReceiver.TakeDamage(damage / (float) maxHealth);
         }
     }
 
@@ -388,6 +389,9 @@ public class Player : MonoBehaviour
 
     public static EventHandler<EventArgs> grapplePressed;
     public static EventHandler<EventArgs> grappleReleased;
+    [SerializeField] private float maxPlaceDistance = 3f;
+    [SerializeField] private float placeAtHigherLevelThreshold = .75f;
+    [SerializeField] private float placeAtHigherLevelDistanceModifier = 1f;
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
@@ -508,25 +512,39 @@ public class Player : MonoBehaviour
     {
         Vector3 tmpTargetPoint4PlacingItem;
 
-        var maxDistance = 3f;
-        if (Physics.Raycast(position, direction, out var hitResult, maxDistance,
+        maxPlaceDistance = 3f;
+        if (Physics.Raycast(position, direction, out var hitResult, maxPlaceDistance,
                 LayerMask.GetMask("Terrain", "Obstacles")))
         {
-            tmpTargetPoint4PlacingItem = hitResult.point - direction * .9f;
+            var obstacleDistance = Vector2.Distance(new Vector2(position.x, position.z),
+                new Vector2(hitResult.point.x, hitResult.point.z));
+            Debug.Log(obstacleDistance);
+            placeAtHigherLevelThreshold = .75f;
+            if (obstacleDistance >= maxPlaceDistance - placeAtHigherLevelThreshold)
+            {
+                tmpTargetPoint4PlacingItem = hitResult.point - direction * .9f;
+            }
+            else
+            {
+                placeAtHigherLevelDistanceModifier = 1f;
+                tmpTargetPoint4PlacingItem =
+                    position + direction * (maxPlaceDistance - placeAtHigherLevelDistanceModifier);
+            }
         }
         else
         {
-            tmpTargetPoint4PlacingItem = position + direction * maxDistance;
+            tmpTargetPoint4PlacingItem = position + direction * maxPlaceDistance;
         }
 
         Coords coords = worldCells.GetCellPosition(tmpTargetPoint4PlacingItem.x, tmpTargetPoint4PlacingItem.z);
         var heightAtTarget = worldCells.GetHeightAt(coords);
         Coords coordsReference = worldCells.GetCellPosition(position.x, position.z);
         var heightAtReference = worldCells.GetHeightAt(coordsReference);
-        if (heightAtTarget == heightAtReference)
+        if (heightAtTarget >= heightAtReference - 1 && heightAtTarget <= heightAtReference + 2)
         {
             var cellBasedPosition = worldCells.GetWorldPosition(coords);
-            return new Vector3(cellBasedPosition.x, tmpTargetPoint4PlacingItem.y - .55f, cellBasedPosition.y);
+            return new Vector3(cellBasedPosition.x,
+                tmpTargetPoint4PlacingItem.y - .55f - heightAtReference + heightAtTarget, cellBasedPosition.y);
         }
         else
         {
