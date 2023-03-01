@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
     private bool _isMoveForward;
 
     private CozinessReceiver cozinessReceiver;
+    [SerializeField] private CombinatorProfileSO combinatorProfile;
 
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
@@ -475,7 +476,15 @@ public class Player : MonoBehaviour
         // the player cannot scale high ground
         if (UpdatePlaceableItemState(playerPosition))
         {
-            Instantiate(placeModeItemReference.Prototype, targetPoint4PlacingItem, Quaternion.identity);
+            var itemReceiver = combinatorProfile.CanCombine(placeModeItemReference, targetPoint4PlacingItem);
+            if (itemReceiver == null)
+            {
+                Instantiate(placeModeItemReference.Prototype, targetPoint4PlacingItem, Quaternion.identity);
+            }
+            else
+            {
+                itemReceiver.ReceiveItem(placeModeItemReference);
+            }
             ExitPlaceMode();
         }
     }
@@ -504,7 +513,24 @@ public class Player : MonoBehaviour
     {
         var possible = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
             new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= 1f;
-        itemInHand.SetActive(possible);
+        if (possible)
+        {
+            var itemReceiver = combinatorProfile.CanCombine(placeModeItemReference, targetPoint4PlacingItem);
+            if (itemReceiver == null)
+            {
+                itemInHand.SetActive(true);
+            }
+            else
+            {
+                itemInHand.SetActive(false);
+                itemReceiver.PreviewReceiveItem(placeModeItemReference);
+            }
+        }
+        else
+        {
+            itemInHand.SetActive(false);
+        }
+
         return possible;
     }
 
@@ -518,8 +544,6 @@ public class Player : MonoBehaviour
         {
             var obstacleDistance = Vector2.Distance(new Vector2(position.x, position.z),
                 new Vector2(hitResult.point.x, hitResult.point.z));
-            Debug.Log(obstacleDistance);
-            placeAtHigherLevelThreshold = .75f;
             if (obstacleDistance >= maxPlaceDistance - placeAtHigherLevelThreshold)
             {
                 tmpTargetPoint4PlacingItem = hitResult.point - direction * .9f;

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80afdf4bd39248209c0cf570b00698a6, type: 3}
+  m_Name: DefaultCombinatorProfile
+  m_EditorClassIdentifier: 
+  combinationMatrix:
+  - activeItem: {fileID: 11400000, guid: 21f0531b3b7424c42b6555abeb726078, type: 2}
+    focusedItem: {fileID: 11400000, guid: b1854407aa607aa4cb528cceef00f86f, type: 2}
+  - activeItem: {fileID: 11400000, guid: 21f0531b3b7424c42b6555abeb726078, type: 2}
+    focusedItem: {fileID: 11400000, guid: 85cdfc5821f0c2f4fab03d981dad290c, type: 2}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 6144
