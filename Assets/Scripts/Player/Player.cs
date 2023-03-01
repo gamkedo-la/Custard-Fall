@@ -112,11 +112,11 @@ public class Player : MonoBehaviour
             {
                 // player in place mode state
                 targetPoint4PlacingItem =
-                    FindNearestPlaceModeItemPosition(playerPosition, playerDirectional.transform.forward);
+                    FindNearestPlaceModeItemPosition(playerPosition, playerDirectional.transform.forward, out ItemReceiver itemReceiver);
                 _smoothPreviewPosition = Vector3.SmoothDamp(_smoothPreviewPosition, targetPoint4PlacingItem,
                     ref _velSmoothPreviewPosition, 0.042f);
                 itemInHand.transform.position = _smoothPreviewPosition;
-                UpdatePlaceableItemState(playerPosition);
+                UpdatePlaceableItemState(playerPosition, itemReceiver);
             }
             else if (itemInHand)
             {
@@ -393,6 +393,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float maxPlaceDistance = 3f;
     [SerializeField] private float placeAtHigherLevelThreshold = .75f;
     [SerializeField] private float placeAtHigherLevelDistanceModifier = 1f;
+    private ItemReceiver focusedItemReceiver;
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
@@ -474,16 +475,15 @@ public class Player : MonoBehaviour
     {
         var playerPosition = playerDirectional.transform.position;
         // the player cannot scale high ground
-        if (UpdatePlaceableItemState(playerPosition))
+        if (UpdatePlaceableItemState(playerPosition, focusedItemReceiver))
         {
-            var itemReceiver = combinatorProfile.CanCombine(placeModeItemReference, targetPoint4PlacingItem);
-            if (itemReceiver == null)
+            if (focusedItemReceiver == null)
             {
                 Instantiate(placeModeItemReference.Prototype, targetPoint4PlacingItem, Quaternion.identity);
             }
             else
             {
-                itemReceiver.ReceiveItem(placeModeItemReference);
+                focusedItemReceiver.ReceiveItem(placeModeItemReference);
             }
             ExitPlaceMode();
         }
@@ -494,6 +494,7 @@ public class Player : MonoBehaviour
         Destroy(itemInHand);
         itemInHand = null;
         placeModeItemReference = null;
+        focusedItemReceiver = null;
     }
 
     public void EnterPlaceMode(PlaceableItem item)
@@ -502,20 +503,25 @@ public class Player : MonoBehaviour
         var playerDirectionalTransform = playerDirectional.transform;
         var playerPosition = playerDirectionalTransform.position;
         targetPoint4PlacingItem =
-            FindNearestPlaceModeItemPosition(playerPosition, playerDirectionalTransform.forward);
+            FindNearestPlaceModeItemPosition(playerPosition, playerDirectionalTransform.forward, out ItemReceiver itemReceiver);
 
         itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
         _smoothPreviewPosition = targetPoint4PlacingItem;
-        UpdatePlaceableItemState(playerPosition);
+        UpdatePlaceableItemState(playerPosition, itemReceiver);
     }
 
-    private bool UpdatePlaceableItemState(Vector3 playerPosition)
+    private bool UpdatePlaceableItemState(Vector3 playerPosition, ItemReceiver itemReceiver)
     {
+        if (focusedItemReceiver!=null && itemReceiver != focusedItemReceiver)
+        {
+            focusedItemReceiver.OnPreviewLeave();
+        }
+        focusedItemReceiver = null;
+        
         var possible = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
             new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= 1f;
         if (possible)
         {
-            var itemReceiver = combinatorProfile.CanCombine(placeModeItemReference, targetPoint4PlacingItem);
             if (itemReceiver == null)
             {
                 itemInHand.SetActive(true);
@@ -524,6 +530,7 @@ public class Player : MonoBehaviour
             {
                 itemInHand.SetActive(false);
                 itemReceiver.PreviewReceiveItem(placeModeItemReference);
+                focusedItemReceiver = itemReceiver;
             }
         }
         else
@@ -534,23 +541,30 @@ public class Player : MonoBehaviour
         return possible;
     }
 
-    private Vector3 FindNearestPlaceModeItemPosition(Vector3 position, Vector3 direction)
+    private Vector3 FindNearestPlaceModeItemPosition(Vector3 position, Vector3 direction, out ItemReceiver itemReceiver)
     {
         Vector3 tmpTargetPoint4PlacingItem;
+        itemReceiver = null;
 
         maxPlaceDistance = 3f;
         if (Physics.Raycast(position, direction, out var hitResult, maxPlaceDistance,
-                LayerMask.GetMask("Terrain", "Obstacles")))
+                LayerMask.GetMask("Terrain", "Obstacles", "Interactable")))
         {
+            bool blockedByOtherItem = false;
+            if (LayerMask.LayerToName(hitResult.transform.gameObject.layer) == "Interactable")
+            {
+                blockedByOtherItem = true;
+                // set output
+                itemReceiver = combinatorProfile.CanCombine(placeModeItemReference, hitResult.point + Vector3.up);
+            }
             var obstacleDistance = Vector2.Distance(new Vector2(position.x, position.z),
                 new Vector2(hitResult.point.x, hitResult.point.z));
-            if (obstacleDistance >= maxPlaceDistance - placeAtHigherLevelThreshold)
+            if (blockedByOtherItem || obstacleDistance >= maxPlaceDistance - placeAtHigherLevelThreshold)
             {
                 tmpTargetPoint4PlacingItem = hitResult.point - direction * .9f;
             }
             else
             {
-                placeAtHigherLevelDistanceModifier = 1f;
                 tmpTargetPoint4PlacingItem =
                     position + direction * (maxPlaceDistance - placeAtHigherLevelDistanceModifier);
             }

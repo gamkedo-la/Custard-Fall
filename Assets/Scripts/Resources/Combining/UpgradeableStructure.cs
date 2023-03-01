@@ -94,6 +94,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     public bool PreviewReceiveItem(PlaceableItem material)
     {
+        Debug.Log("Preview upgrade");
         var canUpgradeWith = CanUpgradeWith(material);
         // if(canUpgradeWith)
         //     OnValidFocus?.Invoke(this, );
@@ -104,5 +105,10 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     {
         return UpgradeWith(material);
 
+    }
+
+    public void OnPreviewLeave()
+    {
+        Debug.Log("Leaving upgrade preview.");
     }
 }
