@@ -340,6 +340,7 @@ GameObject:
   - component: {fileID: 6364037155524986597}
   - component: {fileID: 907674133423362430}
   - component: {fileID: 6543988843938257523}
+  - component: {fileID: 5596722775045631836}
   - component: {fileID: 6950737515800148178}
   m_Layer: 12
   m_Name: Seat
@@ -432,6 +433,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coziness: 1
   maxEffective: 1
+--- !u!114 &5596722775045631836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6303623572148944328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002b131b4ce0463a9bb4bee16ca523ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6950737515800148178
 MonoBehaviour:
   m_ObjectHideFlags: 0

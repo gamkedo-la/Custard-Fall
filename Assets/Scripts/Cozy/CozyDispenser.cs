@@ -9,7 +9,11 @@ public class CozyDispenser : MonoBehaviour
 
     private CozinessManager cozinessManager;
 
-    public float Coziness => coziness;
+    public float Coziness
+    {
+        get => coziness;
+        set => coziness = value;
+    }
 
 
     private void Start()
