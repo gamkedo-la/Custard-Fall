@@ -210,3 +210,4 @@ MonoBehaviour:
   - resourceName: Creamy Cone Tree
     itemReference: {fileID: 11400000, guid: 6f0cc07d7c66b734e9d119b89c3467dd, type: 2}
     timeToTake: 0
+  Height: 2

@@ -266,8 +266,7 @@ public class Player : MonoBehaviour
         var heightDifference = terrainHeight - colliderBounds.min.y;
         // player cannot scale high ground
         // player can only leap from a high point if running
-        if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f &&
-            worldCells.GetWorldItemHeightAt(coords) <= 1)
+        if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f)
         {
             currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
             if (Math.Abs(heightDifference) > .0001f)

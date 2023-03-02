@@ -154,14 +154,15 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         if (previewInstance == null)
         {
             var placeableItem = upgradeLevels[currentLevel - 1].upgrade;
+            var originalTransform = transform;
             if (placeableItem)
             {
-                previewInstance = Instantiate(placeableItem.PlaceablePreview, transform);
+                previewInstance = Instantiate(placeableItem.PlaceablePreview, originalTransform.position, originalTransform.rotation);
             }
             else
             {
                 if (placeableItemReference)
-                    previewInstance = Instantiate(placeableItemReference.Item().PlaceablePreview, transform);
+                    previewInstance = Instantiate(placeableItemReference.Item().PlaceablePreview, originalTransform.position, originalTransform.rotation);
             }
         }
 

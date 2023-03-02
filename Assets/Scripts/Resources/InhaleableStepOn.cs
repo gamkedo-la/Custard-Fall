@@ -3,11 +3,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public class Pole : Inhalable
+public class InhaleableStepOn : Inhalable
 {
     private WorldCells _worldCells;
     private PlaceableItem _placeableItem;
-    private const int Height = 2;
+    [SerializeField]
+    private int Height = 2;
     private bool hasRegisteredHeight;
 
     private void Awake()
