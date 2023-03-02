@@ -13,8 +13,9 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     [SerializeField] private UpgradeConfig[] upgradeLevels;
 
     public event EventHandler<UpgradeArgs> OnProgressToLevelUp;
-    public event EventHandler<UpgradeArgs> OnValidFocus;
     public event EventHandler<UpgradeArgs> OnLevelUp;
+    public event EventHandler<UpgradeArgs> OnPreviewLeave;
+    public event EventHandler<UpgradeArgs> OnPreviewEnter;
 
     public bool IsMaxedOut()
     {
@@ -31,24 +32,31 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         if (CanUpgradeWith(material))
         {
             investedPoints++;
-            var nextUpgrade = upgradeLevels[currentLevel - 1];
+            var obtainedUpgrade = upgradeLevels[currentLevel - 1];
 
             OnProgressToLevelUp?.Invoke(this,
-                new UpgradeArgs(currentLevel, nextUpgrade.comment, nextUpgrade.requiredPoints, investedPoints, false));
+                new UpgradeArgs(currentLevel, obtainedUpgrade.Comment, obtainedUpgrade.RequiredPoints, investedPoints,
+                    false));
 
-            if (investedPoints >= nextUpgrade.RequiredPoints)
+            if (investedPoints >= obtainedUpgrade.RequiredPoints)
             {
                 currentLevel++;
-                bool maxedOut = IsMaxedOut();
-                if (!maxedOut)
+                if (IsMaxedOut())
+                {
+                    OnLevelUp?.Invoke(this,
+                        new UpgradeArgs(currentLevel, obtainedUpgrade.Comment, obtainedUpgrade.RequiredPoints,
+                            investedPoints,
+                            true));
+                }
+                else
                 {
                     investedPoints = 0;
-                    nextUpgrade = upgradeLevels[currentLevel - 1];
+                    UpgradeConfig nextUpgrade = upgradeLevels[currentLevel - 1];
+                    OnLevelUp?.Invoke(this,
+                        new UpgradeArgs(currentLevel, obtainedUpgrade.Comment, nextUpgrade.RequiredPoints,
+                            investedPoints,
+                            false));
                 }
-
-                OnLevelUp?.Invoke(this,
-                    new UpgradeArgs(currentLevel, nextUpgrade.comment, nextUpgrade.requiredPoints, investedPoints,
-                        maxedOut));
             }
 
             return true;
@@ -67,6 +75,8 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
         public string Comment => comment;
         public int RequiredPoints => requiredPoints;
+
+        public PlaceableItem upgrade;
     }
 
     public class UpgradeArgs : EventArgs
@@ -85,6 +95,15 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
             this.investedPoints = investedPoints;
             this.maxedOut = maxedOut;
         }
+
+        private UpgradeArgs()
+        {
+        }
+
+        public static UpgradeArgs Empty()
+        {
+            return new UpgradeArgs();
+        }
     }
 
     public bool CanReceiveItem(PlaceableItem material)
@@ -94,21 +113,25 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     public bool PreviewReceiveItem(PlaceableItem material)
     {
-        Debug.Log("Preview upgrade");
         var canUpgradeWith = CanUpgradeWith(material);
-        // if(canUpgradeWith)
-        //     OnValidFocus?.Invoke(this, );
+        if (canUpgradeWith)
+        {
+            var upgradeConfig = upgradeLevels[currentLevel - 1];
+            OnPreviewEnter?.Invoke(this,
+                new UpgradeArgs(currentLevel, upgradeConfig.comment, upgradeConfig.requiredPoints, investedPoints,
+                    IsMaxedOut()));
+        }
+
         return canUpgradeWith;
     }
 
     public bool ReceiveItem(PlaceableItem material)
     {
         return UpgradeWith(material);
-
     }
 
-    public void OnPreviewLeave()
+    public void LeavePreview()
     {
-        Debug.Log("Leaving upgrade preview.");
+        OnPreviewLeave?.Invoke(this, UpgradeArgs.Empty());
     }
 }

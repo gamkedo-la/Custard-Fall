@@ -15,6 +15,8 @@ using UnityEngine;
         {
             var cozyDispenser = GetComponent<CozyDispenser>();
             cozyDispenser.Coziness += 1;
+            
+            // also update the comment
             var inhalable = GetComponent<Inhalable>();
             if (inhalable)
             {

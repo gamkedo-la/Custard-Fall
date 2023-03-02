@@ -494,6 +494,7 @@ public class Player : MonoBehaviour
         Destroy(itemInHand);
         itemInHand = null;
         placeModeItemReference = null;
+        focusedItemReceiver?.LeavePreview();
         focusedItemReceiver = null;
     }
 
@@ -514,7 +515,7 @@ public class Player : MonoBehaviour
     {
         if (focusedItemReceiver!=null && itemReceiver != focusedItemReceiver)
         {
-            focusedItemReceiver.OnPreviewLeave();
+            focusedItemReceiver.LeavePreview();
         }
         focusedItemReceiver = null;
         

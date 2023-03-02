@@ -3,5 +3,5 @@
     bool CanReceiveItem(PlaceableItem material);
     bool PreviewReceiveItem(PlaceableItem material);
     bool ReceiveItem(PlaceableItem placeModeItemReference);
-    void OnPreviewLeave();
+    void LeavePreview();
 }
