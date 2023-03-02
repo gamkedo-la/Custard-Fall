@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2434565686643255774}
   - component: {fileID: 1750635512978238016}
   - component: {fileID: 606633464850426892}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cookie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1601750598963412056}
   - component: {fileID: 4097840201040917868}
   - component: {fileID: 4104852158577261849}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cookie.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1460692176949920585}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: cookie-test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,8 @@ GameObject:
   - component: {fileID: 5048714788798354512}
   - component: {fileID: 1005043756474850742}
   - component: {fileID: 2081649860317614178}
-  m_Layer: 0
+  - component: {fileID: 442073294202765709}
+  m_Layer: 12
   m_Name: Single-Cookie-Shard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -253,8 +254,6 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Cookie Shard
-  usedUp: 0
-  placeableItem: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
 --- !u!114 &5048714788798354512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +278,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2081649860317614178
 MonoBehaviour:
@@ -294,6 +293,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
+--- !u!114 &442073294202765709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3343993881124649202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4278d01bd5e045319bdd2d2c707d5d46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: 1
+  investedPoints: 0
+  expectedUpgradeMaterial: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
+  upgradeLevels:
+  - comment: 
+    requiredPoints: 1
+    upgrade: {fileID: 11400000, guid: a7cb0979b2e4a054dabb80cc63e108ef, type: 2}
 --- !u!1 &7092343330896372520
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +323,7 @@ GameObject:
   - component: {fileID: 7822984325162135983}
   - component: {fileID: 4359113728213728388}
   - component: {fileID: 1091942696716718827}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cookie.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -388,7 +406,7 @@ GameObject:
   - component: {fileID: 2804109956803341190}
   - component: {fileID: 324182825786800549}
   - component: {fileID: 6643759998937388490}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cookie.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -474,6 +492,10 @@ PrefabInstance:
     - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Name
       value: ParticleItemPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_IsActive

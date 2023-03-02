@@ -112,7 +112,8 @@ public class Player : MonoBehaviour
             {
                 // player in place mode state
                 targetPoint4PlacingItem =
-                    FindNearestPlaceModeItemPosition(playerPosition, playerDirectional.transform.forward, out ItemReceiver itemReceiver);
+                    FindNearestPlaceModeItemPosition(playerPosition, playerDirectional.transform.forward,
+                        out ItemReceiver itemReceiver);
                 _smoothPreviewPosition = Vector3.SmoothDamp(_smoothPreviewPosition, targetPoint4PlacingItem,
                     ref _velSmoothPreviewPosition, 0.042f);
                 itemInHand.transform.position = _smoothPreviewPosition;
@@ -485,6 +486,7 @@ public class Player : MonoBehaviour
             {
                 focusedItemReceiver.ReceiveItem(placeModeItemReference);
             }
+
             ExitPlaceMode();
         }
     }
@@ -500,11 +502,13 @@ public class Player : MonoBehaviour
 
     public void EnterPlaceMode(PlaceableItem item)
     {
+        Debug.Log("EnterPlaceMode.item is "+item == null);
         placeModeItemReference = item;
         var playerDirectionalTransform = playerDirectional.transform;
         var playerPosition = playerDirectionalTransform.position;
         targetPoint4PlacingItem =
-            FindNearestPlaceModeItemPosition(playerPosition, playerDirectionalTransform.forward, out ItemReceiver itemReceiver);
+            FindNearestPlaceModeItemPosition(playerPosition, playerDirectionalTransform.forward,
+                out ItemReceiver itemReceiver);
 
         itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
         _smoothPreviewPosition = targetPoint4PlacingItem;
@@ -513,12 +517,13 @@ public class Player : MonoBehaviour
 
     private bool UpdatePlaceableItemState(Vector3 playerPosition, ItemReceiver itemReceiver)
     {
-        if (focusedItemReceiver!=null && itemReceiver != focusedItemReceiver)
+        if (focusedItemReceiver != null && itemReceiver != focusedItemReceiver)
         {
             focusedItemReceiver.LeavePreview();
         }
+
         focusedItemReceiver = null;
-        
+
         var possible = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
             new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= 1f;
         if (possible)
@@ -547,17 +552,19 @@ public class Player : MonoBehaviour
         Vector3 tmpTargetPoint4PlacingItem;
         itemReceiver = null;
 
-        maxPlaceDistance = 3f;
         if (Physics.Raycast(position, direction, out var hitResult, maxPlaceDistance,
                 LayerMask.GetMask("Terrain", "Obstacles", "Interactable")))
         {
             bool blockedByOtherItem = false;
             if (LayerMask.LayerToName(hitResult.transform.gameObject.layer) == "Interactable")
             {
+                Debug.Log("blocked by other item. Is there a placeModeItemReferene:"+(placeModeItemReference == null));
                 blockedByOtherItem = true;
                 // set output
-                itemReceiver = combinatorProfile.CanCombine(placeModeItemReference, hitResult.point + Vector3.up);
+                itemReceiver =
+                    combinatorProfile.CanCombine(placeModeItemReference, hitResult.transform.position + Vector3.up);
             }
+
             var obstacleDistance = Vector2.Distance(new Vector2(position.x, position.z),
                 new Vector2(hitResult.point.x, hitResult.point.z));
             if (blockedByOtherItem || obstacleDistance >= maxPlaceDistance - placeAtHigherLevelThreshold)

@@ -7,7 +7,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 {
     [SerializeField] private int currentLevel = 1;
     [SerializeField] private int investedPoints = 0;
-    [SerializeField] private PlaceableItem validUpgrade;
+    [SerializeField] private PlaceableItem expectedUpgradeMaterial;
 
     [SerializeField] private UpgradeConfig[] upgradeLevels;
 
@@ -34,7 +34,9 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     public bool CanUpgradeWith(PlaceableItem material)
     {
-        return !IsMaxedOut() && validUpgrade == material;
+        Debug.Log("expected material is null:" + (expectedUpgradeMaterial == null));
+        Debug.Log(IsMaxedOut()+"is maxed out, checking "+material.name + " expecting "+expectedUpgradeMaterial.name);
+        return !IsMaxedOut() && expectedUpgradeMaterial == material;
     }
 
     public bool UpgradeWith(PlaceableItem material)
@@ -176,11 +178,29 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     private void HandleUpgrade(object sender, UpgradeArgs e)
     {
+        var placeableItem = upgradeLevels[e.level - 2].upgrade;
+        GameObject replacement;
+        if (placeableItem != null)
+        {
+        Debug.Log(placeableItem.name);
+            replacement = Instantiate(placeableItem.Prototype, transform);
+        }
+        else
+        {
+            Debug.Log("no internal upgrade");
+            replacement = null;
+        }
+
         if (previewInstance != null)
         {
             previewInstance.SetActive(false);
             Destroy(previewInstance);
             previewInstance = null;
+        }
+
+        if (replacement)
+        {
+            Destroy(this);
         }
     }
 }

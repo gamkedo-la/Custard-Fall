@@ -218,11 +218,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15bafb5778b74ce99b4698e05a734128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeableStructure: {fileID: 6950737515800148178}
   canvas: {fileID: 6705692951339435083}
   slots: {fileID: 1561943283417646597}
   filledSlots: {fileID: 8190169870090127966}
   previewSlots: {fileID: 3849248980912012102}
-  upgradeableStructure: {fileID: 6950737515800148178}
 --- !u!1 &2908693891514717056
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,12 +662,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   investedPoints: 0
-  validUpgrade: {fileID: 11400000, guid: 21f0531b3b7424c42b6555abeb726078, type: 2}
+  expectedUpgradeMaterial: {fileID: 11400000, guid: 21f0531b3b7424c42b6555abeb726078, type: 2}
   upgradeLevels:
   - comment: comfy red sofa
     requiredPoints: 1
+    upgrade: {fileID: 0}
   - comment: A red seating too comfy for this world
     requiredPoints: 9
+    upgrade: {fileID: 0}
 --- !u!1 &6682065839496063702
 GameObject:
   m_ObjectHideFlags: 0
