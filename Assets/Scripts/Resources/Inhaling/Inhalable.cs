@@ -15,7 +15,7 @@ public class Inhalable : MonoBehaviour, WorldItem
     public string interactionMessage;
     private Coords cellPosition;
 
-    private bool _usedUp = false;
+    protected bool _usedUp = false;
 
     [SerializeField] private InhaleItemProfile[] inhaleItemsProfile;
 
@@ -52,10 +52,20 @@ public class Inhalable : MonoBehaviour, WorldItem
 
         worldItemsInCell.Add(this);
 
+        ReFillInhaleQueue();
+    }
+
+    private void ReFillInhaleQueue()
+    {
         foreach (var profile in inhaleItemsProfile)
         {
             AddToInhaleQueue(new Resource(profile.resourceName, profile.itemReference), profile.timeToTake);
         }
+    }
+
+    public void ClearInhaleQueue()
+    {
+        _inhaleQueue.Clear();
     }
 
     protected virtual void FixedUpdate()
@@ -136,7 +146,7 @@ public class Inhalable : MonoBehaviour, WorldItem
         }
     }
 
-    protected void Remove()
+    protected virtual void Remove()
     {
         // cleanup
         List<WorldItem> worldItemsInCell;
@@ -162,7 +172,13 @@ public class Inhalable : MonoBehaviour, WorldItem
 
     public void Reset()
     {
+        ReFillInhaleQueue();
         _usedUp = false;
+    }
+
+    private void OnDestroy()
+    {
+        ClearInhaleQueue();
     }
 
     [Serializable]

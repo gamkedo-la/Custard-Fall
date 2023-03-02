@@ -8,6 +8,7 @@ public class Pole : Inhalable
     private WorldCells _worldCells;
     private PlaceableItem _placeableItem;
     private const int Height = 2;
+    private bool hasRegisteredHeight;
 
     private void Awake()
     {
@@ -18,18 +19,23 @@ public class Pole : Inhalable
 
     private void AddObstacleToWorld(int height)
     {
+        hasRegisteredHeight = height > 0;
         var position = gameObject.transform.position;
         var cellPosition = worldCells.GetCellPosition(position.x, position.z);
         worldCells.WriteWorldItemHeight(cellPosition, worldCells.GetWorldItemHeightAt(cellPosition) + height);
     }
 
-    public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
+    protected override void Remove()
     {
-        if (GetRemainingResourcesCount() == 0)
+        AddObstacleToWorld(-Height);
+        base.Remove();
+    }
+
+    private void OnDestroy()
+    {
+        if (hasRegisteredHeight)
         {
             AddObstacleToWorld(-Height);
         }
-
-        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
     }
 }

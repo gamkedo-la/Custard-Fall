@@ -43,6 +43,10 @@ public class CozinessManager : MonoBehaviour
     public void UnregisterDispenser(CozyDispenser cozyDispenser)
     {
         registeredDispensers.Remove(cozyDispenser);
+        foreach (var pair in receivers2Dispensers)
+        {
+            pair.Value.Remove(cozyDispenser);
+        }
     }
 
     private void FixedUpdate()

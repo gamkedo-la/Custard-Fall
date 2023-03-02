@@ -502,7 +502,7 @@ public class Player : MonoBehaviour
 
     public void EnterPlaceMode(PlaceableItem item)
     {
-        Debug.Log("EnterPlaceMode.item is "+item == null);
+        Debug.Log("EnterPlaceMode.item is "+(item == null));
         placeModeItemReference = item;
         var playerDirectionalTransform = playerDirectional.transform;
         var playerPosition = playerDirectionalTransform.position;

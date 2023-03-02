@@ -35,7 +35,8 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     public bool CanUpgradeWith(PlaceableItem material)
     {
         Debug.Log("expected material is null:" + (expectedUpgradeMaterial == null));
-        Debug.Log(IsMaxedOut()+"is maxed out, checking "+material.name + " expecting "+expectedUpgradeMaterial.name);
+        Debug.Log(IsMaxedOut() + "is maxed out, checking " + material.name + " expecting " +
+                  expectedUpgradeMaterial.name);
         return !IsMaxedOut() && expectedUpgradeMaterial == material;
     }
 
@@ -182,8 +183,9 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         GameObject replacement;
         if (placeableItem != null)
         {
-        Debug.Log(placeableItem.name);
-            replacement = Instantiate(placeableItem.Prototype, transform);
+            Debug.Log(placeableItem.name);
+            var originalTransform = transform;
+            replacement = Instantiate(placeableItem.Prototype, originalTransform.position, originalTransform.rotation);
         }
         else
         {
@@ -200,7 +202,8 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
         if (replacement)
         {
-            Destroy(this);
+            Debug.Log("Destroying "+gameObject.name);
+            Destroy(this.gameObject);
         }
     }
 }
