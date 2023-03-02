@@ -9,13 +9,6 @@ public class Pole : Inhalable
     private PlaceableItem _placeableItem;
     private const int Height = 2;
 
-    public override void Init()
-    {
-        base.Init();
-
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 2f);
-    }
-
     private void Awake()
     {
         AddObstacleToWorld(Height);

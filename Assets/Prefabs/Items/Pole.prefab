@@ -190,6 +190,10 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Well, it's a pole...
+  inhaleItemsProfile:
+  - resourceName: Creamy Cone Tree
+    itemReference: {fileID: 11400000, guid: 6f0cc07d7c66b734e9d119b89c3467dd, type: 2}
+    timeToTake: 2
 --- !u!114 &7575111775947911427
 MonoBehaviour:
   m_ObjectHideFlags: 0

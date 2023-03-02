@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Inhalable : MonoBehaviour, WorldItem
@@ -15,6 +16,8 @@ public class Inhalable : MonoBehaviour, WorldItem
     private Coords cellPosition;
 
     private bool _usedUp = false;
+
+    [SerializeField] private InhaleItemProfile[] inhaleItemsProfile;
 
     public void Inhale(Inhaler inhaler, float strength)
     {
@@ -48,6 +51,11 @@ public class Inhalable : MonoBehaviour, WorldItem
         }
 
         worldItemsInCell.Add(this);
+
+        foreach (var profile in inhaleItemsProfile)
+        {
+            AddToInhaleQueue(new Resource(profile.resourceName, profile.itemReference), profile.timeToTake);
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -155,5 +163,13 @@ public class Inhalable : MonoBehaviour, WorldItem
     public void Reset()
     {
         _usedUp = false;
+    }
+
+    [Serializable]
+    public class InhaleItemProfile
+    {
+        public string resourceName;
+        public PlaceableItem itemReference;
+        public float timeToTake = 1.5f;
     }
 }
