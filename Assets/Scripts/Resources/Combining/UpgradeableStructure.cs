@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-
 public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 {
     [SerializeField] private int currentLevel = 1;
@@ -12,10 +11,21 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     [SerializeField] private UpgradeConfig[] upgradeLevels;
 
+    private GameObject previewInstance;
+    private PlaceableItemReference placeableItemReference;
+
     public event EventHandler<UpgradeArgs> OnProgressToLevelUp;
     public event EventHandler<UpgradeArgs> OnLevelUp;
     public event EventHandler<UpgradeArgs> OnPreviewLeave;
     public event EventHandler<UpgradeArgs> OnPreviewEnter;
+
+    private void Awake()
+    {
+        placeableItemReference = GetComponent<PlaceableItemReference>();
+        OnPreviewEnter += PreviewUpgrade;
+        OnPreviewLeave += LeavePreviewUpgrade;
+        OnLevelUp += HandleUpgrade;
+    }
 
     public bool IsMaxedOut()
     {
@@ -73,10 +83,11 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         public string comment;
         public int requiredPoints;
 
+        [Tooltip("optional, usually on the last level")]
+        public PlaceableItem upgrade;
+
         public string Comment => comment;
         public int RequiredPoints => requiredPoints;
-
-        public PlaceableItem upgrade;
     }
 
     public class UpgradeArgs : EventArgs
@@ -133,5 +144,43 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     public void LeavePreview()
     {
         OnPreviewLeave?.Invoke(this, UpgradeArgs.Empty());
+    }
+
+    private void PreviewUpgrade(object sender, UpgradeArgs e)
+    {
+        if (previewInstance == null)
+        {
+            var placeableItem = upgradeLevels[currentLevel - 1].upgrade;
+            if (placeableItem)
+            {
+                previewInstance = Instantiate(placeableItem.PlaceablePreview, transform);
+            }
+            else
+            {
+                if (placeableItemReference)
+                    previewInstance = Instantiate(placeableItemReference.Item().PlaceablePreview, transform);
+            }
+        }
+
+        previewInstance.SetActive(true);
+    }
+
+    private void LeavePreviewUpgrade(object sender, UpgradeArgs e)
+    {
+        if (previewInstance != null)
+        {
+            previewInstance.SetActive(false);
+        }
+    }
+
+
+    private void HandleUpgrade(object sender, UpgradeArgs e)
+    {
+        if (previewInstance != null)
+        {
+            previewInstance.SetActive(false);
+            Destroy(previewInstance);
+            previewInstance = null;
+        }
     }
 }
