@@ -254,6 +254,10 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: Cookie Shard
+  inhaleItemsProfile:
+  - resourceName: Cookie shard
+    itemReference: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
+    timeToTake: 0.55
 --- !u!114 &5048714788798354512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,8 +282,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 3, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 9, y: 5, z: 9}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &2081649860317614178
 MonoBehaviour:
   m_ObjectHideFlags: 0

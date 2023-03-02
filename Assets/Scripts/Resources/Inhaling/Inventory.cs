@@ -38,6 +38,10 @@ public class Inventory : MonoBehaviour
     public int AddOrSubResourceAmount(Resource resource, int amount)
     {
         InventorySlot slot = null;
+        if (amount >= 0)
+            Debug.Log("Added " + amount + " " + resource.Name);
+        else
+            Debug.Log("Removed " + amount + " " + resource.Name);
 
         // inelegant way to do it, but correct way wasn't working, so brute force :)
         // (not happening often enough for this to be any sort of performance snag)
@@ -96,7 +100,7 @@ public class Inventory : MonoBehaviour
 
     public class InventorySlot
     {
-        public Resource Resource { get;}
+        public Resource Resource { get; }
 
         public int Amount { get; set; }
 
