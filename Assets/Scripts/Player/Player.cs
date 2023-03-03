@@ -555,7 +555,8 @@ public class Player : MonoBehaviour
                 LayerMask.GetMask("Terrain", "Obstacles", "Interactable")))
         {
             bool blockedByOtherItem = false;
-            if (LayerMask.LayerToName(hitResult.transform.gameObject.layer) == "Interactable")
+            var layerName = LayerMask.LayerToName(hitResult.transform.gameObject.layer);
+            if (layerName == "Interactable")
             {
                 Debug.Log("blocked by other item. Is there a placeModeItemReferene:"+(placeModeItemReference == null));
                 blockedByOtherItem = true;

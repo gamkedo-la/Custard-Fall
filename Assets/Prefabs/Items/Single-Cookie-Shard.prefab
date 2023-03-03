@@ -282,7 +282,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 9, y: 5, z: 9}
+  m_Size: {x: 6, y: 5, z: 6}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &2081649860317614178
 MonoBehaviour:
@@ -315,7 +315,7 @@ MonoBehaviour:
   upgradeLevels:
   - comment: 
     requiredPoints: 1
-    upgrade: {fileID: 11400000, guid: a7cb0979b2e4a054dabb80cc63e108ef, type: 2}
+    upgrade: {fileID: 11400000, guid: c7b17ec6735155646a99d2bda3835d30, type: 2}
 --- !u!1 &7092343330896372520
 GameObject:
   m_ObjectHideFlags: 0

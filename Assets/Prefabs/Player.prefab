@@ -5288,7 +5288,7 @@ MonoBehaviour:
   currentHealth: 0
   healthbar: {fileID: 0}
   maxPlaceDistance: 3
-  placeAtHigherLevelThreshold: 0.75
+  placeAtHigherLevelThreshold: 0.1
   placeAtHigherLevelDistanceModifier: 1
 --- !u!114 &4078713960622899494
 MonoBehaviour:
