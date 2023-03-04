@@ -15,6 +15,12 @@ public class Resource : WorldItem
         Name = name;
         this.placeableItem = placeableItem;
     }
+    
+    public Resource(PlaceableItem placeableItem)
+    {
+        Name = placeableItem.ResourceName;
+        this.placeableItem = placeableItem;
+    }
 
     private bool Equals(Resource other)
     {

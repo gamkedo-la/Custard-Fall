@@ -15,3 +15,4 @@ MonoBehaviour:
   prototype: {fileID: 8821145956041889501, guid: 8552564aec0c3ab45ae4b2d9c2e4cd7f, type: 3}
   placeablePreview: {fileID: 8821145956041889501, guid: 7292e3bde8058ef45a7ddbfd814356b0, type: 3}
   icon: {fileID: 21300000, guid: 9bfc0677fd5eed740aba4c04d08b4d38, type: 3}
+  resourceName: Pole

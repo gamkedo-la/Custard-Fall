@@ -15,3 +15,4 @@ MonoBehaviour:
   prototype: {fileID: 8821145956041889501, guid: 9ede45b9297c1924a956b94090e70575, type: 3}
   placeablePreview: {fileID: 8821145956041889501, guid: 9b31e167b997a784e9eef1304c64627b, type: 3}
   icon: {fileID: 21300000, guid: 2da13f4520ca050469b9bce9ec129f6d, type: 3}
+  resourceName: Waffle wall

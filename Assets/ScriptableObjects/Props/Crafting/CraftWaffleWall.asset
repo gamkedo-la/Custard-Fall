@@ -15,4 +15,4 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: a7cb0979b2e4a054dabb80cc63e108ef, type: 2}
   requirements:
   - resourceName: Cookie shard
-    amount: 7
+    amount: 4

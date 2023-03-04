@@ -10,8 +10,8 @@ public class Crafter : MonoBehaviour
 
     public void CraftItem(CraftableItem item)
     {
-        DoCraftInternal(item);
-        craftReceiver.TakePlaceableItem(item.Item,
+        if(CanCraftItem(item))
+        craftReceiver.TakePlaceableItem(item.Item,() => CanCraftItem(item),
             () => DoCraftInternal(item));
     }
 

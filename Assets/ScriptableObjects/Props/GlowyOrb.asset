@@ -15,3 +15,4 @@ MonoBehaviour:
   prototype: {fileID: 6303623572148944328, guid: 30103aed2e20d5a45acde190082438d1, type: 3}
   placeablePreview: {fileID: 6303623572148944328, guid: cb97d3b0b753c2945948e887e6154d84, type: 3}
   icon: {fileID: 21300000, guid: f014122db5ed76949bc883a1171190a2, type: 3}
+  resourceName: glow orb

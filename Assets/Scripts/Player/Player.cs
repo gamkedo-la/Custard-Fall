@@ -402,6 +402,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float placeAtHigherLevelDistanceModifier = 1f;
     private ItemReceiver focusedItemReceiver;
     private Func<bool> canPlaceMoreCheckFunc;
+    private Func<bool> onItemPlaced;
     private bool requireUseButtonRelease;
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
@@ -491,6 +492,8 @@ public class Player : MonoBehaviour
         // the player cannot scale high ground
         if (UpdatePlaceableItemState(playerPosition, focusedItemReceiver))
         {
+            onItemPlaced?.Invoke();
+            
             if (focusedItemReceiver == null)
             {
                 Instantiate(placeModeItemReference.Prototype, targetPoint4PlacingItem, Quaternion.identity);
@@ -499,7 +502,7 @@ public class Player : MonoBehaviour
             {
                 focusedItemReceiver.ReceiveItem(placeModeItemReference);
             }
-
+            
             if (canPlaceMoreCheckFunc())
             {
                 requireUseButtonRelease = true;
@@ -522,7 +525,7 @@ public class Player : MonoBehaviour
         requireUseButtonRelease = false;
     }
 
-    public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck)
+    public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> onItemPlaced)
     {
         placeModeItemReference = item;
         var playerDirectionalTransform = playerDirectional.transform;
@@ -533,6 +536,7 @@ public class Player : MonoBehaviour
 
         itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
         canPlaceMoreCheckFunc = canPlaceMoreCheck;
+        this.onItemPlaced = onItemPlaced;
         _smoothPreviewPosition = targetPoint4PlacingItem;
         UpdatePlaceableItemState(playerPosition, itemReceiver);
     }

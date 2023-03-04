@@ -63,7 +63,6 @@ public class InventorySlot : MonoBehaviour
 
     public void TakeItem()
     {
-        var availableAmount = _inventory.AddOrSubResourceAmount(resource, -1);
-        Player.EnterPlaceMode(resource.PlaceableItem, () => _inventory.AddOrSubResourceAmount(resource, -1) > 0);
+        Player.EnterPlaceMode(resource.PlaceableItem, ()=>_inventory.GetResourceAmount(resource)>0,() => _inventory.AddOrSubResourceAmount(resource, -1) > 0);
     }
 }

@@ -8,8 +8,8 @@ public class PlayerPlaceableItemSpawner : CraftReceiver
     [SerializeField]
     private Player player;
     
-    public override void TakePlaceableItem(PlaceableItem item, Func<bool> canPlaceMoreCheck)
+    public override void TakePlaceableItem(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> onItemPlaced)
     {
-        player.EnterPlaceMode(item, canPlaceMoreCheck);
+        player.EnterPlaceMode(item, canPlaceMoreCheck, onItemPlaced);
     }
 }

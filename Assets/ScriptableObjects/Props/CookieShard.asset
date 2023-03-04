@@ -15,3 +15,4 @@ MonoBehaviour:
   prototype: {fileID: 3343993881124649202, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
   placeablePreview: {fileID: 3343993881124649202, guid: d39298f684f716d4495893ab40c5a0c6, type: 3}
   icon: {fileID: 21300000, guid: 89653693cc8bbe843b414f916ae7fbc9, type: 3}
+  resourceName: Cookie shard
