@@ -332,20 +332,21 @@ public class Player : MonoBehaviour
 
     public void OnInhale(InputValue context)
     {
-        if (placeModeItemReference)
-        {
-            PlaceItemInHand();
-        }
-
         if (context.isPressed)
         {
             inhaler.BeginInhaleInTransformDirection(4f);
             inhaleSFX.Play();
+
+            if (itemInHand != null)
+            {
+                PlaceItemInHand();
+            }
         }
         else
         {
             inhaler.StopInhale();
             inhaleSFX.Stop();
+            requireUseButtonRelease = false;
         }
     }
 
@@ -382,9 +383,15 @@ public class Player : MonoBehaviour
 
     public void OnUseItem(InputValue context)
     {
-        if (!context.isPressed && itemInHand != null)
+        if (context.isPressed)
         {
-            PlaceItemInHand();
+            requireUseButtonRelease = false;
+        }
+        else
+        {
+            // on release
+            if (itemInHand != null)
+                PlaceItemInHand();
         }
     }
 
@@ -394,6 +401,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float placeAtHigherLevelThreshold = .75f;
     [SerializeField] private float placeAtHigherLevelDistanceModifier = 1f;
     private ItemReceiver focusedItemReceiver;
+    private Func<bool> canPlaceMoreCheckFunc;
+    private bool requireUseButtonRelease;
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
@@ -473,6 +482,11 @@ public class Player : MonoBehaviour
 
     private void PlaceItemInHand()
     {
+        if (requireUseButtonRelease)
+        {
+            return;
+        }
+
         var playerPosition = playerDirectional.transform.position;
         // the player cannot scale high ground
         if (UpdatePlaceableItemState(playerPosition, focusedItemReceiver))
@@ -486,7 +500,14 @@ public class Player : MonoBehaviour
                 focusedItemReceiver.ReceiveItem(placeModeItemReference);
             }
 
-            ExitPlaceMode();
+            if (canPlaceMoreCheckFunc())
+            {
+                requireUseButtonRelease = true;
+            }
+            else
+            {
+                ExitPlaceMode();
+            }
         }
     }
 
@@ -494,14 +515,15 @@ public class Player : MonoBehaviour
     {
         Destroy(itemInHand);
         itemInHand = null;
+        canPlaceMoreCheckFunc = null;
         placeModeItemReference = null;
         focusedItemReceiver?.LeavePreview();
         focusedItemReceiver = null;
+        requireUseButtonRelease = false;
     }
 
-    public void EnterPlaceMode(PlaceableItem item)
+    public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck)
     {
-        Debug.Log("EnterPlaceMode.item is "+(item == null));
         placeModeItemReference = item;
         var playerDirectionalTransform = playerDirectional.transform;
         var playerPosition = playerDirectionalTransform.position;
@@ -510,6 +532,7 @@ public class Player : MonoBehaviour
                 out ItemReceiver itemReceiver);
 
         itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
+        canPlaceMoreCheckFunc = canPlaceMoreCheck;
         _smoothPreviewPosition = targetPoint4PlacingItem;
         UpdatePlaceableItemState(playerPosition, itemReceiver);
     }
@@ -519,12 +542,12 @@ public class Player : MonoBehaviour
         if (focusedItemReceiver != null && itemReceiver != focusedItemReceiver)
         {
             focusedItemReceiver.LeavePreview();
+            focusedItemReceiver = null;
         }
-
-        focusedItemReceiver = null;
 
         var possible = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
             new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= 1f;
+        Debug.Log("is it possible to place? " + possible + "! Item receiver is " + (itemReceiver == null));
         if (possible)
         {
             if (itemReceiver == null)
@@ -558,7 +581,8 @@ public class Player : MonoBehaviour
             var layerName = LayerMask.LayerToName(hitResult.transform.gameObject.layer);
             if (layerName == "Interactable")
             {
-                Debug.Log("blocked by other item. Is there a placeModeItemReferene:"+(placeModeItemReference == null));
+                Debug.Log("blocked by other item. Is there a placeModeItemReferene:" +
+                          (placeModeItemReference == null));
                 blockedByOtherItem = true;
                 // set output
                 itemReceiver =

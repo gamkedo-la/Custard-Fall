@@ -12,7 +12,9 @@ public class InventorySlot : MonoBehaviour
     public Resource Resource => resource;
 
     [SerializeField] private Button Button;
-    [SerializeField] [Tooltip("Don't forget to set this field!")] private Player Player;
+
+    [SerializeField] [Tooltip("Don't forget to set this field!")]
+    private Player Player;
 
     private Inventory _inventory;
 
@@ -35,6 +37,7 @@ public class InventorySlot : MonoBehaviour
             count.text = "";
         }
     }
+
     public void AddItem(Resource newResource, int showCount)
     {
         Button.enabled = true;
@@ -60,7 +63,7 @@ public class InventorySlot : MonoBehaviour
 
     public void TakeItem()
     {
-        _inventory.AddOrSubResourceAmount(resource, -1);
-        Player.EnterPlaceMode(resource.PlaceableItem);
+        var availableAmount = _inventory.AddOrSubResourceAmount(resource, -1);
+        Player.EnterPlaceMode(resource.PlaceableItem, () => _inventory.AddOrSubResourceAmount(resource, -1) > 0);
     }
 }

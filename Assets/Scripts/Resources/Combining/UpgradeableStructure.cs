@@ -34,9 +34,6 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     public bool CanUpgradeWith(PlaceableItem material)
     {
-        Debug.Log("expected material is null:" + (expectedUpgradeMaterial == null));
-        Debug.Log(IsMaxedOut() + "is maxed out, checking " + material.name + " expecting " +
-                  expectedUpgradeMaterial.name);
         return !IsMaxedOut() && expectedUpgradeMaterial == material;
     }
 

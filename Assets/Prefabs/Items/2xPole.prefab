@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6789041969606504833}
   - component: {fileID: 5846074528790582407}
   - component: {fileID: 107417104073275358}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 721735576766007876}
   - component: {fileID: 4422275303628176580}
   - component: {fileID: 8340865707689748986}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: 2xPole
   m_TagString: Untagged
   m_Icon: {fileID: 0}

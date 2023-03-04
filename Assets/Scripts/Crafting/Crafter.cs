@@ -10,16 +10,22 @@ public class Crafter : MonoBehaviour
 
     public void CraftItem(CraftableItem item)
     {
+        DoCraftInternal(item);
+        craftReceiver.TakePlaceableItem(item.Item,
+            () => DoCraftInternal(item));
+    }
+
+    private bool DoCraftInternal(CraftableItem item)
+    {
         Debug.Log("Crafting item");
         var cost = CalculateCost(item, out var craftingRequirements);
-        
+
         if (craftingRequirements.Count == 0)
         {
             foreach (var costForSlot in cost)
             {
                 var inventorySlot = costForSlot.Key;
                 inventory.AddOrSubResourceAmount(inventorySlot.Resource, -costForSlot.Value);
-                craftReceiver.TakePlaceableItem(item.Item);
             }
         }
         else
@@ -27,6 +33,8 @@ public class Crafter : MonoBehaviour
             // TODO feedback about failure, though should not have been 
             Debug.Log("Could not craft");
         }
+
+        return craftingRequirements.Count == 0;
     }
 
     public bool CanCraftItem(CraftableItem item)

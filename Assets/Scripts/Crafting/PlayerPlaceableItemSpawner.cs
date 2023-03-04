@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(Player))]
 public class PlayerPlaceableItemSpawner : CraftReceiver
@@ -7,8 +8,8 @@ public class PlayerPlaceableItemSpawner : CraftReceiver
     [SerializeField]
     private Player player;
     
-    public override void TakePlaceableItem(PlaceableItem item)
+    public override void TakePlaceableItem(PlaceableItem item, Func<bool> canPlaceMoreCheck)
     {
-        player.EnterPlaceMode(item);
+        player.EnterPlaceMode(item, canPlaceMoreCheck);
     }
 }
