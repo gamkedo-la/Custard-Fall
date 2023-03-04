@@ -1,4 +1,6 @@
 ﻿using System;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +16,10 @@ public class UpgradableStructureVisual : MonoBehaviour
     [SerializeField] private Image filledSlots;
 
     [SerializeField] private Image previewSlots;
+    [SerializeField] private TextMeshProUGUI lvlDisplay;
+    [SerializeField] private Image lvlBackground;
+    [SerializeField]
+    private CozySettings _cozySettings;
 
     private float targetAlpha;
     private bool doFade;
@@ -27,11 +33,19 @@ public class UpgradableStructureVisual : MonoBehaviour
         upgradeableStructure.OnProgressToLevelUp += OnProgressToLevelUp;
         upgradeableStructure.OnLevelUp += OnLevelUp;
 
+        PrepareLvlDisplay(upgradeableStructure.CurrentLevel());
         CenterSlots(upgradeableStructure.RequieredPoints());
         PrepareRequiredSlots(upgradeableStructure.RequieredPoints());
         PreparePreviewPoints(upgradeableStructure.InvestedPoints());
         
         HideImmediately();
+    }
+
+    private void PrepareLvlDisplay(int currentLevel)
+    {
+        var backgroundColor = _cozySettings.Levels[Mathf.Min(currentLevel - 1, _cozySettings.Levels.Count - 1)].Color;
+        lvlBackground.color =backgroundColor;
+        lvlDisplay.SetText("lvl " + currentLevel);
     }
 
     private void CenterSlots(int requieredPoints)
@@ -67,6 +81,9 @@ public class UpgradableStructureVisual : MonoBehaviour
         slots.CrossFadeAlpha(targetAlpha,.3f,false);
         filledSlots.CrossFadeAlpha(targetAlpha,.3f,false);
         previewSlots.CrossFadeAlpha(targetAlpha,.3f,false);
+        // XXX something wrong on fade complete
+        lvlDisplay.gameObject.SetActive(false);
+        lvlBackground.gameObject.SetActive(false);
         onFadeComplete = HideImmediately;
     }
 
@@ -74,6 +91,8 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         doFade = false;
         targetAlpha = 0f;
+        lvlDisplay.gameObject.SetActive(false);
+        lvlBackground.gameObject.SetActive(false);
         canvas.gameObject.SetActive(false);
     }
 
@@ -85,12 +104,15 @@ public class UpgradableStructureVisual : MonoBehaviour
         filledSlots.CrossFadeAlpha(targetAlpha,.3f,false);
         previewSlots.CrossFadeAlpha(targetAlpha,.3f,false);
         onFadeComplete = null;
+        lvlDisplay.gameObject.SetActive(true);
+        lvlBackground.gameObject.SetActive(true);
         canvas.gameObject.SetActive(true);
     }
 
 
     private void OnLevelUp(object sender, UpgradeableStructure.UpgradeArgs e)
     {
+        PrepareLvlDisplay(e.level);
         CenterSlots(e.requiredPoints);
         PrepareRequiredSlots(e.requiredPoints);
         PreparePreviewPoints(0);
@@ -129,7 +151,8 @@ public class UpgradableStructureVisual : MonoBehaviour
 
     private void PreparePreviewPoints(int investedPoints)
     {
-        previewSlots.fillAmount = (investedPoints + 1) / 12f;
+        // previewSlots.fillAmount = (investedPoints + 1) / 12f;
+        previewSlots.fillAmount = 0;
     }
 
     private void PrepareRequiredSlots(int requiredPoints)

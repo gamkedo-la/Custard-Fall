@@ -28,7 +28,7 @@ public class Inventory : MonoBehaviour
     public OnItemChanged onItemChangedCallback;
     private InventoryUI UIRef;
 
-    private readonly SortedSet<InventorySlot> _slots = new SortedSet<InventorySlot>(InventorySlot.SortIndexComparer);
+    private readonly HashSet<InventorySlot> _slots = new HashSet<InventorySlot>();
 
     public void SetUIRef(InventoryUI getRef)
     {
@@ -39,9 +39,9 @@ public class Inventory : MonoBehaviour
     {
         InventorySlot slot = null;
         if (amount >= 0)
-            Debug.Log("Added " + amount + " " + resource.Name);
+            Debug.Log("Adding " + amount + " " + resource.Name);
         else
-            Debug.Log("Removed " + amount + " " + resource.Name);
+            Debug.Log("Removing " + amount + " " + resource.Name);
 
         // inelegant way to do it, but correct way wasn't working, so brute force :)
         // (not happening often enough for this to be any sort of performance snag)
@@ -58,8 +58,10 @@ public class Inventory : MonoBehaviour
             slot.Amount = amount + slot.Amount;
             if (slot.Amount <= 0)
             {
+                Debug.Log("Remaining "+slot.Amount );
                 slot.Amount = 0;
                 _slots.Remove(slot);
+                Debug.Log("Has the slot been removed? "+!_slots.TryGetValue(slot,out _) );
 
                 if (onItemChangedCallback != null)
                     onItemChangedCallback.Invoke();
@@ -75,11 +77,20 @@ public class Inventory : MonoBehaviour
         }
 
         UIRef.UpdateUI();
-        return slot.Amount;
+        if (slot == null)
+        {
+            return 0;
+        }
+        else
+        {
+            return slot.Amount;
+        }
     }
 
     public int GetResourceAmount(Resource resource)
     {
+        if(resource == null || resource.Name == null)
+            Debug.Log("Resource already null");
         if (_slots.TryGetValue(InventorySlot.Of(resource), out InventorySlot slot))
             return slot.Amount;
         else
@@ -89,11 +100,12 @@ public class Inventory : MonoBehaviour
     public List<InventorySlot> GetResourceList()
     {
         List<InventorySlot> local = new List<InventorySlot>();
-        SortedSet<InventorySlot>.Enumerator em = _slots.GetEnumerator();
+        HashSet<InventorySlot>.Enumerator em = _slots.GetEnumerator();
         while (em.MoveNext())
         {
             local.Add(em.Current);
         }
+        em.Dispose();
 
         return local;
     }
@@ -122,7 +134,7 @@ public class Inventory : MonoBehaviour
         {
             return Equals(Resource.Name, other.Resource.Name);
         }
-
+        
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -130,23 +142,10 @@ public class Inventory : MonoBehaviour
             if (obj.GetType() != this.GetType()) return false;
             return Equals((InventorySlot) obj);
         }
-
+        
         public override int GetHashCode()
         {
             return (Resource != null ? Resource.GetHashCode() : 0);
         }
-
-        private sealed class SortIndexEqualityComparer : IComparer<InventorySlot>
-        {
-            public int Compare(InventorySlot x, InventorySlot y)
-            {
-                if (ReferenceEquals(x, y)) return 0;
-                if (ReferenceEquals(null, y)) return 1;
-                if (ReferenceEquals(null, x)) return -1;
-                return x.SortIndex.CompareTo(y.SortIndex);
-            }
-        }
-
-        public static IComparer<InventorySlot> SortIndexComparer { get; } = new SortIndexEqualityComparer();
     }
 }

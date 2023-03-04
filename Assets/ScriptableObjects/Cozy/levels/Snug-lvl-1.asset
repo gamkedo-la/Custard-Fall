@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95e108b930834b44975944d6aaaf89d, type: 3}
   m_Name: Snug-lvl-1
   m_EditorClassIdentifier: 
-  displayName: snug lvl 1
+  displayName: snug lvl 3
   color: {r: 0.71599996, g: 0.64543355, b: 0.29351553, a: 1}
   progressColor: {r: 0.74820083, g: 0.754717, b: 0.1459594, a: 1}
