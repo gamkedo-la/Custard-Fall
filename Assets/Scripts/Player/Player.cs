@@ -365,8 +365,6 @@ public class Player : MonoBehaviour
 
     public void OnDebugHealthUp(InputValue context)
     {
-        //Debug.Log("health up "+context.isPressed);
-
         if (currentHealth <= 3)
         {
             GainHealth(1);
@@ -421,13 +419,11 @@ public class Player : MonoBehaviour
 
         if (context.isPressed)
         {
-            Debug.Log("grapple pressed");
             grapplePressed?.Invoke(this, EventArgs.Empty);
         }
         else
         {
             // this can only run when the OnGrapple is called and the button isn't pressed => release state
-            Debug.Log("grapple released");
             grappleReleased?.Invoke(this, EventArgs.Empty);
         }
         // when released the grapple is thrown towards grapplePoint
@@ -551,7 +547,6 @@ public class Player : MonoBehaviour
 
         var possible = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
             new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= 1f;
-        Debug.Log("is it possible to place? " + possible + "! Item receiver is " + (itemReceiver == null));
         if (possible)
         {
             if (itemReceiver == null)
@@ -585,8 +580,6 @@ public class Player : MonoBehaviour
             var layerName = LayerMask.LayerToName(hitResult.transform.gameObject.layer);
             if (layerName == "Interactable")
             {
-                Debug.Log("blocked by other item. Is there a placeModeItemReferene:" +
-                          (placeModeItemReference == null));
                 blockedByOtherItem = true;
                 // set output
                 itemReceiver =

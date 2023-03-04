@@ -37,6 +37,20 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         return !IsMaxedOut() && expectedUpgradeMaterial == material;
     }
 
+    public int CurrentLevel()
+    {
+        return currentLevel;
+    }
+    public int RequieredPoints()
+    {
+        return upgradeLevels[currentLevel - 1].requiredPoints;
+    }    
+    
+    public int InvestedPoints()
+    {
+        return investedPoints;
+    }
+
     public bool UpgradeWith(PlaceableItem material)
     {
         if (CanUpgradeWith(material))
