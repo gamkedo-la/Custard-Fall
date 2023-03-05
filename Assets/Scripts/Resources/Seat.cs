@@ -12,7 +12,7 @@ public class Seat : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Seat", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Seat", _placeableItem), 2f);
     }
 
     private void Awake()

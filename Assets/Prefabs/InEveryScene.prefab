@@ -6219,7 +6219,7 @@ MonoBehaviour:
   InsideCustard: 0
   CoveredByCustard: 0
   graceTimeForBeingInsideOrOutsideCustard: 0.6
-  timeBeforePlayerTakesDamageFromDrawning: 2
+  timeBeforePlayerTakesDamageFromDrawning: 1
   timeBetweenDamageTicks: 2
   drowningDamage: 30
 --- !u!114 &8634744845753951226
