@@ -546,7 +546,7 @@ public class Player : MonoBehaviour
         }
 
         var possible = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
-            new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= 1f;
+            new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= .3f;
         if (possible)
         {
             if (itemReceiver == null)
