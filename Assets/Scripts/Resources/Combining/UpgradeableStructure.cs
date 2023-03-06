@@ -43,7 +43,10 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     }
     public int RequieredPoints()
     {
-        return upgradeLevels[currentLevel - 1].requiredPoints;
+        if (currentLevel < upgradeLevels.Length)
+            return upgradeLevels[currentLevel - 1].requiredPoints;
+        else
+            return 0;
     }    
     
     public int InvestedPoints()

@@ -523,6 +523,7 @@ public class Player : MonoBehaviour
 
     public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> onItemPlaced)
     {
+        Debug.Log("Enter place mode with "+ item.ResourceName);
         placeModeItemReference = item;
         var playerDirectionalTransform = playerDirectional.transform;
         var playerPosition = playerDirectionalTransform.position;

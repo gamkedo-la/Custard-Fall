@@ -28,7 +28,7 @@ public class Inventory : MonoBehaviour
     public OnItemChanged onItemChangedCallback;
     private InventoryUI UIRef;
 
-    private readonly HashSet<InventorySlot> _slots = new HashSet<InventorySlot>();
+    private readonly Dictionary<string,InventorySlot> _slots = new ();
 
     public void SetUIRef(InventoryUI getRef)
     {
@@ -37,7 +37,6 @@ public class Inventory : MonoBehaviour
 
     public int AddOrSubResourceAmount(Resource resource, int amount)
     {
-        InventorySlot slot = null;
         if (amount >= 0)
             Debug.Log("Adding " + amount + " " + resource.Name);
         else
@@ -45,23 +44,16 @@ public class Inventory : MonoBehaviour
 
         // inelegant way to do it, but correct way wasn't working, so brute force :)
         // (not happening often enough for this to be any sort of performance snag)
-        foreach (InventorySlot val in _slots)
-        {
-            if (val.Resource.Name == resource.Name)
-            {
-                slot = val;
-            }
-        }
+        _slots.TryGetValue(resource.Name, out InventorySlot slot);
 
         if (slot != null)
         {
             slot.Amount = amount + slot.Amount;
             if (slot.Amount <= 0)
             {
-                Debug.Log("Remaining "+slot.Amount );
                 slot.Amount = 0;
-                _slots.Remove(slot);
-                Debug.Log("Has the slot been removed? "+!_slots.TryGetValue(slot,out _) );
+                Debug.Log("Has the slot been removed? " + resource.Name + " " + _slots.Remove(resource.Name));
+                slot = null;
 
                 if (onItemChangedCallback != null)
                     onItemChangedCallback.Invoke();
@@ -70,7 +62,7 @@ public class Inventory : MonoBehaviour
         else if (amount > 0)
         {
             slot = new InventorySlot(resource, amount, _slots.Count);
-            _slots.Add(slot);
+            _slots.Add(resource.Name, slot);
 
             if (onItemChangedCallback != null)
                 onItemChangedCallback.Invoke();
@@ -89,10 +81,17 @@ public class Inventory : MonoBehaviour
 
     public int GetResourceAmount(Resource resource)
     {
-        if(resource == null || resource.Name == null)
+        if (resource == null || resource.Name == null)
+        {
             Debug.Log("Resource already null");
-        if (_slots.TryGetValue(InventorySlot.Of(resource), out InventorySlot slot))
+            return 0;
+        }
+
+        if (_slots.TryGetValue(resource.Name, out InventorySlot slot))
+        {
+            Debug.Log(resource.Name + " has only remaining " + slot.Amount);
             return slot.Amount;
+        }
         else
             return 0;
     }
@@ -100,10 +99,10 @@ public class Inventory : MonoBehaviour
     public List<InventorySlot> GetResourceList()
     {
         List<InventorySlot> local = new List<InventorySlot>();
-        HashSet<InventorySlot>.Enumerator em = _slots.GetEnumerator();
+        Dictionary<string, InventorySlot>.Enumerator em = _slots.GetEnumerator();
         while (em.MoveNext())
         {
-            local.Add(em.Current);
+            local.Add(em.Current.Value);
         }
         em.Dispose();
 
@@ -117,11 +116,6 @@ public class Inventory : MonoBehaviour
         public int Amount { get; set; }
 
         public int SortIndex { get; set; }
-
-        public static InventorySlot Of(Resource resource)
-        {
-            return new InventorySlot(resource, 0, 0);
-        }
 
         public InventorySlot(Resource resource, int amount, int sortIndex)
         {
