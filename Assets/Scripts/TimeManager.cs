@@ -35,6 +35,8 @@ public class TimeManager : MonoBehaviour
     bool eveningStarted;
     bool morningStarted;
 
+    public int Days => currentDay;
+
     public bool IsDayTime { get {
         return dayStart <= time && time < nightStart;
     }}

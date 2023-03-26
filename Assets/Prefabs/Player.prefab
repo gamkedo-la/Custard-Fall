@@ -5260,6 +5260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   inhaler: {fileID: 7330138422288815188}
+  respawnPoint: {fileID: 0}
   playerDirectional: {fileID: 1551700867557054575}
   movementSpeed: 5
   lookTransitionSpeed: 0.12
@@ -5288,7 +5289,7 @@ MonoBehaviour:
   currentHealth: 0
   healthbar: {fileID: 0}
   maxPlaceDistance: 3
-  placeAtHigherLevelThreshold: 0.1
+  placeAtHigherLevelThreshold: 0.78
   placeAtHigherLevelDistanceModifier: 1
 --- !u!114 &4078713960622899494
 MonoBehaviour:

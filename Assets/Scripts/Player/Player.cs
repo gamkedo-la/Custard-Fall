@@ -3,11 +3,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
     public WorldCells worldCells;
     public Inhaler inhaler;
+
+    [SerializeField] private Transform respawnPoint;
 
     private AudioSource inhaleSFX;
 
@@ -233,12 +236,28 @@ public class Player : MonoBehaviour
         }
     }
 
+    [ContextMenu("Respawn")]
     void Respawn()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
-        worldCells.ResetChanges();
         MusicManager.Instance.SetUnder(false);
-        SceneManager.LoadScene(currentScene.name);
+        var respawnPointPosition = respawnPoint.position;
+        var cellPosition = worldCells.GetCellPosition(respawnPointPosition);
+        float yOnSurface = worldCells.GetHeightAt(cellPosition);
+        yOnSurface += _collider.bounds.extents.y * 2 + yOffset;
+        transform.position = new Vector3(respawnPointPosition.x, yOnSurface, respawnPointPosition.z);
+        ResetPlayerState();
+    }
+
+    private void ResetPlayerState()
+    {
+        currentHealth = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
+        isDashing = false;
+        grappling = false;
+        _currenRunningMultiplier = 1f;
+        _velDash = 0;
+        _velLook = Vector3.zero;
+        _velMove = Vector3.zero;
     }
 
     void GainHealth(int health)
@@ -489,7 +508,7 @@ public class Player : MonoBehaviour
         if (UpdatePlaceableItemState(playerPosition, focusedItemReceiver))
         {
             onItemPlaced?.Invoke();
-            
+
             if (focusedItemReceiver == null)
             {
                 Instantiate(placeModeItemReference.Prototype, targetPoint4PlacingItem, Quaternion.identity);
@@ -498,7 +517,7 @@ public class Player : MonoBehaviour
             {
                 focusedItemReceiver.ReceiveItem(placeModeItemReference);
             }
-            
+
             if (canPlaceMoreCheckFunc())
             {
                 requireUseButtonRelease = true;
@@ -523,7 +542,7 @@ public class Player : MonoBehaviour
 
     public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> onItemPlaced)
     {
-        Debug.Log("Enter place mode with "+ item.ResourceName);
+        Debug.Log("Enter place mode with " + item.ResourceName);
         placeModeItemReference = item;
         var playerDirectionalTransform = playerDirectional.transform;
         var playerPosition = playerDirectionalTransform.position;
