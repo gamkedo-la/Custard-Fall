@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,7 @@ public class Player : MonoBehaviour
     public Inhaler inhaler;
 
     [SerializeField] private Transform respawnPoint;
+    [SerializeField] private Animator playerAnimator;
 
     private AudioSource inhaleSFX;
 
@@ -227,7 +229,7 @@ public class Player : MonoBehaviour
 
             if (currentHealth <= 0)
             {
-                Respawn();
+                DieAndRespawn();
             }
         }
         else
@@ -236,17 +238,30 @@ public class Player : MonoBehaviour
         }
     }
 
-    [ContextMenu("Respawn")]
-    void Respawn()
+    [ContextMenu("DieAndRespawn")]
+    void DieAndRespawn()
     {
+        _pauseActivator.PauseGameSilently();
+        playerAnimator.SetBool(Dead,true);
+
+        StartCoroutine(Respawn());
+    }
+
+    IEnumerator Respawn()
+    {
+        yield return new WaitForSecondsRealtime(2);
         MusicManager.Instance.SetUnder(false);
         var respawnPointPosition = respawnPoint.position;
         var cellPosition = worldCells.GetCellPosition(respawnPointPosition);
         float yOnSurface = worldCells.GetHeightAt(cellPosition);
-        yOnSurface += _collider.bounds.extents.y * 2 + yOffset;
+        yOnSurface += _collider.bounds.extents.y * 1.5f + yOffset;
         transform.position = new Vector3(respawnPointPosition.x, yOnSurface, respawnPointPosition.z);
         ResetPlayerState();
+        
+        _pauseActivator.UnPauseGame();
+        playerAnimator.SetBool(Dead,false);
     }
+
 
     private void ResetPlayerState()
     {
@@ -421,6 +436,8 @@ public class Player : MonoBehaviour
     private Func<bool> canPlaceMoreCheckFunc;
     private Func<bool> onItemPlaced;
     private bool requireUseButtonRelease;
+    
+    private static readonly int Dead = Animator.StringToHash("dead");
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
@@ -529,7 +546,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ExitPlaceMode()
+    private void ExitPlaceMode()
     {
         Destroy(itemInHand);
         itemInHand = null;

@@ -329,7 +329,7 @@
                     "id": "25e8728f-7bb7-4fab-8629-3e254e9b4696",
                     "path": "2DVector",
                     "interactions": "",
-                    "processors": "StickDeadzone",
+                    "processors": "",
                     "groups": "",
                     "action": "MoveForwardDirectional",
                     "isComposite": true,

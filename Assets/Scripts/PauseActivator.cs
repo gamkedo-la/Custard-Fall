@@ -42,7 +42,7 @@ public class PauseActivator : MonoBehaviour
         }
     }
 
-    public void UnPauseGameByButton()
+    public void UnPauseGame()
     {
         isGamePaused = false;
         pauseCanvas.SetActive(isGamePaused);

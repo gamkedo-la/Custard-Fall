@@ -66,6 +66,7 @@ GameObject:
   - component: {fileID: 3492040887602476588}
   - component: {fileID: 9059931971537525148}
   - component: {fileID: 2233491662278470131}
+  - component: {fileID: 7377127292375690880}
   m_Layer: 0
   m_Name: PlayerBody
   m_TagString: Untagged
@@ -161,6 +162,26 @@ MonoBehaviour:
   outlineWidth: 2
   bakeKeys: []
   bakeValues: []
+--- !u!95 &7377127292375690880
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396804389976041274}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ae290a3a5fc722e4e8dbfe85a872ed03, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &634481626215235167
 GameObject:
   m_ObjectHideFlags: 0
@@ -5261,6 +5282,7 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   inhaler: {fileID: 7330138422288815188}
   respawnPoint: {fileID: 0}
+  playerAnimator: {fileID: 7377127292375690880}
   playerDirectional: {fileID: 1551700867557054575}
   movementSpeed: 5
   lookTransitionSpeed: 0.12
