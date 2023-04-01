@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
 
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
-    private float yOffset = -.05f;
+    [SerializeField] private float yOffset = -.6f;
     private Collider _collider;
 
     public InputControlScheme gameplayScheme;
@@ -241,8 +241,8 @@ public class Player : MonoBehaviour
     [ContextMenu("DieAndRespawn")]
     void DieAndRespawn()
     {
-        _pauseActivator.PauseGameSilently();
         playerAnimator.SetBool(Dead,true);
+        _pauseActivator.PauseGameSilently();
 
         StartCoroutine(Respawn());
     }

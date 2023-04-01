@@ -5301,6 +5301,7 @@ MonoBehaviour:
   grappleLine: {fileID: 4890982066620614929}
   ownsGrapplingHook: 0
   combinatorProfile: {fileID: 11400000, guid: 0e447b4e028cdbb49b9307791fcdc4a1, type: 2}
+  yOffset: -0.6
   gameplayScheme:
     m_Name: 
     m_BindingGroup: 
