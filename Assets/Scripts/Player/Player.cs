@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Custard;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,8 @@ public class Player : MonoBehaviour
 
     private AudioSource inhaleSFX;
 
-
+    [SerializeField] private CustardState custardState;
+    
     [SerializeField] private GameObject playerDirectional;
     public float movementSpeed = 4;
     private bool _isLookInMoveDirection = true;
@@ -60,6 +62,7 @@ public class Player : MonoBehaviour
     private CozinessReceiver cozinessReceiver;
     [SerializeField] private CombinatorProfileSO combinatorProfile;
 
+    [SerializeField] private bool isSwimming;
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     [SerializeField] private float yOffset = -.6f;
@@ -111,7 +114,7 @@ public class Player : MonoBehaviour
         nextGrappleTime += Time.fixedDeltaTime;
 
         Vector3 playerPosition = transform.position;
-        if (!isDashing && !grappling)
+        if (!isDashing && !grappling && !isSwimming)
         {
             if (placeModeItemReference)
             {
@@ -218,6 +221,10 @@ public class Player : MonoBehaviour
         {
             MovePlayer(_currentMoveDirection);
         }
+        else
+        {
+            MovePlayer(Vector3.zero);
+        }
     }
 
     public void TakeDamage(int damage)
@@ -241,7 +248,7 @@ public class Player : MonoBehaviour
     [ContextMenu("DieAndRespawn")]
     void DieAndRespawn()
     {
-        playerAnimator.SetBool(Dead,true);
+        playerAnimator.SetBool(Dead, true);
         _pauseActivator.PauseGameSilently();
 
         StartCoroutine(Respawn());
@@ -257,9 +264,9 @@ public class Player : MonoBehaviour
         yOnSurface += _collider.bounds.extents.y * 1.5f + yOffset;
         transform.position = new Vector3(respawnPointPosition.x, yOnSurface, respawnPointPosition.z);
         ResetPlayerState();
-        
+
         _pauseActivator.UnPauseGame();
-        playerAnimator.SetBool(Dead,false);
+        playerAnimator.SetBool(Dead, false);
     }
 
 
@@ -293,24 +300,64 @@ public class Player : MonoBehaviour
         var colliderBounds = _collider.bounds;
 
         var tracePoint = currentPosition + targetDirection * colliderBounds.extents.x / 2;
-
         Coords coords = worldCells.GetCellPosition(tracePoint);
-        // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
-        var terrainHeight = worldCells.GetHeightAt(coords);
-        var heightDifference = terrainHeight - colliderBounds.min.y;
-        // player cannot scale high ground
-        // player can only leap from a high point if running
-        if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f)
+
+        if (isSwimming)
         {
-            currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
-            if (Math.Abs(heightDifference) > .0001f)
+            // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
+            var terrainHeight = worldCells.GetHeightAt(coords);
+            // player cannot scale high ground
+            // player can only leap from a high point if running
+            if (terrainHeight != 255)
             {
-                currentPosition += (heightDifference + colliderBounds.extents.y / 2 + yOffset) * Time.deltaTime * 18 *
-                                   Vector3.up;
+                var custardLevel = custardState.GetCurrentCustardLevelAt(coords);
+                var heightDifference = terrainHeight + custardLevel - colliderBounds.min.y;
+                var thresholdHeight = 1.75f;
+                if (heightDifference < thresholdHeight || custardLevel > 0)
+                {
+                    currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
+                    if (Math.Abs(heightDifference) > .0001f)
+                    {
+                        currentPosition += (heightDifference + colliderBounds.extents.y / 2 + yOffset) *
+                                           Time.deltaTime * 18 *
+                                           Vector3.up;
+                        if (custardLevel <= 1)
+                        {
+                            EnterSwimMode(false);
+                        }
+                    }
+
+                    currentTransform.position = currentPosition;
+                }
             }
         }
+        else
+        {
+            // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
+            var terrainHeight = worldCells.GetHeightAt(coords);
+            var custardLevel = custardState.GetCurrentCustardLevelAt(coords);
+            var heightDifference = terrainHeight - colliderBounds.min.y;
+            if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f ||
+                custardLevel > 0 && Math.Abs(heightDifference + custardLevel) < 2.75)
+            {
+                currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
+                if (Math.Abs(heightDifference) > .0001f)
+                {
+                    Debug.Log(custardLevel);
+                    currentPosition +=
+                        (heightDifference + (custardLevel > 1 ? custardLevel : 0) + colliderBounds.extents.y / 2 +
+                         yOffset) * Time.deltaTime *
+                        18 *
+                        Vector3.up;
+                    if (custardLevel > 1)
+                    {
+                        EnterSwimMode(true);
+                    }
+                }
+            }
 
-        currentTransform.position = currentPosition;
+            currentTransform.position = currentPosition;
+        }
     }
 
     public void OnMoveForwardButton(InputValue input)
@@ -436,7 +483,7 @@ public class Player : MonoBehaviour
     private Func<bool> canPlaceMoreCheckFunc;
     private Func<bool> onItemPlaced;
     private bool requireUseButtonRelease;
-    
+
     private static readonly int Dead = Animator.StringToHash("dead");
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
@@ -654,5 +701,16 @@ public class Player : MonoBehaviour
         {
             return position;
         }
+    }
+
+    public void EnterSwimMode(bool doSwim)
+    {
+        isSwimming = doSwim;
+        if (isSwimming)
+        {
+            ExitPlaceMode();
+        }
+
+        MovePlayer(Vector3.zero);
     }
 }

@@ -70,6 +70,7 @@ public class LocalCustardListener : MonoBehaviour
     {
         timePassedSinceCoveredByCustard = 0.0f;
         timePassedSinceLastDamage = 0.0f;
+        player.EnterSwimMode(coveredByCustard);
     }
 
     private void OnInsideCustard(bool insideCustard)

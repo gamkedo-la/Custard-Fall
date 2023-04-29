@@ -5283,6 +5283,7 @@ MonoBehaviour:
   inhaler: {fileID: 7330138422288815188}
   respawnPoint: {fileID: 0}
   playerAnimator: {fileID: 7377127292375690880}
+  custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   playerDirectional: {fileID: 1551700867557054575}
   movementSpeed: 5
   lookTransitionSpeed: 0.12
@@ -5301,6 +5302,7 @@ MonoBehaviour:
   grappleLine: {fileID: 4890982066620614929}
   ownsGrapplingHook: 0
   combinatorProfile: {fileID: 11400000, guid: 0e447b4e028cdbb49b9307791fcdc4a1, type: 2}
+  isSwimming: 0
   yOffset: -0.6
   gameplayScheme:
     m_Name: 
