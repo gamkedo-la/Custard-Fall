@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     private AudioSource inhaleSFX;
 
     [SerializeField] private CustardState custardState;
-    
+
     [SerializeField] private GameObject playerDirectional;
     public float movementSpeed = 4;
     private bool _isLookInMoveDirection = true;
@@ -485,6 +485,7 @@ public class Player : MonoBehaviour
     private bool requireUseButtonRelease;
 
     private static readonly int Dead = Animator.StringToHash("dead");
+    private static readonly int Swimming = Animator.StringToHash("swimming");
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
@@ -711,6 +712,7 @@ public class Player : MonoBehaviour
             ExitPlaceMode();
         }
 
+        playerAnimator.SetBool(Swimming, doSwim);
         MovePlayer(Vector3.zero);
     }
 }
