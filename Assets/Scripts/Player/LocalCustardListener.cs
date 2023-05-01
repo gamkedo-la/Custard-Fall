@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Custard;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,18 +24,19 @@ public class LocalCustardListener : MonoBehaviour
     private float timePassedSinceCoveredByCustard = 0.0f;
     private float timePassedSinceInsideCustardChange = 0.0f;
     private float timePassedSinceLastDamage = 0.0f;
+    private Coroutine inCustardEffectFader;
 
     private void Awake()
     {
         player = gameObject.GetComponent<Player>();
-        hideInCustardEffectImmediately();
+        HideInCustardEffectImmediately();
     }
 
-    private void hideInCustardEffectImmediately()
+    private void HideInCustardEffectImmediately()
     {
         var colorLeft = inCustardEffect.color;
         inCustardEffect.color = new Color(colorLeft.r, colorLeft.g, colorLeft.b, 0);
-        
+
         var colorRight = inCustardEffectRight.color;
         inCustardEffectRight.color = new Color(colorRight.r, colorRight.g, colorRight.b, 0);
     }
@@ -98,6 +100,11 @@ public class LocalCustardListener : MonoBehaviour
             if (timePassedSinceCoveredByCustard < timeBeforePlayerTakesDamageFromDrawning)
             {
                 timePassedSinceCoveredByCustard += Time.deltaTime;
+
+                if (timeBeforePlayerTakesDamageFromDrawning - timePassedSinceCoveredByCustard < .8f)
+                {
+                    FadeCustardEffect(100, .8f);
+                }
             }
             else
             {
@@ -111,6 +118,43 @@ public class LocalCustardListener : MonoBehaviour
                     timePassedSinceLastDamage = 0.0f;
                 }
             }
+        }
+        else
+        {
+            FadeCustardEffect(0, .5f);
+        }
+    }
+
+    private void FadeCustardEffect(int alpha, float duration)
+    {
+        CrossFadeAlpha(inCustardEffect, inCustardEffectRight, alpha, duration);
+    }
+
+    public void CrossFadeAlpha(Image img, Image img2, float alpha, float duration)
+    {
+        if (inCustardEffectFader != null)
+        {
+            StopCoroutine(inCustardEffectFader);
+        }
+
+        inCustardEffectFader = StartCoroutine(CrossFadeAlphaCoroutine(img, img2, alpha, duration));
+    }
+
+    public static IEnumerator CrossFadeAlphaCoroutine(Image img, Image img2, float alpha, float duration)
+    {
+        Color currentColor = img.color;
+
+        Color visibleColor = img.color;
+        visibleColor.a = alpha;
+
+        float counter = 0;
+
+        while (counter < duration)
+        {
+            counter += Time.deltaTime;
+            img.color = Color.Lerp(currentColor, visibleColor, counter / duration);
+            img2.color = Color.Lerp(currentColor, visibleColor, counter / duration);
+            yield return null;
         }
     }
 }
