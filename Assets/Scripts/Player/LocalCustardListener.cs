@@ -1,6 +1,7 @@
 ﻿using System;
 using Custard;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LocalCustardListener : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class LocalCustardListener : MonoBehaviour
     public CustardState custardState;
     public int HeightTillCovered;
     private Player player;
+    [SerializeField] private Image inCustardEffect;
+    [SerializeField] private Image inCustardEffectRight;
 
     public bool InsideCustard;
     public bool CoveredByCustard;
@@ -24,6 +27,16 @@ public class LocalCustardListener : MonoBehaviour
     private void Awake()
     {
         player = gameObject.GetComponent<Player>();
+        hideInCustardEffectImmediately();
+    }
+
+    private void hideInCustardEffectImmediately()
+    {
+        var colorLeft = inCustardEffect.color;
+        inCustardEffect.color = new Color(colorLeft.r, colorLeft.g, colorLeft.b, 0);
+        
+        var colorRight = inCustardEffectRight.color;
+        inCustardEffectRight.color = new Color(colorRight.r, colorRight.g, colorRight.b, 0);
     }
 
     private void FixedUpdate()
@@ -92,7 +105,7 @@ public class LocalCustardListener : MonoBehaviour
                 {
                     timePassedSinceLastDamage += Time.deltaTime;
                 }
-                else if(player)
+                else if (player)
                 {
                     player.TakeDamage(drowningDamage);
                     timePassedSinceLastDamage = 0.0f;

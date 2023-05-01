@@ -2688,7 +2688,7 @@ GameObject:
   - component: {fileID: 2344310409103366954}
   - component: {fileID: 9112028844417420799}
   m_Layer: 0
-  m_Name: custard-gradient
+  m_Name: custard-gradient-left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4316,7 +4316,7 @@ GameObject:
   - component: {fileID: 5613897965189590052}
   - component: {fileID: 3782650569712433841}
   m_Layer: 0
-  m_Name: custard-gradient (1)
+  m_Name: custard-gradient-right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6645,6 +6645,8 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   HeightTillCovered: 2
+  inCustardEffect: {fileID: 9112028844417420799}
+  inCustardEffectRight: {fileID: 3782650569712433841}
   InsideCustard: 0
   CoveredByCustard: 0
   graceTimeForBeingInsideOrOutsideCustard: 0.6
