@@ -6462,6 +6462,14 @@ PrefabInstance:
       propertyPath: m_NeverAutoSwitchControlSchemes
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5454419848131368307, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: inCustardEffect
+      value: 
+      objectReference: {fileID: 9112028844417420799}
+    - target: {fileID: 5454419848131368307, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: inCustardEffectRight
+      value: 
+      objectReference: {fileID: 3782650569712433841}
     - target: {fileID: 6713574407888306948, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 0
@@ -6630,29 +6638,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2707271701656813138, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
   m_PrefabInstance: {fileID: 6813161327211590579}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6941246524270052908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8871844313728323041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 996b124e83114787accabbbce51836c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
-  custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
-  HeightTillCovered: 2
-  inCustardEffect: {fileID: 9112028844417420799}
-  inCustardEffectRight: {fileID: 3782650569712433841}
-  InsideCustard: 0
-  CoveredByCustard: 0
-  graceTimeForBeingInsideOrOutsideCustard: 0.6
-  timeBeforePlayerTakesDamageFromDrawning: 1
-  timeBetweenDamageTicks: 2
-  drowningDamage: 30
 --- !u!114 &8634744845753951226
 MonoBehaviour:
   m_ObjectHideFlags: 0

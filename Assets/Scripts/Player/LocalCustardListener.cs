@@ -25,6 +25,8 @@ public class LocalCustardListener : MonoBehaviour
     private float timePassedSinceInsideCustardChange = 0.0f;
     private float timePassedSinceLastDamage = 0.0f;
     private Coroutine inCustardEffectFader;
+    [SerializeField] private float _fadeInDuration = 2.5f;
+    [SerializeField] private float _fadeOutDuration = 1.5f;
 
     private void Awake()
     {
@@ -53,23 +55,30 @@ public class LocalCustardListener : MonoBehaviour
         if (CoveredByCustard != coveredByCustard)
         {
             OnCoveredByCustard(coveredByCustard);
+            if (!coveredByCustard)
+            {
+                CheckForDrownDamage(false);
+            }
         }
 
         if (InsideCustard != insideCustard)
         {
             timePassedSinceInsideCustardChange = 0f;
+            CheckTimeSpentInOrOutsideCustard();
         }
+
+        CoveredByCustard = coveredByCustard;
+        InsideCustard = insideCustard;
 
         if (CoveredByCustard || timePassedSinceInsideCustardChange >= graceTimeForBeingInsideOrOutsideCustard)
         {
             OnInsideCustard(insideCustard);
         }
 
-        InsideCustard = insideCustard;
-        CoveredByCustard = coveredByCustard;
-
-        CheckTimeSpentInOrOutsideCustard();
-        CheckForDrownDamage();
+        if (CoveredByCustard)
+        {
+            CheckForDrownDamage(CoveredByCustard);
+        }
     }
 
     private void CheckTimeSpentInOrOutsideCustard()
@@ -93,17 +102,18 @@ public class LocalCustardListener : MonoBehaviour
         MusicManager.Instance.SetUnder(insideCustard);
     }
 
-    private void CheckForDrownDamage()
+    private void CheckForDrownDamage(bool coveredByCustard)
     {
-        if (CoveredByCustard)
+        if (coveredByCustard)
         {
             if (timePassedSinceCoveredByCustard < timeBeforePlayerTakesDamageFromDrawning)
             {
                 timePassedSinceCoveredByCustard += Time.deltaTime;
 
-                if (timeBeforePlayerTakesDamageFromDrawning - timePassedSinceCoveredByCustard < .8f)
+                var timeTillDamage = timeBeforePlayerTakesDamageFromDrawning - timePassedSinceCoveredByCustard;
+                if (timeTillDamage <= .01f)
                 {
-                    FadeCustardEffect(100, .8f);
+                    FadeCustardEffect(100, _fadeInDuration);
                 }
             }
             else
@@ -121,7 +131,7 @@ public class LocalCustardListener : MonoBehaviour
         }
         else
         {
-            FadeCustardEffect(0, .5f);
+            FadeCustardEffect(0, _fadeOutDuration);
         }
     }
 
@@ -144,16 +154,14 @@ public class LocalCustardListener : MonoBehaviour
     {
         Color currentColor = img.color;
 
-        Color visibleColor = img.color;
-        visibleColor.a = alpha;
-
         float counter = 0;
 
         while (counter < duration)
         {
             counter += Time.deltaTime;
-            img.color = Color.Lerp(currentColor, visibleColor, counter / duration);
-            img2.color = Color.Lerp(currentColor, visibleColor, counter / duration);
+            img.color = new Color(currentColor.r, currentColor.g, currentColor.b,
+                Mathf.MoveTowards(currentColor.a, alpha, counter / duration));
+            img2.color = img.color;
             yield return null;
         }
     }
