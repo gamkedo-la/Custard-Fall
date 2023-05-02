@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject playerDirectional;
     public float movementSpeed = 4;
+    [SerializeField]
+    private float swimSpeed = 3.4f;
     private bool _isLookInMoveDirection = true;
     private Vector3 _targetMoveDirection = Vector3.zero;
     private Vector3 _currentMoveDirection = Vector3.zero;
@@ -315,7 +317,7 @@ public class Player : MonoBehaviour
                 var thresholdHeight = 1.75f;
                 if (heightDifference < thresholdHeight || custardLevel > 0)
                 {
-                    currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
+                    currentPosition += targetDirection * (Time.deltaTime * swimSpeed * _currenRunningMultiplier);
                     if (Math.Abs(heightDifference) > .0001f)
                     {
                         currentPosition += (heightDifference + colliderBounds.extents.y / 2 + yOffset) *
@@ -343,7 +345,6 @@ public class Player : MonoBehaviour
                 currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
                 if (Math.Abs(heightDifference) > .0001f)
                 {
-                    Debug.Log(custardLevel);
                     currentPosition +=
                         (heightDifference + (custardLevel > 1 ? custardLevel : 0) + colliderBounds.extents.y / 2 +
                          yOffset) * Time.deltaTime *

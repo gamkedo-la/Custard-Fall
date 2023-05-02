@@ -5229,6 +5229,7 @@ GameObject:
   - component: {fileID: 8279002282216483286}
   - component: {fileID: 3490619458514794137}
   - component: {fileID: 8006690096804111679}
+  - component: {fileID: 5454419848131368307}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5286,6 +5287,7 @@ MonoBehaviour:
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   playerDirectional: {fileID: 1551700867557054575}
   movementSpeed: 5
+  swimSpeed: 3.4
   lookTransitionSpeed: 0.12
   lookTransitionSpeedMouse: 0.08
   moveTransitionSpeed: 0.011
@@ -5567,6 +5569,31 @@ MonoBehaviour:
   cozinessTillNextLevel: 0
   baseFillDuration: 3
   cozySettings: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
+--- !u!114 &5454419848131368307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996b124e83114787accabbbce51836c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
+  HeightTillCovered: 2
+  inCustardEffect: {fileID: 0}
+  inCustardEffectRight: {fileID: 0}
+  InsideCustard: 0
+  CoveredByCustard: 0
+  graceTimeForBeingInsideOrOutsideCustard: 0.6
+  timeBeforePlayerTakesDamageFromDrawning: 1
+  timeBetweenDamageTicks: 1.6
+  drowningDamage: 40
+  _fadeInDuration: 2
+  _fadeOutDuration: 1.5
 --- !u!1 &4134362619229406679
 GameObject:
   m_ObjectHideFlags: 0
