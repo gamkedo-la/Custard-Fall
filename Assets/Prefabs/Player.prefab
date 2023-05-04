@@ -66,6 +66,7 @@ GameObject:
   - component: {fileID: 3492040887602476588}
   - component: {fileID: 9059931971537525148}
   - component: {fileID: 2233491662278470131}
+  - component: {fileID: 7377127292375690880}
   m_Layer: 0
   m_Name: PlayerBody
   m_TagString: Untagged
@@ -161,6 +162,26 @@ MonoBehaviour:
   outlineWidth: 2
   bakeKeys: []
   bakeValues: []
+--- !u!95 &7377127292375690880
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 396804389976041274}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ae290a3a5fc722e4e8dbfe85a872ed03, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &634481626215235167
 GameObject:
   m_ObjectHideFlags: 0
@@ -5205,6 +5226,10 @@ GameObject:
   - component: {fileID: 1966580447810109878}
   - component: {fileID: 74465695373766138}
   - component: {fileID: 4770266509914053720}
+  - component: {fileID: 8279002282216483286}
+  - component: {fileID: 3490619458514794137}
+  - component: {fileID: 8006690096804111679}
+  - component: {fileID: 5454419848131368307}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5257,8 +5282,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   inhaler: {fileID: 7330138422288815188}
+  respawnPoint: {fileID: 0}
+  playerAnimator: {fileID: 7377127292375690880}
+  custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   playerDirectional: {fileID: 1551700867557054575}
   movementSpeed: 5
+  swimSpeed: 3.4
   lookTransitionSpeed: 0.12
   lookTransitionSpeedMouse: 0.08
   moveTransitionSpeed: 0.011
@@ -5271,16 +5300,24 @@ MonoBehaviour:
   grappleCooldownTime: 1.5
   grappleDistance: 11
   grappleSpeed: 11.5
+  grappleMarker: {fileID: 0}
   grappleLine: {fileID: 4890982066620614929}
   ownsGrapplingHook: 0
+  combinatorProfile: {fileID: 11400000, guid: 0e447b4e028cdbb49b9307791fcdc4a1, type: 2}
+  isSwimming: 0
+  yOffset: -0.6
   gameplayScheme:
     m_Name: 
     m_BindingGroup: 
     m_DeviceRequirements: []
   itemInHand: {fileID: 0}
+  placeModeItemReference: {fileID: 0}
   maxHealth: 90
   currentHealth: 0
   healthbar: {fileID: 0}
+  maxPlaceDistance: 3
+  placeAtHigherLevelThreshold: 0.78
+  placeAtHigherLevelDistanceModifier: 1
 --- !u!114 &4078713960622899494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5488,6 +5525,75 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8279002282216483286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4071e6d9151044cea38fdff3b22409d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventory: {fileID: 1966580447810109878}
+  craftReceiver: {fileID: 3490619458514794137}
+--- !u!114 &3490619458514794137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0808212f4814f70b6104210a63345a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 9001336511291437872}
+--- !u!114 &8006690096804111679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9fe7187a334b4b866edf981911376c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cozyLevelOfSurrounding: 0
+  personalCozyLevel: 1
+  cozinessTillNextLevel: 0
+  baseFillDuration: 3
+  cozySettings: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
+--- !u!114 &5454419848131368307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996b124e83114787accabbbce51836c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
+  HeightTillCovered: 2
+  inCustardEffect: {fileID: 0}
+  inCustardEffectRight: {fileID: 0}
+  InsideCustard: 0
+  CoveredByCustard: 0
+  graceTimeForBeingInsideOrOutsideCustard: 0.6
+  timeBeforePlayerTakesDamageFromDrawning: 1
+  timeBetweenDamageTicks: 1.6
+  drowningDamage: 40
+  _fadeInDuration: 2
+  _fadeOutDuration: 1.5
 --- !u!1 &4134362619229406679
 GameObject:
   m_ObjectHideFlags: 0
@@ -5908,7 +6014,7 @@ LineRenderer:
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
-    textureMode: 0
+    textureMode: 1
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 1

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7161474476943604578}
   - component: {fileID: 4385387227174738258}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Volcano
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,6 +115,10 @@ PrefabInstance:
     - target: {fileID: 7577677890871168495, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
       propertyPath: m_Name
       value: Crusted_Custard_Volcano
+      objectReference: {fileID: 0}
+    - target: {fileID: 7577677890871168495, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8871988095928574479, guid: c109c576375d4364b88d3f97fb7c720d, type: 3}
       propertyPath: interactionMessage

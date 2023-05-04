@@ -6,8 +6,8 @@ using System.Collections;
 public class UIMessage : MonoBehaviour
 {
 
-    [SerializeField] TextMeshProUGUI congratsMsg;
-    [SerializeField] float messageFadeInDuration, messageShowDuration, messageFadeOutDuration;
+    [SerializeField] private TextMeshProUGUI congratsMsg;
+    [SerializeField] private float messageFadeInDuration, messageShowDuration, messageFadeOutDuration;
 
     private void OnEnable() {
         CollectibleManager.onAllCollectiblesInhaled += AllCollectiblesInhaled;

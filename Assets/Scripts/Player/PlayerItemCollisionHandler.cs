@@ -22,20 +22,33 @@ public class PlayerItemCollisionHandler : MonoBehaviour
         {
             textForItemDisplay.enabled = true;
             textForItemDisplay.text = collision.GetComponent<Inhalable>().interactionMessage;
+            var upgradableStructureVisual = collision.GetComponentInChildren<UpgradableStructureVisual>();
+            if (upgradableStructureVisual != null)
+            {
+                upgradableStructureVisual.Show();
+            }
+
             _disappearEffect.Reset();
             _timeSinceActivated = Time.time;
-            StartCoroutine(DisappearLater());
+            StartCoroutine(DisappearLater(upgradableStructureVisual));
         }
     }
 
-    private IEnumerator DisappearLater()
+    private IEnumerator DisappearLater(UpgradableStructureVisual upgradableStructureVisual)
     {
         var sinceActivated = _timeSinceActivated;
         yield return new WaitForSecondsRealtime(3f);
 
         // target did not switch meanwhile
         if (Math.Abs(sinceActivated - _timeSinceActivated) < .1f)
+        {
+            if (upgradableStructureVisual != null)
+            {
+                upgradableStructureVisual.Hide();
+            }
+
             Hide();
+        }
     }
 
     private void Hide()
@@ -48,6 +61,12 @@ public class PlayerItemCollisionHandler : MonoBehaviour
         collision.GetComponent<Inhalable>();
         if (collision.GetComponent<Inhalable>() != null)
         {
+            var upgradableStructureVisual = collision.GetComponentInChildren<UpgradableStructureVisual>();
+            if (upgradableStructureVisual != null)
+            {
+                upgradableStructureVisual.Hide();
+            }
+            
             Hide();
         }
     }

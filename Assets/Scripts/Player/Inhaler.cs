@@ -215,7 +215,7 @@ public class Inhaler : MonoBehaviour
                         Quaternion.Euler(-90f, 0f, 0f));
             }
 
-            var newAmount = inventory.AddOrSubResourceAmount(resource, amount);
+            inventory.AddOrSubResourceAmount(resource, amount);
         }
         catch (Exception e)
         {

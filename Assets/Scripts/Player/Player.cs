@@ -1,18 +1,28 @@
 using System;
+using System.Collections;
+using Custard;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
     public WorldCells worldCells;
     public Inhaler inhaler;
 
+    [SerializeField] private Transform respawnPoint;
+    [SerializeField] private Animator playerAnimator;
+
     private AudioSource inhaleSFX;
 
+    [SerializeField] private CustardState custardState;
 
     [SerializeField] private GameObject playerDirectional;
     public float movementSpeed = 4;
+    [SerializeField]
+    private float swimSpeed = 3.4f;
     private bool _isLookInMoveDirection = true;
     private Vector3 _targetMoveDirection = Vector3.zero;
     private Vector3 _currentMoveDirection = Vector3.zero;
@@ -41,8 +51,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float grappleDistance = 7f;
     [SerializeField] private float grappleSpeed = 8f;
 
-    [SerializeField]
-    private GameObject grappleMarker;
+    [SerializeField] private GameObject grappleMarker;
     private Vector3 grapplePoint;
     [SerializeField] private LineRenderer grappleLine;
 
@@ -52,14 +61,24 @@ public class Player : MonoBehaviour
     private bool grappleIntoTheVoid;
     private bool _isMoveForward;
 
+    private CozinessReceiver cozinessReceiver;
+    [SerializeField] private CombinatorProfileSO combinatorProfile;
+
+    [SerializeField] private bool isSwimming;
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
-    private float yOffset = -.05f;
+    [SerializeField] private float yOffset = -.6f;
     private Collider _collider;
 
     public InputControlScheme gameplayScheme;
 
     public GameObject itemInHand;
+
+    [SerializeField] private PlaceableItem placeModeItemReference;
+
+    private Vector3 targetPoint4PlacingItem;
+    private Vector3 _smoothPreviewPosition;
+    private Vector3 _velSmoothPreviewPosition = Vector3.zero;
 
 
     //health bar
@@ -83,6 +102,8 @@ public class Player : MonoBehaviour
         currentHealth = maxHealth;
         healthbar.SetMaxHealth(maxHealth);
         inhaler.owner = gameObject;
+
+        cozinessReceiver = GetComponent<CozinessReceiver>();
     }
 
     // Update is called once per frame
@@ -93,11 +114,32 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         nextGrappleTime += Time.fixedDeltaTime;
+
+        Vector3 playerPosition = transform.position;
+        if (!isDashing && !grappling && !isSwimming)
+        {
+            if (placeModeItemReference)
+            {
+                // player in place mode state
+                targetPoint4PlacingItem =
+                    FindNearestPlaceModeItemPosition(playerPosition, playerDirectional.transform.forward,
+                        out ItemReceiver itemReceiver);
+                _smoothPreviewPosition = Vector3.SmoothDamp(_smoothPreviewPosition, targetPoint4PlacingItem,
+                    ref _velSmoothPreviewPosition, 0.042f);
+                itemInHand.transform.position = _smoothPreviewPosition;
+                UpdatePlaceableItemState(playerPosition, itemReceiver);
+            }
+            else if (itemInHand)
+            {
+                itemInHand.SetActive(false);
+            }
+        }
+
         if (grappling)
         {
             grappleMarker.SetActive(false);
             transform.position =
-                Vector3.MoveTowards(transform.position, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
+                Vector3.MoveTowards(playerPosition, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
             grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
             if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
             {
@@ -107,7 +149,7 @@ public class Player : MonoBehaviour
 
             return;
         }
-        else if(ownsGrapplingHook)
+        else if (ownsGrapplingHook)
         {
             var hit = UpdateGrapplePoint();
             if (hit)
@@ -119,7 +161,8 @@ public class Player : MonoBehaviour
             {
                 grappleLine.gameObject.SetActive(true);
                 grappleIntoTheVoid = false;
-            } else
+            }
+            else
             {
                 grappleLine.gameObject.SetActive(false);
                 grappleMarker.SetActive(false);
@@ -180,25 +223,65 @@ public class Player : MonoBehaviour
         {
             MovePlayer(_currentMoveDirection);
         }
+        else
+        {
+            MovePlayer(Vector3.zero);
+        }
     }
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        healthbar.SetHealth(currentHealth);
-
-        if (currentHealth <= 0)
+        if (cozinessReceiver.PersonalCozyLevel == 0 && cozinessReceiver.CozinessTillNextLevel <= 0.01f)
         {
-            Respawn();
+            currentHealth -= damage;
+            healthbar.SetHealth(currentHealth);
+
+            if (currentHealth <= 0)
+            {
+                DieAndRespawn();
+            }
+        }
+        else
+        {
+            cozinessReceiver.TakeDamage(damage / (float) maxHealth);
         }
     }
 
-    void Respawn()
+    [ContextMenu("DieAndRespawn")]
+    void DieAndRespawn()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
-        worldCells.ResetChanges();
+        playerAnimator.SetBool(Dead, true);
+        _pauseActivator.PauseGameSilently();
+
+        StartCoroutine(Respawn());
+    }
+
+    IEnumerator Respawn()
+    {
+        yield return new WaitForSecondsRealtime(2);
         MusicManager.Instance.SetUnder(false);
-        SceneManager.LoadScene(currentScene.name);
+        var respawnPointPosition = respawnPoint.position;
+        var cellPosition = worldCells.GetCellPosition(respawnPointPosition);
+        float yOnSurface = worldCells.GetHeightAt(cellPosition);
+        yOnSurface += _collider.bounds.extents.y * 1.5f + yOffset;
+        transform.position = new Vector3(respawnPointPosition.x, yOnSurface, respawnPointPosition.z);
+        ResetPlayerState();
+
+        _pauseActivator.UnPauseGame();
+        playerAnimator.SetBool(Dead, false);
+    }
+
+
+    private void ResetPlayerState()
+    {
+        currentHealth = maxHealth;
+        healthbar.SetMaxHealth(maxHealth);
+        isDashing = false;
+        grappling = false;
+        _currenRunningMultiplier = 1f;
+        _velDash = 0;
+        _velLook = Vector3.zero;
+        _velMove = Vector3.zero;
     }
 
     void GainHealth(int health)
@@ -219,25 +302,63 @@ public class Player : MonoBehaviour
         var colliderBounds = _collider.bounds;
 
         var tracePoint = currentPosition + targetDirection * colliderBounds.extents.x / 2;
-
         Coords coords = worldCells.GetCellPosition(tracePoint);
-        // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
-        var terrainHeight = worldCells.GetHeightAt(coords);
-        var heightDifference = terrainHeight - colliderBounds.min.y;
-        // player cannot scale high ground
-        // player can only leap from a high point if running
-        if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f &&
-            worldCells.GetWorldItemHeightAt(coords) == 0)
+
+        if (isSwimming)
         {
-            currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
-            if (Math.Abs(heightDifference) > .0001f)
+            // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
+            var terrainHeight = worldCells.GetHeightAt(coords);
+            // player cannot scale high ground
+            // player can only leap from a high point if running
+            if (terrainHeight != 255)
             {
-                currentPosition += (heightDifference + colliderBounds.extents.y / 2 + yOffset) * Time.deltaTime * 18 *
-                                   Vector3.up;
+                var custardLevel = custardState.GetCurrentCustardLevelAt(coords);
+                var heightDifference = terrainHeight + custardLevel - colliderBounds.min.y;
+                var thresholdHeight = 1.75f;
+                if (heightDifference < thresholdHeight || custardLevel > 0)
+                {
+                    currentPosition += targetDirection * (Time.deltaTime * swimSpeed * _currenRunningMultiplier);
+                    if (Math.Abs(heightDifference) > .0001f)
+                    {
+                        currentPosition += (heightDifference + colliderBounds.extents.y / 2 + yOffset) *
+                                           Time.deltaTime * 18 *
+                                           Vector3.up;
+                        if (custardLevel <= 1)
+                        {
+                            EnterSwimMode(false);
+                        }
+                    }
+
+                    currentTransform.position = currentPosition;
+                }
             }
         }
+        else
+        {
+            // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
+            var terrainHeight = worldCells.GetHeightAt(coords);
+            var custardLevel = custardState.GetCurrentCustardLevelAt(coords);
+            var heightDifference = terrainHeight - colliderBounds.min.y;
+            if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f ||
+                custardLevel > 0 && Math.Abs(heightDifference + custardLevel) < 2.75)
+            {
+                currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
+                if (Math.Abs(heightDifference) > .0001f)
+                {
+                    currentPosition +=
+                        (heightDifference + (custardLevel > 1 ? custardLevel : 0) + colliderBounds.extents.y / 2 +
+                         yOffset) * Time.deltaTime *
+                        18 *
+                        Vector3.up;
+                    if (custardLevel > 1)
+                    {
+                        EnterSwimMode(true);
+                    }
+                }
+            }
 
-        currentTransform.position = currentPosition;
+            currentTransform.position = currentPosition;
+        }
     }
 
     public void OnMoveForwardButton(InputValue input)
@@ -297,17 +418,23 @@ public class Player : MonoBehaviour
         {
             inhaler.BeginInhaleInTransformDirection(4f);
             inhaleSFX.Play();
+
+            if (itemInHand != null)
+            {
+                PlaceItemInHand();
+            }
         }
         else
         {
             inhaler.StopInhale();
             inhaleSFX.Stop();
+            requireUseButtonRelease = false;
         }
     }
 
     public void OnDash(InputValue context)
     {
-        if (!isDashing && Time.time > nextRunningTime)
+        if (!isDashing && Time.time > nextRunningTime && !placeModeItemReference)
         {
             if (context.isPressed)
             {
@@ -320,8 +447,6 @@ public class Player : MonoBehaviour
 
     public void OnDebugHealthUp(InputValue context)
     {
-        //Debug.Log("health up "+context.isPressed);
-
         if (currentHealth <= 3)
         {
             GainHealth(1);
@@ -338,17 +463,39 @@ public class Player : MonoBehaviour
 
     public void OnUseItem(InputValue context)
     {
-        if (!context.isPressed && itemInHand != null)
+        if (context.isPressed)
         {
-            PlaceItemInHand();
+            requireUseButtonRelease = false;
+        }
+        else
+        {
+            // on release
+            if (itemInHand != null)
+                PlaceItemInHand();
         }
     }
 
     public static EventHandler<EventArgs> grapplePressed;
     public static EventHandler<EventArgs> grappleReleased;
+    [SerializeField] private float maxPlaceDistance = 3f;
+    [SerializeField] private float placeAtHigherLevelThreshold = .75f;
+    [SerializeField] private float placeAtHigherLevelDistanceModifier = 1f;
+    private ItemReceiver focusedItemReceiver;
+    private Func<bool> canPlaceMoreCheckFunc;
+    private Func<bool> onItemPlaced;
+    private bool requireUseButtonRelease;
+
+    private static readonly int Dead = Animator.StringToHash("dead");
+    private static readonly int Swimming = Animator.StringToHash("swimming");
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
+        if (placeModeItemReference)
+        {
+            // cancel place mode
+            ExitPlaceMode();
+        }
+
         if (!ownsGrapplingHook) return; // maybe play null sound effect
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
@@ -357,13 +504,11 @@ public class Player : MonoBehaviour
 
         if (context.isPressed)
         {
-            Debug.Log("grapple pressed");
             grapplePressed?.Invoke(this, EventArgs.Empty);
         }
         else
         {
             // this can only run when the OnGrapple is called and the button isn't pressed => release state
-            Debug.Log("grapple released");
             grappleReleased?.Invoke(this, EventArgs.Empty);
         }
         // when released the grapple is thrown towards grapplePoint
@@ -419,24 +564,156 @@ public class Player : MonoBehaviour
 
     private void PlaceItemInHand()
     {
-        var currentTransform = playerDirectional.transform;
-        var result = currentTransform.position;
-        var colliderBounds = _collider.bounds;
-
-        var tracePoint = result + currentTransform.forward * 1.1f;
-
-        Coords coords = worldCells.GetCellPosition(tracePoint.x, tracePoint.z);
-        // terrainHeight: currently out of bounds of terrain height check is coded as 255 value (int max)
-        var terrainHeight = worldCells.GetHeightAt(coords);
-        var heightDifference = terrainHeight - colliderBounds.min.y;
-        // the player cannot scale high ground
-        if (terrainHeight != 255 && heightDifference < 1.5f && itemInHand != null)
+        if (requireUseButtonRelease)
         {
-            var cellWorldPosition = worldCells.GetWorldPosition(coords);
-            // only if no other item at target position
-            if (worldCells.GetWorldItemHeightAt(coords) == 0)
-                Instantiate(itemInHand, new Vector3(cellWorldPosition.x, terrainHeight + 0.2f, cellWorldPosition.y),
-                    Quaternion.Euler(90f, 0, 90f));
+            return;
         }
+
+        var playerPosition = playerDirectional.transform.position;
+        // the player cannot scale high ground
+        if (UpdatePlaceableItemState(playerPosition, focusedItemReceiver))
+        {
+            onItemPlaced?.Invoke();
+
+            if (focusedItemReceiver == null)
+            {
+                Instantiate(placeModeItemReference.Prototype, targetPoint4PlacingItem, Quaternion.identity);
+            }
+            else
+            {
+                focusedItemReceiver.ReceiveItem(placeModeItemReference);
+            }
+
+            if (canPlaceMoreCheckFunc())
+            {
+                requireUseButtonRelease = true;
+            }
+            else
+            {
+                ExitPlaceMode();
+            }
+        }
+    }
+
+    private void ExitPlaceMode()
+    {
+        Destroy(itemInHand);
+        itemInHand = null;
+        canPlaceMoreCheckFunc = null;
+        placeModeItemReference = null;
+        focusedItemReceiver?.LeavePreview();
+        focusedItemReceiver = null;
+        requireUseButtonRelease = false;
+    }
+
+    public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> onItemPlaced)
+    {
+        Debug.Log("Enter place mode with " + item.ResourceName);
+        placeModeItemReference = item;
+        var playerDirectionalTransform = playerDirectional.transform;
+        var playerPosition = playerDirectionalTransform.position;
+        targetPoint4PlacingItem =
+            FindNearestPlaceModeItemPosition(playerPosition, playerDirectionalTransform.forward,
+                out ItemReceiver itemReceiver);
+
+        itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
+        canPlaceMoreCheckFunc = canPlaceMoreCheck;
+        this.onItemPlaced = onItemPlaced;
+        _smoothPreviewPosition = targetPoint4PlacingItem;
+        UpdatePlaceableItemState(playerPosition, itemReceiver);
+    }
+
+    private bool UpdatePlaceableItemState(Vector3 playerPosition, ItemReceiver itemReceiver)
+    {
+        if (focusedItemReceiver != null && itemReceiver != focusedItemReceiver)
+        {
+            focusedItemReceiver.LeavePreview();
+            focusedItemReceiver = null;
+        }
+
+        var possible = Vector2.Distance(new Vector2(playerPosition.x, playerPosition.z),
+            new Vector2(targetPoint4PlacingItem.x, targetPoint4PlacingItem.z)) >= .3f;
+        if (possible)
+        {
+            if (itemReceiver == null)
+            {
+                itemInHand.SetActive(true);
+            }
+            else
+            {
+                itemInHand.SetActive(false);
+                itemReceiver.PreviewReceiveItem(placeModeItemReference);
+                focusedItemReceiver = itemReceiver;
+            }
+        }
+        else
+        {
+            itemInHand.SetActive(false);
+        }
+
+        return possible;
+    }
+
+    private Vector3 FindNearestPlaceModeItemPosition(Vector3 position, Vector3 direction, out ItemReceiver itemReceiver)
+    {
+        Vector3 tmpTargetPoint4PlacingItem;
+        itemReceiver = null;
+
+        if (Physics.Raycast(position, direction, out var hitResult, maxPlaceDistance,
+                LayerMask.GetMask("Terrain", "Obstacles", "Interactable")))
+        {
+            bool blockedByOtherItem = false;
+            var layerName = LayerMask.LayerToName(hitResult.transform.gameObject.layer);
+            if (layerName == "Interactable")
+            {
+                blockedByOtherItem = true;
+                // set output
+                itemReceiver =
+                    combinatorProfile.CanCombine(placeModeItemReference, hitResult.transform.position + Vector3.up);
+            }
+
+            var obstacleDistance = Vector2.Distance(new Vector2(position.x, position.z),
+                new Vector2(hitResult.point.x, hitResult.point.z));
+            if (blockedByOtherItem || obstacleDistance >= maxPlaceDistance - placeAtHigherLevelThreshold)
+            {
+                tmpTargetPoint4PlacingItem = hitResult.point - direction * .9f;
+            }
+            else
+            {
+                tmpTargetPoint4PlacingItem =
+                    position + direction * (maxPlaceDistance - placeAtHigherLevelDistanceModifier);
+            }
+        }
+        else
+        {
+            tmpTargetPoint4PlacingItem = position + direction * maxPlaceDistance;
+        }
+
+        Coords coords = worldCells.GetCellPosition(tmpTargetPoint4PlacingItem.x, tmpTargetPoint4PlacingItem.z);
+        var heightAtTarget = worldCells.GetHeightAt(coords);
+        Coords coordsReference = worldCells.GetCellPosition(position.x, position.z);
+        var heightAtReference = worldCells.GetHeightAt(coordsReference);
+        if (heightAtTarget >= heightAtReference - 1 && heightAtTarget <= heightAtReference + 2)
+        {
+            var cellBasedPosition = worldCells.GetWorldPosition(coords);
+            return new Vector3(cellBasedPosition.x,
+                tmpTargetPoint4PlacingItem.y - .55f - heightAtReference + heightAtTarget, cellBasedPosition.y);
+        }
+        else
+        {
+            return position;
+        }
+    }
+
+    public void EnterSwimMode(bool doSwim)
+    {
+        isSwimming = doSwim;
+        if (isSwimming)
+        {
+            ExitPlaceMode();
+        }
+
+        playerAnimator.SetBool(Swimming, doSwim);
+        MovePlayer(Vector3.zero);
     }
 }

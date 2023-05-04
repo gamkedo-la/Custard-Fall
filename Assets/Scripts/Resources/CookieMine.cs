@@ -5,15 +5,19 @@ using UnityEngine;
 
 public class CookieMine : Inhalable
 {
+    
+    [SerializeField]
+    private PlaceableItem placeableItem;
+    
     public override void Init()
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Cookie shard"), 1.5f);
-        AddToInhaleQueue(new Resource("Cookie shard"), 1.5f);
-        AddToInhaleQueue(new Resource("Cookie shard"), 1.5f);
-        AddToInhaleQueue(new Resource("Cookie shard"), 2f);
-        AddToInhaleQueue(new Resource("Cookie shard"), 3f);
+        AddToInhaleQueue(new Resource("Cookie shard", placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Cookie shard", placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Cookie shard", placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Cookie shard", placeableItem), 2f);
+        AddToInhaleQueue(new Resource("Cookie shard", placeableItem), 3f);
     }
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)

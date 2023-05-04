@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5818915413345323112
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 104063790800867478, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 47dca4e67eab9564b8326e9483640396, type: 2}
+    - target: {fileID: 907674133423362430, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: interactionMessage
+      value: torn  sofa
+      objectReference: {fileID: 0}
+    - target: {fileID: 1533854352299913079, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 47dca4e67eab9564b8326e9483640396, type: 2}
+    - target: {fileID: 3600753700581650625, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 47dca4e67eab9564b8326e9483640396, type: 2}
+    - target: {fileID: 4069673725444057122, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 85cdfc5821f0c2f4fab03d981dad290c, type: 2}
+    - target: {fileID: 6303623572148944328, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_Name
+      value: Seat2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543988843938257523, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: coziness
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6643135529607440242, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950737515800148178, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: currentLevel
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950737515800148178, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: upgradeLevels.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950737515800148178, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: upgradeLevels.Array.data[0].comment
+      value: A red seating too comfy for this world
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950737515800148178, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: upgradeLevels.Array.data[1].comment
+      value: comfy sofa
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950737515800148178, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: upgradeLevels.Array.data[2].comment
+      value: A seating too comfy for this world
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950737515800148178, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: upgradeLevels.Array.data[0].requiredPoints
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950737515800148178, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: upgradeLevels.Array.data[1].requiredPoints
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950737515800148178, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: upgradeLevels.Array.data[2].requiredPoints
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7607876877137607206, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 47dca4e67eab9564b8326e9483640396, type: 2}
+    m_RemovedComponents:
+    - {fileID: 907674133423362430, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+--- !u!1 &556766852631049632 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6303623572148944328, guid: 4ebdbb9f0f3a7db4991d60fbd55e82ce, type: 3}
+  m_PrefabInstance: {fileID: 5818915413345323112}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3128310895336323534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556766852631049632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72712ff255f549b197e0f358734b364a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  hasInhaleFocus: 0
+  interactionMessage: A nice sofa
+  inhaleItemsProfile:
+  - resourceName: Seat2
+    itemReference: {fileID: 11400000, guid: 85cdfc5821f0c2f4fab03d981dad290c, type: 2}
+    timeToTake: 2

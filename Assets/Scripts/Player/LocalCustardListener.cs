@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using Custard;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LocalCustardListener : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class LocalCustardListener : MonoBehaviour
     public CustardState custardState;
     public int HeightTillCovered;
     private Player player;
+    [SerializeField] private Image inCustardEffect;
+    [SerializeField] private Image inCustardEffectRight;
 
     public bool InsideCustard;
     public bool CoveredByCustard;
@@ -20,10 +24,23 @@ public class LocalCustardListener : MonoBehaviour
     private float timePassedSinceCoveredByCustard = 0.0f;
     private float timePassedSinceInsideCustardChange = 0.0f;
     private float timePassedSinceLastDamage = 0.0f;
+    private Coroutine inCustardEffectFader;
+    [SerializeField] private float _fadeInDuration = 2.5f;
+    [SerializeField] private float _fadeOutDuration = 1.5f;
 
     private void Awake()
     {
         player = gameObject.GetComponent<Player>();
+        HideInCustardEffectImmediately();
+    }
+
+    private void HideInCustardEffectImmediately()
+    {
+        var colorLeft = inCustardEffect.color;
+        inCustardEffect.color = new Color(colorLeft.r, colorLeft.g, colorLeft.b, 0);
+
+        var colorRight = inCustardEffectRight.color;
+        inCustardEffectRight.color = new Color(colorRight.r, colorRight.g, colorRight.b, 0);
     }
 
     private void FixedUpdate()
@@ -38,23 +55,30 @@ public class LocalCustardListener : MonoBehaviour
         if (CoveredByCustard != coveredByCustard)
         {
             OnCoveredByCustard(coveredByCustard);
+            if (!coveredByCustard)
+            {
+                CheckForDrownDamage(false);
+            }
         }
 
         if (InsideCustard != insideCustard)
         {
             timePassedSinceInsideCustardChange = 0f;
+            CheckTimeSpentInOrOutsideCustard();
         }
+
+        CoveredByCustard = coveredByCustard;
+        InsideCustard = insideCustard;
 
         if (CoveredByCustard || timePassedSinceInsideCustardChange >= graceTimeForBeingInsideOrOutsideCustard)
         {
             OnInsideCustard(insideCustard);
         }
 
-        InsideCustard = insideCustard;
-        CoveredByCustard = coveredByCustard;
-
-        CheckTimeSpentInOrOutsideCustard();
-        CheckForDrownDamage();
+        if (CoveredByCustard)
+        {
+            CheckForDrownDamage(CoveredByCustard);
+        }
     }
 
     private void CheckTimeSpentInOrOutsideCustard()
@@ -70,6 +94,7 @@ public class LocalCustardListener : MonoBehaviour
     {
         timePassedSinceCoveredByCustard = 0.0f;
         timePassedSinceLastDamage = 0.0f;
+        player.EnterSwimMode(coveredByCustard);
     }
 
     private void OnInsideCustard(bool insideCustard)
@@ -77,13 +102,19 @@ public class LocalCustardListener : MonoBehaviour
         MusicManager.Instance.SetUnder(insideCustard);
     }
 
-    private void CheckForDrownDamage()
+    private void CheckForDrownDamage(bool coveredByCustard)
     {
-        if (CoveredByCustard)
+        if (coveredByCustard)
         {
             if (timePassedSinceCoveredByCustard < timeBeforePlayerTakesDamageFromDrawning)
             {
                 timePassedSinceCoveredByCustard += Time.deltaTime;
+
+                var timeTillDamage = timeBeforePlayerTakesDamageFromDrawning - timePassedSinceCoveredByCustard;
+                if (timeTillDamage <= .01f)
+                {
+                    FadeCustardEffect(100, _fadeInDuration);
+                }
             }
             else
             {
@@ -91,12 +122,47 @@ public class LocalCustardListener : MonoBehaviour
                 {
                     timePassedSinceLastDamage += Time.deltaTime;
                 }
-                else if(player)
+                else if (player)
                 {
                     player.TakeDamage(drowningDamage);
                     timePassedSinceLastDamage = 0.0f;
                 }
             }
+        }
+        else
+        {
+            FadeCustardEffect(0, _fadeOutDuration);
+        }
+    }
+
+    private void FadeCustardEffect(int alpha, float duration)
+    {
+        CrossFadeAlpha(inCustardEffect, inCustardEffectRight, alpha, duration);
+    }
+
+    public void CrossFadeAlpha(Image img, Image img2, float alpha, float duration)
+    {
+        if (inCustardEffectFader != null)
+        {
+            StopCoroutine(inCustardEffectFader);
+        }
+
+        inCustardEffectFader = StartCoroutine(CrossFadeAlphaCoroutine(img, img2, alpha, duration));
+    }
+
+    public static IEnumerator CrossFadeAlphaCoroutine(Image img, Image img2, float alpha, float duration)
+    {
+        Color currentColor = img.color;
+
+        float counter = 0;
+
+        while (counter < duration)
+        {
+            counter += Time.deltaTime;
+            img.color = new Color(currentColor.r, currentColor.g, currentColor.b,
+                Mathf.MoveTowards(currentColor.a, alpha, counter / duration));
+            img2.color = img.color;
+            yield return null;
         }
     }
 }

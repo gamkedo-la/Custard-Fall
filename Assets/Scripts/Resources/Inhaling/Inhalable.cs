@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Inhalable : MonoBehaviour, WorldItem
@@ -14,7 +15,9 @@ public class Inhalable : MonoBehaviour, WorldItem
     public string interactionMessage;
     private Coords cellPosition;
 
-    [SerializeField] private bool usedUp = false;
+    protected bool _usedUp = false;
+
+    [SerializeField] private InhaleItemProfile[] inhaleItemsProfile;
 
     public void Inhale(Inhaler inhaler, float strength)
     {
@@ -32,7 +35,7 @@ public class Inhalable : MonoBehaviour, WorldItem
         _wobble = GetComponent<Wobble>();
         _wobbleInitialized = _wobble != null;
         Init();
-        usedUp = false;
+        _usedUp = false;
     }
 
     public virtual void Init()
@@ -48,6 +51,21 @@ public class Inhalable : MonoBehaviour, WorldItem
         }
 
         worldItemsInCell.Add(this);
+
+        ReFillInhaleQueue();
+    }
+
+    private void ReFillInhaleQueue()
+    {
+        foreach (var profile in inhaleItemsProfile)
+        {
+            AddToInhaleQueue(new Resource(profile.resourceName, profile.itemReference), profile.timeToTake);
+        }
+    }
+
+    public void ClearInhaleQueue()
+    {
+        _inhaleQueue.Clear();
     }
 
     protected virtual void FixedUpdate()
@@ -128,7 +146,7 @@ public class Inhalable : MonoBehaviour, WorldItem
         }
     }
 
-    protected void Remove()
+    protected virtual void Remove()
     {
         // cleanup
         List<WorldItem> worldItemsInCell;
@@ -139,21 +157,35 @@ public class Inhalable : MonoBehaviour, WorldItem
 
         GameObject go = gameObject;
         go.SetActive(false);
-        usedUp = true;
+        _usedUp = true;
     }
 
     public bool IsUsedUp()
     {
-        return usedUp;
+        return _usedUp;
     }
 
     public void SetUsedUp(bool isUsedUp)
     {
-        this.usedUp = isUsedUp;
+        this._usedUp = isUsedUp;
     }
 
     public void Reset()
     {
-        usedUp = false;
+        ReFillInhaleQueue();
+        _usedUp = false;
+    }
+
+    private void OnDestroy()
+    {
+        ClearInhaleQueue();
+    }
+
+    [Serializable]
+    public class InhaleItemProfile
+    {
+        public string resourceName;
+        public PlaceableItem itemReference;
+        public float timeToTake = 1.5f;
     }
 }

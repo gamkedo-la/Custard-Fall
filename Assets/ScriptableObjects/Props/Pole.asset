@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26931c617568282449a3c22c510a2f46, type: 3}
+  m_Name: Pole
+  m_EditorClassIdentifier: 
+  prototype: {fileID: 8821145956041889501, guid: 50bfe55f92c6ad342833ae041e2197e6, type: 3}
+  placeablePreview: {fileID: 8821145956041889501, guid: 7346c1d818a2a0f4ea89ba1fe87b4dfb, type: 3}
+  icon: {fileID: 21300000, guid: 9bfc0677fd5eed740aba4c04d08b4d38, type: 3}
+  resourceName: Creamy Cone Tree

@@ -2,13 +2,21 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-
+[RequireComponent(typeof(PlaceableItemReference))]
 public class LargeCreamyConeTree : Inhalable
 {
+    private PlaceableItem _placeableItem;
+    
     protected override void Start()
     {
         base.Start();
         AddObstacleToWorld(2);
+    }
+    
+    private void Awake()
+    {
+        var placeableItemReference = GetComponent<PlaceableItemReference>();
+        _placeableItem = placeableItemReference.Item();
     }
 
     private void AddObstacleToWorld(int height)
@@ -33,14 +41,14 @@ public class LargeCreamyConeTree : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 2f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), 3f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 2f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 2f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 2f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 3f);
     }
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)

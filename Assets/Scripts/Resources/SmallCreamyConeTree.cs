@@ -2,14 +2,21 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-
+[RequireComponent(typeof(PlaceableItemReference))]
 public class SmallCreamyConeTree : Inhalable
 {
+    private PlaceableItem _placeableItem;
     
     protected override void Start()
     {
         base.Start();
         AddObstacleToWorld(2);
+    }
+
+    private void Awake()
+    {
+        var placeableItemReference = GetComponent<PlaceableItemReference>();
+        _placeableItem = placeableItemReference.Item();
     }
 
     private void AddObstacleToWorld(int height)
@@ -26,10 +33,10 @@ public class SmallCreamyConeTree : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree"), .8f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .8f);
     }
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)

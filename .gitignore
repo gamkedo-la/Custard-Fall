@@ -80,3 +80,5 @@ Assets/Plugins/FMOD/Cache/Editor/FMODStudioCache.asset
 *.kra~
 *.png~
 Art/*
+*.bak
+*.bak.meta
