@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Custard;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Tidesmanager : MonoBehaviour
 {
@@ -29,17 +30,24 @@ public class Tidesmanager : MonoBehaviour
     public bool pause = false;
     public bool realCustardFallCycle;
 
+    [SerializeField] private bool useSerializedCycle;
+    [SerializeField] private List<TideDay> cycle = new();
+
     public int indexOfCurrentDayTimeTideLevel;
 
     private void Start()
     {
         InitPlannedTideBehavior();
 
-        _weeklyPlan = new[]
+        if (!useSerializedCycle)
         {
-            _tidesPlanFirstTime, _tidesPlanNormal, _tidesPlanNormal1, _tidesPlanNormal2, _tidesPlanNormal3,
-            _tidesPlanNormal4, _tidesPlanNormal5, _tidesPlanFullMoon
-        };
+            _weeklyPlan = new[]
+            {
+                _tidesPlanFirstTime, _tidesPlanNormal, _tidesPlanNormal1, _tidesPlanNormal2, _tidesPlanNormal3,
+                _tidesPlanNormal4, _tidesPlanNormal5, _tidesPlanFullMoon
+            };
+        }
+
         SetTidesDayOfWeek(0);
 
         TimeManager.onMidnightPassed += (sender, arg) => StartNextTidesDayOfWeek();
@@ -143,7 +151,26 @@ public class Tidesmanager : MonoBehaviour
 
     private void InitPlannedTideBehavior()
     {
-        if (realCustardFallCycle)
+        if (useSerializedCycle)
+        {
+            _weeklyPlan = new SortedDictionary<float, TideStep>[cycle.Count];
+            for (int i = 0; i < cycle.Count; i++)
+            {
+                var tideDay = cycle[i];
+                Debug.Log("day " + i);
+                SortedDictionary<float, TideStep> normalSteps = new();
+                float fractionOfDay = 0;
+                foreach (var tideStep in tideDay.TideSteps)
+                {
+                    fractionOfDay += tideStep.getFraction16();
+                    normalSteps.Add(fractionOfDay / 16f, tideStep);
+                    Debug.Log(" fraction of day " + fractionOfDay + " " + tideStep.getLevel());
+                }
+
+                _weeklyPlan[i] = normalSteps;
+            }
+        }
+        else if (realCustardFallCycle)
         {
             _tidesPlanFirstTime.Add(0f, new TideStep(9));
             _tidesPlanFirstTime.Add(5 / 16f, new TideStep(5));
@@ -154,7 +181,7 @@ public class Tidesmanager : MonoBehaviour
             _tidesPlanNormal0.Add(4 / 16f, new TideStep(5));
             _tidesPlanNormal0.Add(13 / 16f, new TideStep(6));
             _tidesPlanNormal0.Add(13.5f / 16f, new TideStep(7));
-            
+
             _tidesPlanNormal.Add(0f, new TideStep(8));
             _tidesPlanNormal.Add(4 / 16f, new TideStep(5));
             _tidesPlanNormal.Add(13 / 16f, new TideStep(6));
@@ -164,7 +191,7 @@ public class Tidesmanager : MonoBehaviour
             _tidesPlanNormal1.Add(4 / 16f, new TideStep(4));
             _tidesPlanNormal1.Add(13 / 16f, new TideStep(5));
             _tidesPlanNormal1.Add(13.5f / 16f, new TideStep(6));
-            
+
             _tidesPlanNormal2.Add(0f, new TideStep(6));
             _tidesPlanNormal2.Add(4 / 16f, new TideStep(3));
             _tidesPlanNormal2.Add(13 / 16f, new TideStep(4));
@@ -179,7 +206,7 @@ public class Tidesmanager : MonoBehaviour
             _tidesPlanNormal4.Add(4 / 16f, new TideStep(5));
             _tidesPlanNormal4.Add(13 / 16f, new TideStep(7));
             _tidesPlanNormal4.Add(13.5f / 16f, new TideStep(8));
-            
+
             _tidesPlanNormal5.Add(0f, new TideStep(8));
             _tidesPlanNormal5.Add(4 / 16f, new TideStep(7));
             _tidesPlanNormal5.Add(13 / 16f, new TideStep(9));
@@ -224,22 +251,30 @@ public class Tidesmanager : MonoBehaviour
     }
 
 
+    [Serializable]
+    public class TideDay
+    {
+        [SerializeField] private List<TideStep> tideSteps;
+
+        public List<TideStep> TideSteps => tideSteps;
+    }
+
+    [Serializable]
     public class TideStep
     {
-        private int level;
+        [SerializeField] private int level;
 
-        // currently not used
-        private float secondsToLast;
+        [SerializeField] private float fraction16;
 
         public TideStep(int level)
         {
             this.level = level;
         }
 
-        public TideStep(int level, float secondsToLast)
+        public TideStep(int level, float fraction16)
         {
             this.level = level;
-            this.secondsToLast = secondsToLast;
+            this.fraction16 = fraction16;
         }
 
         public int getLevel()
@@ -247,9 +282,9 @@ public class Tidesmanager : MonoBehaviour
             return level;
         }
 
-        public float getSecondsToLast()
+        public float getFraction16()
         {
-            return secondsToLast;
+            return fraction16;
         }
     }
 }
