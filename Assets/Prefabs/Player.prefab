@@ -5305,7 +5305,7 @@ MonoBehaviour:
   ownsGrapplingHook: 0
   combinatorProfile: {fileID: 11400000, guid: 0e447b4e028cdbb49b9307791fcdc4a1, type: 2}
   isSwimming: 0
-  yOffset: -0.6
+  yOffset: -0.1
   gameplayScheme:
     m_Name: 
     m_BindingGroup: 

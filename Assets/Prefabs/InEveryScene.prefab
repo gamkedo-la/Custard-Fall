@@ -3955,6 +3955,8 @@ MonoBehaviour:
   dayOfWeek: -1
   pause: 0
   realCustardFallCycle: 0
+  useSerializedCycle: 0
+  cycle: []
   indexOfCurrentDayTimeTideLevel: 0
 --- !u!1 &8634744845947213669
 GameObject:
@@ -6461,6 +6463,18 @@ PrefabInstance:
     - target: {fileID: 4078713960622899494, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: m_NeverAutoSwitchControlSchemes
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5145240563790132885, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5145240563790132885, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5145240563790132885, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5454419848131368307, guid: ecbd608d66f648b4babe75e260cdfa4d, type: 3}
       propertyPath: inCustardEffect
