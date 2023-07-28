@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8226297047903022138}
   - component: {fileID: 4548006772022468161}
   - component: {fileID: 8871988095928574479}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Crusted_Custard_Volcano
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,4 +114,4 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   interactionMessage: 
-  usedUp: 0
+  inhaleItemsProfile: []
