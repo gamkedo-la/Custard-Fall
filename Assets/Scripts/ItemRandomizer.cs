@@ -276,7 +276,6 @@ public class ItemRandomizer : MonoBehaviour
             return;
 
         var currentPlayerChunk = peekCurrentPlayerChunk();
-        _playerChunk = currentPlayerChunk;
 
         if (force)
             _activeChunks.Clear();
@@ -284,6 +283,7 @@ public class ItemRandomizer : MonoBehaviour
             // still same chunk
             return;
 
+        _playerChunk = currentPlayerChunk;
         HashSet<Coords> currentChunks = new HashSet<Coords>();
         var halfWindowSize = 2;
         for (int x = -halfWindowSize; x < halfWindowSize; x++)
