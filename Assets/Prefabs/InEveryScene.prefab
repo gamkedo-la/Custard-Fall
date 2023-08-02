@@ -3600,7 +3600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   receivers:
   - {fileID: 3571438178642794124}
-  searchRadius: 10
+  searchRadius: 12
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0
