@@ -10,7 +10,7 @@ public class LargeCreamyConeTree : Inhalable
     protected override void Start()
     {
         base.Start();
-        AddObstacleToWorld(2);
+        AddObstacleToWorld(16);
     }
     
     private void Awake()

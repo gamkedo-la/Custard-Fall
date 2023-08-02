@@ -7,7 +7,7 @@ public class Volcano : Inhalable
     protected override void Start()
     {
         base.Start();
-        AddObstacleToWorld(2);
+        AddObstacleToWorld(16);
     }
 
     private void AddObstacleToWorld(int height)
@@ -15,8 +15,8 @@ public class Volcano : Inhalable
         var position = gameObject.transform.position;
         var cellPosition = worldCells.GetCellPosition(position.x, position.z);
         var centerTerrainHeight = worldCells.GetTerrainHeightAt(cellPosition);
-        for (int i = -4; i < 4; i++)
-        for (int j = -4; j < 4; j++)
+        for (int i = -3; i < 7; i++)
+        for (int j = -4; j < 5; j++)
         {
             var localX = cellPosition.X + i;
             var localY = cellPosition.Y + j;
