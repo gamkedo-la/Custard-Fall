@@ -58,6 +58,10 @@ public class VisualDebugger : MonoBehaviour
         {
             Visualize(custardManager.custardRim, Color.red);
         }
+        if (custardManager.debugSet.Count !=0)
+        {
+            Visualize(custardManager.debugSet, Color.magenta);
+        }
         if (showInhaleArea)
         {
             List<Coords> positions = new List<Coords>();
