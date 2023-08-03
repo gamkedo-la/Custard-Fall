@@ -27,9 +27,9 @@ public class TimeManager : MonoBehaviour
     private float timeRate;
 
     [SerializeField]
-    float dayStart = 0.25f;
+    public float dayStart = 0.25f;
     [SerializeField]
-    float nightStart = 0.75f;
+    public float nightStart = 0.75f;
 
     int currentDay;
     int previousDay;
