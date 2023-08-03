@@ -99,10 +99,15 @@ public class Tidesmanager : MonoBehaviour
 
                 // custard ai
                 var nextTideLevel = tideStep.GetLevel();
+                var currentTideLevel = CustardManager.targetTideLevel;
                 CustardManager.targetTideLevel = nextTideLevel;
 
                 // spread custard hotspots
-                // TODO center custard update roughly at some distance around the player
+                if (currentTideLevel > nextTideLevel)
+                {
+                    CustardManager.RimCustardUpdate();
+                }
+
                 CustardManager.SeedCustardUpdate((int) Math.Floor(Time.time * 1000));
                 CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 2);
                 CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 4);
@@ -263,7 +268,8 @@ public class Tidesmanager : MonoBehaviour
     {
         [SerializeField] private int level;
 
-        [FormerlySerializedAs("fraction16")] [SerializeField] private float time;
+        [FormerlySerializedAs("fraction16")] [SerializeField]
+        private float time;
 
         public TideStep(int level)
         {

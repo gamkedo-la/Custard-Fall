@@ -19236,6 +19236,17 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &1827260112 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8634744844989316037, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+  m_PrefabInstance: {fileID: 8634744845791239551}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fb00f90c41416aa260bdc6340c9719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1842032440
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23451,6 +23462,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8634744844989316036, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: showRim
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8634744844989316036, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: custardManager
+      value: 
+      objectReference: {fileID: 1827260112}
     - target: {fileID: 8634744844989316038, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_LocalPosition.y
       value: 3.159281

@@ -15,6 +15,8 @@ namespace Custard
         public CustardState custardState;
         private Dictionary<Coords, List<ImpededCell>> _impededCells;
 
+        public HashSet<Coords> custardRim;
+
         private CustardSpawn[] _initialSpawns;
 
         public CustardVisualizer custardVisualizer;
@@ -38,6 +40,7 @@ namespace Custard
         private void Awake()
         {
             _initialSpawns = FindObjectsOfType<CustardSpawn>();
+            custardRim = new HashSet<Coords>();
         }
 
 
@@ -127,6 +130,7 @@ namespace Custard
                     valuesOfImpededCells.Add(cell);
                 }
             }
+
             custardVisualizer.RenderCustard(valuesOfImpededCells);
         }
 
@@ -162,7 +166,7 @@ namespace Custard
             foreach (var impededCellList in _impededCells.Values)
             {
                 List<ImpededCell> timedOutCells = new List<ImpededCell>();
-                
+
                 foreach (var impededCell in impededCellList)
                 {
                     impededCell.SetDuration(impededCell.GetDuration() - Time.deltaTime);
@@ -201,6 +205,15 @@ namespace Custard
         {
             pauseIterationCountDown = !pauseIterationCountDown;
             return pauseIterationCountDown;
+        }
+
+        public void RimCustardUpdate()
+        {
+            Debug.Log($"Updating {custardRim.Count} cells in total");
+            foreach (var rimCell in custardRim)
+            {
+                custardState.QueueCellForNextIteration(rimCell.X, rimCell.Y);
+            }
         }
 
         public void SeedCustardUpdate(int seed)
@@ -321,8 +334,8 @@ namespace Custard
                     // next iteration: check all cells that now might flow into me
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                 }
-                else if (pivotCustardAmount == 1 && (custardState.IsTrapped(pivot)  ||  info.CellsBellow.Count == 0 &&
-                         info.CellsAtSameLevel.Count + info.CustardFromAbove.Count == 8))
+                else if (pivotCustardAmount == 1 && (custardState.IsTrapped(pivot) || info.CellsBellow.Count == 0 &&
+                             info.CellsAtSameLevel.Count + info.CustardFromAbove.Count == 8))
                 {
                     // custard is trapped
                     newPivotCustardAmount = 1;
@@ -347,10 +360,20 @@ namespace Custard
                     // if in sink and has neighbor custard flowing downwards
                     newPivotCustardAmount = 1;
                 }
+
                 // cells above should flow into me
                 custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                 // spread: next iteration: check all cells below me as they should come up
                 custardState.QueueCellsForNextIteration(info.CellsBellow);
+                if (info.CellsBellow.Count != 0)
+                {
+                    custardRim.AddRange(info.CellsBellow);
+                }
+
+                if (info.CustardAtSameLevel.Count == 8)
+                {
+                    custardRim.Remove(pivot);
+                }
             }
             else
             {
@@ -543,7 +566,7 @@ namespace Custard
                 if (!isPresent)
                     knownImpededCells.Add(new ImpededCell(coords, strength, worldY));
             }
-            
+
             custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
         }
 
