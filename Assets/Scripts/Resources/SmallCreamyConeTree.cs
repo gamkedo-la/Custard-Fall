@@ -33,10 +33,9 @@ public class SmallCreamyConeTree : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .8f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 3.0f);
     }
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)

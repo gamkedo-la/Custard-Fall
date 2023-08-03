@@ -43,8 +43,6 @@ public class LargeCreamyConeTree : Inhalable
 
         AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
         AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
         AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 2f);
         AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 2f);
         AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 2f);
