@@ -5309,10 +5309,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4236102027822663860}
     - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
-      propertyPath: fullDayLength
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
       propertyPath: dayCountAnimatorController
       value: 
       objectReference: {fileID: 5364399219188337385}
