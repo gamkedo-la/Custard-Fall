@@ -32,32 +32,32 @@ public class StoryTeller : MonoBehaviour
                 // we do not want to overwhelm the player with infos on the start of the game
                 timeTillNextMessage = 1.5f;
                 messages.Enqueue("The world wants to nibble at you,\nso munch back and survive!");
-                messages.Enqueue("7 days left till next calamity...");
+                // messages.Enqueue("7 days left till next calamity...");
              }
-            else if (relativeDay == 1)
-            {
-                messages.Clear();
-                timeTillNextMessage = 1.5f;
-                messages.Enqueue("7 days left till next calamity...");
-            }
-            else if (relativeDay == 3)
-            {
-                messages.Clear();
-                timeTillNextMessage = 1.5f;
-                messages.Enqueue("The moon feels stronger today...");
-            }
-            else if (relativeDay == 4)
-            {
-                messages.Clear();
-                timeTillNextMessage = 1.5f;
-                messages.Enqueue("3 days left till next calamity...");
-            }
-            else if (relativeDay == 6)
-            {
-                messages.Clear();
-                timeTillNextMessage = 1.5f;
-                messages.Enqueue("The world will change tonight...\nthe custard falls.");
-            }
+            // else if (relativeDay == 1)
+            // {
+            //     messages.Clear();
+            //     timeTillNextMessage = 1.5f;
+            //     messages.Enqueue("7 days left till next calamity...");
+            // }
+            // else if (relativeDay == 3)
+            // {
+            //     messages.Clear();
+            //     timeTillNextMessage = 1.5f;
+            //     messages.Enqueue("The moon feels stronger today...");
+            // }
+            // else if (relativeDay == 4)
+            // {
+            //     messages.Clear();
+            //     timeTillNextMessage = 1.5f;
+            //     messages.Enqueue("3 days left till next calamity...");
+            // }
+            // else if (relativeDay == 6)
+            // {
+            //     messages.Clear();
+            //     timeTillNextMessage = 1.5f;
+            //     messages.Enqueue("The world will change tonight...\nthe custard falls.");
+            // }
         };
 
         StartCoroutine(DoCinematicMagic());
