@@ -1180,6 +1180,88 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1001 &94503191
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 629243604912482257, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_Name
+      value: TutorialPopup - the shores
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_RootOrder
+      value: 131
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 28.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482259, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243604912482268, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: MyPopupCanvas
+      value: 
+      objectReference: {fileID: 94503192}
+    - target: {fileID: 629243605008189738, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243606352101909, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_text
+      value: The shores - a source for the wonders of life and scrap...
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243606352101909, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_fontSize
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 629243606352101909, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4280096796
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dddb670edba280f4b92787084fc78032, type: 3}
+--- !u!1 &94503192 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 629243604756098767, guid: dddb670edba280f4b92787084fc78032, type: 3}
+  m_PrefabInstance: {fileID: 94503191}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &109099370
 GameObject:
   m_ObjectHideFlags: 0
@@ -7575,9 +7657,13 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.38
       objectReference: {fileID: 0}
+    - target: {fileID: 629243606352101908, guid: dddb670edba280f4b92787084fc78032, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.71
+      objectReference: {fileID: 0}
     - target: {fileID: 629243606352101909, guid: dddb670edba280f4b92787084fc78032, type: 3}
       propertyPath: m_text
-      value: Inhale delicious custard, edible items and rare treasure!
+      value: The world is full of resources and rarities to inhale, literally.
       objectReference: {fileID: 0}
     - target: {fileID: 629243606352101909, guid: dddb670edba280f4b92787084fc78032, type: 3}
       propertyPath: m_fontSize
@@ -15344,7 +15430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 629243606352101909, guid: dddb670edba280f4b92787084fc78032, type: 3}
       propertyPath: m_text
-      value: It's been craving us, ever since the custard fell...
+      value: It's been craving us, ever since the custard fell.
       objectReference: {fileID: 0}
     - target: {fileID: 629243606352101909, guid: dddb670edba280f4b92787084fc78032, type: 3}
       propertyPath: m_fontSize
