@@ -37,10 +37,10 @@ public class Inventory : MonoBehaviour
 
     public int AddOrSubResourceAmount(Resource resource, int amount)
     {
-        if (amount >= 0)
-            Debug.Log("Adding " + amount + " " + resource.Name);
-        else
-            Debug.Log("Removing " + amount + " " + resource.Name);
+        // if (amount >= 0)
+        //     Debug.Log("Adding " + amount + " " + resource.Name);
+        // else
+        //     Debug.Log("Removing " + amount + " " + resource.Name);
 
         // inelegant way to do it, but correct way wasn't working, so brute force :)
         // (not happening often enough for this to be any sort of performance snag)
