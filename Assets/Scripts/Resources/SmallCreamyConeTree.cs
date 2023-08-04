@@ -42,7 +42,7 @@ public class SmallCreamyConeTree : Inhalable
     {
         if (GetRemainingResourcesCount() == 0)
         {
-            AddObstacleToWorld(-2);
+            AddObstacleToWorld(-16);
         }
         base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
     }
