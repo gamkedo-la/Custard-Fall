@@ -13,7 +13,7 @@ public class WaffleWall1x1 : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Waffle wall", _placeableItem), 2f);
+        AddToInhaleQueue(new Resource("Waffle cube", _placeableItem), 2f);
     }
 
     private void Awake()
