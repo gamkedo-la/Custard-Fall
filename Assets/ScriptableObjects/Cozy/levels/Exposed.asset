@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95e108b930834b44975944d6aaaf89d, type: 3}
   m_Name: Exposed
   m_EditorClassIdentifier: 
-  displayName: exposed
+  displayName: radiance lvl 0
   color: {r: 0.3490566, g: 0.34345853, b: 0.3210662, a: 1}
   progressColor: {r: 0.29730332, g: 0.4811321, b: 0.4721378, a: 1}
