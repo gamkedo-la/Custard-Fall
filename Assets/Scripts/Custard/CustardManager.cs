@@ -510,7 +510,7 @@ namespace Custard
             int[,] terrainAreaAroundPivot)
         {
             List<Coords> custardCellsAbove = new List<Coords>();
-            List<Coords> custardtAtSameLevel = new List<Coords>();
+            List<Coords> custardAtSameLevel = new List<Coords>();
             List<Coords> sameLevelCells = new List<Coords>();
             List<Coords> cellsBellow = new List<Coords>();
 
@@ -549,7 +549,7 @@ namespace Custard
                 {
                     sameLevelCells.Add(coord);
                     if (neighborCustardAmount != 0)
-                        custardtAtSameLevel.Add(coord);
+                        custardAtSameLevel.Add(coord);
                 }
                 else
                 {
@@ -563,7 +563,7 @@ namespace Custard
                 }
             }
 
-            return new CustardAreaInfo(custardCellsAbove, custardtAtSameLevel, sameLevelCells, cellsBellow);
+            return new CustardAreaInfo(custardCellsAbove, custardAtSameLevel, sameLevelCells, cellsBellow);
         }
 
         private int[,] GetLocalNeighborhood(Coords coords, Func<int, int, int> getValueAt)
