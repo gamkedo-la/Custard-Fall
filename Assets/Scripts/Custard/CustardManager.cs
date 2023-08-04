@@ -360,12 +360,16 @@ namespace Custard
                     {
                         debugSet.Add(pivot);
                     }
-                    // custard is trapped
-                    newPivotCustardAmount = 1;
 
                     if (info.CustardAtSameLevel.Count == 0)
                     {
                         custardRim.Remove(pivot);
+                    }
+                    else
+                    {
+                        // custard is trapped
+                        newPivotCustardAmount = 1;
+                        custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                     }
                 }
                 else if (pivotCustardAmount == 1 && !(custardState.GlobalTideLevel == 0 && pivotTerrainHeight == 0))
@@ -377,7 +381,7 @@ namespace Custard
                         custardState.QueueCellsForNextIteration(info.CellsBellow);
                         custardRim.AddRange(info.CellsBellow);
                     }
-
+                
                     if (info.CellsAtSameLevel.Count != 0)
                     {
                         custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
