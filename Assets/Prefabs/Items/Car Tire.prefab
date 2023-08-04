@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 1650035146164881562}
   - component: {fileID: 850855140104764191}
   - component: {fileID: 5463855207902234404}
+  - component: {fileID: 1776846035395798667}
+  - component: {fileID: 4548285329376016947}
+  - component: {fileID: 7446605153624581511}
   m_Layer: 0
   m_Name: Car Tire
   m_TagString: Untagged
@@ -3324,6 +3327,50 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1776846035395798667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941044459362297472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 170aaf4cd5514fa4ba85ff6718404b3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: e0da90fdcf3a7154dbca075ab5fa791e, type: 2}
+--- !u!114 &4548285329376016947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941044459362297472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ef49d5da33d4728b5e317b5cb6c04c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  hasInhaleFocus: 0
+  interactionMessage: retired car tire
+  inhaleItemsProfile: []
+  resourceName: scrap
+  timeToInhaleWhole: 2
+--- !u!114 &7446605153624581511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941044459362297472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94aa7582687e3d4ab0e8f97b571f55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wobbleStrength: 0
 --- !u!1 &2223762597364661771
 GameObject:
   m_ObjectHideFlags: 0
