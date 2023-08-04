@@ -6,13 +6,13 @@ using UnityEngine;
 public class LargeCreamyConeTree : Inhalable
 {
     private PlaceableItem _placeableItem;
-    
+
     protected override void Start()
     {
         base.Start();
         AddObstacleToWorld(16);
     }
-    
+
     private void Awake()
     {
         var placeableItemReference = GetComponent<PlaceableItemReference>();
@@ -29,11 +29,20 @@ public class LargeCreamyConeTree : Inhalable
         {
             var localX = cellPosition.X + i;
             var localY = cellPosition.Y + j;
-            var localTerrainHeight = worldCells.GetTerrainHeightAt(localX, localY);
-            var difference = localTerrainHeight - centerTerrainHeight;
-            if (localTerrainHeight >= centerTerrainHeight && difference < height)
-                worldCells.WriteWorldItemHeight(Coords.Of(localX, localY),
-                    worldCells.GetWorldItemHeightAt(cellPosition) + height - difference);
+
+            if (height < 0)
+            {
+                worldCells.WriteWorldItemHeight(Coords.Of(cellPosition.X + i, cellPosition.Y + j),
+                    worldCells.GetWorldItemHeightAt(cellPosition) + height);
+            }
+            else
+            {
+                var localTerrainHeight = worldCells.GetTerrainHeightAt(localX, localY);
+                var difference = localTerrainHeight - centerTerrainHeight;
+                if (localTerrainHeight >= centerTerrainHeight && difference < height)
+                    worldCells.WriteWorldItemHeight(Coords.Of(localX, localY),
+                        worldCells.GetWorldItemHeightAt(cellPosition) + height - difference);
+            }
         }
     }
 
