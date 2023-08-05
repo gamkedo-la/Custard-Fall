@@ -3600,7 +3600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   receivers:
   - {fileID: 3571438178642794124}
-  searchRadius: 10
+  searchRadius: 12
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0
@@ -5308,10 +5308,6 @@ PrefabInstance:
       propertyPath: dayCountText
       value: 
       objectReference: {fileID: 4236102027822663860}
-    - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
-      propertyPath: fullDayLength
-      value: 300
-      objectReference: {fileID: 0}
     - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
       propertyPath: dayCountAnimatorController
       value: 

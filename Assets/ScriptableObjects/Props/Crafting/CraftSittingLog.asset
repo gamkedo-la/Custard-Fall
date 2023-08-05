@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b95e108b930834b44975944d6aaaf89d, type: 3}
-  m_Name: Snug-lvl-8
+  m_Script: {fileID: 11500000, guid: b3c013d3bbed4035a43e298d1f203d9e, type: 3}
+  m_Name: CraftSittingLog
   m_EditorClassIdentifier: 
-  displayName: radiance lvl 8
-  color: {r: 0.6886792, g: 0.21764861, b: 0.35294476, a: 1}
-  progressColor: {r: 0.915, g: 0.31876484, b: 0.31292996, a: 1}
+  item: {fileID: 11400000, guid: 658966ea58642164fa4ce6cd29690db4, type: 2}
+  requirements:
+  - resourceName: Creamy Cone Tree
+    amount: 5

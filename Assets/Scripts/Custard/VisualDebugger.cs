@@ -10,8 +10,10 @@ public class VisualDebugger : MonoBehaviour
     public CustardState custardState;
     public WorldCells worldCells;
     public Player player;
-
+    public CustardManager custardManager;
+    
     private Inhaler _inhaler;
+    
     
     
 
@@ -23,6 +25,7 @@ public class VisualDebugger : MonoBehaviour
     public bool showTerrainInfo;
     public bool displayOnWorldCells = true;
     public bool showInhaleArea;
+    public bool showRim;
 
     private void Start()
     {
@@ -50,6 +53,14 @@ public class VisualDebugger : MonoBehaviour
         if (showTerrainInfo)
         {
             Visualize(worldCells.GetTerrainList());
+        }
+        if (showRim)
+        {
+            Visualize(custardManager.custardRim, Color.red);
+        }
+        if (custardManager.debugSet.Count !=0)
+        {
+            Visualize(custardManager.debugSet, Color.magenta);
         }
         if (showInhaleArea)
         {

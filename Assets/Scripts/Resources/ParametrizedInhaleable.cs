@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 public class ParametrizedInhaleable : Inhalable
 {
     [SerializeField] private string resourceName;
+    [SerializeField] private float timeToInhaleWhole = 2.0f;
     
     private PlaceableItem _placeableItem;
     
@@ -15,7 +16,7 @@ public class ParametrizedInhaleable : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource(resourceName, _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource(resourceName, _placeableItem), timeToInhaleWhole);
     }
 
     private void Awake()

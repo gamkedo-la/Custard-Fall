@@ -21,8 +21,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject playerDirectional;
     public float movementSpeed = 4;
-    [SerializeField]
-    private float swimSpeed = 3.4f;
+    [SerializeField] private float swimSpeed = 3.4f;
     private bool _isLookInMoveDirection = true;
     private Vector3 _targetMoveDirection = Vector3.zero;
     private Vector3 _currentMoveDirection = Vector3.zero;
@@ -37,6 +36,8 @@ public class Player : MonoBehaviour
     private float _velDash = 0f;
     [SerializeField] private float LookInMoveDirectionGraceTime = .35f;
     private float _nextLookInMoveDirectionTime;
+
+    [SerializeField] private GameObject buttonPrompt;
 
     public bool isDashing = false;
     public float runningMultiplier;
@@ -80,6 +81,7 @@ public class Player : MonoBehaviour
     private Vector3 _smoothPreviewPosition;
     private Vector3 _velSmoothPreviewPosition = Vector3.zero;
 
+    private bool _isAtEdge;
 
     //health bar
     public int maxHealth = 90;
@@ -339,8 +341,9 @@ public class Player : MonoBehaviour
             var terrainHeight = worldCells.GetHeightAt(coords);
             var custardLevel = custardState.GetCurrentCustardLevelAt(coords);
             var heightDifference = terrainHeight - colliderBounds.min.y;
+
             if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f ||
-                custardLevel > 0 && Math.Abs(heightDifference + custardLevel) < 2.75)
+                custardLevel > 0 && Math.Abs(heightDifference + custardLevel) < 1.75)
             {
                 currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
                 if (Math.Abs(heightDifference) > .0001f)
@@ -354,6 +357,33 @@ public class Player : MonoBehaviour
                     {
                         EnterSwimMode(true);
                     }
+                }
+            }
+            else
+            {
+                // display leap of faith
+                switch (_isAtEdge)
+                {
+                    case false when heightDifference < -2.75f || heightDifference + custardLevel < -1.75f:
+                    {
+                        Debug.Log($"height difference: {heightDifference}");
+                        _isAtEdge = true;
+                        buttonPrompt.SetActive(true);
+                        var fadeInThenOutCanvasGroup = buttonPrompt.GetComponent<FadeInThenOutCanvasGroup>();
+                        if (!fadeInThenOutCanvasGroup)
+                        {
+                            buttonPrompt.AddComponent<FadeInThenOutCanvasGroup>();
+                        }
+                        else
+                        {
+                            fadeInThenOutCanvasGroup.KeepItUp();
+                        }
+
+                        break;
+                    }
+                    case true:
+                        _isAtEdge = false;
+                        break;
                 }
             }
 
@@ -434,7 +464,7 @@ public class Player : MonoBehaviour
 
     public void OnDash(InputValue context)
     {
-        if (!isDashing && Time.time > nextRunningTime && !placeModeItemReference)
+        if (!isDashing && !isSwimming && Time.time > nextRunningTime && !placeModeItemReference)
         {
             if (context.isPressed)
             {

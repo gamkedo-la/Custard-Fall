@@ -15,6 +15,9 @@ namespace Custard
         public CustardState custardState;
         private Dictionary<Coords, List<ImpededCell>> _impededCells;
 
+        public HashSet<Coords> custardRim;
+        public HashSet<Coords> debugSet;
+
         private CustardSpawn[] _initialSpawns;
 
         public CustardVisualizer custardVisualizer;
@@ -38,6 +41,8 @@ namespace Custard
         private void Awake()
         {
             _initialSpawns = FindObjectsOfType<CustardSpawn>();
+            custardRim = new HashSet<Coords>();
+            debugSet = new HashSet<Coords>();
         }
 
 
@@ -127,6 +132,7 @@ namespace Custard
                     valuesOfImpededCells.Add(cell);
                 }
             }
+
             custardVisualizer.RenderCustard(valuesOfImpededCells);
         }
 
@@ -162,7 +168,7 @@ namespace Custard
             foreach (var impededCellList in _impededCells.Values)
             {
                 List<ImpededCell> timedOutCells = new List<ImpededCell>();
-                
+
                 foreach (var impededCell in impededCellList)
                 {
                     impededCell.SetDuration(impededCell.GetDuration() - Time.deltaTime);
@@ -201,6 +207,15 @@ namespace Custard
         {
             pauseIterationCountDown = !pauseIterationCountDown;
             return pauseIterationCountDown;
+        }
+
+        public void RimCustardUpdate()
+        {
+            debugSet.Clear();
+            foreach (var rimCell in custardRim)
+            {
+                custardState.QueueCellForNextIteration(rimCell.X, rimCell.Y);
+            }
         }
 
         public void SeedCustardUpdate(int seed)
@@ -287,10 +302,22 @@ namespace Custard
                     custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                     // I stay at the same level but maybe my neighbors need to be checked
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
+                    if (newPivotCustardAmount <= 0)
+                    {
+                        custardRim.Remove(pivot);
+                        custardRim.AddRange(info.CustardFromAbove);
+                        custardRim.AddRange(info.CellsAtSameLevel);
+                    }
+
                     if (pivotCustardAmount > 0 || pivotCustardAmount == 0 && custardState.IsTrapped(pivot))
                     {
                         // next iteration: check all cells where I might flow down into
                         custardState.QueueCellsForNextIteration(info.CellsBellow);
+                        if (newPivotCustardAmount <= 0)
+                        {
+                            custardRim.Remove(pivot);
+                            custardRim.AddRange(info.CellsBellow);
+                        }
                     }
                 }
                 else if (info.CellsBellow.Count != 0)
@@ -308,6 +335,12 @@ namespace Custard
                         custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                     }
 
+                    if (newPivotCustardAmount <= 0)
+                    {
+                        custardRim.Remove(pivot);
+                        custardRim.AddRange(info.CellsBellow);
+                    }
+
                     // next iteration: check all cells where I might flow down into
                     custardState.QueueCellsForNextIteration(info.CellsBellow);
                 }
@@ -321,11 +354,39 @@ namespace Custard
                     // next iteration: check all cells that now might flow into me
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                 }
-                else if (pivotCustardAmount == 1 && (custardState.IsTrapped(pivot)  ||  info.CellsBellow.Count == 0 &&
-                         info.CellsAtSameLevel.Count + info.CustardFromAbove.Count == 8))
+                else if (pivotCustardAmount == 1 && custardState.IsTrapped(pivot))
                 {
-                    // custard is trapped
-                    newPivotCustardAmount = 1;
+                    if(custardState.IsTrapped(pivot))
+                    {
+                        debugSet.Add(pivot);
+                    }
+
+                    if (info.CustardAtSameLevel.Count == 0)
+                    {
+                        custardRim.Remove(pivot);
+                    }
+                    else
+                    {
+                        // custard is trapped
+                        newPivotCustardAmount = 1;
+                        custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
+                    }
+                }
+                else if (pivotCustardAmount == 1 && !(custardState.GlobalTideLevel == 0 && pivotTerrainHeight == 0))
+                {
+                    newPivotCustardAmount = 0;
+                    custardRim.Remove(pivot);
+                    if (info.CellsBellow.Count != 0)
+                    {
+                        custardState.QueueCellsForNextIteration(info.CellsBellow);
+                        custardRim.AddRange(info.CellsBellow);
+                    }
+                
+                    if (info.CellsAtSameLevel.Count != 0)
+                    {
+                        custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
+                        custardRim.AddRange(info.CellsAtSameLevel);
+                    }
                 }
                 else if (custardState.GlobalTideLevel == 0 && pivotTerrainHeight == 0)
                 {
@@ -333,6 +394,12 @@ namespace Custard
                     newPivotCustardAmount = pivotCustardAmount == 1 ? 1 : pivotCustardAmount - 1;
                     // next iteration: check all cells that should also dissolve/shrink
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
+
+                    if (newPivotCustardAmount <= 0)
+                    {
+                        custardRim.Remove(pivot);
+                        custardRim.AddRange(info.CellsAtSameLevel);
+                    }
                 }
             }
             else if (pivotTotalHeight == custardState.GlobalTideLevel)
@@ -347,10 +414,25 @@ namespace Custard
                     // if in sink and has neighbor custard flowing downwards
                     newPivotCustardAmount = 1;
                 }
+
                 // cells above should flow into me
                 custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                 // spread: next iteration: check all cells below me as they should come up
                 custardState.QueueCellsForNextIteration(info.CellsBellow);
+                if (info.CellsBellow.Count != 0)
+                {
+                    custardRim.AddRange(info.CellsBellow);
+                }
+
+                if (info.CustardFromAbove.Count != 0)
+                {
+                    custardRim.AddRange(info.CustardFromAbove);
+                }
+
+                if (newPivotCustardAmount == 0 || info.CustardAtSameLevel.Count == 8)
+                {
+                    custardRim.Remove(pivot);
+                }
             }
             else
             {
@@ -369,6 +451,26 @@ namespace Custard
                     // spread: next iteration: check all cells below me or currently at same level should grow next as well
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                     custardState.QueueCellsForNextIteration(info.CellsBellow);
+
+                    if (info.CellsBellow.Count != 0)
+                    {
+                        custardRim.AddRange(info.CellsBellow);
+                    }
+
+                    if (info.CellsAtSameLevel.Count != 0)
+                    {
+                        custardRim.AddRange(info.CellsAtSameLevel);
+                    }
+
+                    if (info.CustardFromAbove.Count != 0)
+                    {
+                        custardRim.AddRange(info.CustardFromAbove);
+                    }
+
+                    if (info.CustardFromAbove.Count + info.CustardAtSameLevel.Count == 8)
+                    {
+                        custardRim.Remove(pivot);
+                    }
                 }
             }
 
@@ -408,7 +510,7 @@ namespace Custard
             int[,] terrainAreaAroundPivot)
         {
             List<Coords> custardCellsAbove = new List<Coords>();
-            List<Coords> custardtAtSameLevel = new List<Coords>();
+            List<Coords> custardAtSameLevel = new List<Coords>();
             List<Coords> sameLevelCells = new List<Coords>();
             List<Coords> cellsBellow = new List<Coords>();
 
@@ -447,7 +549,7 @@ namespace Custard
                 {
                     sameLevelCells.Add(coord);
                     if (neighborCustardAmount != 0)
-                        custardtAtSameLevel.Add(coord);
+                        custardAtSameLevel.Add(coord);
                 }
                 else
                 {
@@ -461,7 +563,7 @@ namespace Custard
                 }
             }
 
-            return new CustardAreaInfo(custardCellsAbove, custardtAtSameLevel, sameLevelCells, cellsBellow);
+            return new CustardAreaInfo(custardCellsAbove, custardAtSameLevel, sameLevelCells, cellsBellow);
         }
 
         private int[,] GetLocalNeighborhood(Coords coords, Func<int, int, int> getValueAt)
@@ -543,7 +645,7 @@ namespace Custard
                 if (!isPresent)
                     knownImpededCells.Add(new ImpededCell(coords, strength, worldY));
             }
-            
+
             custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
         }
 

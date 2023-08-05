@@ -54,7 +54,7 @@ public class Tidesmanager : MonoBehaviour
 
         indexOfCurrentDayTimeTideLevel = 0;
         var tideStep = _currentDailyTidesPlan[indexOfCurrentDayTimeTideLevel];
-        CustardManager.targetTideLevel = tideStep.getLevel();
+        CustardManager.targetTideLevel = tideStep.GetLevel();
     }
 
     private void StartNextTidesDayOfWeek()
@@ -67,7 +67,7 @@ public class Tidesmanager : MonoBehaviour
         if (newDayOfWeek >= _weeklyPlan.Length)
         {
             // we need a more epic custard animation the first time when the level starts
-            if (_weeklyPlan[0] == _tidesPlanFirstTime)
+            if (!useSerializedCycle && _weeklyPlan[0] == _tidesPlanFirstTime)
             {
                 _weeklyPlan[0] = _tidesPlanNormal0;
             }
@@ -93,15 +93,21 @@ public class Tidesmanager : MonoBehaviour
 
             if (timeIndex != indexOfCurrentDayTimeTideLevel)
             {
+                Debug.Log($"Tide step {timeIndex}");
                 TideStep tideStep = _currentDailyTidesPlan.GetValueOrDefault(_tidesPlanIndices[timeIndex]);
                 indexOfCurrentDayTimeTideLevel = timeIndex;
 
                 // custard ai
-                var nextTideLevel = tideStep.getLevel();
+                var nextTideLevel = tideStep.GetLevel();
+                var currentTideLevel = CustardManager.targetTideLevel;
                 CustardManager.targetTideLevel = nextTideLevel;
 
                 // spread custard hotspots
-                // TODO center custard update roughly at some distance around the player
+                if (currentTideLevel > nextTideLevel)
+                {
+                    CustardManager.RimCustardUpdate();
+                }
+
                 CustardManager.SeedCustardUpdate((int) Math.Floor(Time.time * 1000));
                 CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 2);
                 CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 4);
@@ -159,12 +165,10 @@ public class Tidesmanager : MonoBehaviour
                 var tideDay = cycle[i];
                 Debug.Log("day " + i);
                 SortedDictionary<float, TideStep> normalSteps = new();
-                float fractionOfDay = 0;
                 foreach (var tideStep in tideDay.TideSteps)
                 {
-                    fractionOfDay += tideStep.getFraction16();
-                    normalSteps.Add(fractionOfDay / 16f, tideStep);
-                    Debug.Log(" fraction of day " + fractionOfDay + " " + tideStep.getLevel());
+                    normalSteps.Add(tideStep.GetTime(), tideStep);
+                    Debug.Log("fraction of day " + tideStep.GetTime() + " " + tideStep.GetLevel());
                 }
 
                 _weeklyPlan[i] = normalSteps;
@@ -264,27 +268,28 @@ public class Tidesmanager : MonoBehaviour
     {
         [SerializeField] private int level;
 
-        [SerializeField] private float fraction16;
+        [FormerlySerializedAs("fraction16")] [SerializeField]
+        private float time;
 
         public TideStep(int level)
         {
             this.level = level;
         }
 
-        public TideStep(int level, float fraction16)
+        public TideStep(int level, float time)
         {
             this.level = level;
-            this.fraction16 = fraction16;
+            this.time = time;
         }
 
-        public int getLevel()
+        public int GetLevel()
         {
             return level;
         }
 
-        public float getFraction16()
+        public float GetTime()
         {
-            return fraction16;
+            return time;
         }
     }
 }

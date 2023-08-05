@@ -10,7 +10,7 @@ public class SmallCreamyConeTree : Inhalable
     protected override void Start()
     {
         base.Start();
-        AddObstacleToWorld(2);
+        AddObstacleToWorld(16);
     }
 
     private void Awake()
@@ -33,17 +33,16 @@ public class SmallCreamyConeTree : Inhalable
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .6f);
-        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), .8f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 1.5f);
+        AddToInhaleQueue(new Resource("Creamy Cone Tree", _placeableItem), 3.0f);
     }
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
         if (GetRemainingResourcesCount() == 0)
         {
-            AddObstacleToWorld(-2);
+            AddObstacleToWorld(-16);
         }
         base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
     }
