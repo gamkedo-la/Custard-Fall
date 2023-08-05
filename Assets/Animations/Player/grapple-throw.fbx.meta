@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: d1373e050b13683458f5c24e5ca86311
+guid: dced734be782705468a43c70ef5ddee1
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable:
   - first:
-      74: 5223480148776679931
-    second: loop-fast-walk
+      74: -7065185658475104966
+    second: grapple-throw
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,11 +36,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: loop-fast-walk
-      takeName: loop-fast-walk
+      name: grapple-throw
+      takeName: grapple-throw
       internalID: 0
       firstFrame: 0
-      lastFrame: 39
+      lastFrame: 59
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -52,9 +52,9 @@ ModelImporter:
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -82,7 +82,7 @@ ModelImporter:
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
-    weldVertices: 0
+    weldVertices: 1
     bakeAxisConversion: 0
     preserveHierarchy: 1
     skinWeightsMode: 0
