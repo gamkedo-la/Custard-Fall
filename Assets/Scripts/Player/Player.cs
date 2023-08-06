@@ -231,9 +231,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, DamageImplication implication)
     {
-        if (cozinessReceiver.PersonalCozyLevel == 0 && cozinessReceiver.CozinessTillNextLevel <= 0.01f)
+        if (implication != DamageImplication.Health ||
+            cozinessReceiver.PersonalCozyLevel == 0 &&
+            cozinessReceiver.CozinessTillNextLevel <= 0.01f)
         {
             currentHealth -= damage;
             healthbar.SetHealth(currentHealth);
@@ -487,7 +489,7 @@ public class Player : MonoBehaviour
     {
         if (currentHealth >= 0)
         {
-            TakeDamage(1);
+            TakeDamage(1, DamageImplication.RadianceThenHealth);
         }
     }
 
@@ -746,4 +748,11 @@ public class Player : MonoBehaviour
         playerAnimator.SetBool(Swimming, doSwim);
         MovePlayer(Vector3.zero);
     }
+}
+
+public enum DamageImplication
+{
+    Health,
+    Radiance,
+    RadianceThenHealth
 }

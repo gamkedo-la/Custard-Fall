@@ -5,6 +5,7 @@ public class GlowOrbItem : Inhalable
 {
     public bool selfPlaced = false;
     private PlaceableItem _placeableItem;
+    public int healingAmount = 15;
 
     protected override void Start()
     {
@@ -41,7 +42,7 @@ public class GlowOrbItem : Inhalable
             if (player)
             {
                 // XD
-                player.TakeDamage(-10);
+                player.TakeDamage(-healingAmount, DamageImplication.Health);
             }
         }
 

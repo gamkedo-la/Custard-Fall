@@ -124,7 +124,7 @@ public class LocalCustardListener : MonoBehaviour
                 }
                 else if (player)
                 {
-                    player.TakeDamage(drowningDamage);
+                    player.TakeDamage(drowningDamage, DamageImplication.RadianceThenHealth);
                     timePassedSinceLastDamage = 0.0f;
                 }
             }
