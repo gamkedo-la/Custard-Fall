@@ -11,6 +11,9 @@ public class ProjectileMove : MonoBehaviour
     [SerializeField] private float maxLifespan = 5f;
     private float _ageInSeconds = 0;
 
+    [SerializeField] private float magnetStrength = .3f;
+    private Transform _magnet;
+
     private void Start()
     {
         StartCoroutine(KillMe());
@@ -24,6 +27,12 @@ public class ProjectileMove : MonoBehaviour
         var projectileTransform = transform;
         projectileTransform.position += projectileTransform.forward * modifiedSpeed;
 
+        if (_magnet)
+        {
+            projectileTransform.position +=
+                (_magnet.position - projectileTransform.position) * (Time.deltaTime * magnetStrength);
+        }
+
         _ageInSeconds += Time.deltaTime;
     }
 
@@ -34,11 +43,26 @@ public class ProjectileMove : MonoBehaviour
         projectileTransform.position -= projectileTransform.forward * (_ageInSeconds * speed);
         _ageInSeconds = 0;
     }
-    
+
     private IEnumerator KillMe()
     {
         yield return new WaitForSeconds(maxLifespan);
         Debug.Log("killing old projectile");
         Destroy(gameObject);
+    }
+
+    public void SetMagnet(Transform magnet)
+    {
+        if (this._magnet != null)
+        {
+            this._magnet = magnet;
+            StartCoroutine(ResetMagnet());
+        }
+    }
+
+    private IEnumerator ResetMagnet()
+    {
+        yield return new WaitForSeconds(.3f);
+        this._magnet = null;
     }
 }

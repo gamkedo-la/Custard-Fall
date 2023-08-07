@@ -110,6 +110,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   spawnAnimationDuration: 0.15
   maxLifespan: 5
+  magnetStrength: 0.3
 --- !u!114 &1882357039267393712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,7 +130,7 @@ MonoBehaviour:
   inhaleItemsProfile:
   - resourceName: projectile
     itemReference: {fileID: 0}
-    timeToTake: 0.2
+    timeToTake: 0.6
 --- !u!1 &5887178896647435581
 GameObject:
   m_ObjectHideFlags: 0

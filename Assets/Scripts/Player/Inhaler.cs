@@ -107,7 +107,11 @@ public class Inhaler : MonoBehaviour
                 {
                     var worldHeight = worldCells.GetTerrainHeightAt(inhaleCell.GetCoords());
                     if (inhaleCell.GetWorldY() == worldHeight + 1)
-                        projectile.GetComponent<InhalableProjectile>().Inhale(this, inhaleCell.GetStrength());
+                    {
+                        var inhalableProjectile = projectile.GetComponent<InhalableProjectile>();
+                        inhalableProjectile.Inhale(this, inhaleCell.GetStrength());
+                        projectile.GetComponent<ProjectileMove>().SetMagnet(this.transform);
+                    }
                 }
             }
         }
