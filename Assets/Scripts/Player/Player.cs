@@ -233,7 +233,7 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int damage, DamageImplication implication)
     {
-        if (implication != DamageImplication.Health ||
+        if (implication == DamageImplication.Health ||
             cozinessReceiver.PersonalCozyLevel == 0 &&
             cozinessReceiver.CozinessTillNextLevel <= 0.01f)
         {
