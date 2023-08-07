@@ -6,6 +6,7 @@ public class Inhalable : MonoBehaviour, WorldItem
 {
     public WorldCells worldCells;
     public bool hasInhaleFocus;
+    public GameObject optVisual;
     private readonly Queue<InhaleQueueItem> _inhaleQueue = new Queue<InhaleQueueItem>();
     private Inhaler _currentInhaler = null;
     private float _currentInhaleStrength;
@@ -32,9 +33,18 @@ public class Inhalable : MonoBehaviour, WorldItem
 
     protected virtual void Start()
     {
-        _wobble = GetComponent<Wobble>();
+        if (optVisual)
+        {
+            _wobble = optVisual.GetComponent<Wobble>();
+        }
+        else
+        {
+            _wobble = GetComponent<Wobble>();
+        }
+
         _wobbleInitialized = _wobble != null;
         Init();
+        ReFillInhaleQueue();
         _usedUp = false;
     }
 
@@ -51,8 +61,6 @@ public class Inhalable : MonoBehaviour, WorldItem
         }
 
         worldItemsInCell.Add(this);
-
-        ReFillInhaleQueue();
     }
 
     private void ReFillInhaleQueue()
@@ -129,6 +137,7 @@ public class Inhalable : MonoBehaviour, WorldItem
     class InhaleQueueItem
     {
         public Resource resource;
+        public bool goesToInventory = true;
         public int amount = 1;
         public float inhaleThresholdSeconds;
 
