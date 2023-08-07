@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5887178896442314685}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 37.54, y: 7.7975016, z: 13.05}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5887178896647435568}
@@ -87,15 +87,6 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.33888942
-      value: 0.3170359
-      inSlope: 2.7064316
-      outSlope: 2.7064316
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.1019182
-    - serializedVersion: 3
       time: 1
       value: 1
       inSlope: 0
@@ -107,7 +98,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  spawnAnimationDuration: 0.4
+  spawnAnimationDuration: 0.3
 --- !u!1 &5887178896647435581
 GameObject:
   m_ObjectHideFlags: 0
