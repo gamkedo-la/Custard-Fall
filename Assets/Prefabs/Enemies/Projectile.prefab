@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5887178896442314675}
   - component: {fileID: 5887178896442314684}
   - component: {fileID: 2368029175491198124}
+  - component: {fileID: 1882357039267393712}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5887178896442314685}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 37.54, y: 7.7975016, z: 13.05}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 0.666, y: 0.666, z: 0.666}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5887178896647435568}
@@ -73,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aa9a013a413651499f8a8cc7354e49c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 9
+  speed: 8
   spawnSpeed:
     serializedVersion: 2
     m_Curve:
@@ -87,6 +88,15 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
+      time: 0.23571008
+      value: 0.25085247
+      inSlope: 2.0248063
+      outSlope: 2.0248063
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17691088
+      outWeight: 0.060811114
+    - serializedVersion: 3
       time: 1
       value: 1
       inSlope: 0
@@ -98,7 +108,28 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  spawnAnimationDuration: 0.3
+  spawnAnimationDuration: 0.15
+  maxLifespan: 5
+--- !u!114 &1882357039267393712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5887178896442314685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5c2a4a2d4e114d4398e97d853b4dc46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  hasInhaleFocus: 0
+  optVisual: {fileID: 5887178896647435581}
+  interactionMessage: 
+  inhaleItemsProfile:
+  - resourceName: projectile
+    itemReference: {fileID: 0}
+    timeToTake: 0.2
 --- !u!1 &5887178896647435581
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,6 +141,7 @@ GameObject:
   - component: {fileID: 5887178896647435568}
   - component: {fileID: 5887178896647435569}
   - component: {fileID: 5887178896647435570}
+  - component: {fileID: 406269989484596732}
   m_Layer: 0
   m_Name: projectileVisual
   m_TagString: Untagged
@@ -125,7 +157,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5887178896647435581}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -182,3 +214,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &406269989484596732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5887178896647435581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94aa7582687e3d4ab0e8f97b571f55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wobbleStrength: 0
+  canMove: 1
+  parent: {fileID: 5887178896442314674}
+  shakeScale: 0.15

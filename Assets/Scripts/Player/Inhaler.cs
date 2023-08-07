@@ -29,6 +29,7 @@ public class Inhaler : MonoBehaviour
             InhaleCustard();
             InhaleCone();
             InhaleResources();
+            InhaleProjectiles();
         }
     }
 
@@ -89,6 +90,24 @@ public class Inhaler : MonoBehaviour
                         if (inhaleCell.GetWorldY() == worldHeight + 1)
                             listener.Inhale(this, inhaleCell.GetStrength());
                     }
+                }
+            }
+        }
+    }
+
+    private void InhaleProjectiles()
+    {
+        foreach (var keyValuePair in affectedCells)
+        {
+            var inhaleCell = keyValuePair.Value;
+
+            foreach (var projectile in InhalableProjectile.allCurrentProjectiles)
+            {
+                if (worldCells.GetCellPosition(projectile.transform.position).Equals(inhaleCell.GetCoords()))
+                {
+                    var worldHeight = worldCells.GetTerrainHeightAt(inhaleCell.GetCoords());
+                    if (inhaleCell.GetWorldY() == worldHeight + 1)
+                        projectile.GetComponent<InhalableProjectile>().Inhale(this, inhaleCell.GetStrength());
                 }
             }
         }
