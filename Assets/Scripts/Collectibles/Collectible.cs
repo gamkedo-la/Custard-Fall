@@ -26,7 +26,6 @@ public class Collectible : Inhalable
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
-        base.OnResourceInhaledAndMaybeRemove(inhaler, resource, amount);
         if (GetRemainingResourcesCount() == 0)
         {
             gameObject.SetActive(false);
