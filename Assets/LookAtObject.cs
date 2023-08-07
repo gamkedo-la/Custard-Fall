@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LookAtObject : MonoBehaviour
 {
-    [SerializeField] private GameObject target;
+    [SerializeField] private Transform target;
     [SerializeField] private Mode lookAtMode;
     [SerializeField] float delay = .3f;
 
@@ -21,7 +21,7 @@ public class LookAtObject : MonoBehaviour
 
     private void Start()
     {
-        _targetPosition = target.transform.position;
+        _targetPosition = target.position;
         _targetPositionInterpolated = _targetPosition;
         StartCoroutine(UpdateTargetPosition());
     }
