@@ -5,7 +5,6 @@ using UnityEngine;
 public class ProjectileSpawner : MonoBehaviour
 {
     [SerializeField] private float interval = 1.5f;
-    [SerializeField] private float maxLifespan = 5f;
     [SerializeField] private GameObject spawnable;
     [SerializeField] private GameObject spawnPoint;
 
@@ -33,11 +32,5 @@ public class ProjectileSpawner : MonoBehaviour
             SpawnProjectile();
             yield return new WaitForSeconds(interval);
         }
-    }
-
-    private IEnumerator KillMe()
-    {
-        yield return new WaitForSeconds(maxLifespan);
-        Destroy(gameObject);
     }
 }
