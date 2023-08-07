@@ -7,7 +7,9 @@ using Random = UnityEngine.Random;
 public class Wobble : MonoBehaviour
 {
     public float wobbleStrength = 0.0f; // range is 0.0 to 1.0
-    private float shakeScale = 0.15f; // change to adjust severity for shake
+    public bool canMove = false;
+    public Transform parent;
+    public float shakeScale = 0.15f; // change to adjust severity for shake
     private float
         decayValue =
             0.85f; // percentage of wobbleStrength kept every FixedUpdate; suggested range .7 to .99 (change to adjust transition to stop shaking)
@@ -24,7 +26,13 @@ public class Wobble : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position = _startShakePosition + Random.insideUnitSphere * (wobbleStrength * shakeScale);
+        if (canMove)
+        {
+            _startShakePosition = parent.position;
+        }
+
+        var diff = Random.insideUnitSphere * (wobbleStrength * shakeScale);
+        transform.position = _startShakePosition + diff;
         if (_increasingWobble)
         {
             _increasingWobble = false;
