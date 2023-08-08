@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 
@@ -8,6 +7,11 @@ public class DistanceTracker : MonoBehaviour
     [SerializeField] private float maxDistance = 8f;
     [SerializeField] private float checkIntervalEnter = .4f;
     [SerializeField] private float checkIntervalExit = .3f;
+
+    [SerializeField] private int maxHeightAbove = 0;
+    [SerializeField] private int maxHeightBelow = 1;
+
+    public WorldCells worldCells;
 
     public delegate void OnTargetEnter();
 
@@ -36,18 +40,45 @@ public class DistanceTracker : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(_inRange ? checkIntervalExit : checkIntervalEnter);
-            var inRange = Vector3.Distance(transform.position, _target.transform.position) < maxDistance;
+            var targetPosition = _target.transform.position;
+            var position = transform.position;
+            var inRange = Vector3.Distance(position, targetPosition) < maxDistance;
+
+            if (inRange)
+            {
+                var difference = GetHeightDifference(position, targetPosition);
+                if (difference > maxHeightAbove  || difference < -maxHeightBelow)
+                {
+                    inRange = false;
+                }
+            }
             
             if (!_inRange && inRange)
             {
-                onTargetEnter?.Invoke();
+                var difference = GetHeightDifference(position, targetPosition);
+                if (difference <= maxHeightAbove  && difference >= -maxHeightBelow)
+                {
+                    onTargetEnter?.Invoke();
+                }
+                else
+                {
+                    continue;
+                }
             }
             else if (_inRange && !inRange)
             {
-                onTargetExit?.Invoke();
+                    onTargetExit?.Invoke();
             }
 
             _inRange = inRange;
         }
+    }
+
+    private int GetHeightDifference(Vector3 position, Vector3 targetPosition)
+    {
+        var coords = worldCells.GetCellPosition(position);
+        var targetCoords = worldCells.GetCellPosition(targetPosition);
+        var difference = worldCells.GetHeightAt(targetCoords) - worldCells.GetHeightAt(coords);
+        return difference;
     }
 }

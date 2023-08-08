@@ -22,8 +22,8 @@ public class CrabShooter : Mob
     protected override void Start()
     {
         base.Start();
-        _tracker.onTargetEnter += MaybeGetAngry;
-        _tracker.onTargetExit += MaybeCalmDown;
+        tracker.onTargetEnter += MaybeGetAngry;
+        tracker.onTargetExit += MaybeCalmDown;
     }
     
     protected override void MaybeCalmDown()

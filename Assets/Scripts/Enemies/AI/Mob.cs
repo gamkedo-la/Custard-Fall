@@ -4,17 +4,17 @@ using UnityEngine;
 [RequireComponent(typeof(DistanceTracker))]
 public class Mob : MonoBehaviour
 {
-    protected DistanceTracker _tracker;
+    protected DistanceTracker tracker;
 
     protected virtual void Awake()
     {
-        _tracker = GetComponent<DistanceTracker>();
+        tracker = GetComponent<DistanceTracker>();
     }
 
     protected virtual void Start()
     {
-        _tracker.onTargetEnter += MaybeGetAngry;
-        _tracker.onTargetExit += MaybeCalmDown;
+        tracker.onTargetEnter += MaybeGetAngry;
+        tracker.onTargetExit += MaybeCalmDown;
     }
 
     protected virtual void MaybeCalmDown()
