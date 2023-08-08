@@ -1266,7 +1266,7 @@ GameObject:
   - component: {fileID: 7549712970866059714}
   - component: {fileID: 7549712970866059715}
   m_Layer: 0
-  m_Name: ShooterDemo
+  m_Name: Crab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
