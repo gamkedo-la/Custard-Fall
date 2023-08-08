@@ -31,6 +31,11 @@ public class LookAtObject : MonoBehaviour
         _targetPositionInterpolated += (_targetPosition - _targetPositionInterpolated) * Time.deltaTime / delay;
     }
 
+    public float GetProgress()
+    {
+        return Vector3.Distance(_targetPosition.normalized, _targetPositionInterpolated.normalized);
+    }
+
 
     private IEnumerator UpdateTargetPosition()
     {
