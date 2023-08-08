@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +8,8 @@ public class ProjectileSpawner : MonoBehaviour
     [SerializeField] private float interval = 1.5f;
     [SerializeField] private GameObject spawnable;
     [SerializeField] private GameObject spawnPoint;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        StartCoroutine(ShootPeriodically());
-    }
+    private Coroutine _spawner;
+    
 
     [ContextMenu("Spawn Projectile")]
     private void SpawnProjectile()
@@ -20,9 +17,14 @@ public class ProjectileSpawner : MonoBehaviour
         Instantiate(spawnable, spawnPoint.transform.position, transform.rotation);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
+        _spawner = StartCoroutine(ShootPeriodically());
+    }
+
+    private void OnDisable()
+    {
+        StopCoroutine(_spawner);
     }
 
     private IEnumerator ShootPeriodically()
