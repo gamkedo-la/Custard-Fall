@@ -110,7 +110,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   spawnAnimationDuration: 0.15
   maxLifespan: 5
-  magnetStrength: 0.3
+  magnetStrength: 1.3
+  magnetRelease: 0.8
 --- !u!114 &1882357039267393712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +131,7 @@ MonoBehaviour:
   inhaleItemsProfile:
   - resourceName: projectile
     itemReference: {fileID: 0}
-    timeToTake: 0.6
+    timeToTake: 0.4
 --- !u!1 &5887178896647435581
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,4 +231,4 @@ MonoBehaviour:
   wobbleStrength: 0
   canMove: 1
   parent: {fileID: 5887178896442314674}
-  shakeScale: 0.15
+  shakeScale: 0.177

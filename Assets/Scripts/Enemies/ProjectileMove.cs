@@ -12,6 +12,7 @@ public class ProjectileMove : MonoBehaviour
     private float _ageInSeconds = 0;
 
     [SerializeField] private float magnetStrength = .3f;
+    [SerializeField] private float magnetRelease = .5f;
     private Transform _magnet;
 
     private void Start()
@@ -53,16 +54,17 @@ public class ProjectileMove : MonoBehaviour
 
     public void SetMagnet(Transform magnet)
     {
-        if (this._magnet != null)
+        bool freshAssigment = this._magnet;
+        _magnet = magnet;
+        if (freshAssigment)
         {
-            this._magnet = magnet;
             StartCoroutine(ResetMagnet());
         }
     }
 
     private IEnumerator ResetMagnet()
     {
-        yield return new WaitForSeconds(.3f);
-        this._magnet = null;
+        yield return new WaitForSeconds(magnetRelease);
+        _magnet = null;
     }
 }
