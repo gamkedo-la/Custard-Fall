@@ -9,6 +9,7 @@ public class CrabShooter : Mob
 
     protected LookAtObject lookAtObject;
     protected ProjectileSpawner projectileSpawner;
+    protected Inhalable _inhalable;
 
     protected StateOfMind stateOfMind = StateOfMind.OwnBusiness;
     
@@ -17,6 +18,7 @@ public class CrabShooter : Mob
         base.Awake();
         lookAtObject = GetComponent<LookAtObject>();
         projectileSpawner = GetComponent<ProjectileSpawner>();
+        _inhalable = GetComponent<InhalableProjectile>();
     }
 
     protected override void Start()
@@ -24,8 +26,17 @@ public class CrabShooter : Mob
         base.Start();
         tracker.onTargetEnter += MaybeGetAngry;
         tracker.onTargetExit += MaybeCalmDown;
+        _inhalable.onInhaling += ReactToInhaling;
     }
-    
+
+    private void ReactToInhaling(Inhaler inhaler)
+    {
+        if (stateOfMind == StateOfMind.OwnBusiness)
+        {
+            OnStateOfMindChange(StateOfMind.Surprised);
+        }
+    }
+
     protected override void MaybeCalmDown()
     {
         projectileSpawner.enabled = false;
