@@ -315,7 +315,7 @@ public class Player : MonoBehaviour
             {
                 var custardLevel = custardState.GetCurrentCustardLevelAt(coords);
                 var heightDifference = terrainHeight + custardLevel - colliderBounds.min.y;
-                var thresholdHeight = 1.75f;
+                var thresholdHeight = 1.5f;
                 if (heightDifference < thresholdHeight || custardLevel > 0)
                 {
                     currentPosition += targetDirection * (Time.deltaTime * swimSpeed * _currenRunningMultiplier);
@@ -341,8 +341,8 @@ public class Player : MonoBehaviour
             var custardLevel = custardState.GetCurrentCustardLevelAt(coords);
             var heightDifference = terrainHeight - colliderBounds.min.y;
 
-            if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.75f ||
-                custardLevel > 0 && Math.Abs(heightDifference + custardLevel) < 1.75)
+            if (terrainHeight != 255 && (isDashing ? heightDifference : Math.Abs(heightDifference)) < 2.5f ||
+                custardLevel > 0 && Math.Abs(heightDifference + custardLevel) < 1.5)
             {
                 currentPosition += targetDirection * (Time.deltaTime * movementSpeed * _currenRunningMultiplier);
                 if (Math.Abs(heightDifference) > .0001f)
@@ -363,7 +363,7 @@ public class Player : MonoBehaviour
                 // display leap of faith
                 switch (_isAtEdge)
                 {
-                    case false when heightDifference < -2.75f || heightDifference + custardLevel < -1.75f:
+                    case false when heightDifference < -2.5f || heightDifference + custardLevel < -1.25f:
                     {
                         Debug.Log($"height difference: {heightDifference}");
                         _isAtEdge = true;
@@ -736,6 +736,9 @@ public class Player : MonoBehaviour
 
     public void EnterSwimMode(bool doSwim)
     {
+        if(grappling)
+            return;
+        
         isSwimming = doSwim;
         if (isSwimming)
         {
