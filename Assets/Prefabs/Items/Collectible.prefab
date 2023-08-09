@@ -51,8 +51,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: Mankind's true treasure
-  usedUp: 0
+  inhaleItemsProfile: []
+  plusOnePrefab: {fileID: 2713394065547945622, guid: 474306a931cfbec498955a8f9d812fb1, type: 3}
 --- !u!54 &1723292341381968490
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -82,6 +84,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!65 &3105157818053368766
 BoxCollider:
   m_ObjectHideFlags: 0

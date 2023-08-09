@@ -3,9 +3,6 @@ using System.Collections;
 using Custard;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
