@@ -12,6 +12,11 @@ public class Inhalable : MonoBehaviour, WorldItem
     private float _currentInhaleStrength;
     private Wobble _wobble;
     private bool _wobbleInitialized;
+    
+    public delegate void OnInhaled(Inhaler inhaler, Resource resource, int amount);
+    public OnInhaled onInhaled;
+    public delegate void OnInhaling(Inhaler inhaler);
+    public OnInhaling onInhaling;
 
     public string interactionMessage;
     private Coords cellPosition;
@@ -25,6 +30,7 @@ public class Inhalable : MonoBehaviour, WorldItem
         // sub classes can decide if strength is enough
         if (OnInhaleStart(inhaler, strength))
         {
+            onInhaling?.Invoke(inhaler);
             hasInhaleFocus = true;
             _currentInhaler = inhaler;
             _currentInhaleStrength = strength;
@@ -89,6 +95,7 @@ public class Inhalable : MonoBehaviour, WorldItem
             if (item.inhaleThresholdSeconds <= 0 && (!_wobbleInitialized || _wobble.IsAtMaxWobble()))
             {
                 _inhaleQueue.Dequeue();
+                onInhaled?.Invoke(_currentInhaler, item.resource, item.amount);
                 OnResourceInhaledAndMaybeRemove(_currentInhaler, item.resource, item.amount);
             }
 
