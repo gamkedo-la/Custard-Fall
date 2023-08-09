@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class DistanceTracker : MonoBehaviour
 {
-    [SerializeField] private float maxDistance = 8f;
+    [SerializeField] private float maxDistance = 6f;
+    [SerializeField] private float maxDistanceExit = 8f;
+    [SerializeField] private float offset = 2f;
+    [SerializeField] private float offsetExit = 0f;
     [SerializeField] private float checkIntervalEnter = .4f;
     [SerializeField] private float checkIntervalExit = .3f;
 
@@ -41,22 +44,22 @@ public class DistanceTracker : MonoBehaviour
         {
             yield return new WaitForSeconds(_inRange ? checkIntervalExit : checkIntervalEnter);
             var targetPosition = _target.transform.position;
-            var position = transform.position;
-            var inRange = Vector3.Distance(position, targetPosition) < maxDistance;
+            var position = transform.TransformPoint(Vector3.forward * (_inRange ? offsetExit : offset));
+            var inRange = Vector3.Distance(position, targetPosition) < GetMaxDistance();
 
             if (inRange)
             {
                 var difference = GetHeightDifference(position, targetPosition);
-                if (difference > maxHeightAbove  || difference < -maxHeightBelow)
+                if (difference > maxHeightAbove || difference < -maxHeightBelow)
                 {
                     inRange = false;
                 }
             }
-            
+
             if (!_inRange && inRange)
             {
                 var difference = GetHeightDifference(position, targetPosition);
-                if (difference <= maxHeightAbove  && difference >= -maxHeightBelow)
+                if (difference <= maxHeightAbove && difference >= -maxHeightBelow)
                 {
                     onTargetEnter?.Invoke();
                 }
@@ -67,11 +70,16 @@ public class DistanceTracker : MonoBehaviour
             }
             else if (_inRange && !inRange)
             {
-                    onTargetExit?.Invoke();
+                onTargetExit?.Invoke();
             }
 
             _inRange = inRange;
         }
+    }
+
+    private float GetMaxDistance()
+    {
+        return _inRange ? maxDistanceExit : maxDistance;
     }
 
     private int GetHeightDifference(Vector3 position, Vector3 targetPosition)
