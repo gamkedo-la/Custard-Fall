@@ -55,8 +55,7 @@ public class Inventory : MonoBehaviour
                 Debug.Log("Has the slot been removed? " + resource.Name + " " + _slots.Remove(resource.Name));
                 slot = null;
 
-                if (onItemChangedCallback != null)
-                    onItemChangedCallback.Invoke();
+                onItemChangedCallback?.Invoke();
             }
         }
         else if (amount > 0)
@@ -64,8 +63,7 @@ public class Inventory : MonoBehaviour
             slot = new InventorySlot(resource, amount, _slots.Count);
             _slots.Add(resource.Name, slot);
 
-            if (onItemChangedCallback != null)
-                onItemChangedCallback.Invoke();
+            onItemChangedCallback?.Invoke();
         }
 
         UIRef.UpdateUI();
