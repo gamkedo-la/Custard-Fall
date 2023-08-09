@@ -132,6 +132,7 @@ MonoBehaviour:
   - resourceName: projectile
     itemReference: {fileID: 0}
     timeToTake: 0.4
+  plusOnePrefab: {fileID: 2713394065547945622, guid: 474306a931cfbec498955a8f9d812fb1, type: 3}
 --- !u!1 &5887178896647435581
 GameObject:
   m_ObjectHideFlags: 0

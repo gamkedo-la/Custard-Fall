@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class Collectible : Inhalable
 {
@@ -10,6 +11,7 @@ public class Collectible : Inhalable
     static int ID = 0;
 
     int id;
+    [SerializeField] private GameObject plusOnePrefab;
 
     public override void Init()
     {
@@ -21,6 +23,10 @@ public class Collectible : Inhalable
     void OnPickup()
     {
         onCollectiblePickup?.Invoke(this, id);
+        if (plusOnePrefab)
+            Instantiate(plusOnePrefab,
+                new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z),
+                Quaternion.Euler(-90f, 0f, 0f));
         Destroy(gameObject);
     }
 

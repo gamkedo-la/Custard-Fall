@@ -147,10 +147,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: trusty grappling hook
-  usedUp: 0
+  inhaleItemsProfile: []
   _player: {fileID: 0}
   _grappleBtnUi: {fileID: 0}
+  plusOnePrefab: {fileID: 2713394065547945622, guid: 474306a931cfbec498955a8f9d812fb1, type: 3}
 --- !u!114 &6135289179636515564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +166,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!114 &2312287917895976251
 MonoBehaviour:
   m_ObjectHideFlags: 0

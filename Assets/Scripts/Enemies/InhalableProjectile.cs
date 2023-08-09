@@ -1,18 +1,23 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class InhalableProjectile : Inhalable
 {
-
     public static EventHandler onProjectileInhale;
     public static HashSet<GameObject> allCurrentProjectiles = new();
-    
+    [SerializeField] private GameObject plusOnePrefab;
+
 
     void OnPickup()
     {
         Debug.Log("picked up projectile");
         onProjectileInhale?.Invoke(this, null);
+        if (plusOnePrefab)
+            Instantiate(plusOnePrefab,
+                new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z),
+                Quaternion.Euler(-90f, 0f, 0f));
         Destroy(gameObject);
     }
 
@@ -30,11 +35,10 @@ public class InhalableProjectile : Inhalable
     {
         allCurrentProjectiles.Add(gameObject);
     }
-    
+
     void OnDestroy()
     {
         allCurrentProjectiles.Remove(gameObject);
         Debug.Log($"remaining projectiles in Level {allCurrentProjectiles.Count}");
     }
-    
 }
