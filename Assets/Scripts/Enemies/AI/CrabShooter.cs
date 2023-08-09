@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(LookAtObject))]
 [RequireComponent(typeof(ProjectileSpawner))]
@@ -12,7 +13,9 @@ public class CrabShooter : Mob
     protected Inhalable _inhalable;
 
     protected StateOfMind stateOfMind = StateOfMind.OwnBusiness;
-    
+    [SerializeField]
+    private float surprisedDelay = .7f;
+
     protected override void Awake()
     {
         base.Awake();
@@ -51,7 +54,7 @@ public class CrabShooter : Mob
 
     private IEnumerator GetAngryAfterDelay()
     {
-        yield return new WaitForSeconds(.7f);
+        yield return new WaitForSeconds(surprisedDelay);
         OnStateOfMindChange(StateOfMind.Angry);
     }
     
