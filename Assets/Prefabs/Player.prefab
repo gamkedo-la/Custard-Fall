@@ -5296,9 +5296,9 @@ MonoBehaviour:
   LookInMoveDirectionGraceTime: 0.3
   buttonPrompt: {fileID: 9053762404139652883}
   isDashing: 0
-  runningMultiplier: 6
+  runningMultiplier: 6.1
   cooldownTime: 0.6
-  runningDuration: 0.15
+  runningDuration: 0.13
   grappleCooldownTime: 1.5
   grappleDistance: 11
   grappleSpeed: 11.5
