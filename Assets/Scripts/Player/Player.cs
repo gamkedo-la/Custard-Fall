@@ -746,7 +746,6 @@ public class Player : MonoBehaviour
         }
 
         playerAnimator.SetBool(Swimming, doSwim);
-        MovePlayer(Vector3.zero);
     }
 }
 
