@@ -30,6 +30,7 @@ public class ItemRandomizer : MonoBehaviour
 
     private HashSet<Coords> _activeChunks = new HashSet<Coords>();
     private Coords _playerChunk = Coords.Of(255, 255);
+    [SerializeField]private int itemsDisplayChunkRadius = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -285,7 +286,7 @@ public class ItemRandomizer : MonoBehaviour
 
         _playerChunk = currentPlayerChunk;
         HashSet<Coords> currentChunks = new HashSet<Coords>();
-        var halfWindowSize = 2;
+        var halfWindowSize = itemsDisplayChunkRadius;
         for (int x = -halfWindowSize; x < halfWindowSize; x++)
         for (int y = -halfWindowSize; y < halfWindowSize; y++)
         {
