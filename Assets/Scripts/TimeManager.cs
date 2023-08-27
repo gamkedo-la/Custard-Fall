@@ -31,11 +31,18 @@ public class TimeManager : MonoBehaviour
     [SerializeField]
     public float nightStart = 0.75f;
 
+    [NonSerialized]
     int currentDay;
+    [NonSerialized]
     int previousDay;
+    [NonSerialized]
     bool noonPassed;
+    [NonSerialized]
     bool eveningStarted;
+    [NonSerialized]
     bool morningStarted;
+    
+    [SerializeField] private bool pause;
 
     public int Days => currentDay;
 
@@ -77,7 +84,11 @@ public class TimeManager : MonoBehaviour
         timeRate = 1.0f / fullDayLength;
     }
 
-    private void Update() {     
+    private void Update()
+    {
+        if (pause)
+            return;
+        
         time += Math.Clamp(TimeManager.Instance.TimeRate * Time.deltaTime, 0.0f, 1.0f);
 
         if(time >= 1.0f){

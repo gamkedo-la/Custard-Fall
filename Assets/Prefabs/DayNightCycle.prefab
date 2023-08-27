@@ -234,10 +234,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae8836e495712f24e905d7b441d3a2a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 0
-  fullDayLength: 360
-  startTime: 0.4
   noon: {x: 90, y: 0, z: 0}
+  offset: 0
+  dawnRotation: {x: 3, y: 0, z: 0}
+  duskRotation: {x: 177, y: 0, z: 0}
   sun: {fileID: 8448847963745054924}
   sunColor:
     serializedVersion: 2
