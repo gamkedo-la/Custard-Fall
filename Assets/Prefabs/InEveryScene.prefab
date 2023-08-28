@@ -3477,7 +3477,7 @@ MonoBehaviour:
   custardVisualizer: {fileID: 8634744845809120382}
   custardBlockPrefab: {fileID: 3960450973255617825, guid: 5506ad9aa974dce4a810a1dc40b7c4ac, type: 3}
   pauseIterationCountDown: 0
-  custardCrawlDuration: 0.35
+  custardCrawlDuration: 0.5
   targetTideLevel: 1
 --- !u!114 &8634744844989316036
 MonoBehaviour:
@@ -3588,6 +3588,7 @@ MonoBehaviour:
     maxTerrainLevel: 15
     dontSpawnNearPlayer: 1
     numberRetries: 32
+  itemsDisplayChunkRadius: 3
 --- !u!114 &8582329314383768474
 MonoBehaviour:
   m_ObjectHideFlags: 0
