@@ -15,7 +15,7 @@ public class StoryTeller : MonoBehaviour
     private Queue<String> messages = new();
 
     private float timeTillNextMessage = 0f;
-    private float _timeInbetweenMessages = .8f;
+    private float _timeInbetweenMessages = 1.2f;
     private float _timeForRethoricalPause = 1f;
     private float _timeToReadAMessage = 5f;
 
@@ -31,7 +31,7 @@ public class StoryTeller : MonoBehaviour
             {
                 // we do not want to overwhelm the player with infos on the start of the game
                 timeTillNextMessage = 1.5f;
-                messages.Enqueue("The world wants to nibble at you,\nso munch back and survive!");
+                messages.Enqueue("\"Before the Custard fell, I had no aspiration. Alas, my ample collection is ready to expand beyond the memories of the past.\"\n\n                                   - The Collector");
                 // messages.Enqueue("7 days left till next calamity...");
              }
             // else if (relativeDay == 1)
@@ -69,7 +69,7 @@ public class StoryTeller : MonoBehaviour
         // cinematicBar.gameObject.SetActive(true);
         cinematicOverlay.CrossFadeAlpha(1,0,true);
         // cinematicBar.CrossFadeAlpha(1, 0, true);
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(6.5f);
         cinematicOverlay.CrossFadeAlpha(0,1.5f,true);
         yield return new WaitForSeconds(1.6f);
         cinematicOverlay.gameObject.SetActive(false);
