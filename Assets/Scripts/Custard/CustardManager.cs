@@ -679,9 +679,9 @@ namespace Custard
 
         public ImpededCell(Coords coords, float strength, int worldY)
         {
-            this._coords = coords;
-            this._strength = strength;
-            this._worldY = worldY;
+            _coords = coords;
+            _strength = strength;
+            _worldY = worldY;
         }
 
         public Coords GetCoords()
@@ -711,7 +711,7 @@ namespace Custard
 
         public void SetStrength(float strength)
         {
-            this._strength = strength;
+            _strength = strength;
         }
     }
 }
