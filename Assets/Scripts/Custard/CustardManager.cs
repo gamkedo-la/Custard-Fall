@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using Custard;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 namespace Custard
 {
@@ -223,7 +220,7 @@ namespace Custard
 
         public void SeedCustardUpdate(int seed)
         {
-            var random = new System.Random(seed);
+            var random = new Random(seed);
             const int numWindows = 8;
             var windowNoX = random.Next(0, numWindows / 2);
             var windowNoY = random.Next(0, numWindows / 2);
