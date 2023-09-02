@@ -5,6 +5,7 @@ using System.Net;
 using Custard;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Custard
@@ -30,6 +31,8 @@ namespace Custard
         public int targetTideLevel = 2;
         private float _custardUpdateCountdown;
 
+        [SerializeField] private int maxCellUpdatesPerSecond = 16384;
+        private bool _isCustardCoroutineRunning;
 
         private void Start()
         {
@@ -139,14 +142,14 @@ namespace Custard
         private void FixedUpdate()
         {
             custardState.GlobalTideLevel = targetTideLevel;
-            if (!pauseIterationCountDown)
+            if (!pauseIterationCountDown && _custardUpdateCountdown > 0)
                 _custardUpdateCountdown -= Time.deltaTime;
 
             UpdateWhichCellsAreImpeded();
 
             if (custardState.CellsToProcessInCurrentIteration.Count == 0)
             {
-                if (_custardUpdateCountdown <= 0.001f)
+                if (_custardUpdateCountdown <= 0)
                 {
                     // reset the countdown
                     _custardUpdateCountdown = custardCrawlDuration;
@@ -154,10 +157,10 @@ namespace Custard
                     NextCustardIteration();
                 }
             }
-            else
+            else if (!_isCustardCoroutineRunning)
             {
                 // prepare next custard iteration
-                SimulateCustard();
+                StartCoroutine(SimulateCustard());
             }
         }
 
@@ -251,10 +254,14 @@ namespace Custard
                 _custardUpdateCountdown = 0;
         }
 
-        private void SimulateCustard()
+        private IEnumerator SimulateCustard()
         {
+            _isCustardCoroutineRunning = true;
             // working on a shallow copy as other cells might find their way into current iteration
             var processing = new HashSet<Coords>(custardState.CellsToProcessInCurrentIteration);
+            var cutOffPoint = maxCellUpdatesPerSecond * Time.deltaTime;
+
+            var index = 0;
             foreach (var pivot in processing)
             {
                 custardState.MarkAsProcessed(pivot);
@@ -265,7 +272,17 @@ namespace Custard
                 var terrainAreaAroundPivot = GetLocalNeighborhood(pivot, (i, j) => worldCells.GetHeightAt(i, j));
 
                 UpdateCustardState(pivot, custardAreaAroundPivot, terrainAreaAroundPivot);
+
+                // spread custard updates evenly over time
+                index++;
+                if (index >= cutOffPoint)
+                {
+                    yield return new WaitForFixedUpdate();
+                    cutOffPoint = index + maxCellUpdatesPerSecond * Time.deltaTime;
+                }
             }
+
+            _isCustardCoroutineRunning = false;
         }
 
 
@@ -356,7 +373,7 @@ namespace Custard
                 }
                 else if (pivotCustardAmount == 1 && custardState.IsTrapped(pivot))
                 {
-                    if(custardState.IsTrapped(pivot))
+                    if (custardState.IsTrapped(pivot))
                     {
                         debugSet.Add(pivot);
                     }
@@ -381,7 +398,7 @@ namespace Custard
                         custardState.QueueCellsForNextIteration(info.CellsBellow);
                         custardRim.AddRange(info.CellsBellow);
                     }
-                
+
                     if (info.CellsAtSameLevel.Count != 0)
                     {
                         custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);

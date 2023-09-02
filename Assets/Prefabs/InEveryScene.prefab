@@ -3479,6 +3479,7 @@ MonoBehaviour:
   pauseIterationCountDown: 0
   custardCrawlDuration: 0.5
   targetTideLevel: 1
+  maxCellUpdatesPerSecond: 16384
 --- !u!114 &8634744844989316036
 MonoBehaviour:
   m_ObjectHideFlags: 0
