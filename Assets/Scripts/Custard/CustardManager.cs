@@ -31,6 +31,8 @@ namespace Custard
         [SerializeField] private int maxCellUpdatesPerSecond = 16384;
         private bool _isCustardCoroutineRunning;
 
+        private HashSet<Coords> _lastTimedoutImpededCells = new();
+
         private void Start()
         {
             worldCells.onItemHeightChanged += OnHeightChanged;
@@ -81,7 +83,7 @@ namespace Custard
                     else
                     {
                         custardState.RegisterUpdate(spawnPosition, 1);
-                        custardState.QueueForNextIteration(spawnPosition);
+                        custardState.QueueCellForNextIteration(spawnPosition);
                     }
                 }
         }
@@ -133,6 +135,7 @@ namespace Custard
                 }
             }
 
+            // trick: eventhough the state has not been calculated, preview the result
             custardVisualizer.RenderCustard(valuesOfImpededCells);
         }
 
@@ -174,18 +177,21 @@ namespace Custard
                     impededCell.SetDuration(impededCell.GetDuration() - Time.deltaTime);
                     if (impededCell.GetDuration() <= 0)
                     {
-                        Coords coords = impededCell.GetCoords();
+                        impededCell.SetStrength(0);
                         timedOutCells.Add(impededCell);
-                        custardState.QueueForNextIteration(impededCell.GetCoords());
-                        // clean up memory
-                        if (impededCellList.Count == 1)
-                            emptyCellLists.Add(coords);
+                        Coords coords = impededCell.GetCoords();
+                        _lastTimedoutImpededCells.Add(coords);
+                        custardState.QueueCellForNextIteration(coords);
                     }
                 }
-
+                
                 foreach (var timedOutCell in timedOutCells)
                 {
                     impededCellList.Remove(timedOutCell);
+                    var coords = timedOutCell.GetCoords();
+                    
+                    if (impededCellList.Count == 0)
+                        emptyCellLists.Add(coords);
                 }
             }
 
@@ -211,7 +217,6 @@ namespace Custard
 
         public void RimCustardUpdate()
         {
-            debugSet.Clear();
             foreach (var rimCell in custardRim)
             {
                 custardState.QueueCellForNextIteration(rimCell.X, rimCell.Y);
@@ -311,7 +316,7 @@ namespace Custard
                     }
 
                     // very likely level is not going to stay next iteration as we are still above the global tide level
-                    custardState.QueueForNextIteration(pivot);
+                    custardState.QueueCellForNextIteration(pivot);
                     // cells above should flow into me
                     custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                     // I stay at the same level but maybe my neighbors need to be checked
@@ -342,7 +347,7 @@ namespace Custard
                         newPivotCustardAmount = pivotCustardAmount - 1;
                         if (custardState.GlobalTideLevel < newPivotCustardAmount + pivotTerrainHeight)
                         {
-                            custardState.QueueForNextIteration(pivot);
+                            custardState.QueueCellForNextIteration(pivot);
                         }
 
                         // next iteration: check all cells that might get affected by this change
@@ -364,16 +369,16 @@ namespace Custard
                     // so we simply shrink up to a single layer
                     newPivotCustardAmount = pivotCustardAmount - 1;
                     if (custardState.GlobalTideLevel < newPivotCustardAmount + pivotTerrainHeight)
-                        custardState.QueueForNextIteration(pivot);
+                        custardState.QueueCellForNextIteration(pivot);
                     // next iteration: check all cells that now might flow into me
                     custardState.QueueCellsForNextIteration(info.CellsAtSameLevel);
                 }
                 else if (pivotCustardAmount == 1 && custardState.IsTrapped(pivot))
                 {
-                    if (custardState.IsTrapped(pivot))
-                    {
-                        debugSet.Add(pivot);
-                    }
+                    // if (custardState.IsTrapped(pivot))
+                    // {
+                    //     debugSet.Add(pivot);
+                    // }
 
                     if (info.CustardAtSameLevel.Count == 0)
                     {
@@ -427,6 +432,7 @@ namespace Custard
                 {
                     // if in sink and has neighbor custard flowing downwards
                     newPivotCustardAmount = 1;
+                    debugSet.Add(pivot);
                 }
 
                 // cells above should flow into me
@@ -459,7 +465,7 @@ namespace Custard
                 {
                     newPivotCustardAmount = pivotCustardAmount + 1;
                     if (custardState.GlobalTideLevel > newPivotCustardAmount + pivotTerrainHeight)
-                        custardState.QueueForNextIteration(pivot);
+                        custardState.QueueCellForNextIteration(pivot);
                     // cells above should flow into me
                     custardState.QueueCellsForNextIteration(info.CustardFromAbove);
                     // spread: next iteration: check all cells below me or currently at same level should grow next as well
@@ -640,6 +646,8 @@ namespace Custard
                 var impededCells = new List<ImpededCell>();
                 impededCells.Add(new ImpededCell(coords, strength, worldY));
                 _impededCells.Add(coords, impededCells);
+
+                custardState.QueueCellForNextIteration(coords);
             }
             else
             {
@@ -652,6 +660,10 @@ namespace Custard
                         if (impededCell.GetStrength() < strength)
                             impededCell.SetStrength(strength);
                     }
+                    else
+                    {
+                        custardState.QueueCellForNextIteration(coords);
+                    }
 
                     impededCell.SetDuration(1.5f);
                 }
@@ -659,8 +671,6 @@ namespace Custard
                 if (!isPresent)
                     knownImpededCells.Add(new ImpededCell(coords, strength, worldY));
             }
-
-            custardState.CellsThatMightCauseChangeNextIteration.Add(coords);
         }
 
         private void OnHeightChanged(Coords coords)

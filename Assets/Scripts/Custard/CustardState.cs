@@ -57,7 +57,7 @@ namespace Custard
 
         public void QueueCellForNextIteration(int x, int y)
         {
-            QueueForNextIteration(Coords.Of(x, y));
+            QueueCellForNextIteration(Coords.Of(x, y));
         }
 
         public void QueueCellsForNextIteration(IEnumerable<Coords> coords)
@@ -65,7 +65,7 @@ namespace Custard
             CellsThatMightCauseChangeNextIteration.AddRange(coords);
         }
         
-        public void QueueForNextIteration(Coords coords)
+        public void QueueCellForNextIteration(Coords coords)
         {
             CellsThatMightCauseChangeNextIteration.Add(coords);
         }
