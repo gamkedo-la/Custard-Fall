@@ -14,78 +14,94 @@ public class TimeManager : MonoBehaviour
     public static EventHandler<EventArgs> onNightStarted;
     public static EventHandler<EventArgs> onMidnightPassed;
 
-    public enum DayNightState { Daytime, Nightime };
+    public enum DayNightState
+    {
+        Daytime,
+        Nightime
+    };
 
     public DayNightState state;
     public TextMeshProUGUI dayCountText;
     public Animator dayCountAnimatorController;
 
-    [Range(0.0f, 1.0f)]
-    public float time;
+    [Range(0.0f, 1.0f)] public float time;
     public float fullDayLength = 300f;
     public float startTime = 0.25f;
     private float timeRate;
 
-    [SerializeField]
-    public float dayStart = 0.25f;
-    [SerializeField]
-    public float nightStart = 0.75f;
+    [SerializeField] public float dayStart = 0.25f;
+    [SerializeField] public float nightStart = 0.75f;
 
-    [NonSerialized]
-    int currentDay;
-    [NonSerialized]
-    int previousDay;
-    [NonSerialized]
-    bool noonPassed;
-    [NonSerialized]
-    bool eveningStarted;
-    [NonSerialized]
-    bool morningStarted;
-    
+    [NonSerialized] int currentDay;
+    [NonSerialized] int previousDay;
+    [NonSerialized] bool noonPassed;
+    [NonSerialized] bool eveningStarted;
+    [NonSerialized] bool morningStarted;
+
     [SerializeField] private bool pause;
 
     public void Pause()
     {
         pause = true;
     }
-    
+
     public int Days => currentDay;
 
-    public bool IsDayTime { get {
-        return dayStart <= time && time < nightStart;
-    }}
+    public bool IsDayTime
+    {
+        get { return dayStart <= time && time < nightStart; }
+    }
 
-    public float TimeRate { get => timeRate; }
-    public int CurrentDay { get => currentDay; }
+    public float TimeRate
+    {
+        get => timeRate;
+    }
 
-    private void Awake() {
-        if(Instance != null){
+    public int CurrentDay
+    {
+        get => currentDay;
+    }
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
             Destroy(gameObject);
             Debug.LogWarning("Time Manager already exists, deleting...");
             return;
         }
+
         Instance = this;
         previousDay = 0;
         currentDay = 0;
 
-        if (state == DayNightState.Daytime && startTime >= nightStart) {
+        if (state == DayNightState.Daytime && startTime >= nightStart)
+        {
             startTime = dayStart;
         }
-        if (state == DayNightState.Nightime && startTime < nightStart) {
+
+        if (state == DayNightState.Nightime && startTime < nightStart)
+        {
             startTime = nightStart;
         }
     }
 
-    void Start ()
+    void Start()
     {
         timeRate = 1.0f / fullDayLength;
         time = startTime;
         state = IsDayTime ? DayNightState.Daytime : DayNightState.Nightime;
-        dayCountText.SetText("Day " + currentDay.ToString());
+        dayCountText.SetText("Day " + currentDay);
+    }
+
+    private IEnumerator StartFirstDayAnimation()
+    {
+        yield return new WaitForSeconds(8.3f);
         dayCountAnimatorController.SetTrigger("NewDayTrigger");
     }
 
-    private void OnValidate() {
+    private void OnValidate()
+    {
         timeRate = 1.0f / fullDayLength;
     }
 
@@ -93,43 +109,52 @@ public class TimeManager : MonoBehaviour
     {
         if (pause)
             return;
-        
+
         time += Math.Clamp(TimeManager.Instance.TimeRate * Time.deltaTime, 0.0f, 1.0f);
 
-        if(time >= 1.0f){
+        if (time >= 1.0f)
+        {
             time = 0.0f;
             previousDay = currentDay;
             onMidnightPassed?.Invoke(this, EventArgs.Empty);
         }
 
-        if (time >= dayStart && previousDay >= currentDay) {
+        if (time >= dayStart && previousDay >= currentDay)
+        {
             currentDay++;
             dayCountText.SetText("Day " + currentDay.ToString());
-            dayCountAnimatorController.SetTrigger("NewDayTrigger");
+            if (currentDay == 1)
+            {
+                StartCoroutine(StartFirstDayAnimation());
+            }
+            else
+            {
+                dayCountAnimatorController.SetTrigger("NewDayTrigger");
+            }
+
             noonPassed = false;
             onDayComplete?.Invoke(this, currentDay);
         }
 
-        if(time >= 0.5 && !noonPassed){
+        if (time >= 0.5 && !noonPassed)
+        {
             noonPassed = true;
-            
+
             onNoonPassed?.Invoke(this, EventArgs.Empty);
         }
 
-        if( IsDayTime && state == DayNightState.Nightime){
+        if (IsDayTime && state == DayNightState.Nightime)
+        {
             state = DayNightState.Daytime;
 
             onMorningStarted?.Invoke(this, EventArgs.Empty);
         }
 
-        if( !IsDayTime && state == DayNightState.Daytime){
+        if (!IsDayTime && state == DayNightState.Daytime)
+        {
             state = DayNightState.Nightime;
 
             onNightStarted?.Invoke(this, EventArgs.Empty);
         }
-
-
     }
-
-
 }

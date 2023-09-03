@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class StoryTeller : MonoBehaviour
 {
     public TextMeshProUGUI text;
+
     public Image cinematicOverlay;
+
     // public Image cinematicBar;
     public PauseActivator pauseActivator;
 
@@ -17,23 +19,26 @@ public class StoryTeller : MonoBehaviour
     private float timeTillNextMessage = 0f;
     private float _timeInbetweenMessages = 1.2f;
     private float _timeForRethoricalPause = 1f;
-    private float _timeToReadAMessage = 5f;
+    private float _timeToReadAMessage = 4.2f;
 
 
     // Start is called before the first frame update
 
     void Awake()
     {
+        text.CrossFadeAlpha(0, 0, true);
+
         TimeManager.onDayComplete += (sender, day) =>
         {
             var relativeDay = day % 7;
-            if (day  == 1)
+            if (day == 1)
             {
                 // we do not want to overwhelm the player with infos on the start of the game
-                timeTillNextMessage = 1.5f;
-                messages.Enqueue("\"Before the Custard fell, I had no aspiration. Alas, my ample collection is ready to expand beyond the memories of the past.\"\n\n                                   - The Collector");
+                timeTillNextMessage = 0.3f;
+                messages.Enqueue(
+                    "\"Before the Custard fell, I had no aspiration. Alas, my ample collection is ready to expand beyond the memories of the past.\"\n\n                                   - The Collector");
                 // messages.Enqueue("7 days left till next calamity...");
-             }
+            }
             // else if (relativeDay == 1)
             // {
             //     messages.Clear();
@@ -67,11 +72,12 @@ public class StoryTeller : MonoBehaviour
     {
         cinematicOverlay.gameObject.SetActive(true);
         // cinematicBar.gameObject.SetActive(true);
-        cinematicOverlay.CrossFadeAlpha(1,0,true);
+        cinematicOverlay.CrossFadeAlpha(1, 0.5f, true);
         // cinematicBar.CrossFadeAlpha(1, 0, true);
-        yield return new WaitForSeconds(6.5f);
-        cinematicOverlay.CrossFadeAlpha(0,1.5f,true);
-        yield return new WaitForSeconds(1.6f);
+        yield return new WaitForSeconds(5f);
+        // cinematicOverlay.CrossFadeAlpha(0, .6f, true);
+        text.CrossFadeAlpha(0, .6f, true);
+        yield return new WaitForSeconds(.64f);
         cinematicOverlay.gameObject.SetActive(false);
     }
 
@@ -85,6 +91,7 @@ public class StoryTeller : MonoBehaviour
         }
         else
         {
+            text.CrossFadeAlpha(1, .45f, true);
             timeTillNextMessage = _timeToReadAMessage;
         }
     }
@@ -103,13 +110,14 @@ public class StoryTeller : MonoBehaviour
             else
             {
                 text.SetText("");
+                text.CrossFadeAlpha(0, 0, true);
                 timeTillNextMessage = _timeInbetweenMessages;
             }
         }
         else
         {
             timeTillNextMessage = 0f;
-            text.SetText("");
+            text.CrossFadeAlpha(0, .3f, true);
         }
     }
 }
