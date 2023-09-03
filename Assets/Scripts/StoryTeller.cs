@@ -36,7 +36,7 @@ public class StoryTeller : MonoBehaviour
                 // we do not want to overwhelm the player with infos on the start of the game
                 timeTillNextMessage = 0.3f;
                 messages.Enqueue(
-                    "\"Before the Custard fell, I had no aspiration. Alas, my ample collection is ready to expand beyond the memories of the past.\"\n\n                                   - The Collector");
+                    "\"The world was dull during that time before the Custard fell. But as it expanded and spread, so did my ample collection. Soon, I'm going to accommodate features\n far beyond the original scope.\"\n\n                                   - The Collector");
                 // messages.Enqueue("7 days left till next calamity...");
             }
             // else if (relativeDay == 1)
