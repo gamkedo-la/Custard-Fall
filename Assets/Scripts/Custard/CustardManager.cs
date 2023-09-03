@@ -12,6 +12,7 @@ namespace Custard
         public WorldCells worldCells;
         public CustardState custardState;
         private Dictionary<Coords, List<ImpededCell>> _impededCells;
+        private Dictionary<Coords, List<ImpededCell>> _impededCellsCurrentGen;
 
         public HashSet<Coords> custardRim;
         public HashSet<Coords> debugSet;
@@ -36,6 +37,7 @@ namespace Custard
             worldCells.onItemHeightChanged += OnHeightChanged;
             _custardUpdateCountdown = custardCrawlDuration;
             _impededCells = new Dictionary<Coords, List<ImpededCell>>();
+            _impededCellsCurrentGen = new Dictionary<Coords, List<ImpededCell>>();
         }
 
         private void Awake()
@@ -143,8 +145,6 @@ namespace Custard
             if (!pauseIterationCountDown && _custardUpdateCountdown > 0)
                 _custardUpdateCountdown -= Time.deltaTime;
 
-            UpdateWhichCellsAreImpeded();
-
             if (custardState.CellsToProcessInCurrentIteration.Count == 0)
             {
                 if (_custardUpdateCountdown <= 0)
@@ -204,6 +204,9 @@ namespace Custard
             custardVisualizer.RenderChangedCustard();
             // proceed to next custard iteration
             custardState.ApplyAllUpdatesAndStartNewIteration();
+
+            _impededCellsCurrentGen.Clear();
+            _impededCellsCurrentGen.AddRange(_impededCells);
         }
 
         public bool TogglePause()
@@ -252,7 +255,7 @@ namespace Custard
             else
                 _custardUpdateCountdown = 0;
         }
-        
+
         public void ClearDebugSet()
         {
             debugSet.Clear();
@@ -496,7 +499,7 @@ namespace Custard
                 }
             }
 
-            _impededCells.TryGetValue(pivot, out var impededCellList);
+            _impededCellsCurrentGen.TryGetValue(pivot, out var impededCellList);
             if (impededCellList != null)
                 foreach (var impededCell in impededCellList)
                 {
@@ -504,8 +507,8 @@ namespace Custard
                     var impededWorldY = impededCell.GetWorldY();
                     var worldHeight = worldCells.GetHeightAt(pivot);
                     var custardAmountFromImpededHeight = worldHeight + newPivotCustardAmount;
-                    if (impededWorldY > worldHeight && custardAmountFromImpededHeight >= impededWorldY &&
-                        strength > .2f)
+                    if (impededWorldY >= worldHeight && custardAmountFromImpededHeight >= impededWorldY &&
+                        strength > 0)
                     {
                         newPivotCustardAmount--;
                         // ensure only one layer is removed
@@ -631,20 +634,20 @@ namespace Custard
             if (WorldCells.IsOutOfBounds(coords))
                 return;
 
-            // check is there actually custard at inhale position and y-height
-            var custardLevelAt = custardState.GetCurrentCustardLevelAt(coords);
-            if (custardLevelAt == 0)
-                return;
-            var worldHeight = worldCells.GetHeightAt(coords);
-            if (worldHeight >= worldY || worldHeight + custardLevelAt < worldY)
-                return;
-
-            // check, is actually custard at impeded point?
-            if (custardState.CustardArea[coords.X, coords.Y] + worldCells.GetHeightAt(coords) < worldY)
-                return;
-
             if (!_impededCells.TryGetValue(coords, out var knownImpededCells))
             {
+                // check is there actually custard at inhale position and y-height
+                var custardLevelAt = custardState.GetCurrentCustardLevelAt(coords);
+                // if (custardLevelAt == 0)
+                //     return;
+                var worldHeight = worldCells.GetHeightAt(coords);
+                if (worldHeight > worldY + 1 || worldHeight + custardLevelAt <= worldY - 2)
+                    return;
+                //
+                // // check, is actually custard at impeded point?
+                // if (custardLevelAt + worldCells.GetHeightAt(coords) < worldY)
+                //     return;
+
                 var impededCells = new List<ImpededCell>();
                 impededCells.Add(new ImpededCell(coords, strength, worldY));
                 _impededCells.Add(coords, impededCells);
@@ -667,7 +670,8 @@ namespace Custard
                         custardState.QueueCellForNextIteration(coords);
                     }
 
-                    impededCell.SetDuration(1.5f);
+                    var duration = impededCell.GetDuration();
+                    impededCell.SetDuration(Math.Max(duration, 1f));
                 }
 
                 if (!isPresent)
@@ -687,7 +691,7 @@ namespace Custard
         private readonly Coords _coords;
         private readonly int _worldY;
         private float _strength;
-        private float durationLeft = 2.5f;
+        private float durationLeft = 2f;
 
         public ImpededCell(Coords coords, float strength, int worldY)
         {
