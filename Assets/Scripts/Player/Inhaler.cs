@@ -110,7 +110,7 @@ public class Inhaler : MonoBehaviour
                     {
                         var inhalableProjectile = projectile.GetComponent<InhalableProjectile>();
                         inhalableProjectile.Inhale(this, inhaleCell.GetStrength());
-                        projectile.GetComponent<ProjectileMove>().SetMagnet(this.transform);
+                        projectile.GetComponent<ProjectileMove>()?.SetMagnet(this.transform);
                     }
                 }
             }
