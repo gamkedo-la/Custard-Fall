@@ -31,8 +31,6 @@ namespace Custard
         [SerializeField] private int maxCellUpdatesPerSecond = 16384;
         private bool _isCustardCoroutineRunning;
 
-        private HashSet<Coords> _lastTimedoutImpededCells = new();
-
         private void Start()
         {
             worldCells.onItemHeightChanged += OnHeightChanged;
@@ -180,16 +178,15 @@ namespace Custard
                         impededCell.SetStrength(0);
                         timedOutCells.Add(impededCell);
                         Coords coords = impededCell.GetCoords();
-                        _lastTimedoutImpededCells.Add(coords);
                         custardState.QueueCellForNextIteration(coords);
                     }
                 }
-                
+
                 foreach (var timedOutCell in timedOutCells)
                 {
                     impededCellList.Remove(timedOutCell);
                     var coords = timedOutCell.GetCoords();
-                    
+
                     if (impededCellList.Count == 0)
                         emptyCellLists.Add(coords);
                 }
@@ -254,6 +251,11 @@ namespace Custard
                 }
             else
                 _custardUpdateCountdown = 0;
+        }
+        
+        public void ClearDebugSet()
+        {
+            debugSet.Clear();
         }
 
         private IEnumerator SimulateCustard()
