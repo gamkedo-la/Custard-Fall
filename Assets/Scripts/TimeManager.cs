@@ -44,6 +44,11 @@ public class TimeManager : MonoBehaviour
     
     [SerializeField] private bool pause;
 
+    public void Pause()
+    {
+        pause = true;
+    }
+    
     public int Days => currentDay;
 
     public bool IsDayTime { get {
