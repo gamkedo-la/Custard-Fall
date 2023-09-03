@@ -34,9 +34,9 @@ public class StoryTeller : MonoBehaviour
             if (day == 1)
             {
                 // we do not want to overwhelm the player with infos on the start of the game
-                timeTillNextMessage = 0.3f;
+                timeTillNextMessage = 0.1f;
                 messages.Enqueue(
-                    "\"The world was dull during that time before the Custard fell. But as it expanded and spread, so did my ample collection. Soon, I'm going to accommodate features\n far beyond the original scope.\"\n\n                                   - The Collector");
+                    "\" I began collecting \nwhen the Custard first fell. \nAs it spread, \nI preserved what I saw fit.\"\n\n                                   - The Collector");
                 // messages.Enqueue("7 days left till next calamity...");
             }
             // else if (relativeDay == 1)
@@ -74,10 +74,10 @@ public class StoryTeller : MonoBehaviour
         // cinematicBar.gameObject.SetActive(true);
         cinematicOverlay.CrossFadeAlpha(1, 0.5f, true);
         // cinematicBar.CrossFadeAlpha(1, 0, true);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(6.4f);
         // cinematicOverlay.CrossFadeAlpha(0, .6f, true);
-        text.CrossFadeAlpha(0, .6f, true);
-        yield return new WaitForSeconds(.64f);
+        text.CrossFadeAlpha(0, .24f, true);
+        yield return new WaitForSeconds(.28f);
         cinematicOverlay.gameObject.SetActive(false);
     }
 
