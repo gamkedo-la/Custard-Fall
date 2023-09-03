@@ -32,10 +32,16 @@ namespace Editor
                 manager.TogglePause();
             }
             
+            
             if (manager.pauseIterationCountDown && GUILayout.Button("Next Half Step"))
             {
                 manager.ForceNextIterationHalfStep();
-            }    
+            }
+            
+            if (GUILayout.Button("Clear Debug Positions"))
+            {
+                manager.ClearDebugSet();
+            }
         }
     }
 }
