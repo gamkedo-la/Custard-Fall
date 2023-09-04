@@ -81,13 +81,11 @@ public class Inventory : MonoBehaviour
     {
         if (resource == null || resource.Name == null)
         {
-            Debug.Log("Resource already null");
             return 0;
         }
 
         if (_slots.TryGetValue(resource.Name, out InventorySlot slot))
         {
-            Debug.Log(resource.Name + " has only remaining " + slot.Amount);
             return slot.Amount;
         }
         else

@@ -25,7 +25,6 @@ public class UpgradableStructureVisual : MonoBehaviour
     private bool doFade;
     private Action onFadeComplete;
 
-
     private void Start()
     {
         upgradeableStructure.OnPreviewEnter += OnPreviewEnter;

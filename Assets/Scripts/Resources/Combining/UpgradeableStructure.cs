@@ -11,8 +11,8 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     [SerializeField] private UpgradeConfig[] upgradeLevels;
 
-    private GameObject previewInstance;
-    private PlaceableItemReference placeableItemReference;
+    private GameObject _previewInstance;
+    private PlaceableItemReference _placeableItemReference;
 
     public event EventHandler<UpgradeArgs> OnProgressToLevelUp;
     public event EventHandler<UpgradeArgs> OnLevelUp;
@@ -21,7 +21,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     private void Awake()
     {
-        placeableItemReference = GetComponent<PlaceableItemReference>();
+        _placeableItemReference = GetComponent<PlaceableItemReference>();
         OnPreviewEnter += PreviewUpgrade;
         OnPreviewLeave += LeavePreviewUpgrade;
         OnLevelUp += HandleUpgrade;
@@ -165,29 +165,30 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     private void PreviewUpgrade(object sender, UpgradeArgs e)
     {
-        if (previewInstance == null)
+        Debug.Log("# preview "+_previewInstance == null);
+        if (_previewInstance == null)
         {
-            var placeableItem = upgradeLevels[currentLevel - 1].upgrade;
             var originalTransform = transform;
+            var placeableItem = upgradeLevels[currentLevel - 1].upgrade;
             if (placeableItem)
             {
-                previewInstance = Instantiate(placeableItem.PlaceablePreview, originalTransform.position, originalTransform.rotation);
+                _previewInstance = Instantiate(placeableItem.PlaceablePreview, originalTransform.position, originalTransform.rotation);
             }
             else
             {
-                if (placeableItemReference)
-                    previewInstance = Instantiate(placeableItemReference.Item().PlaceablePreview, originalTransform.position, originalTransform.rotation);
+                if (_placeableItemReference)
+                    _previewInstance = Instantiate(_placeableItemReference.Item().PlaceablePreview, originalTransform.position, originalTransform.rotation);
             }
         }
 
-        previewInstance.SetActive(true);
+        _previewInstance.SetActive(true);
     }
 
     private void LeavePreviewUpgrade(object sender, UpgradeArgs e)
     {
-        if (previewInstance != null)
+        if (_previewInstance != null)
         {
-            previewInstance.SetActive(false);
+            _previewInstance?.SetActive(false);
         }
     }
 
@@ -208,11 +209,11 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
             replacement = null;
         }
 
-        if (previewInstance != null)
+        if (_previewInstance != null)
         {
-            previewInstance.SetActive(false);
-            Destroy(previewInstance);
-            previewInstance = null;
+            _previewInstance.SetActive(false);
+            Destroy(_previewInstance);
+            _previewInstance = null;
         }
 
         if (replacement)
