@@ -57,10 +57,6 @@ namespace Custard
             material.SetColor("_BaseColorGammaSpace", color);
         }
 
-        private void Update()
-        {
-        }
-
         private void FixedUpdate()
         {
             if (custardState.Rising)
