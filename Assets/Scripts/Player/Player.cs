@@ -688,6 +688,10 @@ public class Player : MonoBehaviour
         Vector3 tmpTargetPoint4PlacingItem;
         itemReceiver = null;
 
+        var debugVectorVisual = DebugUtils.ProvideTransform("player transform");
+        debugVectorVisual.position = position;
+        debugVectorVisual.forward = direction.normalized;
+        
         if (Physics.Raycast(position, direction, out var hitResult, maxPlaceDistance,
                 LayerMask.GetMask("Terrain", "Obstacles", "Interactable")))
         {
