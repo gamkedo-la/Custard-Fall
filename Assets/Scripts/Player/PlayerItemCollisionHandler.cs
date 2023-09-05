@@ -20,18 +20,31 @@ public class PlayerItemCollisionHandler : MonoBehaviour
         collision.GetComponent<Inhalable>();
         if (collision.GetComponent<Inhalable>() != null)
         {
-            textForItemDisplay.enabled = true;
-            textForItemDisplay.text = collision.GetComponent<Inhalable>().interactionMessage;
-            var upgradableStructureVisual = collision.GetComponentInChildren<UpgradableStructureVisual>();
-            if (upgradableStructureVisual != null)
-            {
-                upgradableStructureVisual.Show();
-            }
-
-            _disappearEffect.Reset();
-            _timeSinceActivated = Time.time;
-            StartCoroutine(DisappearLater(upgradableStructureVisual));
+            var upgradableStructureVisual = ShowVisual(collision.GetComponentInChildren<UpgradableStructureVisual>(),
+                collision.GetComponent<Inhalable>().interactionMessage);
+            if (upgradableStructureVisual != null && upgradableStructureVisual.AutoHide)
+                HideVisualLater(upgradableStructureVisual);
         }
+    }
+
+    private UpgradableStructureVisual ShowVisual(UpgradableStructureVisual visual, string comment)
+    {
+        textForItemDisplay.enabled = true;
+        textForItemDisplay.text = comment;
+        var upgradableStructureVisual = visual;
+        if (upgradableStructureVisual != null)
+        {
+            upgradableStructureVisual.Show();
+        }
+
+        return upgradableStructureVisual;
+    }
+
+    private void HideVisualLater(UpgradableStructureVisual upgradableStructureVisual)
+    {
+        _disappearEffect.Reset();
+        _timeSinceActivated = Time.time;
+        StartCoroutine(DisappearLater(upgradableStructureVisual));
     }
 
     private IEnumerator DisappearLater(UpgradableStructureVisual upgradableStructureVisual)
@@ -66,7 +79,7 @@ public class PlayerItemCollisionHandler : MonoBehaviour
             {
                 upgradableStructureVisual.Hide();
             }
-            
+
             Hide();
         }
     }

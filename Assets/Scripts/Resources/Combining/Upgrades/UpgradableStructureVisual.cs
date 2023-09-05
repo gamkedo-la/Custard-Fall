@@ -18,8 +18,10 @@ public class UpgradableStructureVisual : MonoBehaviour
     [SerializeField] private Image previewSlots;
     [SerializeField] private TextMeshProUGUI lvlDisplay;
     [SerializeField] private Image lvlBackground;
-    [SerializeField]
-    private CozySettings _cozySettings;
+    [SerializeField] private CozySettings _cozySettings;
+
+    [SerializeField] private bool autoHide = true;
+    public bool AutoHide => autoHide;
 
     private float targetAlpha;
     private bool doFade;
@@ -36,14 +38,15 @@ public class UpgradableStructureVisual : MonoBehaviour
         CenterSlots(upgradeableStructure.RequieredPoints());
         PrepareRequiredSlots(upgradeableStructure.RequieredPoints());
         PreparePreviewPoints(upgradeableStructure.InvestedPoints());
-        
-        HideImmediately();
+
+        if (autoHide)
+            HideImmediately();
     }
 
     private void PrepareLvlDisplay(int currentLevel)
     {
         var backgroundColor = _cozySettings.Levels[Mathf.Min(currentLevel - 1, _cozySettings.Levels.Count - 1)].Color;
-        lvlBackground.color =backgroundColor;
+        lvlBackground.color = backgroundColor;
         lvlDisplay.SetText("lvl " + currentLevel);
     }
 
@@ -51,9 +54,9 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         RectTransform currentTransform = slots.GetComponent<RectTransform>();
         var tmpPosition = currentTransform.localPosition;
-        var centered = new Vector3(1.15f *(1f - (requieredPoints - 1)/11f) , tmpPosition.y, tmpPosition.z);
+        var centered = new Vector3(1.15f * (1f - (requieredPoints - 1) / 11f), tmpPosition.y, tmpPosition.z);
         currentTransform.localPosition = centered;
-        
+
         filledSlots.GetComponent<RectTransform>().localPosition = centered;
         previewSlots.GetComponent<RectTransform>().localPosition = centered;
     }
@@ -77,9 +80,9 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         doFade = true;
         targetAlpha = 0f;
-        slots.CrossFadeAlpha(targetAlpha,.3f,false);
-        filledSlots.CrossFadeAlpha(targetAlpha,.3f,false);
-        previewSlots.CrossFadeAlpha(targetAlpha,.3f,false);
+        slots.CrossFadeAlpha(targetAlpha, .3f, false);
+        filledSlots.CrossFadeAlpha(targetAlpha, .3f, false);
+        previewSlots.CrossFadeAlpha(targetAlpha, .3f, false);
         // XXX something wrong on fade complete
         lvlDisplay.gameObject.SetActive(false);
         lvlBackground.gameObject.SetActive(false);
@@ -99,9 +102,9 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         doFade = true;
         targetAlpha = 1f;
-        slots.CrossFadeAlpha(targetAlpha,.3f,false);
-        filledSlots.CrossFadeAlpha(targetAlpha,.3f,false);
-        previewSlots.CrossFadeAlpha(targetAlpha,.3f,false);
+        slots.CrossFadeAlpha(targetAlpha, .3f, false);
+        filledSlots.CrossFadeAlpha(targetAlpha, .3f, false);
+        previewSlots.CrossFadeAlpha(targetAlpha, .3f, false);
         onFadeComplete = null;
         lvlDisplay.gameObject.SetActive(true);
         lvlBackground.gameObject.SetActive(true);
@@ -124,6 +127,7 @@ public class UpgradableStructureVisual : MonoBehaviour
         {
             PrepareInvestedSlots(0);
         }
+
         Show();
     }
 
@@ -162,6 +166,7 @@ public class UpgradableStructureVisual : MonoBehaviour
 
     private void OnPreviewLeave(object sender, UpgradeableStructure.UpgradeArgs e)
     {
-        Hide();
+        if (autoHide)
+            Hide();
     }
 }
