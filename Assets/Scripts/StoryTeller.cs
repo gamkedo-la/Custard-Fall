@@ -36,7 +36,7 @@ public class StoryTeller : MonoBehaviour
                 // we do not want to overwhelm the player with infos on the start of the game
                 timeTillNextMessage = 0.1f;
                 messages.Enqueue(
-                    "\" I began collecting \nwhen the Custard first fell. \nAs it spread, \nI preserved what I saw fit.\"\n\n                                   - The Collector");
+                    "I began collecting\nwhen the Custard first fell.\nAs it spread,\nI preserved what I saw fit.\n\n\nThe Collector");
                 // messages.Enqueue("7 days left till next calamity...");
             }
             // else if (relativeDay == 1)
