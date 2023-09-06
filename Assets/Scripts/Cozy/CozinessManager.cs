@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CozinessManager : MonoBehaviour
@@ -65,10 +67,11 @@ public class CozinessManager : MonoBehaviour
                     leavingDispensers.Add(dispenser);
                 }
             }
+
             foreach (var dispenser in leavingDispensers)
             {
                 nearDispensers.Remove(dispenser);
-                receiver.OnCozyLeave(dispenser.Coziness);
+                receiver.OnCozyLost(dispenser.Coziness);
             }
         }
 
@@ -88,6 +91,18 @@ public class CozinessManager : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    public float GetTotalCoziness(CozinessReceiver receiver)
+    {
+        if (!receivers2Dispensers.TryGetValue(receiver, out HashSet<CozyDispenser> dispensers))
+        {
+            return 0;
+        }
+        else
+        {
+            return dispensers.Sum(e => e.Coziness);
         }
     }
 }

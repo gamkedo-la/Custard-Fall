@@ -15,22 +15,20 @@ public class CozinessReceiver : MonoBehaviour
     public int PersonalCozyLevel => personalCozyLevel;
     public float CozinessTillNextLevel => cozinessTillNextLevel;
 
-    private void Start()
-    {
-    }
+
+    public delegate void OnCozyEnter(float amount);
+    public OnCozyEnter onCozyEnter;
+    public delegate void OnCozyLeave(float amount);
+    public OnCozyLeave onCozyLeave;
 
     public void OnCozyReceive(float coziness)
     {
-        cozyLevelOfSurrounding += coziness;
+        onCozyEnter?.Invoke(coziness);
     }
 
-    public void OnCozyLeave(float coziness)
+    public void OnCozyLost(float coziness)
     {
-        cozyLevelOfSurrounding -= coziness;
-        if (cozyLevelOfSurrounding < 0)
-        {
-            cozyLevelOfSurrounding = 0;
-        }
+        onCozyLeave?.Invoke(coziness);
     }
 
     private void Update()
@@ -52,7 +50,7 @@ public class CozinessReceiver : MonoBehaviour
 
     private float GetEnvironmentalCoziness()
     {
-        return Mathf.Min(Mathf.Floor(cozyLevelOfSurrounding), cozySettings.Levels.Count - 1);
+        return Mathf.Min(Mathf.Floor(CozinessManager.Instance.GetTotalCoziness(this)), cozySettings.Levels.Count - 1);
     }
 
     public void TakeDamage(float fraction)
