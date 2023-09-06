@@ -2132,7 +2132,6 @@ GameObject:
   - component: {fileID: 1005043756474850742}
   - component: {fileID: 2081649860317614178}
   - component: {fileID: 7941767162966892360}
-  - component: {fileID: 8089206803243427248}
   m_Layer: 0
   m_Name: Cookie-Wall
   m_TagString: Untagged
@@ -2183,6 +2182,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!65 &1005043756474850742
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2223,6 +2225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: cozy cookie wall
   inhaleItemsProfile:
   - resourceName: Cookie shard
@@ -2235,20 +2238,6 @@ MonoBehaviour:
     itemReference: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
     timeToTake: 0
   Height: 1
---- !u!114 &8089206803243427248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3343993881124649202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84d0bd8b37f846e41a9c0222372cf5c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coziness: 0.1
-  maxEffective: 10
 --- !u!1 &3365898689964875755
 GameObject:
   m_ObjectHideFlags: 0

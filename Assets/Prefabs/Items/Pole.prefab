@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 835317256470959598}
   - component: {fileID: -1744009046040958364}
   - component: {fileID: 721735576766007876}
-  - component: {fileID: 4422275303628176580}
   - component: {fileID: 8340865707689748986}
   - component: {fileID: 7575111775947911427}
   - component: {fileID: 3183307939259767850}
@@ -135,6 +134,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!114 &-1744009046040958364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,20 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 6f0cc07d7c66b734e9d119b89c3467dd, type: 2}
---- !u!114 &4422275303628176580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8821145956041889501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84d0bd8b37f846e41a9c0222372cf5c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coziness: 0.1
-  maxEffective: 0
 --- !u!114 &8340865707689748986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,6 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: Well, it's a pole...
   inhaleItemsProfile:
   - resourceName: Creamy Cone Tree

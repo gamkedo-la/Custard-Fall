@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 3968125979850809368}
   - component: {fileID: 3968125979850809375}
   - component: {fileID: 3201496222099614150}
-  - component: {fileID: 5211784927385413593}
   - component: {fileID: 772483409811980185}
   - component: {fileID: 8482908454949983611}
   m_Layer: 0
@@ -146,20 +145,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 658966ea58642164fa4ce6cd29690db4, type: 2}
---- !u!114 &5211784927385413593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3968125979850809369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84d0bd8b37f846e41a9c0222372cf5c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coziness: 1
-  maxEffective: 1
 --- !u!114 &772483409811980185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +158,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!114 &8482908454949983611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,9 +175,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: a log for sitting
   inhaleItemsProfile: []
   resourceName: Sitting log
+  timeToInhaleWhole: 2
 --- !u!1 &4310213519659430577
 GameObject:
   m_ObjectHideFlags: 0
