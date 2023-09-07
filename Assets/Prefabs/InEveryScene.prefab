@@ -3496,7 +3496,7 @@ MonoBehaviour:
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   player: {fileID: 2478701615409234051}
-  custardManager: {fileID: 0}
+  custardManager: {fileID: 8634744844989316037}
   showCustardDebugInfo: 0
   showQueue: 0
   showNextQueue: 0
@@ -3605,7 +3605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   receivers:
   - {fileID: 3571438178642794124}
-  searchRadius: 12
+  searchRadius: 14
 --- !u!114 &6826369342560504894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3618,7 +3618,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5870c8c154241b096d7eb46e3e8c146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VectorVisual: {fileID: 8821145956041889501, guid: 7292e3bde8058ef45a7ddbfd814356b0, type: 3}
+  vectorVisual: {fileID: 8821145956041889501, guid: 93af6a5acd38f9c43a169d3ce4e19555, type: 3}
+  display: 0
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0
