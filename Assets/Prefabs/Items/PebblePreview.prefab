@@ -75,9 +75,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8508275908456296017, guid: 74d6220463336ee4c8922423448ce741, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6720778346109180065, guid: 74d6220463336ee4c8922423448ce741, type: 3}
     - {fileID: 6720778346109180066, guid: 74d6220463336ee4c8922423448ce741, type: 3}
     - {fileID: 6720778346109180067, guid: 74d6220463336ee4c8922423448ce741, type: 3}
     - {fileID: 7482327710146689217, guid: 74d6220463336ee4c8922423448ce741, type: 3}
+    - {fileID: 4052854434075427228, guid: 74d6220463336ee4c8922423448ce741, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 74d6220463336ee4c8922423448ce741, type: 3}

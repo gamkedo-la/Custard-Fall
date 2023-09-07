@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6720778345667361605}
   - component: {fileID: 6720778345667361607}
   - component: {fileID: 6720778345667361606}
+  - component: {fileID: 4052854434075427228}
   m_Layer: 12
   m_Name: PebbleVisual
   m_TagString: Untagged
@@ -83,6 +84,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4052854434075427228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6720778345667361604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94aa7582687e3d4ab0e8f97b571f55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 6720778346109180076}
+  shakeScale: 0.15
 --- !u!1 &6720778346109180064
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +112,6 @@ GameObject:
   - component: {fileID: 6720778346109180067}
   - component: {fileID: 6720778346109180066}
   - component: {fileID: 6720778346109180065}
-  - component: {fileID: 7482327710146689217}
   m_Layer: 0
   m_Name: Pebble
   m_TagString: Untagged
@@ -111,7 +127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6720778346109180064}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.68, y: 8.68, z: 27.83}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -159,24 +175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
-  optVisual: {fileID: 0}
-  interactionMessage: 
+  optVisual: {fileID: 6720778345667361604}
+  interactionMessage: a pebble
   inhaleItemsProfile: []
   resourceName: pebble
   timeToInhaleWhole: 1
---- !u!114 &7482327710146689217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6720778346109180064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e94aa7582687e3d4ab0e8f97b571f55f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wobbleStrength: 0
-  canMove: 0
-  parent: {fileID: 0}
-  shakeScale: 0.15
