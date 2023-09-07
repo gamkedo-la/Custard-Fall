@@ -45,8 +45,7 @@ public class UpgradableStructureVisual : MonoBehaviour
 
     private void PrepareLvlDisplay(int currentLevel)
     {
-        var backgroundColor = _cozySettings.Levels[Mathf.Min(currentLevel - 1, _cozySettings.Levels.Count - 1)].Color;
-        lvlBackground.color = backgroundColor;
+        lvlBackground.color = _cozySettings.GetColorForEffectiveLevel(currentLevel);
         lvlDisplay.SetText("lvl " + currentLevel);
     }
 

@@ -9635,6 +9635,9 @@ GameObject:
   - component: {fileID: 144113269610123850}
   - component: {fileID: 1910542287982107540}
   - component: {fileID: 9132623894400947595}
+  - component: {fileID: 6558898880563003225}
+  - component: {fileID: 1539056187295167450}
+  - component: {fileID: 1759799360406086489}
   m_Layer: 0
   m_Name: Campfire
   m_TagString: Untagged
@@ -9687,7 +9690,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coziness: 2
-  maxEffective: 1
+--- !u!114 &6558898880563003225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144113269610123851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4278d01bd5e045319bdd2d2c707d5d46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: 1
+  investedPoints: 0
+  expectedUpgradeMaterial: {fileID: 11400000, guid: 6f0cc07d7c66b734e9d119b89c3467dd, type: 2}
+  upgradeLevels:
+  - comment: warm campfire
+    requiredPoints: 3
+    upgrade: {fileID: 0}
+  - comment: nice campfire
+    requiredPoints: 5
+    upgrade: {fileID: 0}
+  - comment: cozy campfire
+    requiredPoints: 5
+    upgrade: {fileID: 0}
+  - comment: cozy campfire
+    requiredPoints: 5
+    upgrade: {fileID: 0}
+--- !u!114 &1539056187295167450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144113269610123851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002b131b4ce0463a9bb4bee16ca523ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1759799360406086489
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144113269610123851}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9820824, y: 2.8575764, z: 1.9715328}
+  m_Center: {x: -0.09015083, y: 0.9287882, z: -0.036467552}
 --- !u!1001 &144113269750529458
 PrefabInstance:
   m_ObjectHideFlags: 0
