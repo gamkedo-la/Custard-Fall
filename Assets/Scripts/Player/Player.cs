@@ -730,11 +730,11 @@ public class Player : MonoBehaviour
         {
             var cellBasedPosition = worldCells.GetWorldPosition(coords);
             return new Vector3(cellBasedPosition.x,
-                tmpTargetPoint4PlacingItem.y - .55f - heightAtReference + heightAtTarget, cellBasedPosition.y);
+                heightAtTarget, cellBasedPosition.y);
         }
         else
         {
-            return position;
+            return new Vector3(position.x, heightAtTarget, position.z);
         }
     }
 
