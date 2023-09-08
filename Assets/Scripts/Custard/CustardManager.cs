@@ -691,7 +691,7 @@ namespace Custard
         private readonly Coords _coords;
         private readonly int _worldY;
         private float _strength;
-        private float durationLeft = 2f;
+        private float durationLeft = 1.5f;
 
         public ImpededCell(Coords coords, float strength, int worldY)
         {
