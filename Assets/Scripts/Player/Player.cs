@@ -66,6 +66,7 @@ public class Player : MonoBehaviour
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     [SerializeField] private float yOffset = -.6f;
+    [SerializeField] private float placementYOffset = .6f;
     private Collider _collider;
 
     public InputControlScheme gameplayScheme;
@@ -691,7 +692,7 @@ public class Player : MonoBehaviour
         var debugVectorVisual = DebugUtils.ProvideTransform("player transform");
         debugVectorVisual.position = position;
         debugVectorVisual.forward = direction.normalized;
-        
+
         if (Physics.Raycast(position, direction, out var hitResult, maxPlaceDistance,
                 LayerMask.GetMask("Terrain", "Obstacles", "Interactable")))
         {
@@ -730,19 +731,19 @@ public class Player : MonoBehaviour
         {
             var cellBasedPosition = worldCells.GetWorldPosition(coords);
             return new Vector3(cellBasedPosition.x,
-                heightAtTarget, cellBasedPosition.y);
+                heightAtTarget + placementYOffset, cellBasedPosition.y);
         }
         else
         {
-            return new Vector3(position.x, heightAtTarget, position.z);
+            return new Vector3(position.x, heightAtTarget + placementYOffset, position.z);
         }
     }
 
     public void EnterSwimMode(bool doSwim)
     {
-        if(grappling)
+        if (grappling)
             return;
-        
+
         isSwimming = doSwim;
         if (isSwimming)
         {

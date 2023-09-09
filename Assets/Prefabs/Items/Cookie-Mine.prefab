@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4229541877690997310}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.26054, y: -25.737427, z: -12.0903015}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -50,7 +50,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: Cookie Mine
+  inhaleItemsProfile: []
   placeableItem: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
 --- !u!114 &3163973215154773292
 MonoBehaviour:
@@ -65,6 +67,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!65 &6237925528568802630
 BoxCollider:
   m_ObjectHideFlags: 0
