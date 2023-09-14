@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prototype: {fileID: 6720778346109180064, guid: 74d6220463336ee4c8922423448ce741, type: 3}
   placeablePreview: {fileID: 2920748741562219894, guid: 1a02e169b3160eb4d8f11a52fef87ce9, type: 3}
-  icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 1e3e94b2353883342adec5576b247f2a, type: 3}
   resourceName: pebble
