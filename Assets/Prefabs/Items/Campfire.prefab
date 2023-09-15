@@ -9707,16 +9707,16 @@ MonoBehaviour:
   expectedUpgradeMaterial: {fileID: 11400000, guid: 6f0cc07d7c66b734e9d119b89c3467dd, type: 2}
   upgradeLevels:
   - comment: warm campfire
-    requiredPoints: 3
+    requiredPoints: 5
     upgrade: {fileID: 0}
   - comment: nice campfire
-    requiredPoints: 5
+    requiredPoints: 7
     upgrade: {fileID: 0}
   - comment: cozy campfire
-    requiredPoints: 5
+    requiredPoints: 9
     upgrade: {fileID: 0}
   - comment: cozy campfire
-    requiredPoints: 5
+    requiredPoints: 9
     upgrade: {fileID: 0}
 --- !u!114 &1539056187295167450
 MonoBehaviour:
