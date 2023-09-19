@@ -5230,6 +5230,7 @@ GameObject:
   - component: {fileID: 3490619458514794137}
   - component: {fileID: 8006690096804111679}
   - component: {fileID: 5454419848131368307}
+  - component: {fileID: 6589503392973350852}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -5597,6 +5598,18 @@ MonoBehaviour:
   drowningDamage: 40
   _fadeInDuration: 2
   _fadeOutDuration: 1.5
+--- !u!114 &6589503392973350852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707271701656813138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa1425796300ce4096aa50cf12d38a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2768492954590745114
 GameObject:
   m_ObjectHideFlags: 0
