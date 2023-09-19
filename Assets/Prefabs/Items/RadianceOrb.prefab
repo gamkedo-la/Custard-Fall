@@ -261,11 +261,11 @@ BoxCollider:
   m_GameObject: {fileID: 6303623572148944328}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4069673725444057122
+--- !u!114 &12932511341739411
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -274,10 +274,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 6303623572148944328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 170aaf4cd5514fa4ba85ff6718404b3c, type: 3}
+  m_Script: {fileID: 11500000, guid: f4b2cde1dcba42a8a09b4e301d9310df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 21f0531b3b7424c42b6555abeb726078, type: 2}
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  hasInhaleFocus: 0
+  optVisual: {fileID: 6491192973536895801}
+  interactionMessage: 
+  inhaleItemsProfile:
+  - resourceName: small-orb
+    itemReference: {fileID: 0}
+    timeToTake: 0.4
+  plusOnePrefab: {fileID: 2713394065547945622, guid: 474306a931cfbec498955a8f9d812fb1, type: 3}
+--- !u!114 &5535757956577567329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6303623572148944328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43fae95d470548d6881348be63c1b17d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radianceBonus: 0.203
 --- !u!114 &6364037155524986597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,8 +312,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
-  canMove: 0
-  parent: {fileID: 0}
+  canMove: 1
+  parent: {fileID: 6643135529607440242}
   shakeScale: 0.15
 --- !u!1 &6491192973536895801 stripped
 GameObject:
