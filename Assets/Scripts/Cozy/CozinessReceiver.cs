@@ -17,9 +17,14 @@ public class CozinessReceiver : MonoBehaviour
 
 
     public delegate void OnCozyEnter(float amount);
+
     public OnCozyEnter onCozyEnter;
+
     public delegate void OnCozyLeave(float amount);
+
     public OnCozyLeave onCozyLeave;
+
+    private float _bonusValue = 0;
 
     public void OnCozyReceive(float coziness)
     {
@@ -34,11 +39,22 @@ public class CozinessReceiver : MonoBehaviour
     private void Update()
     {
         var possibleValue = GetEnvironmentalCoziness();
-        var maxPossibleValue = possibleValue;
+        var maxPossibleValue = (possibleValue == 0 ? personalCozyLevel : possibleValue) + _bonusValue;
         if (personalCozyLevel < maxPossibleValue)
         {
-            _cozinessTillNextLevelLinearInternal += Time.deltaTime / baseFillDuration;
+            var delta = Time.deltaTime / baseFillDuration;
+            _cozinessTillNextLevelLinearInternal += delta;
+
+
             cozinessTillNextLevel = cozySettings.EasingFunction.Evaluate(_cozinessTillNextLevelLinearInternal);
+            if (_bonusValue > 0)
+            {
+                _bonusValue -= cozySettings.EasingFunction.Evaluate(_cozinessTillNextLevelLinearInternal + delta) - cozinessTillNextLevel;
+            }
+            else
+            {
+                _bonusValue = 0;
+            }
             if (cozinessTillNextLevel >= 1)
             {
                 _cozinessTillNextLevelLinearInternal = 0;
@@ -53,13 +69,21 @@ public class CozinessReceiver : MonoBehaviour
         return Mathf.Min(Mathf.Floor(CozinessManager.Instance.GetTotalCoziness(this)), cozySettings.Levels.Count - 1);
     }
 
+    public void IncreaseRadiance(float bonus)
+    {
+        // refactor this later
+        _bonusValue += bonus;
+        onCozyEnter?.Invoke(bonus);
+    }
+
     public void TakeDamage(float fraction)
     {
         float threshold = .01f;
         if (cozinessTillNextLevel > fraction + threshold)
         {
             cozinessTillNextLevel -= fraction;
-        } else if (cozinessTillNextLevel > threshold)
+        }
+        else if (cozinessTillNextLevel > threshold)
         {
             cozinessTillNextLevel = 0;
         }

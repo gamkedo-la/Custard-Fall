@@ -30,6 +30,7 @@ public class Inhaler : MonoBehaviour
             InhaleCone();
             InhaleResources();
             InhaleProjectiles();
+            InhaleDynamic();
         }
     }
 
@@ -111,6 +112,28 @@ public class Inhaler : MonoBehaviour
                         var inhalableProjectile = projectile.GetComponent<InhalableProjectile>();
                         inhalableProjectile.Inhale(this, inhaleCell.GetStrength());
                         projectile.GetComponent<ProjectileMove>()?.SetMagnet(this.transform);
+                    }
+                }
+            }
+        }
+    }
+    private void InhaleDynamic()
+    {
+        foreach (var keyValuePair in affectedCells)
+        {
+            var inhaleCell = keyValuePair.Value;
+
+            foreach (var dynamicInhaleable in InhalableFloatingOrb.allCurrentDynamicInhaleables)
+            {
+                if (worldCells.GetCellPosition(dynamicInhaleable.transform.position).Equals(inhaleCell.GetCoords()))
+                {
+                    var worldHeight = worldCells.GetTerrainHeightAt(inhaleCell.GetCoords());
+                    if (inhaleCell.GetWorldY() == worldHeight + 1)
+                    {
+                        var inhalable = dynamicInhaleable.GetComponent<Inhalable>();
+                        inhalable.Inhale(this, inhaleCell.GetStrength());
+                        
+                        dynamicInhaleable.GetComponent<ProjectileMove>()?.SetMagnet(this.transform);
                     }
                 }
             }
