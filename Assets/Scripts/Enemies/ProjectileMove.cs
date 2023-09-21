@@ -8,17 +8,12 @@ public class ProjectileMove : MonoBehaviour
     public float speed = 1;
     public AnimationCurve spawnSpeed;
     public float spawnAnimationDuration = .3f;
-    [SerializeField] private float maxLifespan = 5f;
     private float _ageInSeconds = 0;
 
     [SerializeField] private float magnetStrength = .3f;
     [SerializeField] private float magnetRelease = .5f;
     private Transform _magnet;
-
-    private void Start()
-    {
-        StartCoroutine(KillMe());
-    }
+    
 
     void Update()
     {
@@ -45,12 +40,6 @@ public class ProjectileMove : MonoBehaviour
         _ageInSeconds = 0;
     }
 
-    private IEnumerator KillMe()
-    {
-        yield return new WaitForSeconds(maxLifespan);
-        Debug.Log("killing old projectile");
-        Destroy(gameObject);
-    }
 
     public void SetMagnet(Transform magnet)
     {
