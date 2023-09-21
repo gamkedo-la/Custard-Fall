@@ -2,11 +2,11 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(ProjectileMove))]
+[RequireComponent(typeof(MoveTowards))]
 public class MoveOnRangedInhaling : MonoBehaviour
 {
     [SerializeField] private float range;
-    private ProjectileMove _movementLogic;
+    private MoveTowards _movementLogic;
 
     private Inhaler _activeInhaler;
     private bool _isMoving;
@@ -20,7 +20,7 @@ public class MoveOnRangedInhaling : MonoBehaviour
 
     private void Awake()
     {
-        _movementLogic = gameObject.GetComponent<ProjectileMove>();
+        _movementLogic = gameObject.GetComponent<MoveTowards>();
         _movementLogic.enabled = false;
     }
 
