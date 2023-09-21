@@ -117,6 +117,7 @@ public class Inhaler : MonoBehaviour
             }
         }
     }
+
     private void InhaleDynamic()
     {
         foreach (var keyValuePair in affectedCells)
@@ -132,7 +133,7 @@ public class Inhaler : MonoBehaviour
                     {
                         var inhalable = dynamicInhaleable.GetComponent<Inhalable>();
                         inhalable.Inhale(this, inhaleCell.GetStrength());
-                        
+
                         dynamicInhaleable.GetComponent<ProjectileMove>()?.SetMagnet(this.transform);
                     }
                 }
@@ -235,12 +236,20 @@ public class Inhaler : MonoBehaviour
     {
         _distance = coneLength;
         if (!isInhale)
+        {
             inhalingConeParticleSystem.gameObject.SetActive(true);
+            CallOnInhaleStartEvents();
+        }
+
         isInhale = true;
     }
 
     public void StopInhale()
     {
+        if (isInhale)
+        {
+            CallOnInhaleEndEvents();
+        }
         isInhale = false;
         OnCustardInhaleStopped();
         inhalingConeParticleSystem.gameObject.SetActive(false);
@@ -277,6 +286,15 @@ public class Inhaler : MonoBehaviour
     public void OnCustardInhaleStopped()
     {
         inhalingParticleSystem.gameObject.SetActive(false);
+    }
+
+    private void CallOnInhaleStartEvents()
+    {
+        InhalersTracker.Instance.onInhaleStart?.Invoke(this);
+    }
+    private void CallOnInhaleEndEvents()
+    {
+        InhalersTracker.Instance.onInhaleEnd?.Invoke(this);
     }
 
     public class InhaleCell

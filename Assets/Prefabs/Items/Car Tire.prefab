@@ -3354,6 +3354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: retired car tire
   inhaleItemsProfile: []
   resourceName: scrap
@@ -3371,6 +3372,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!1 &2223762597364661771
 GameObject:
   m_ObjectHideFlags: 0
@@ -4435,7 +4439,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3180
+  m_VersionIndex: 3183
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

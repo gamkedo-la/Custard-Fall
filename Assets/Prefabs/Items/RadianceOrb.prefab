@@ -299,6 +299,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radianceBonus: 0.203
+--- !u!114 &5783487300265022453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6303623572148944328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd9f35b2b58426489b18356b6aca73b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 18
 --- !u!114 &6364037155524986597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,6 +328,29 @@ MonoBehaviour:
   canMove: 1
   parent: {fileID: 6643135529607440242}
   shakeScale: 0.15
+--- !u!114 &6468177337168465226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6303623572148944328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aa9a013a413651499f8a8cc7354e49c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1
+  spawnSpeed:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnAnimationDuration: 0.3
+  maxLifespan: 5
+  magnetStrength: 0.3
+  magnetRelease: 0.5
 --- !u!1 &6491192973536895801 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9102117403313577056, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}
@@ -333,7 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amplitude: 0.5
-  frequency: 1
+  frequency: 0.6
 --- !u!4 &6643135529607440242 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}
