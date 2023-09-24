@@ -14,21 +14,18 @@ public class MoveTowards : MonoBehaviour
 
     void Update()
     {
-        var modifiedSpeed = Time.deltaTime * speed;
-        var projectileTransform = transform;
-        var objectPosition = projectileTransform.position;
-        objectPosition += projectileTransform.forward * modifiedSpeed;
-
         if (_isMoving)
         {
-            projectileTransform.position +=
-                (_magnet.position - projectileTransform.position) * (Time.deltaTime * magnetStrength);
+            var transformTmp = transform;
+            var positionTmp = transformTmp.position;
+            positionTmp +=
+                (_magnet.position - positionTmp) * (magnetStrength * speed * Time.deltaTime);
+            transformTmp.position = positionTmp;
         }
     }
 
     public void SetMagnet(Transform magnet)
     {
-        bool freshAssigment = this._magnet;
         _magnet = magnet;
         _isMoving = magnet != null;
     }

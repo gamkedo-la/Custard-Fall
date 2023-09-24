@@ -21,7 +21,6 @@ public class MoveOnRangedInhaling : MonoBehaviour
     private void Awake()
     {
         _movementLogic = gameObject.GetComponent<MoveTowards>();
-        _movementLogic.enabled = false;
     }
 
     private void FixedUpdate()
@@ -62,14 +61,12 @@ public class MoveOnRangedInhaling : MonoBehaviour
     {
         _isMoving = true;
         _movementLogic.SetMagnet(magnet);
-        _movementLogic.gameObject.SetActive(true);
     }
 
     private void StopMoving()
     {
         _isMoving = false;
         _movementLogic.SetMagnet(null);
-        _movementLogic.enabled = true;
     }
 
     private bool InRange(Inhaler inhaler, Transform magnet)

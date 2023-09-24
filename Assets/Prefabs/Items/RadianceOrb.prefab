@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dd9f35b2b58426489b18356b6aca73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 18
+  range: 12
 --- !u!114 &6364037155524986597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,7 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9785f8c7e91a45838e8d3934e8e4930a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.5
   magnetStrength: 0.3
 --- !u!1 &6491192973536895801 stripped
 GameObject:
