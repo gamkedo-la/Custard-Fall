@@ -18,6 +18,11 @@ public class Inhaler : MonoBehaviour
     private float _distance;
     public bool isInhale;
     [DoNotSerialize] public GameObject owner;
+    
+    public delegate void OnInhaleStart(Inhaler inhaler);
+    public OnInhaleStart onInhaleStart;
+    public delegate void OnInhaleEnd(Inhaler inhaler);
+    public OnInhaleEnd onInhaleEnd;
 
     private Quaternion _previousRotation;
 
@@ -291,10 +296,12 @@ public class Inhaler : MonoBehaviour
     private void CallOnInhaleStartEvents()
     {
         InhalersTracker.Instance.onInhaleStart?.Invoke(this);
+        onInhaleStart?.Invoke(this);
     }
     private void CallOnInhaleEndEvents()
     {
         InhalersTracker.Instance.onInhaleEnd?.Invoke(this);
+        onInhaleEnd?.Invoke(this);
     }
 
     public class InhaleCell
