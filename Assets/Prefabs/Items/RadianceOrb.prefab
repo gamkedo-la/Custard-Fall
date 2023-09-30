@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dd9f35b2b58426489b18356b6aca73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 12
+  range: 18
 --- !u!114 &6364037155524986597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,8 +340,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9785f8c7e91a45838e8d3934e8e4930a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.5
-  magnetStrength: 0.3
+  speed: 3.5
+  magnetStrength: 1
+  smoothTime: 0.3
+  transitionDuration: 0.66
+  speedByDistanceModifier:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.00004196167
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.50139916
+      value: 0.7517904
+      inSlope: 1.3025334
+      outSlope: 1.3025334
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.052548498
+      outWeight: 0.116305605
+    - serializedVersion: 3
+      time: 0.99871826
+      value: 1
+      inSlope: -0.016518073
+      outSlope: -0.016518073
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.15724207
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  invertModifier: 0
+  modifierBaseDistance: 18
+  maxSpeed: 2.2
 --- !u!1 &6491192973536895801 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9102117403313577056, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}
