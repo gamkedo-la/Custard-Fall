@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
+    path: Assets/Scenes/Coast-World.unity
+    guid: 9b7817b408bb9d346a933a82ba541332
+  - enabled: 1
     path: Assets/Scenes/Tutorial-World.unity
     guid: deb0e6a88d7ab1548b15612a4ddfd666
   m_configObjects:
