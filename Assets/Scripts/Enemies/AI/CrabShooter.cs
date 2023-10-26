@@ -28,8 +28,14 @@ public class CrabShooter : Mob
     {
         base.Start();
         tracker.onTargetEnter += MaybeGetAngry;
+        tracker.onTargetEnter += LookAtTarget;
         tracker.onTargetExit += MaybeCalmDown;
         _inhalable.onInhaling += ReactToInhaling;
+    }
+
+    private void LookAtTarget(GameObject target)
+    {
+        lookAtObject.target = target.transform;
     }
 
     private void ReactToInhaling(Inhaler inhaler)
@@ -47,7 +53,7 @@ public class CrabShooter : Mob
         stateOfMind = StateOfMind.OwnBusiness;
     }
 
-    protected override void MaybeGetAngry()
+    protected override void MaybeGetAngry(GameObject target)
     {
         OnStateOfMindChange(StateOfMind.Surprised);
     }

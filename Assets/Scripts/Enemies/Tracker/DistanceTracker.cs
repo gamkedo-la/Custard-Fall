@@ -16,7 +16,7 @@ public class DistanceTracker : MonoBehaviour
 
     public WorldCells worldCells;
 
-    public delegate void OnTargetEnter();
+    public delegate void OnTargetEnter(GameObject target);
 
     public OnTargetEnter onTargetEnter;
 
@@ -61,7 +61,7 @@ public class DistanceTracker : MonoBehaviour
                 var difference = GetHeightDifference(position, targetPosition);
                 if (difference <= maxHeightAbove && difference >= -maxHeightBelow)
                 {
-                    onTargetEnter?.Invoke();
+                    onTargetEnter?.Invoke(_target);
                 }
                 else
                 {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LookAtObject : MonoBehaviour
 {
-    [SerializeField] private Transform target;
+    [SerializeField] public Transform target;
     [SerializeField] private Mode lookAtMode;
     [SerializeField] float delay = .3f;
 

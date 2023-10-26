@@ -22,8 +22,8 @@ public class Mob : MonoBehaviour
         Debug.Log("calming down");
     }
 
-    protected virtual void MaybeGetAngry()
+    protected virtual void MaybeGetAngry(GameObject target)
     {
-        Debug.Log("getting angry");
+        Debug.Log("getting angry at "+target.name);
     }
 }
