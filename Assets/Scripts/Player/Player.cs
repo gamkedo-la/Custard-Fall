@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Transform respawnPoint;
     [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Transform activePoint;
 
     private AudioSource inhaleSFX;
 
@@ -106,18 +107,14 @@ public class Player : MonoBehaviour
         cozinessReceiver = GetComponent<CozinessReceiver>();
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
     private void FixedUpdate()
     {
         nextGrappleTime += Time.fixedDeltaTime;
 
-        Vector3 playerPosition = transform.position;
+        Vector3 playerPosition = activePoint.position;
         if (!isDashing && !grappling && !isSwimming)
         {
+            playerAnimator.SetBool(Grappling, false);
             if (placeModeItemReference)
             {
                 // player in place mode state
@@ -138,12 +135,15 @@ public class Player : MonoBehaviour
         if (grappling)
         {
             grappleMarker.SetActive(false);
+            var positionBefore = transform.position;
+            var realGrapplePoint = new Vector3(grapplePoint.x,positionBefore.y, grapplePoint.z);
             transform.position =
-                Vector3.MoveTowards(playerPosition, grapplePoint, grappleSpeed * Time.fixedDeltaTime);
+                Vector3.MoveTowards(positionBefore, realGrapplePoint, grappleSpeed * Time.fixedDeltaTime);
             grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
-            if (Vector3.Distance(transform.position, grapplePoint) < 0.01f)
+            if (Vector3.Distance(transform.position, realGrapplePoint) < 0.01f)
             {
                 grappling = false;
+                playerAnimator.SetBool(Grappling, false);
                 grappleLine.gameObject.SetActive(false);
             }
 
@@ -226,6 +226,7 @@ public class Player : MonoBehaviour
         else
         {
             MovePlayer(Vector3.zero);
+            playerAnimator.SetBool(Walking, false);
         }
     }
 
@@ -357,10 +358,15 @@ public class Player : MonoBehaviour
                     {
                         EnterSwimMode(true);
                     }
+                    else
+                    {
+                        playerAnimator.SetBool(Walking, true);
+                    }
                 }
             }
             else
             {
+                playerAnimator.SetBool(Walking, true);
                 // display leap of faith
                 switch (_isAtEdge)
                 {
@@ -517,6 +523,8 @@ public class Player : MonoBehaviour
 
     private static readonly int Dead = Animator.StringToHash("dead");
     private static readonly int Swimming = Animator.StringToHash("swimming");
+    private static readonly int Walking = Animator.StringToHash("walking");
+    private static readonly int Grappling = Animator.StringToHash("grappling");
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
@@ -565,11 +573,12 @@ public class Player : MonoBehaviour
             grappleIntoTheVoid = true;
             grappleLine.SetPosition(1, transform.position + playerDirectional.transform.forward * grappleDistance);
         }
+        playerAnimator.SetBool(Grappling, true);
     }
 
     private bool UpdateGrapplePoint()
     {
-        var playerPosition = playerDirectional.transform.position;
+        var playerPosition = activePoint.position;
         RaycastHit[] hits = Physics.RaycastAll(playerPosition,
             playerDirectional.transform.forward, grappleDistance);
         bool hitSuccess = false;
@@ -584,7 +593,7 @@ public class Player : MonoBehaviour
                 }
 
                 hitSuccess = true;
-                grapplePoint = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+                grapplePoint = new Vector3(hit.point.x, playerPosition.y, hit.point.z);
                 break;
             }
         }
@@ -751,6 +760,7 @@ public class Player : MonoBehaviour
         }
 
         playerAnimator.SetBool(Swimming, doSwim);
+        playerAnimator.SetBool(Walking, false);
     }
 }
 
