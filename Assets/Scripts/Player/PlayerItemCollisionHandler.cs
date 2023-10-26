@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerItemCollisionHandler : MonoBehaviour
 {
-    public TextMeshProUGUI textForItemDisplay;
+    [SerializeField] private TextMeshProUGUI textForItemDisplay;
     private DisappearEffect _disappearEffect;
     private float _timeSinceActivated;
 
