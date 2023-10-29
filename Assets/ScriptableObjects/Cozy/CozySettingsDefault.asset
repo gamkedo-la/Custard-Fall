@@ -53,7 +53,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f09833a380cc70e40884dfd87f667bcd, type: 2}
   - {fileID: 11400000, guid: 6f158b28ff77e6c49a7a7ff450d67d98, type: 2}
   - {fileID: 11400000, guid: d9098eab2e915674abeb985b245f78a7, type: 2}
-  - {fileID: 11400000, guid: a77eceedc06bdef48855a92935929126, type: 2}
-  - {fileID: 11400000, guid: 4e81e44bab539f041812f337e8246b96, type: 2}
-  - {fileID: 11400000, guid: 30eeb4f5ff997f64f98cd39f4bedd9d9, type: 2}
-  - {fileID: 11400000, guid: 49a1f974f77e22041893f072ab84e8cb, type: 2}
+  lvl1Offset: 2

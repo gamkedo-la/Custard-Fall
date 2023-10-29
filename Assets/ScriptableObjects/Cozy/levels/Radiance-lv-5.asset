@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b95e108b930834b44975944d6aaaf89d, type: 3}
-  m_Name: Snug-lvl-1
+  m_Name: Radiance-lv-5
   m_EditorClassIdentifier: 
-  displayName: radiance lvl 1
-  color: {r: 0.71599996, g: 0.64543355, b: 0.29351553, a: 1}
-  progressColor: {r: 0.74820083, g: 0.754717, b: 0.1459594, a: 1}
+  displayName: radiance lvl 5
+  color: {r: 0.5518214, g: 0.28751335, b: 0.6698113, a: 1}
+  progressColor: {r: 0.69803923, g: 0.32598433, b: 0.6540229, a: 1}
