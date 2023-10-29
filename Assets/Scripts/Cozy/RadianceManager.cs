@@ -3,24 +3,24 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CozinessManager : MonoBehaviour
+public class RadianceManager : MonoBehaviour
 {
-    [SerializeField] private List<CozinessReceiver> receivers;
+    [SerializeField] private List<RadianceReceiver> receivers;
 
     [SerializeField] private float searchRadius = 10f;
 
-    private readonly Dictionary<CozinessReceiver, HashSet<CozyDispenser>> receivers2Dispensers = new();
-    private readonly List<CozyDispenser> registeredDispensers = new();
+    private readonly Dictionary<RadianceReceiver, HashSet<RadianceDispenser>> receivers2Dispensers = new();
+    private readonly List<RadianceDispenser> registeredDispensers = new();
 
     #region Singleton
 
-    public static CozinessManager Instance { get; private set; }
+    public static RadianceManager Instance { get; private set; }
 
     void Awake()
     {
         if (Instance != null)
         {
-            Debug.LogWarning("More than one instance of CozinessManager found!");
+            Debug.LogWarning("More than one instance of RadianceManager found!");
             return;
         }
 
@@ -37,17 +37,17 @@ public class CozinessManager : MonoBehaviour
         }
     }
 
-    public void RegisterDispenser(CozyDispenser cozyDispenser)
+    public void RegisterDispenser(RadianceDispenser radianceDispenser)
     {
-        registeredDispensers.Add(cozyDispenser);
+        registeredDispensers.Add(radianceDispenser);
     }
 
-    public void UnregisterDispenser(CozyDispenser cozyDispenser)
+    public void UnregisterDispenser(RadianceDispenser radianceDispenser)
     {
-        registeredDispensers.Remove(cozyDispenser);
+        registeredDispensers.Remove(radianceDispenser);
         foreach (var pair in receivers2Dispensers)
         {
-            pair.Value.Remove(cozyDispenser);
+            pair.Value.Remove(radianceDispenser);
         }
     }
 
@@ -59,7 +59,7 @@ public class CozinessManager : MonoBehaviour
             var receiver = receiver2Dispensers.Key;
             var receiverPosition = receiver.transform.position;
             var nearDispensers = receiver2Dispensers.Value;
-            var leavingDispensers = new HashSet<CozyDispenser>();
+            var leavingDispensers = new HashSet<RadianceDispenser>();
             foreach (var dispenser in nearDispensers)
             {
                 if (Vector3.Distance(receiverPosition, dispenser.transform.position) > searchRadius)
@@ -71,7 +71,7 @@ public class CozinessManager : MonoBehaviour
             foreach (var dispenser in leavingDispensers)
             {
                 nearDispensers.Remove(dispenser);
-                receiver.OnCozyLost(dispenser.Coziness);
+                receiver.OnRadianceLost(dispenser.Radiance);
             }
         }
 
@@ -87,22 +87,22 @@ public class CozinessManager : MonoBehaviour
                     if (!nearDispensers.Contains(dispenser))
                     {
                         nearDispensers.Add(dispenser);
-                        receiver.OnCozyReceive(dispenser.Coziness);
+                        receiver.OnRadianceReceive(dispenser.Radiance);
                     }
                 }
             }
         }
     }
 
-    public float GetTotalCoziness(CozinessReceiver receiver)
+    public float GetTotalRadiance(RadianceReceiver receiver)
     {
-        if (!receivers2Dispensers.TryGetValue(receiver, out HashSet<CozyDispenser> dispensers))
+        if (!receivers2Dispensers.TryGetValue(receiver, out HashSet<RadianceDispenser> dispensers))
         {
             return 0;
         }
         else
         {
-            return dispensers.Sum(e => e.Coziness);
+            return dispensers.Sum(e => e.Radiance);
         }
     }
 }

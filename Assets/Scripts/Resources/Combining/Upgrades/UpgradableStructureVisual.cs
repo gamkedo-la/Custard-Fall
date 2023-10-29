@@ -2,6 +2,7 @@
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UpgradableStructureVisual : MonoBehaviour
@@ -18,7 +19,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     [SerializeField] private Image previewSlots;
     [SerializeField] private TextMeshProUGUI lvlDisplay;
     [SerializeField] private Image lvlBackground;
-    [SerializeField] private CozySettings _cozySettings;
+    [FormerlySerializedAs("_cozySettings")] [SerializeField] private RadianceSettings radianceSettings;
 
     [SerializeField] private bool autoHide = true;
     public bool AutoHide => autoHide;
@@ -45,7 +46,7 @@ public class UpgradableStructureVisual : MonoBehaviour
 
     private void PrepareLvlDisplay(int currentLevel)
     {
-        lvlBackground.color = _cozySettings.GetColorForEffectiveLevel(currentLevel);
+        lvlBackground.color = radianceSettings.GetColorForEffectiveLevel(currentLevel);
         lvlDisplay.SetText("lvl " + currentLevel);
     }
 

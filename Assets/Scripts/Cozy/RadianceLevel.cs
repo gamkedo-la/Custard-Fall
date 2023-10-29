@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 
-    [CreateAssetMenu(menuName = "CustardFall/CozyLevelOfSurrounding")]
-    public class CozyLevel : ScriptableObject
+    [CreateAssetMenu(menuName = "CustardFall/RadianceLevel")]
+    public class RadianceLevel : ScriptableObject
     {
         [SerializeField] private string displayName;
         [SerializeField] private Color color;

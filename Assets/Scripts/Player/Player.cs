@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
     private bool grappleIntoTheVoid;
     private bool _isMoveForward;
 
-    private CozinessReceiver cozinessReceiver;
+    private RadianceReceiver _radianceReceiver;
     [SerializeField] private CombinatorProfileSO combinatorProfile;
 
     [SerializeField] private bool isSwimming;
@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
         healthbar.SetMaxHealth(maxHealth);
         inhaler.owner = gameObject;
 
-        cozinessReceiver = GetComponent<CozinessReceiver>();
+        _radianceReceiver = GetComponent<RadianceReceiver>();
     }
 
     private void FixedUpdate()
@@ -233,8 +233,8 @@ public class Player : MonoBehaviour
     public void TakeDamage(int damage, DamageImplication implication)
     {
         if (implication == DamageImplication.Health ||
-            cozinessReceiver.PersonalCozyLevel == 0 &&
-            cozinessReceiver.CozinessTillNextLevel <= 0.01f)
+            _radianceReceiver.PersonalRadianceLevel == 0 &&
+            _radianceReceiver.RadianceTillNextLevel <= 0.01f)
         {
             currentHealth -= damage;
             healthbar.SetHealth(currentHealth);
@@ -246,7 +246,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            cozinessReceiver.TakeDamage(damage / (float) maxHealth);
+            _radianceReceiver.TakeDamage(damage / (float) maxHealth);
         }
     }
 

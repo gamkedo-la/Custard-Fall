@@ -17,7 +17,7 @@ public class ActionOnInhaled : MonoBehaviour
 
     private void IncreaseRadiance(Inhaler inhaler, Resource resource, int amount)
     {
-        var radianceReceiver = inhaler.gameObject.GetComponentInParent<CozinessReceiver>();
+        var radianceReceiver = inhaler.gameObject.GetComponentInParent<RadianceReceiver>();
         Debug.Log($"inhaled by player {radianceReceiver != null}");
         if (radianceReceiver != null)
         {
