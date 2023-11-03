@@ -5144,10 +5144,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.6878813
-  m_Height: 2.8360808
+  m_Radius: 0.5433712
+  m_Height: 2.0886111
   m_Direction: 1
-  m_Center: {x: 0.0018810377, y: -0.0028467178, z: 0.04269711}
+  m_Center: {x: 0.001881063, y: -0.71956515, z: 0.04493141}
 --- !u!114 &9001336511291437872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5440,6 +5440,7 @@ MonoBehaviour:
   baseFillDuration: 5
   radianceSettings: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
   requiredRadianceForLevel: 1
+  bonusValueSpeedup: 0.25
 --- !u!114 &4957307413913084025
 MonoBehaviour:
   m_ObjectHideFlags: 0

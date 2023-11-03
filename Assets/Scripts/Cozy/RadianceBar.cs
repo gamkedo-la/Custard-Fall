@@ -30,6 +30,15 @@ public class RadianceBar : MonoBehaviour
     {
         _displayedRadianceLevel = radianceReceiver.PersonalRadianceLevel;
         UpdateLevelDisplay(_displayedRadianceLevel, radianceReceiver.Radiance);
+
+        radianceReceiver.onLevelChange +=
+            (newLevel, oldLevel) => OnLevelChange(newLevel);
+    }
+
+    private void OnLevelChange(int newLevel)
+    {
+        _displayedRadianceLevel = newLevel;
+        UpdateLevelDisplay(newLevel, _displayedRadianceLevel);
     }
 
 
@@ -41,7 +50,7 @@ public class RadianceBar : MonoBehaviour
         }
         else
         {
-            slider.value = radianceReceiver.Radiance;
+            slider.value = radianceReceiver.Radiance >= 0 ? radianceReceiver.Radiance : 1f - radianceReceiver.Radiance;
         }
     }
 
@@ -75,25 +84,24 @@ public class RadianceBar : MonoBehaviour
         if (_displayedRadianceLevel <= newRadianceLevelValue)
         {
             slider.value = 0;
-            
+
             if (radianceReceiverRadianceTillNextLevel < 0 && _isProgressionMode)
             {
                 _isProgressionMode = false;
                 fill.color = newRadianceLevel.Color;
                 backdrop.color = radianceSettings.Levels[previousIndex].BackColor;
             }
-            else if (radianceReceiverRadianceTillNextLevel >= 0 && !_isProgressionMode)
+            else if (radianceReceiverRadianceTillNextLevel >= 0)
             {
                 _isProgressionMode = true;
                 fill.color = radianceSettings.Levels[successorIndex].ProgressColor;
                 backdrop.color = newRadianceLevel.BackColor;
             }
-            
         }
         else
         {
             slider.value = 1;
-            
+
             if (radianceReceiverRadianceTillNextLevel < 0 && _isProgressionMode)
             {
                 _isProgressionMode = false;

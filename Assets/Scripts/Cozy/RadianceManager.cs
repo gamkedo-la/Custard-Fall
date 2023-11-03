@@ -76,7 +76,7 @@ public class RadianceManager : MonoBehaviour
 
         foreach (var receiver in receivers)
         {
-            float maxOfRadiance = 0;
+            float maxRadiance = 0;
             var transformPosition = receiver.transform.position;
             foreach (var dispenser in registeredDispensers)
             {
@@ -84,15 +84,12 @@ public class RadianceManager : MonoBehaviour
                     continue;
 
                 var nearDispensers = receivers2Dispensers.GetValueOrDefault(receiver);
-                if (!nearDispensers.Contains(dispenser))
-                {
-                    nearDispensers.Add(dispenser);
-                }
+                nearDispensers.Add(dispenser);
 
-                maxOfRadiance = Mathf.Max(maxOfRadiance, dispenser.Radiance);
+                maxRadiance = Mathf.Max(maxRadiance, dispenser.Radiance);
             }
 
-            receiver.UpdateRadianceZoneLevel((int) maxOfRadiance);
+            receiver.UpdateRadianceZoneLevel((int) maxRadiance);
         }
     }
 

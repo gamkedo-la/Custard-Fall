@@ -27,6 +27,7 @@ public class RadianceReceiver : MonoBehaviour
     public OnLevelChange onLevelChange;
 
     private float _bonusValue = 0;
+    [SerializeField] private float bonusValueSpeedup = .25f;
 
     public void UpdateRadianceZoneLevel(int radianceLevel)
     {
@@ -44,11 +45,25 @@ public class RadianceReceiver : MonoBehaviour
             var delta = Time.deltaTime / baseFillDuration;
             radiance += delta;
 
+            if (_bonusValue >= 0)
+            {
+                var valueSpeedup = delta * bonusValueSpeedup;
+                _bonusValue -= valueSpeedup;
+                radiance += valueSpeedup;
+            }
+
             if (radiance >= GetRequiredRadianceForLevel(personalRadianceLevel + 1))
             {
                 radiance = 0;
+                onLevelChange?.Invoke(personalRadianceLevel + 1, personalRadianceLevel);
                 personalRadianceLevel++;
             }
+        }
+        else if (_bonusValue >= 0)
+        {
+            var delta = Time.deltaTime / baseFillDuration;
+            _bonusValue -= delta;
+            radiance += delta;
         }
     }
 
