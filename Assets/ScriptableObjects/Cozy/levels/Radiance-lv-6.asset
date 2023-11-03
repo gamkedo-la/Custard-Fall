@@ -15,3 +15,4 @@ MonoBehaviour:
   displayName: radiance lvl 6
   color: {r: 0.6886792, g: 0.21764861, b: 0.35294476, a: 1}
   progressColor: {r: 0.915, g: 0.31876484, b: 0.31292996, a: 1}
+  backColor: {r: 0.6037736, g: 0.253471, b: 0.3527234, a: 1}

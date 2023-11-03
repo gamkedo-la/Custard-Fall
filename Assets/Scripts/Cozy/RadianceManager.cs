@@ -71,26 +71,28 @@ public class RadianceManager : MonoBehaviour
             foreach (var dispenser in leavingDispensers)
             {
                 nearDispensers.Remove(dispenser);
-                receiver.OnRadianceLost(dispenser.Radiance);
             }
         }
 
-
         foreach (var receiver in receivers)
         {
+            float maxOfRadiance = 0;
             var transformPosition = receiver.transform.position;
             foreach (var dispenser in registeredDispensers)
             {
-                if (Vector3.Distance(transformPosition, dispenser.transform.position) <= searchRadius)
+                if (!(Vector3.Distance(transformPosition, dispenser.transform.position) <= searchRadius))
+                    continue;
+
+                var nearDispensers = receivers2Dispensers.GetValueOrDefault(receiver);
+                if (!nearDispensers.Contains(dispenser))
                 {
-                    var nearDispensers = receivers2Dispensers.GetValueOrDefault(receiver);
-                    if (!nearDispensers.Contains(dispenser))
-                    {
-                        nearDispensers.Add(dispenser);
-                        receiver.OnRadianceReceive(dispenser.Radiance);
-                    }
+                    nearDispensers.Add(dispenser);
                 }
+
+                maxOfRadiance = Mathf.Max(maxOfRadiance, dispenser.Radiance);
             }
+
+            receiver.UpdateRadianceZoneLevel((int) maxOfRadiance);
         }
     }
 

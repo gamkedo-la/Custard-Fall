@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd49327446494197b1f2565ccc78851e, type: 3}
-  m_Name: CozySettingsDefault
+  m_Name: RadianceSettingsDefault
   m_EditorClassIdentifier: 
   easingFunction:
     serializedVersion: 2
@@ -53,4 +53,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f09833a380cc70e40884dfd87f667bcd, type: 2}
   - {fileID: 11400000, guid: 6f158b28ff77e6c49a7a7ff450d67d98, type: 2}
   - {fileID: 11400000, guid: d9098eab2e915674abeb985b245f78a7, type: 2}
-  lvl1Offset: 2
+  lvl1Offset: 1

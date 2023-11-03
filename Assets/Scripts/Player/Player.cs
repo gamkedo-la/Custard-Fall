@@ -234,7 +234,7 @@ public class Player : MonoBehaviour
     {
         if (implication == DamageImplication.Health ||
             _radianceReceiver.PersonalRadianceLevel == 0 &&
-            _radianceReceiver.RadianceTillNextLevel <= 0.01f)
+            _radianceReceiver.Radiance <= 0.01f)
         {
             currentHealth -= damage;
             healthbar.SetHealth(currentHealth);

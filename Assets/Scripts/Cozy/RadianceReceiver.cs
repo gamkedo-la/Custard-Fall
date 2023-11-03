@@ -1,96 +1,83 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class RadianceReceiver : MonoBehaviour
 {
-    [FormerlySerializedAs("cozyLevelOfSurrounding")] [SerializeField] private float radianceLevelOfSurrounding;
-    [FormerlySerializedAs("personalCozyLevel")] [SerializeField] private int personalRadianceLevel = 0;
-    [FormerlySerializedAs("cozinessTillNextLevel")] [SerializeField] private float radianceTillNextLevel = 0;
-    private float _radianceTillNextLevelLinearInternal = 0;
+    [SerializeField] private float radiance = 0;
+    [SerializeField] private int radianceLevelOfSurrounding;
+    [SerializeField] private int personalRadianceLevel = 0;
     [SerializeField] private float baseFillDuration = 3;
-    [FormerlySerializedAs("cozySettings")] [SerializeField] private RadianceSettings radianceSettings;
+    [SerializeField] private RadianceSettings radianceSettings;
+    [SerializeField] private float requiredRadianceForLevel = 1;
 
-    public float RadianceLevelOfSurrounding => radianceLevelOfSurrounding;
+    public int RadianceLevelOfSurrounding => radianceLevelOfSurrounding;
     public int PersonalRadianceLevel => personalRadianceLevel;
-    public float RadianceTillNextLevel => radianceTillNextLevel;
+    public float Radiance => radiance;
 
 
-    public delegate void OnRadianceEnter(float amount);
+    public delegate void OnRadianceChangeInZone(int newLevel, int oldLevel);
 
-    public OnRadianceEnter onRadianceEnter;
+    public OnRadianceChangeInZone onRadianceChangeInZone;
 
-    public delegate void OnRadianceLeave(float amount);
+    public delegate void OnLevelChange(int newLevel, int previousLevel);
 
-    public OnRadianceLeave onRadianceLeave;
+    public OnLevelChange onLevelChange;
 
     private float _bonusValue = 0;
 
-    public void OnRadianceReceive(float radiance)
+    public void UpdateRadianceZoneLevel(int radianceLevel)
     {
-        onRadianceEnter?.Invoke(radiance);
-    }
+        if (radianceLevel == radianceLevelOfSurrounding)
+            return;
 
-    public void OnRadianceLost(float radiance)
-    {
-        onRadianceLeave?.Invoke(radiance);
+        onRadianceChangeInZone?.Invoke(radianceLevel, radianceLevelOfSurrounding);
+        radianceLevelOfSurrounding = radianceLevel;
     }
 
     private void Update()
     {
-        var possibleValue = GetEnvironmentalRadiance();
-        var maxPossibleValue = (possibleValue == 0 ? personalRadianceLevel : possibleValue) + _bonusValue;
-        if (personalRadianceLevel < maxPossibleValue)
+        if (personalRadianceLevel < radianceLevelOfSurrounding)
         {
             var delta = Time.deltaTime / baseFillDuration;
-            _radianceTillNextLevelLinearInternal += delta;
+            radiance += delta;
 
-
-            radianceTillNextLevel = radianceSettings.EasingFunction.Evaluate(_radianceTillNextLevelLinearInternal);
-            if (_bonusValue > 0)
+            if (radiance >= GetRequiredRadianceForLevel(personalRadianceLevel + 1))
             {
-                _bonusValue -= radianceSettings.EasingFunction.Evaluate(_radianceTillNextLevelLinearInternal + delta) - radianceTillNextLevel;
-            }
-            else
-            {
-                _bonusValue = 0;
-            }
-            if (radianceTillNextLevel >= 1)
-            {
-                _radianceTillNextLevelLinearInternal = 0;
-                radianceTillNextLevel = 0;
+                radiance = 0;
                 personalRadianceLevel++;
             }
         }
     }
 
-    private float GetEnvironmentalRadiance()
+    private float GetRequiredRadianceForLevel(int targetLevel)
     {
-        return Mathf.Min(Mathf.Floor(RadianceManager.Instance.GetTotalRadiance(this)), radianceSettings.Levels.Count - 1);
+        return requiredRadianceForLevel;
     }
 
     public void IncreaseRadiance(float bonus)
     {
         // refactor this later
         _bonusValue += bonus;
-        onRadianceEnter?.Invoke(bonus);
     }
 
     public void TakeDamage(float fraction)
     {
         float threshold = .01f;
-        if (radianceTillNextLevel > fraction + threshold)
+        if (radiance > fraction + threshold)
         {
-            radianceTillNextLevel -= fraction;
+            radiance -= fraction;
         }
-        else if (radianceTillNextLevel > threshold)
+        else if (radiance > threshold)
         {
-            radianceTillNextLevel = 0;
+            radiance = 0;
         }
         else
         {
             personalRadianceLevel--;
-            radianceTillNextLevel = 1f - fraction;
+            radiance = 1f - fraction;
         }
     }
 }

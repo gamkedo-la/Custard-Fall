@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class RadianceBar : MonoBehaviour
 {
-    [FormerlySerializedAs("cozinessReceiver")] [SerializeField] private RadianceReceiver radianceReceiver;
+    [SerializeField] private RadianceReceiver radianceReceiver;
 
     [SerializeField] private Slider slider;
 
@@ -16,9 +16,10 @@ public class RadianceBar : MonoBehaviour
     [SerializeField] private Image backdrop;
     [SerializeField] private TextMeshProUGUI displayText;
 
-    [FormerlySerializedAs("cozySettings")] [SerializeField] private RadianceSettings radianceSettings;
+    [SerializeField] private RadianceSettings radianceSettings;
 
-    private int _previousRadianceLevel = 0;
+    private int _displayedRadianceLevel = 0;
+    private bool _isProgressionMode = true;
 
     private void Awake()
     {
@@ -27,51 +28,86 @@ public class RadianceBar : MonoBehaviour
 
     private void Start()
     {
-        _previousRadianceLevel = radianceReceiver.PersonalRadianceLevel;
-        ChangeDisplayedLevel(_previousRadianceLevel);
+        _displayedRadianceLevel = radianceReceiver.PersonalRadianceLevel;
+        UpdateLevelDisplay(_displayedRadianceLevel, radianceReceiver.Radiance);
     }
 
 
     private void Update()
     {
-        if (radianceReceiver.PersonalRadianceLevel != _previousRadianceLevel)
+        if (radianceReceiver.PersonalRadianceLevel != _displayedRadianceLevel)
         {
-            ChangeDisplayedLevel(radianceReceiver.PersonalRadianceLevel);
+            UpdateLevelDisplay(radianceReceiver.PersonalRadianceLevel, radianceReceiver.Radiance);
         }
         else
         {
-            slider.value = Mathf.Lerp(slider.value, radianceReceiver.RadianceTillNextLevel, Time.deltaTime *5f);
+            slider.value = radianceReceiver.Radiance;
         }
     }
 
-    private void ChangeDisplayedLevel(int newRadianceLevelValue)
+    private void UpdateLevelDisplay(int newRadianceLevelValue, float radianceReceiverRadianceTillNextLevel)
     {
-        RadianceLevel newRadianceLevel;
+        int index;
+        int previousIndex;
+        int successorIndex;
         if (newRadianceLevelValue <= 0)
         {
-            newRadianceLevel = radianceSettings.Levels[0];
-            backdrop.color =  radianceSettings.Levels[0].Color;
-        }else if (newRadianceLevelValue >= radianceSettings.Levels.Count)
+            index = previousIndex = 0;
+            successorIndex = 1;
+        }
+        else if (newRadianceLevelValue >= radianceSettings.Levels.Count)
         {
-            newRadianceLevel = radianceSettings.Levels[^1];
-            backdrop.color =  radianceSettings.Levels[^1].Color;
+            previousIndex = radianceSettings.Levels.Count - 2;
+            index = successorIndex = radianceSettings.Levels.Count - 1;
         }
         else
         {
-            newRadianceLevel = radianceSettings.Levels[newRadianceLevelValue];
-            backdrop.color = radianceSettings.Levels[newRadianceLevelValue].Color;
+            previousIndex = newRadianceLevelValue - 1;
+            index = newRadianceLevelValue;
+            successorIndex = newRadianceLevelValue + 1;
         }
-        displayText.text = newRadianceLevel.DisplayName;
-        fill.color = newRadianceLevel.ProgressColor;
 
-        if (_previousRadianceLevel <= newRadianceLevelValue)
+        RadianceLevel newRadianceLevel = radianceSettings.Levels[index];
+
+        displayText.text = newRadianceLevel.DisplayName;
+
+
+        if (_displayedRadianceLevel <= newRadianceLevelValue)
         {
             slider.value = 0;
+            
+            if (radianceReceiverRadianceTillNextLevel < 0 && _isProgressionMode)
+            {
+                _isProgressionMode = false;
+                fill.color = newRadianceLevel.Color;
+                backdrop.color = radianceSettings.Levels[previousIndex].BackColor;
+            }
+            else if (radianceReceiverRadianceTillNextLevel >= 0 && !_isProgressionMode)
+            {
+                _isProgressionMode = true;
+                fill.color = radianceSettings.Levels[successorIndex].ProgressColor;
+                backdrop.color = newRadianceLevel.BackColor;
+            }
+            
         }
         else
         {
             slider.value = 1;
+            
+            if (radianceReceiverRadianceTillNextLevel < 0 && _isProgressionMode)
+            {
+                _isProgressionMode = false;
+                fill.color = newRadianceLevel.Color;
+                backdrop.color = radianceSettings.Levels[previousIndex].BackColor;
+            }
+            else if (radianceReceiverRadianceTillNextLevel >= 0 && !_isProgressionMode)
+            {
+                _isProgressionMode = true;
+                fill.color = radianceSettings.Levels[successorIndex].ProgressColor;
+                backdrop.color = newRadianceLevel.Color;
+            }
         }
-        _previousRadianceLevel = newRadianceLevelValue;
+
+        _displayedRadianceLevel = newRadianceLevelValue;
     }
 }

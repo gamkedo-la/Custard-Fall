@@ -6238,6 +6238,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8634744845352651756}
     m_Modifications:
+    - target: {fileID: 74465695373766138, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
+      propertyPath: textForItemDisplay
+      value: 
+      objectReference: {fileID: 4695250287222826384}
     - target: {fileID: 83292326176017633, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -6248,7 +6252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 83292326176017633, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.23
+      value: 10.138
       objectReference: {fileID: 0}
     - target: {fileID: 83292326176017633, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6535,6 +6539,14 @@ PrefabInstance:
       propertyPath: cozinessReceiver
       value: 
       objectReference: {fileID: 2699728651575149906}
+    - target: {fileID: 5931666419167998042, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
+      propertyPath: radianceReceiver
+      value: 
+      objectReference: {fileID: 2699728651575149906}
+    - target: {fileID: 5931666419167998042, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
+      propertyPath: radianceSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
     - target: {fileID: 7574857064429910964, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
