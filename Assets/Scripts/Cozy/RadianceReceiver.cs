@@ -11,7 +11,8 @@ public class RadianceReceiver : MonoBehaviour
     [SerializeField] private int personalRadianceLevel = 0;
     [SerializeField] private float baseFillDuration = 3;
     [SerializeField] private RadianceSettings radianceSettings;
-    [SerializeField] private float requiredRadianceForLevel = 1;
+    [SerializeField] private float requiredRadianceForLevelUp = 1;
+    [SerializeField] private float requiredRadianceForLevelDown = 1;
 
     public int RadianceLevelOfSurrounding => radianceLevelOfSurrounding;
     public int PersonalRadianceLevel => personalRadianceLevel;
@@ -34,8 +35,9 @@ public class RadianceReceiver : MonoBehaviour
         if (radianceLevel == radianceLevelOfSurrounding)
             return;
 
-        onRadianceChangeInZone?.Invoke(radianceLevel, radianceLevelOfSurrounding);
+        var oldLevel = radianceLevelOfSurrounding;
         radianceLevelOfSurrounding = radianceLevel;
+        onRadianceChangeInZone?.Invoke(radianceLevelOfSurrounding, oldLevel);
     }
 
     private void Update()
@@ -44,32 +46,30 @@ public class RadianceReceiver : MonoBehaviour
         {
             var delta = Time.deltaTime / baseFillDuration;
             radiance += delta;
-
-            if (_bonusValue >= 0)
-            {
-                var valueSpeedup = delta * bonusValueSpeedup;
-                _bonusValue -= valueSpeedup;
-                radiance += valueSpeedup;
-            }
-
-            if (radiance >= GetRequiredRadianceForLevel(personalRadianceLevel + 1))
-            {
-                radiance = 0;
-                onLevelChange?.Invoke(personalRadianceLevel + 1, personalRadianceLevel);
-                personalRadianceLevel++;
-            }
         }
-        else if (_bonusValue >= 0)
+
+        if (_bonusValue >= 0)
         {
-            var delta = Time.deltaTime / baseFillDuration;
+            var delta = Time.deltaTime / baseFillDuration * bonusValueSpeedup;
             _bonusValue -= delta;
             radiance += delta;
         }
+
+        if (radiance >= requiredRadianceForLevelUp)
+        {
+            ChangeLevel(personalRadianceLevel + 1);
+        }
     }
 
-    private float GetRequiredRadianceForLevel(int targetLevel)
+    private void ChangeLevel(int radianceLevel)
     {
-        return requiredRadianceForLevel;
+        if (radianceLevel >= 0 && radianceLevel <= radianceSettings.Levels.Count - 1)
+        {
+            var oldLevel = personalRadianceLevel;
+            personalRadianceLevel = radianceLevel;
+            radiance = 0;
+            onLevelChange?.Invoke(personalRadianceLevel, oldLevel);
+        }
     }
 
     public void IncreaseRadiance(float bonus)
@@ -78,21 +78,28 @@ public class RadianceReceiver : MonoBehaviour
         _bonusValue += bonus;
     }
 
-    public void TakeDamage(float fraction)
+    public void DeclineRadiance(float amount)
     {
-        float threshold = .01f;
-        if (radiance > fraction + threshold)
+        Debug.Log($"Taking damage {amount}");
+        if (personalRadianceLevel == 0 && amount >= radiance - 0.001f)
         {
-            radiance -= fraction;
+            radiance = 0;
+            return;
         }
-        else if (radiance > threshold)
+
+        radiance -= amount;
+        if (radiance < -requiredRadianceForLevelDown + 0.001f)
+        {
+            radiance = -requiredRadianceForLevelDown;
+        }
+        else if (Math.Abs(radiance) <= 0.001f)
         {
             radiance = 0;
         }
-        else
+
+        if (radiance <= -requiredRadianceForLevelDown)
         {
-            personalRadianceLevel--;
-            radiance = 1f - fraction;
+            ChangeLevel(personalRadianceLevel - 1);
         }
     }
 }

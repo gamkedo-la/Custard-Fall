@@ -5439,7 +5439,8 @@ MonoBehaviour:
   personalRadianceLevel: 0
   baseFillDuration: 5
   radianceSettings: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
-  requiredRadianceForLevel: 1
+  requiredRadianceForLevelUp: 1
+  requiredRadianceForLevelDown: 1
   bonusValueSpeedup: 0.25
 --- !u!114 &4957307413913084025
 MonoBehaviour:
@@ -5453,8 +5454,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ee384e150a43ffaf832f61c2e5329a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rate: 30
-  loss: 0.015
+  rate: 60
+  loss: 0.0025
 --- !u!114 &5454419848131368307
 MonoBehaviour:
   m_ObjectHideFlags: 0

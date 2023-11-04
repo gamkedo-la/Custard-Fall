@@ -46,7 +46,7 @@ public class RadianceConsumer : MonoBehaviour
     {
         while (true)
         {
-            _receiver.TakeDamage(loss);
+            _receiver.DeclineRadiance(loss);
             yield return new WaitForSeconds(1f / rate);
         }
     }

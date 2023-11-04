@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class RadianceBar : MonoBehaviour
@@ -29,93 +25,40 @@ public class RadianceBar : MonoBehaviour
     private void Start()
     {
         _displayedRadianceLevel = radianceReceiver.PersonalRadianceLevel;
-        UpdateLevelDisplay(_displayedRadianceLevel, radianceReceiver.Radiance);
-
-        radianceReceiver.onLevelChange +=
-            (newLevel, oldLevel) => OnLevelChange(newLevel);
+        UpdateSlider(radianceReceiver.Radiance);
     }
-
-    private void OnLevelChange(int newLevel)
-    {
-        _displayedRadianceLevel = newLevel;
-        UpdateLevelDisplay(newLevel, _displayedRadianceLevel);
-    }
-
 
     private void Update()
     {
-        if (radianceReceiver.PersonalRadianceLevel != _displayedRadianceLevel)
-        {
-            UpdateLevelDisplay(radianceReceiver.PersonalRadianceLevel, radianceReceiver.Radiance);
-        }
-        else
-        {
-            slider.value = radianceReceiver.Radiance >= 0 ? radianceReceiver.Radiance : 1f - radianceReceiver.Radiance;
-        }
+        var progression = radianceReceiver.Radiance;
+        _isProgressionMode = progression >= 0;
+        _displayedRadianceLevel = radianceReceiver.PersonalRadianceLevel;
+
+        UpdateSlider(progression);
+        UpdateVisuals();
     }
 
-    private void UpdateLevelDisplay(int newRadianceLevelValue, float radianceReceiverRadianceTillNextLevel)
+    private void UpdateSlider(float progression)
     {
-        int index;
-        int previousIndex;
-        int successorIndex;
-        if (newRadianceLevelValue <= 0)
+        // we reuse the single sliders to display decline (colors are swapped in this case)
+        var fillAmount = progression >= 0 ? progression : 1f + progression;
+        slider.value = fillAmount;
+    }
+
+    private void UpdateVisuals()
+    {
+        RadianceLevel radianceInfo = radianceSettings.Levels[_displayedRadianceLevel];
+        displayText.text = radianceInfo.DisplayName;
+
+        if (_isProgressionMode)
         {
-            index = previousIndex = 0;
-            successorIndex = 1;
-        }
-        else if (newRadianceLevelValue >= radianceSettings.Levels.Count)
-        {
-            previousIndex = radianceSettings.Levels.Count - 2;
-            index = successorIndex = radianceSettings.Levels.Count - 1;
-        }
-        else
-        {
-            previousIndex = newRadianceLevelValue - 1;
-            index = newRadianceLevelValue;
-            successorIndex = newRadianceLevelValue + 1;
-        }
-
-        RadianceLevel newRadianceLevel = radianceSettings.Levels[index];
-
-        displayText.text = newRadianceLevel.DisplayName;
-
-
-        if (_displayedRadianceLevel <= newRadianceLevelValue)
-        {
-            slider.value = 0;
-
-            if (radianceReceiverRadianceTillNextLevel < 0 && _isProgressionMode)
-            {
-                _isProgressionMode = false;
-                fill.color = newRadianceLevel.Color;
-                backdrop.color = radianceSettings.Levels[previousIndex].DeclineColor;
-            }
-            else if (radianceReceiverRadianceTillNextLevel >= 0)
-            {
-                _isProgressionMode = true;
-                fill.color = radianceSettings.Levels[successorIndex].ProgressColor;
-                backdrop.color = newRadianceLevel.DeclineColor;
-            }
+            fill.color = radianceInfo.ProgressColor;
+            backdrop.color = radianceInfo.Color;
         }
         else
         {
-            slider.value = 1;
-
-            if (radianceReceiverRadianceTillNextLevel < 0 && _isProgressionMode)
-            {
-                _isProgressionMode = false;
-                fill.color = newRadianceLevel.Color;
-                backdrop.color = radianceSettings.Levels[previousIndex].DeclineColor;
-            }
-            else if (radianceReceiverRadianceTillNextLevel >= 0 && !_isProgressionMode)
-            {
-                _isProgressionMode = true;
-                fill.color = radianceSettings.Levels[successorIndex].ProgressColor;
-                backdrop.color = newRadianceLevel.Color;
-            }
+            fill.color = radianceInfo.Color;
+            backdrop.color = radianceInfo.DeclineColor;
         }
-
-        _displayedRadianceLevel = newRadianceLevelValue;
     }
 }

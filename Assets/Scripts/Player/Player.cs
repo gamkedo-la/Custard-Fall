@@ -246,7 +246,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            _radianceReceiver.TakeDamage(damage / (float) maxHealth);
+            _radianceReceiver.DeclineRadiance(damage / (float) maxHealth);
         }
     }
 
