@@ -44,15 +44,21 @@ public class RadianceReceiver : MonoBehaviour
     {
         if (personalRadianceLevel < radianceLevelOfSurrounding)
         {
-            var delta = Time.deltaTime / baseFillDuration;
-            radiance += delta;
+            var deltaLeveling = Time.deltaTime / baseFillDuration;
+            radiance += deltaLeveling;
+        } else if (personalRadianceLevel == radianceLevelOfSurrounding && radiance < 0)
+        {
+            var deltaRefill = Time.deltaTime / baseFillDuration;
+            radiance += deltaRefill;
+            if (radiance > 0)
+                radiance = 0;
         }
 
         if (_bonusValue >= 0)
         {
-            var delta = Time.deltaTime / baseFillDuration * bonusValueSpeedup;
-            _bonusValue -= delta;
-            radiance += delta;
+            var deltaBonus = Time.deltaTime / baseFillDuration * bonusValueSpeedup;
+            _bonusValue -= deltaBonus;
+            radiance += deltaBonus;
         }
 
         if (radiance >= requiredRadianceForLevelUp)
