@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b95e108b930834b44975944d6aaaf89d, type: 3}
-  m_Name: Radiance-lv-2
+  m_Name: Radiance-lv-0
   m_EditorClassIdentifier: 
-  displayName: radiance lvl 2
-  color: {r: 0.71599996, g: 0.64543355, b: 0.29351553, a: 1}
-  progressColor: {r: 0.74820083, g: 0.754717, b: 0.1459594, a: 1}
-  backColor: {r: 0.6603774, g: 0.61001843, b: 0.3582236, a: 1}
+  displayName: radiance lvl 0
+  color: {r: 0.16470589, g: 0.22352941, b: 0.23921569, a: 1}
+  progressColor: {r: 0.18039216, g: 0.27058825, b: 0.2901961, a: 1}
+  declineColor: {r: 0.16470589, g: 0.22352941, b: 0.23921569, a: 1}

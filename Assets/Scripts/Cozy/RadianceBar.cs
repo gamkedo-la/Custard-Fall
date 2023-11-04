@@ -89,13 +89,13 @@ public class RadianceBar : MonoBehaviour
             {
                 _isProgressionMode = false;
                 fill.color = newRadianceLevel.Color;
-                backdrop.color = radianceSettings.Levels[previousIndex].BackColor;
+                backdrop.color = radianceSettings.Levels[previousIndex].DeclineColor;
             }
             else if (radianceReceiverRadianceTillNextLevel >= 0)
             {
                 _isProgressionMode = true;
                 fill.color = radianceSettings.Levels[successorIndex].ProgressColor;
-                backdrop.color = newRadianceLevel.BackColor;
+                backdrop.color = newRadianceLevel.DeclineColor;
             }
         }
         else
@@ -106,7 +106,7 @@ public class RadianceBar : MonoBehaviour
             {
                 _isProgressionMode = false;
                 fill.color = newRadianceLevel.Color;
-                backdrop.color = radianceSettings.Levels[previousIndex].BackColor;
+                backdrop.color = radianceSettings.Levels[previousIndex].DeclineColor;
             }
             else if (radianceReceiverRadianceTillNextLevel >= 0 && !_isProgressionMode)
             {
