@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95e108b930834b44975944d6aaaf89d, type: 3}
   m_Name: Radiance-lv-0
   m_EditorClassIdentifier: 
-  displayName: radiance lvl 0
+  displayName: weary
   color: {r: 0.16470589, g: 0.22352941, b: 0.23921569, a: 1}
   progressColor: {r: 0.24313726, g: 0.29411766, b: 0.30588236, a: 1}
   declineColor: {r: 0.16470589, g: 0.22352941, b: 0.23921569, a: 1}
