@@ -114,7 +114,7 @@ public class Player : MonoBehaviour
         Vector3 playerPosition = activePoint.position;
         if (!isDashing && !grappling && !isSwimming)
         {
-            playerAnimator.SetBool(Grappling, false);
+            // playerAnimator.SetBool(Grappling, false);
             if (placeModeItemReference)
             {
                 // player in place mode state
@@ -143,7 +143,7 @@ public class Player : MonoBehaviour
             if (Vector3.Distance(transform.position, realGrapplePoint) < 0.01f)
             {
                 grappling = false;
-                playerAnimator.SetBool(Grappling, false);
+                // playerAnimator.SetBool(Grappling, false);
                 grappleLine.gameObject.SetActive(false);
             }
 
@@ -573,7 +573,7 @@ public class Player : MonoBehaviour
             grappleIntoTheVoid = true;
             grappleLine.SetPosition(1, transform.position + playerDirectional.transform.forward * grappleDistance);
         }
-        playerAnimator.SetBool(Grappling, true);
+        // playerAnimator.SetBool(Grappling, true);
     }
 
     private bool UpdateGrapplePoint()

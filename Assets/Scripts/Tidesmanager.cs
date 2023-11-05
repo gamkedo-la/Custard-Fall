@@ -168,7 +168,6 @@ public class Tidesmanager : MonoBehaviour
                 foreach (var tideStep in tideDay.TideSteps)
                 {
                     normalSteps.Add(tideStep.GetTime(), tideStep);
-                    Debug.Log("fraction of day " + tideStep.GetTime() + " " + tideStep.GetLevel());
                 }
 
                 _weeklyPlan[i] = normalSteps;
