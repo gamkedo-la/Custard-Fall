@@ -15,6 +15,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     [SerializeField] private GameObject upgradeVisual;
     [SerializeField] private bool hideUpgradeVisualAtDistance = true;
     [SerializeField] private float hideVisualDelay= 1f;
+    private bool _maxedOut = false;
 
     [SerializeField] private Image slots;
 
@@ -145,9 +146,12 @@ public class UpgradableStructureVisual : MonoBehaviour
             filledSlots.fillAmount = 0;
             slots.fillAmount = 0;
             previewSlots.fillAmount = 0;
+            upgradeVisual.SetActive(false);
+            _maxedOut = true;
         }
         else
         {
+            _maxedOut = false;
             PrepareInvestedSlots(0);
         }
 
@@ -198,6 +202,10 @@ public class UpgradableStructureVisual : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("player entered");
+
+            if (_maxedOut)
+                return;
+            
             if (hideVisualCoroutine != null)
             {
                 StopCoroutine(hideVisualCoroutine);
