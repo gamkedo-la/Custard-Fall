@@ -11,12 +11,6 @@ public class DamageTaker : MonoBehaviour
         player = GetComponent<Player>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void TakeDamage(int f)
     {
         player.TakeDamage(f, DamageImplication.Health);

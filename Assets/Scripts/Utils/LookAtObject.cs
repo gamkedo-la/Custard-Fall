@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LookAtObject : MonoBehaviour
 {
-    [SerializeField] public Transform target;
+    [SerializeField] private Transform target;
     [SerializeField] private Mode lookAtMode;
     [SerializeField] float delay = .3f;
 
@@ -21,9 +21,15 @@ public class LookAtObject : MonoBehaviour
 
     private void Start()
     {
-        _targetPosition = target.position;
-        _targetPositionInterpolated = _targetPosition;
+        if (target != null)
+            UpdateTarget(target);
         StartCoroutine(UpdateTargetPosition());
+    }
+
+    public void UpdateTarget(Transform target0)
+    {
+        _targetPosition = target0.position;
+        _targetPositionInterpolated = _targetPosition;
     }
 
     private void Update()
@@ -42,7 +48,8 @@ public class LookAtObject : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(delay);
-            _targetPosition = target.transform.position;
+            if (target != null)
+                _targetPosition = target.transform.position;
         }
     }
 
@@ -51,13 +58,15 @@ public class LookAtObject : MonoBehaviour
         switch (lookAtMode)
         {
             case Mode.LookAtObject:
-                transform.LookAt(new Vector3(_targetPositionInterpolated.x, transform.position.y, _targetPositionInterpolated.z));
+                transform.LookAt(new Vector3(_targetPositionInterpolated.x, transform.position.y,
+                    _targetPositionInterpolated.z));
                 break;
             case Mode.LookAtObject3d:
                 transform.LookAt(_targetPositionInterpolated);
                 break;
             case Mode.LookAtObjectInverted:
-                transform.LookAt(new Vector3(_targetPositionInterpolated.x, transform.position.y, _targetPositionInterpolated.z));
+                transform.LookAt(new Vector3(_targetPositionInterpolated.x, transform.position.y,
+                    _targetPositionInterpolated.z));
                 transform.forward = -transform.forward;
                 break;
             default:

@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(LookAtObject))]
 [RequireComponent(typeof(ProjectileSpawner))]
 public class CrabShooter : Mob
 {
+    private LookAtObject _lookAtObject;
+    private ProjectileSpawner _projectileSpawner;
+    private Inhalable _inhalable;
+    private StateOfMind _stateOfMind = StateOfMind.OwnBusiness;
 
-    protected LookAtObject lookAtObject;
-    protected ProjectileSpawner projectileSpawner;
-    protected Inhalable _inhalable;
-
-    protected StateOfMind stateOfMind = StateOfMind.OwnBusiness;
-    [SerializeField]
-    private float surprisedDelay = .7f;
+    [SerializeField] private float surprisedDelay = .7f;
 
     protected override void Awake()
     {
         base.Awake();
-        lookAtObject = GetComponent<LookAtObject>();
-        projectileSpawner = GetComponent<ProjectileSpawner>();
+        _lookAtObject = GetComponent<LookAtObject>();
+        _projectileSpawner = GetComponent<ProjectileSpawner>();
         _inhalable = GetComponent<InhalableProjectile>();
     }
 
@@ -35,12 +32,12 @@ public class CrabShooter : Mob
 
     private void LookAtTarget(GameObject target)
     {
-        lookAtObject.target = target.transform;
+        _lookAtObject.UpdateTarget(target.transform);
     }
 
     private void ReactToInhaling(Inhaler inhaler)
     {
-        if (stateOfMind == StateOfMind.OwnBusiness)
+        if (_stateOfMind == StateOfMind.OwnBusiness)
         {
             OnStateOfMindChange(StateOfMind.Surprised);
         }
@@ -48,9 +45,9 @@ public class CrabShooter : Mob
 
     protected override void MaybeCalmDown()
     {
-        projectileSpawner.enabled = false;
-        lookAtObject.enabled = false;
-        stateOfMind = StateOfMind.OwnBusiness;
+        _projectileSpawner.enabled = false;
+        _lookAtObject.enabled = false;
+        _stateOfMind = StateOfMind.OwnBusiness;
     }
 
     protected override void MaybeGetAngry(GameObject target)
@@ -63,7 +60,7 @@ public class CrabShooter : Mob
         yield return new WaitForSeconds(surprisedDelay);
         OnStateOfMindChange(StateOfMind.Angry);
     }
-    
+
     private void OnStateOfMindChange(StateOfMind newStateOfMind)
     {
         switch (newStateOfMind)
@@ -84,29 +81,34 @@ public class CrabShooter : Mob
                 throw new ArgumentOutOfRangeException(nameof(newStateOfMind), newStateOfMind, null);
         }
 
-        stateOfMind = newStateOfMind;
+        _stateOfMind = newStateOfMind;
     }
 
     private void StartLookAtTarget()
     {
-        lookAtObject.enabled = true;
+        _lookAtObject.enabled = true;
     }
+
     private void StopLookAtTarget()
     {
-        lookAtObject.enabled = false;
+        _lookAtObject.enabled = false;
     }
+
     private void StartRangedAttack()
     {
-        projectileSpawner.enabled = true;
+        _projectileSpawner.enabled = true;
     }
+
     private void StopRangedAttack()
     {
-        projectileSpawner.enabled = false;
+        _projectileSpawner.enabled = false;
     }
 
 
-    public enum StateOfMind
+    private enum StateOfMind
     {
-        OwnBusiness, Surprised, Angry
+        OwnBusiness,
+        Surprised,
+        Angry
     }
 }
