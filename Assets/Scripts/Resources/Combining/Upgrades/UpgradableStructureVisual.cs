@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -11,6 +12,9 @@ public class UpgradableStructureVisual : MonoBehaviour
     private UpgradeableStructure upgradeableStructure;
 
     [SerializeField] private Canvas canvas;
+    [SerializeField] private GameObject upgradeVisual;
+    [SerializeField] private bool hideUpgradeVisualAtDistance = true;
+    [SerializeField] private float hideVisualDelay= 1f;
 
     [SerializeField] private Image slots;
 
@@ -20,7 +24,9 @@ public class UpgradableStructureVisual : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lvlDisplay;
     [SerializeField] private Image lvlBackground;
     [SerializeField] private Image resourceIcon;
-    [FormerlySerializedAs("_cozySettings")] [SerializeField] private RadianceSettings radianceSettings;
+
+    [FormerlySerializedAs("_cozySettings")] [SerializeField]
+    private RadianceSettings radianceSettings;
 
     [SerializeField] private bool autoHide = true;
     public bool AutoHide => autoHide;
@@ -28,6 +34,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     private float targetAlpha;
     private bool doFade;
     private Action onFadeComplete;
+    private Coroutine hideVisualCoroutine;
 
     private void Start()
     {
@@ -35,13 +42,18 @@ public class UpgradableStructureVisual : MonoBehaviour
         upgradeableStructure.OnPreviewLeave += OnPreviewLeave;
         upgradeableStructure.OnProgressToLevelUp += OnProgressToLevelUp;
         upgradeableStructure.OnLevelUp += OnLevelUp;
-        
+
         UpdateResourceIcon();
-        
+
         PrepareLvlDisplay(upgradeableStructure.CurrentLevel());
         CenterSlots(upgradeableStructure.RequieredPoints());
         PrepareRequiredSlots(upgradeableStructure.RequieredPoints());
         PreparePreviewPoints(upgradeableStructure.InvestedPoints());
+
+        if (hideUpgradeVisualAtDistance)
+        {
+            upgradeVisual.SetActive(false);
+        }
 
         if (autoHide)
             HideImmediately();
@@ -180,5 +192,33 @@ public class UpgradableStructureVisual : MonoBehaviour
         if (autoHide)
             Hide();
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("player entered");
+            if (hideVisualCoroutine != null)
+            {
+                StopCoroutine(hideVisualCoroutine);
+            }
+
+            upgradeVisual.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("player left");
+            hideVisualCoroutine = StartCoroutine(HideVisualAfterSomeTime());
+        }
+    }
+
+    private IEnumerator HideVisualAfterSomeTime()
+    {
+        yield return new WaitForSeconds(hideVisualDelay);
+        upgradeVisual.SetActive(false);
+    }
 }

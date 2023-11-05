@@ -86,7 +86,6 @@ public class RadianceReceiver : MonoBehaviour
 
     public void DeclineRadiance(float amount)
     {
-        Debug.Log($"Taking damage {amount}");
         if (personalRadianceLevel == 0 && amount >= radiance - 0.001f)
         {
             radiance = 0;
