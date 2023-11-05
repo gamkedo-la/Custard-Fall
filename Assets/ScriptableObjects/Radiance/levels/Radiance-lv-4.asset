@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: radiance lvl 4
   color: {r: 0.624, g: 0.26784906, b: 0.4196431, a: 1}
-  progressColor: {r: 0.7607843, g: 0.27058825, b: 0.48235294, a: 1}
+  progressColor: {r: 0.79607844, g: 0.27058825, b: 0.49803922, a: 1}
   declineColor: {r: 0.3647059, g: 0.2509804, b: 0.3019608, a: 1}
