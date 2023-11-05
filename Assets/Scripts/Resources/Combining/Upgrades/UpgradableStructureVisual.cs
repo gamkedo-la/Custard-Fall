@@ -74,7 +74,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         RectTransform currentTransform = slots.GetComponent<RectTransform>();
         var tmpPosition = currentTransform.localPosition;
-        var centered = new Vector3(1.15f * (1f - (requieredPoints - 1) / 11f), tmpPosition.y, tmpPosition.z);
+        var centered = new Vector3(1.7f * (1f - (requieredPoints - 1) / 11f), tmpPosition.y, tmpPosition.z);
         currentTransform.localPosition = centered;
 
         filledSlots.GetComponent<RectTransform>().localPosition = centered;
