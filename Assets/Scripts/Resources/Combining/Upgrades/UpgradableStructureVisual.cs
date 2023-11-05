@@ -19,6 +19,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     [SerializeField] private Image previewSlots;
     [SerializeField] private TextMeshProUGUI lvlDisplay;
     [SerializeField] private Image lvlBackground;
+    [SerializeField] private Image resourceIcon;
     [FormerlySerializedAs("_cozySettings")] [SerializeField] private RadianceSettings radianceSettings;
 
     [SerializeField] private bool autoHide = true;
@@ -34,7 +35,9 @@ public class UpgradableStructureVisual : MonoBehaviour
         upgradeableStructure.OnPreviewLeave += OnPreviewLeave;
         upgradeableStructure.OnProgressToLevelUp += OnProgressToLevelUp;
         upgradeableStructure.OnLevelUp += OnLevelUp;
-
+        
+        UpdateResourceIcon();
+        
         PrepareLvlDisplay(upgradeableStructure.CurrentLevel());
         CenterSlots(upgradeableStructure.RequieredPoints());
         PrepareRequiredSlots(upgradeableStructure.RequieredPoints());
@@ -42,6 +45,11 @@ public class UpgradableStructureVisual : MonoBehaviour
 
         if (autoHide)
             HideImmediately();
+    }
+
+    private void UpdateResourceIcon()
+    {
+        resourceIcon.sprite = upgradeableStructure?.ExpectedUpgradeMaterial?.Icon;
     }
 
     private void PrepareLvlDisplay(int currentLevel)
@@ -120,8 +128,11 @@ public class UpgradableStructureVisual : MonoBehaviour
         PreparePreviewPoints(0);
         if (e.maxedOut)
         {
-            // depict maxed out with all slots filled, in the future maybe replace by crown
+            // visualize maxed out by hiding any slots
             filledSlots.fillAmount = slots.fillAmount;
+            filledSlots.fillAmount = 0;
+            slots.fillAmount = 0;
+            previewSlots.fillAmount = 0;
         }
         else
         {
@@ -169,4 +180,5 @@ public class UpgradableStructureVisual : MonoBehaviour
         if (autoHide)
             Hide();
     }
+    
 }

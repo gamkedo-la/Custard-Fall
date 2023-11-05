@@ -19,6 +19,8 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     public event EventHandler<UpgradeArgs> OnPreviewLeave;
     public event EventHandler<UpgradeArgs> OnPreviewEnter;
 
+    public PlaceableItem ExpectedUpgradeMaterial => expectedUpgradeMaterial;
+
     private void Awake()
     {
         _placeableItemReference = GetComponent<PlaceableItemReference>();
@@ -34,7 +36,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     public bool CanUpgradeWith(PlaceableItem material)
     {
-        return !IsMaxedOut() && expectedUpgradeMaterial == material;
+        return !IsMaxedOut() && ExpectedUpgradeMaterial == material;
     }
 
     public int CurrentLevel()

@@ -9928,10 +9928,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7627650759830103196, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
-      propertyPath: autoHide
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7627650759830103196, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
       propertyPath: upgradeableStructure
       value: 
       objectReference: {fileID: 6558898880563003225}

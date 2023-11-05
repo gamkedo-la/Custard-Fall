@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prototype: {fileID: 8821145956041889501, guid: 50bfe55f92c6ad342833ae041e2197e6, type: 3}
   placeablePreview: {fileID: 8821145956041889501, guid: 7346c1d818a2a0f4ea89ba1fe87b4dfb, type: 3}
-  icon: {fileID: 21300000, guid: 9bfc0677fd5eed740aba4c04d08b4d38, type: 3}
+  icon: {fileID: 21300000, guid: c8675d4931561e14f86a1801887a80f6, type: 3}
   resourceName: Creamy Cone Tree
