@@ -14,6 +14,10 @@ public class RadianceReceiver : MonoBehaviour
     [SerializeField] private float requiredRadianceForLevelUp = 1;
     [SerializeField] private float requiredRadianceForLevelDown = 1;
 
+    [SerializeField] private float refillRate = 0.034f;
+    [SerializeField] private float refillTillLevel = 1;
+    [SerializeField] private float refillStartDelay = 1;
+
     public int RadianceLevelOfSurrounding => radianceLevelOfSurrounding;
     public int PersonalRadianceLevel => personalRadianceLevel;
     public float Radiance => radiance;
@@ -42,23 +46,37 @@ public class RadianceReceiver : MonoBehaviour
 
     private void Update()
     {
+        var radianceBefore = radiance;
+        float deltaRadiance = 0;
         if (personalRadianceLevel < radianceLevelOfSurrounding)
         {
             var deltaLeveling = Time.deltaTime / baseFillDuration;
-            radiance += deltaLeveling;
-        } else if (personalRadianceLevel == radianceLevelOfSurrounding && radiance < 0)
+            deltaRadiance += deltaLeveling;
+        }
+        else if (personalRadianceLevel == radianceLevelOfSurrounding && radiance < 0)
         {
-            var deltaRefill = Time.deltaTime / baseFillDuration;
-            radiance += deltaRefill;
-            if (radiance > 0)
-                radiance = 0;
+            deltaRadiance += Time.deltaTime / baseFillDuration;
         }
 
         if (_bonusValue >= 0)
         {
             var deltaBonus = Time.deltaTime / baseFillDuration * bonusValueSpeedup;
             _bonusValue -= deltaBonus;
-            radiance += deltaBonus;
+            deltaRadiance += deltaBonus;
+        }
+
+        if (deltaRadiance == 0 && refillRate > 0 && personalRadianceLevel < refillTillLevel)
+        {
+            // TODO add delay
+            deltaRadiance += refillRate * Time.deltaTime;
+        }
+
+        radiance += deltaRadiance;
+
+        if (radianceBefore < 0 && radiance is > 0 and < .1f)
+        {
+            // filled up negative radiance
+            radiance = 0;
         }
 
         if (radiance >= requiredRadianceForLevelUp)
