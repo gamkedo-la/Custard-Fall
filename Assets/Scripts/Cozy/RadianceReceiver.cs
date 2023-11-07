@@ -72,9 +72,15 @@ public class RadianceReceiver : MonoBehaviour
         {
             StopDelayedRefill();
         }
-        else if (!_fillingUp && refillRate > 0 && (personalRadianceLevel < refillTillLevel || refillIfDeclining && radiance < 0))
+        else switch (_fillingUp)
         {
-            StartDelayedRefill();
+            case false when refillRate > 0 &&
+                            (personalRadianceLevel < refillTillLevel || refillIfDeclining && radiance < 0):
+                StartDelayedRefill();
+                break;
+            case true when refillIfDeclining && radiance >= 0 && personalRadianceLevel >= refillTillLevel:
+                StopDelayedRefill();
+                break;
         }
 
         radiance += deltaRadiance;
@@ -104,10 +110,11 @@ public class RadianceReceiver : MonoBehaviour
         {
             var radianceBefore = radiance;
             radiance += refillRate * Time.deltaTime;
-            if (radiance - radianceBefore > 0)
+            if (radianceBefore < 0 && radiance > 0)
             {
                 radiance = 0;
             }
+
             yield return new WaitForEndOfFrame();
         }
     }
@@ -118,6 +125,7 @@ public class RadianceReceiver : MonoBehaviour
         {
             StopCoroutine(_delayedRefill);
         }
+
         _fillingUp = false;
     }
 
