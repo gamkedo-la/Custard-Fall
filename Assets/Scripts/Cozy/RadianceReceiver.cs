@@ -101,7 +101,12 @@ public class RadianceReceiver : MonoBehaviour
         yield return new WaitForSeconds(delay);
         while (_fillingUp)
         {
+            var radianceBefore = radiance;
             radiance += refillRate * Time.deltaTime;
+            if (radiance - radianceBefore > 0)
+            {
+                radiance = 0;
+            }
             yield return new WaitForEndOfFrame();
         }
     }
