@@ -14,14 +14,15 @@ public class RadianceReceiver : MonoBehaviour
     [SerializeField] private float requiredRadianceForLevelUp = 1;
     [SerializeField] private float requiredRadianceForLevelDown = 1;
 
-    [SerializeField] private float refillRate = 0.034f;
+    [SerializeField] private float refillRate = 0.05f;
     [SerializeField] private float refillTillLevel = 1;
-    [SerializeField] private float refillStartDelay = 1;
+    [SerializeField] private float refillStartDelay = 1.33f;
 
     public int RadianceLevelOfSurrounding => radianceLevelOfSurrounding;
     public int PersonalRadianceLevel => personalRadianceLevel;
     public float Radiance => radiance;
 
+    private bool _fillingUp = false;
 
     public delegate void OnRadianceChangeInZone(int newLevel, int oldLevel);
 
@@ -33,6 +34,7 @@ public class RadianceReceiver : MonoBehaviour
 
     private float _bonusValue = 0;
     [SerializeField] private float bonusValueSpeedup = .25f;
+    private Coroutine _delayedRefill;
 
     public void UpdateRadianceZoneLevel(int radianceLevel)
     {
@@ -65,15 +67,18 @@ public class RadianceReceiver : MonoBehaviour
             deltaRadiance += deltaBonus;
         }
 
-        if (deltaRadiance == 0 && refillRate > 0 && personalRadianceLevel < refillTillLevel)
+        if (deltaRadiance != 0)
         {
-            // TODO add delay
-            deltaRadiance += refillRate * Time.deltaTime;
+            StopDelayedRefill();
+        }
+        else if (!_fillingUp && refillRate > 0 && personalRadianceLevel < refillTillLevel)
+        {
+            StartDelayedRefill();
         }
 
         radiance += deltaRadiance;
 
-        if (radianceBefore < 0 && radiance is > 0 and < .1f)
+        if (radianceBefore < 0 && radiance is > 0 and < .05f)
         {
             // filled up negative radiance
             radiance = 0;
@@ -85,6 +90,31 @@ public class RadianceReceiver : MonoBehaviour
         }
     }
 
+    private void StartDelayedRefill()
+    {
+        _fillingUp = true;
+        _delayedRefill = StartCoroutine(DelayedRefill(refillStartDelay));
+    }
+
+    private IEnumerator DelayedRefill(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        while (_fillingUp)
+        {
+            radiance += refillRate * Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    private void StopDelayedRefill()
+    {
+        if (_fillingUp && _delayedRefill != null)
+        {
+            StopCoroutine(_delayedRefill);
+        }
+        _fillingUp = false;
+    }
+
     private void ChangeLevel(int radianceLevel)
     {
         if (radianceLevel >= 0 && radianceLevel <= radianceSettings.Levels.Count - 1)
@@ -92,18 +122,19 @@ public class RadianceReceiver : MonoBehaviour
             var oldLevel = personalRadianceLevel;
             personalRadianceLevel = radianceLevel;
             radiance = 0;
+            StopDelayedRefill();
             onLevelChange?.Invoke(personalRadianceLevel, oldLevel);
         }
     }
 
     public void IncreaseRadiance(float bonus)
     {
-        // refactor this later
         _bonusValue += bonus;
     }
 
     public void DeclineRadiance(float amount)
     {
+        StopDelayedRefill();
         if (personalRadianceLevel == 0 && amount >= radiance - 0.001f)
         {
             radiance = 0;

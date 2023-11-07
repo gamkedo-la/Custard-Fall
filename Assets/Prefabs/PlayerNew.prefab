@@ -5441,9 +5441,9 @@ MonoBehaviour:
   radianceSettings: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
   requiredRadianceForLevelUp: 1
   requiredRadianceForLevelDown: 1
-  refillRate: 0.034
+  refillRate: 0.05
   refillTillLevel: 1
-  refillStartDelay: 1
+  refillStartDelay: 1.33
   bonusValueSpeedup: 0.45
 --- !u!114 &4957307413913084025
 MonoBehaviour:
