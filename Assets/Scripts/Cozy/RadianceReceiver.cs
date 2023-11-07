@@ -17,6 +17,7 @@ public class RadianceReceiver : MonoBehaviour
     [SerializeField] private float refillRate = 0.05f;
     [SerializeField] private float refillTillLevel = 1;
     [SerializeField] private float refillStartDelay = 1.33f;
+    [SerializeField] private bool refillIfDeclining = true;
 
     public int RadianceLevelOfSurrounding => radianceLevelOfSurrounding;
     public int PersonalRadianceLevel => personalRadianceLevel;
@@ -71,7 +72,7 @@ public class RadianceReceiver : MonoBehaviour
         {
             StopDelayedRefill();
         }
-        else if (!_fillingUp && refillRate > 0 && personalRadianceLevel < refillTillLevel)
+        else if (!_fillingUp && refillRate > 0 && (personalRadianceLevel < refillTillLevel || refillIfDeclining && radiance < 0))
         {
             StartDelayedRefill();
         }
