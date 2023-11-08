@@ -8987,10 +8987,11 @@ MonoBehaviour:
     K\xF6kl\xFC: Gamepad movement controls, custard drowning feature, item interaction
     message\nRyan Gaillard: Crafting tab in inventory\nCassidy Noble: Main menu background,
     controls menu\nRandy Tan Shaoxian: Date change, time of day improvements\nPatrick
-    J Thompson: Grapple hook implementation\nRob Kayson: Eyeballs watching from custard
-    with optional time of day sync\nRob Tunstall: Inhale sound and related hookup\nAndy
-    King: Custard shader\nIan Cherabier: Pause menu toggle, volume slider\nGabriel
-    Cornish: Main menu font integration\nChris DeLeon: Inventory panel count fix"
+    J Thompson: Player model and animation, grapple hook implementation\nRob Kayson:
+    Eyeballs watching from custard with optional time of day sync\nRob Tunstall:
+    Inhale sound and related hookup\nAndy King: Custard shader\nIan Cherabier: Pause
+    menu toggle, volume slider\nGabriel Cornish: Main menu font integration\nChris
+    DeLeon: Inventory panel count fix"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
