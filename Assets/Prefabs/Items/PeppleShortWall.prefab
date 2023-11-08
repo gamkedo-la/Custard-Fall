@@ -341,7 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9101167432017389591}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -384,7 +384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5395744165749533585}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1846,7 +1846,9 @@ GameObject:
   - component: {fileID: 6720778346109180067}
   - component: {fileID: 6720778346109180066}
   - component: {fileID: 6720778346109180065}
-  m_Layer: 0
+  - component: {fileID: 1676370741757836971}
+  - component: {fileID: 1546744424450555330}
+  m_Layer: 12
   m_Name: PeppleShortWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1881,8 +1883,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1.0892915, z: 1}
+  m_Center: {x: 0, y: 0.26855224, z: 0}
 --- !u!114 &6720778346109180066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1915,6 +1917,41 @@ MonoBehaviour:
   inhaleItemsProfile: []
   resourceName: pebble
   timeToInhaleWhole: 1
+--- !u!114 &1676370741757836971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6720778346109180064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4278d01bd5e045319bdd2d2c707d5d46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: 1
+  investedPoints: 0
+  expectedUpgradeMaterial: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
+  upgradeLevels:
+  - comment: 
+    requiredPoints: 1
+    upgrade: {fileID: 11400000, guid: 5d56ed74ba570ce47bd5837e102dafe7, type: 2}
+--- !u!114 &1546744424450555330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6720778346109180064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94aa7582687e3d4ab0e8f97b571f55f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!1 &6786857016149217864
 GameObject:
   m_ObjectHideFlags: 0

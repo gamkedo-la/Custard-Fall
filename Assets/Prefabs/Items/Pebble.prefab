@@ -112,7 +112,8 @@ GameObject:
   - component: {fileID: 6720778346109180067}
   - component: {fileID: 6720778346109180066}
   - component: {fileID: 6720778346109180065}
-  m_Layer: 0
+  - component: {fileID: 8186344870324404166}
+  m_Layer: 12
   m_Name: Pebble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,11 +144,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6720778346109180064}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &6720778346109180066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,3 +181,22 @@ MonoBehaviour:
   inhaleItemsProfile: []
   resourceName: pebble
   timeToInhaleWhole: 1
+--- !u!114 &8186344870324404166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6720778346109180064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4278d01bd5e045319bdd2d2c707d5d46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: 1
+  investedPoints: 0
+  expectedUpgradeMaterial: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
+  upgradeLevels:
+  - comment: 
+    requiredPoints: 1
+    upgrade: {fileID: 11400000, guid: 634929c90f3cdb444b622e6d6efa62bf, type: 2}
