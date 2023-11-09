@@ -19,7 +19,21 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     public event EventHandler<UpgradeArgs> OnPreviewLeave;
     public event EventHandler<UpgradeArgs> OnPreviewEnter;
 
-    public PlaceableItem ExpectedUpgradeMaterial => expectedUpgradeMaterial;
+    public PlaceableItem ExpectedUpgradeMaterial
+    {
+        get
+        {
+            if (currentLevel > 0 && currentLevel < upgradeLevels.Length)
+            {
+                var upgradeMaterial = upgradeLevels[currentLevel].upgradeMaterial;
+                return upgradeMaterial == null ? expectedUpgradeMaterial : upgradeMaterial;
+            }
+            else
+            {
+                return expectedUpgradeMaterial;
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -43,14 +57,15 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     {
         return currentLevel;
     }
+
     public int RequieredPoints()
     {
         if (currentLevel < upgradeLevels.Length)
             return upgradeLevels[currentLevel - 1].requiredPoints;
         else
             return 0;
-    }    
-    
+    }
+
     public int InvestedPoints()
     {
         return investedPoints;
@@ -102,8 +117,11 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         public string comment;
         public int requiredPoints;
 
-        [Tooltip("optional, usually on the last level")]
+        [Tooltip("optional, turn current object into the upgrade")]
         public PlaceableItem upgrade;
+
+        [Tooltip("optional, override required upgrade material")]
+        public PlaceableItem upgradeMaterial;
 
         public string Comment => comment;
         public int RequiredPoints => requiredPoints;
@@ -167,19 +185,21 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
     private void PreviewUpgrade(object sender, UpgradeArgs e)
     {
-        Debug.Log("# preview "+_previewInstance == null);
+        Debug.Log("# preview " + _previewInstance == null);
         if (_previewInstance == null)
         {
             var originalTransform = transform;
             var placeableItem = upgradeLevels[currentLevel - 1].upgrade;
             if (placeableItem)
             {
-                _previewInstance = Instantiate(placeableItem.PlaceablePreview, originalTransform.position, originalTransform.rotation);
+                _previewInstance = Instantiate(placeableItem.PlaceablePreview, originalTransform.position,
+                    originalTransform.rotation);
             }
             else
             {
                 if (_placeableItemReference)
-                    _previewInstance = Instantiate(_placeableItemReference.Item().PlaceablePreview, originalTransform.position, originalTransform.rotation);
+                    _previewInstance = Instantiate(_placeableItemReference.Item().PlaceablePreview,
+                        originalTransform.position, originalTransform.rotation);
             }
         }
 
@@ -220,7 +240,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
         if (replacement)
         {
-            Debug.Log("Destroying "+gameObject.name);
+            Debug.Log("Destroying " + gameObject.name);
             Destroy(this.gameObject);
         }
     }
