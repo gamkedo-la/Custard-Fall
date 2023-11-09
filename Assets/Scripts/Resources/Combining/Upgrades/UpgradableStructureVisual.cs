@@ -14,7 +14,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     [SerializeField] private Canvas canvas;
     [SerializeField] private GameObject upgradeVisual;
     [SerializeField] private bool hideUpgradeVisualAtDistance = true;
-    [SerializeField] private float hideVisualDelay= 1f;
+    [SerializeField] private float hideVisualDelay = 1f;
     private bool _maxedOut = false;
 
     [SerializeField] private Image slots;
@@ -153,6 +153,7 @@ public class UpgradableStructureVisual : MonoBehaviour
         {
             _maxedOut = false;
             PrepareInvestedSlots(0);
+            UpdateResourceIcon();
         }
 
         Show();
@@ -205,7 +206,7 @@ public class UpgradableStructureVisual : MonoBehaviour
 
             if (_maxedOut)
                 return;
-            
+
             if (hideVisualCoroutine != null)
             {
                 StopCoroutine(hideVisualCoroutine);
