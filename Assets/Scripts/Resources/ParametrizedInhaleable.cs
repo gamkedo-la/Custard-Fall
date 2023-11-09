@@ -9,14 +9,17 @@ public class ParametrizedInhaleable : Inhalable
 {
     [SerializeField] private string resourceName;
     [SerializeField] private float timeToInhaleWhole = 2.0f;
-    
+
     private PlaceableItem _placeableItem;
-    
+
     public override void Init()
     {
         base.Init();
 
-        AddToInhaleQueue(new Resource(resourceName, _placeableItem), timeToInhaleWhole);
+        if (timeToInhaleWhole != 0)
+        {
+            AddToInhaleQueue(new Resource(resourceName, _placeableItem), timeToInhaleWhole);
+        }
     }
 
     private void Awake()

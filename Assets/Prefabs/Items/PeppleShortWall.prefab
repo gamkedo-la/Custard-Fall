@@ -356,7 +356,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1250935832317325219}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.166, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -399,7 +399,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1297626912209953912}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.032, y: 0, z: -0.013}
+  m_LocalPosition: {x: 0.032, y: 0.16599989, z: -0.013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1863,7 +1863,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6720778346109180064}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.223, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1883,8 +1883,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.0892915, z: 1}
-  m_Center: {x: 0, y: 0.26855224, z: 0}
+  m_Size: {x: 1.2550049, y: 1.6646976, z: 1.1048012}
+  m_Center: {x: 0.008922577, y: 0.14053392, z: 0.05240059}
 --- !u!114 &6720778346109180066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1912,11 +1912,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
-  optVisual: {fileID: 6720778345667361604}
+  optVisual: {fileID: 0}
   interactionMessage: a pebble
-  inhaleItemsProfile: []
+  inhaleItemsProfile:
+  - resourceName: pebble
+    itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
+    timeToTake: 1.5
+  - resourceName: pebble
+    itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
+    timeToTake: 0
   resourceName: pebble
-  timeToInhaleWhole: 1
+  timeToInhaleWhole: 0
 --- !u!114 &1676370741757836971
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7575907675814248884}
   - component: {fileID: 3521471376946753163}
   - component: {fileID: 4355223811646502688}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 996304607851325874}
   - component: {fileID: 2242036759630796950}
   - component: {fileID: 5063649332595937022}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 2658273702278947727}
   - component: {fileID: 7236772032048516230}
   - component: {fileID: 3960174620529083807}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 1548664006226831283}
   - component: {fileID: 1343455972181881975}
   - component: {fileID: 4858731677078385046}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 3523934283533669530}
   - component: {fileID: 2039946209007286737}
   - component: {fileID: 5809509623690720309}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 4839754777231320696}
   - component: {fileID: 5561027622187099383}
   - component: {fileID: 4015270971081901957}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 861571327142751259}
   - component: {fileID: 816081152781746259}
   - component: {fileID: 4611325557176756857}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 2684825477535426734}
   - component: {fileID: 3673764210687458375}
   - component: {fileID: 8696935849499103539}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -675,7 +675,7 @@ GameObject:
   - component: {fileID: 9099426547836023301}
   - component: {fileID: 1966361688776720330}
   - component: {fileID: 7258788099400541593}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -758,7 +758,7 @@ GameObject:
   - component: {fileID: 135615900828513414}
   - component: {fileID: 3558734701067776444}
   - component: {fileID: 288788278564457578}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +841,7 @@ GameObject:
   - component: {fileID: 2009356043037337338}
   - component: {fileID: 8211995026655239259}
   - component: {fileID: 3726225786762438566}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -922,7 +922,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1422822548575248253}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: GameObject (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -965,7 +965,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9101167432017389591}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1008,7 +1008,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5395744165749533585}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1058,7 +1058,7 @@ GameObject:
   - component: {fileID: 6238880594564752571}
   - component: {fileID: 7119652667189584898}
   - component: {fileID: 7402897513703254401}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1141,7 +1141,7 @@ GameObject:
   - component: {fileID: 919218984328406084}
   - component: {fileID: 7546618532145828489}
   - component: {fileID: 4496969984516846418}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1224,7 +1224,7 @@ GameObject:
   - component: {fileID: 6918155084426315120}
   - component: {fileID: 2228147863490623986}
   - component: {fileID: 5143013238624180820}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1307,7 +1307,7 @@ GameObject:
   - component: {fileID: 9187950630991310267}
   - component: {fileID: 1628936102496684188}
   - component: {fileID: 6462805535401638940}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1390,7 +1390,7 @@ GameObject:
   - component: {fileID: 8646956499739654701}
   - component: {fileID: 5714768543884889965}
   - component: {fileID: 2226003456283862650}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1473,7 +1473,7 @@ GameObject:
   - component: {fileID: 3222978976969090611}
   - component: {fileID: 1530729457349971805}
   - component: {fileID: 3333867933315450429}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1556,7 +1556,7 @@ GameObject:
   - component: {fileID: 4698796440961718267}
   - component: {fileID: 7110797706779801870}
   - component: {fileID: 2038304838571856974}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1639,7 +1639,7 @@ GameObject:
   - component: {fileID: 317141900588024309}
   - component: {fileID: 8036891470257495801}
   - component: {fileID: 5652270751035799775}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1722,7 +1722,7 @@ GameObject:
   - component: {fileID: 8009283933746062906}
   - component: {fileID: 5330869455520622774}
   - component: {fileID: 5350011562411732192}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1805,7 +1805,7 @@ GameObject:
   - component: {fileID: 8059087520056136841}
   - component: {fileID: 623728337320025247}
   - component: {fileID: 7800329807115766076}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1888,7 +1888,7 @@ GameObject:
   - component: {fileID: 8261943561703978884}
   - component: {fileID: 4724994577072120383}
   - component: {fileID: 1481869149412422114}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1971,7 +1971,7 @@ GameObject:
   - component: {fileID: 6482699787235406683}
   - component: {fileID: 5460528707949293803}
   - component: {fileID: 2548116403771860229}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2054,7 +2054,7 @@ GameObject:
   - component: {fileID: 5908380323854360682}
   - component: {fileID: 5621409282463142025}
   - component: {fileID: 6760225581550625529}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2137,7 +2137,7 @@ GameObject:
   - component: {fileID: 8101777518807314161}
   - component: {fileID: 5397932839702773731}
   - component: {fileID: 9033825296881735554}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2220,7 +2220,7 @@ GameObject:
   - component: {fileID: 6444030986184741995}
   - component: {fileID: 9023820225611035381}
   - component: {fileID: 8015677758756846707}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2303,7 +2303,7 @@ GameObject:
   - component: {fileID: 6452450852710814656}
   - component: {fileID: 58659758485657400}
   - component: {fileID: 6306347742767533183}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2386,7 +2386,7 @@ GameObject:
   - component: {fileID: 5743136336346542955}
   - component: {fileID: 8195810803275573971}
   - component: {fileID: 4984916353316770150}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2469,7 +2469,7 @@ GameObject:
   - component: {fileID: 2505552790268027443}
   - component: {fileID: 6840996464241685284}
   - component: {fileID: 1047231636631966712}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2552,7 +2552,7 @@ GameObject:
   - component: {fileID: 7574084686932656326}
   - component: {fileID: 1368740301833894080}
   - component: {fileID: 8462027972902689024}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2633,7 +2633,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5317572712115751648}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2678,7 +2678,7 @@ GameObject:
   - component: {fileID: 3717427091393520160}
   - component: {fileID: 607210712624071952}
   - component: {fileID: 717822290817083694}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2761,7 +2761,7 @@ GameObject:
   - component: {fileID: 4792156542147607890}
   - component: {fileID: 2601132037960233557}
   - component: {fileID: 7749824632785266559}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2844,7 +2844,7 @@ GameObject:
   - component: {fileID: 2484939547209275}
   - component: {fileID: 1686537931334932419}
   - component: {fileID: 6890217587011832733}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2927,7 +2927,7 @@ GameObject:
   - component: {fileID: 3386251172331317571}
   - component: {fileID: 5136957635799105074}
   - component: {fileID: 1812335265617937348}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3010,7 +3010,7 @@ GameObject:
   - component: {fileID: 1356129015181317278}
   - component: {fileID: 8555603549197975429}
   - component: {fileID: 2903029326174822201}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3093,7 +3093,7 @@ GameObject:
   - component: {fileID: 4790423236566908610}
   - component: {fileID: 1820466246049338299}
   - component: {fileID: 5456425911519500078}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3176,7 +3176,7 @@ GameObject:
   - component: {fileID: 8550251785519322485}
   - component: {fileID: 502838252028057640}
   - component: {fileID: 7909207570658978385}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3259,7 +3259,7 @@ GameObject:
   - component: {fileID: 309629896128106581}
   - component: {fileID: 597339105375560436}
   - component: {fileID: 451013594217735900}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3342,7 +3342,7 @@ GameObject:
   - component: {fileID: 5407920009648654677}
   - component: {fileID: 6658433781661112707}
   - component: {fileID: 3542723884010156171}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3425,7 +3425,7 @@ GameObject:
   - component: {fileID: 4013522892127895763}
   - component: {fileID: 1887508317785073338}
   - component: {fileID: 2923046047167519549}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3508,7 +3508,7 @@ GameObject:
   - component: {fileID: 6720778345667361605}
   - component: {fileID: 6720778345667361607}
   - component: {fileID: 6720778345667361606}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3591,9 +3591,9 @@ GameObject:
   - component: {fileID: 6720778346109180076}
   - component: {fileID: 6720778346109180067}
   - component: {fileID: 6720778346109180066}
-  - component: {fileID: 6720778346109180065}
   - component: {fileID: 2572696627549159029}
-  m_Layer: 12
+  - component: {fileID: 5733093117253641945}
+  m_Layer: 0
   m_Name: PeppleWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3645,25 +3645,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
---- !u!114 &6720778346109180065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6720778346109180064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ef49d5da33d4728b5e317b5cb6c04c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
-  hasInhaleFocus: 0
-  optVisual: {fileID: 6720778345667361604}
-  interactionMessage: a pebble
-  inhaleItemsProfile: []
-  resourceName: pebble
-  timeToInhaleWhole: 1
 --- !u!114 &2572696627549159029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3680,6 +3661,33 @@ MonoBehaviour:
   canMove: 0
   parent: {fileID: 0}
   shakeScale: 0.15
+--- !u!114 &5733093117253641945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6720778346109180064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa7f0dcf389c410387e84154786cdf72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  hasInhaleFocus: 0
+  optVisual: {fileID: 0}
+  interactionMessage: 
+  inhaleItemsProfile:
+  - resourceName: pebble
+    itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
+    timeToTake: 1.5
+  - resourceName: pebble
+    itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
+    timeToTake: 0
+  - resourceName: pebble
+    itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
+    timeToTake: 0
+  Height: 1
 --- !u!1 &6786857016149217864
 GameObject:
   m_ObjectHideFlags: 0
@@ -3691,7 +3699,7 @@ GameObject:
   - component: {fileID: 609511433229149718}
   - component: {fileID: 8085555994717492554}
   - component: {fileID: 3397853249815155555}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3774,7 +3782,7 @@ GameObject:
   - component: {fileID: 6562992383748336484}
   - component: {fileID: 8224773235446459782}
   - component: {fileID: 2951902093369819105}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3857,7 +3865,7 @@ GameObject:
   - component: {fileID: 8990069468895602979}
   - component: {fileID: 4891661572814972210}
   - component: {fileID: 7787312923649816840}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3940,7 +3948,7 @@ GameObject:
   - component: {fileID: 9003264190116226878}
   - component: {fileID: 5960788221509456696}
   - component: {fileID: 2328683185817403558}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4023,7 +4031,7 @@ GameObject:
   - component: {fileID: 133282836554779241}
   - component: {fileID: 30344095405876710}
   - component: {fileID: 1010653893773951415}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4106,7 +4114,7 @@ GameObject:
   - component: {fileID: 1165926478083668072}
   - component: {fileID: 4117504979678676046}
   - component: {fileID: 5473689378397792019}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4189,7 +4197,7 @@ GameObject:
   - component: {fileID: 7520431095558708920}
   - component: {fileID: 4244106089516228042}
   - component: {fileID: 681169665388293755}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4272,7 +4280,7 @@ GameObject:
   - component: {fileID: 7957416103278799026}
   - component: {fileID: 597714613082814236}
   - component: {fileID: 608379908032933257}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4355,7 +4363,7 @@ GameObject:
   - component: {fileID: 2642706797935420511}
   - component: {fileID: 3260825966784385969}
   - component: {fileID: 8240866122905658267}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4438,7 +4446,7 @@ GameObject:
   - component: {fileID: 1867337788663791834}
   - component: {fileID: 6291073688269030616}
   - component: {fileID: 6077755224232469165}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4521,7 +4529,7 @@ GameObject:
   - component: {fileID: 289976438731735722}
   - component: {fileID: 4368854205377515365}
   - component: {fileID: 2264264182251932371}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4604,7 +4612,7 @@ GameObject:
   - component: {fileID: 7547127951081610967}
   - component: {fileID: 9218449639381064242}
   - component: {fileID: 673281462391479479}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: PebbleVisual (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
