@@ -17,9 +17,9 @@ public class StoryTeller : MonoBehaviour
     private Queue<String> messages = new();
 
     private float timeTillNextMessage = 0f;
-    private float _timeInbetweenMessages = 1.2f;
+    private float _timeInbetweenMessages = 1.6f;
     private float _timeForRethoricalPause = 1f;
-    private float _timeToReadAMessage = 4.2f;
+    private float _timeToReadAMessage = 4.6f;
 
 
     // Start is called before the first frame update
