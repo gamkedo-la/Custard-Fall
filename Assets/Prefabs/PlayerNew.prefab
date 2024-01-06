@@ -5444,6 +5444,7 @@ MonoBehaviour:
   refillRate: 0.05
   refillTillLevel: 1
   refillStartDelay: 1.33
+  refillIfDeclining: 1
   bonusValueSpeedup: 0.45
 --- !u!114 &4957307413913084025
 MonoBehaviour:
@@ -11054,7 +11055,6 @@ GameObject:
   m_Component:
   - component: {fileID: 575572231524268801}
   - component: {fileID: 227355403516020515}
-  - component: {fileID: 8685261012155980988}
   - component: {fileID: 6570370048801514344}
   m_Layer: 0
   m_Name: ItemCollision
@@ -11089,21 +11089,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.1300018, y: 2.0387802, z: 1.2800026}
-  m_Center: {x: 0.089103244, y: 0.5193902, z: -0.062287197}
---- !u!114 &8685261012155980988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7938322248355192729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18006dc4fcd5b5448931ce6adc95c8e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textForItemDisplay: {fileID: 0}
+  m_Size: {x: 2.1300018, y: 3.7952294, z: 1.2800026}
+  m_Center: {x: 0.08910322, y: -0.95357454, z: -0.06228721}
 --- !u!54 &6570370048801514344
 Rigidbody:
   m_ObjectHideFlags: 0
