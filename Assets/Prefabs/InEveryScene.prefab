@@ -6710,10 +6710,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 997554135429052598}
     - target: {fileID: 5358375341736490006, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UnPauseGameByButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 5358375341736490006, guid: 08be616afa16c264d99a26a551cc3c98, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: PauseActivator, Assembly-CSharp
       objectReference: {fileID: 0}
