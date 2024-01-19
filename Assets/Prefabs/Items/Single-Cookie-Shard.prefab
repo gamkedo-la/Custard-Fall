@@ -253,6 +253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: Cookie Shard
   inhaleItemsProfile:
   - resourceName: Cookie shard
@@ -271,6 +272,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!65 &1005043756474850742
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -282,8 +286,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6, y: 5, z: 6}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 6, y: 6.1583605, z: 6}
+  m_Center: {x: 0, y: 1.569738, z: 0}
 --- !u!114 &2081649860317614178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,6 +320,7 @@ MonoBehaviour:
   - comment: 
     requiredPoints: 1
     upgrade: {fileID: 11400000, guid: c7b17ec6735155646a99d2bda3835d30, type: 2}
+    upgradeMaterial: {fileID: 0}
 --- !u!1 &7092343330896372520
 GameObject:
   m_ObjectHideFlags: 0
