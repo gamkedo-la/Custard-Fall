@@ -20,7 +20,7 @@ public class MusicBrain : MonoBehaviour {
 	private bool dangerStarted = false;
 
     private DayNightCycle dayNightCycle;
-	private Tidesmanager custardManager;
+	private Tidesmanager tidesManager;
 	private Player player;
 
 	void Update() {
@@ -42,8 +42,8 @@ public class MusicBrain : MonoBehaviour {
 			dayNightCycle = FindObjectOfType<DayNightCycle>();
 		}
 
-		if (custardManager != null) {
-			int targetTide = custardManager.CustardManager.targetTideLevel;
+		if (tidesManager != null) {
+			int targetTide = tidesManager.CustardManager.targetTideLevel;
 			if (currentLevel != targetTide) {
 				//Debug.Log(custardManager.currentTideIndex + " " + currentLevel);
 				AudioClip clipToPlay = null;
@@ -66,9 +66,9 @@ public class MusicBrain : MonoBehaviour {
 
 				currentLevel = targetTide;
 			}
-		} else {
-			custardManager = FindObjectOfType<Tidesmanager>();
-			currentLevel = custardManager.CustardManager.targetTideLevel;
+		} else if(tidesManager != null){
+			tidesManager = FindObjectOfType<Tidesmanager>();
+			currentLevel = tidesManager.CustardManager.targetTideLevel;
         }
 
 		if (player) {
