@@ -14,7 +14,7 @@ public class PauseActivator : MonoBehaviour
         pauseCanvas.SetActive(false);
     }
 
-    public void OnPause(InputValue context)
+    public void TogglePause()
     {
         if (!IsControlMenuActive()) isGamePaused = !isGamePaused;
 

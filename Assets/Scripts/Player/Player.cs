@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     public WorldCells worldCells;
     public Inhaler inhaler;
 
+    [SerializeField]
+    private PauseActivator _pauseActivator;
+
     [SerializeField] private Transform respawnPoint;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private Transform activePoint;
@@ -88,7 +91,6 @@ public class Player : MonoBehaviour
     public Healthbar healthbar;
 
     private int _mouseTargetLayerMask;
-    private PauseActivator _pauseActivator;
 
     // Start is called before the first frame update
     private void Start()
@@ -761,6 +763,11 @@ public class Player : MonoBehaviour
 
         playerAnimator.SetBool(Swimming, doSwim);
         playerAnimator.SetBool(Walking, false);
+    }
+
+    public void OnPause(InputValue context)
+    {
+        _pauseActivator.TogglePause();
     }
 }
 
