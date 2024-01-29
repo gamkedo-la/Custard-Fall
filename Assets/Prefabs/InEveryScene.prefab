@@ -6326,6 +6326,10 @@ PrefabInstance:
       propertyPath: grappleMarker
       value: 
       objectReference: {fileID: 7865965392767684092}
+    - target: {fileID: 9001336511291437872, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
+      propertyPath: _pauseActivator
+      value: 
+      objectReference: {fileID: 997554135429052598}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
 --- !u!1 &2612282234098155508 stripped
