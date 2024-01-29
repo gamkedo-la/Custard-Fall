@@ -9,5 +9,11 @@ public class PlayButtonTitleScreenScript : MonoBehaviour
     {
         // not used at the moment, see CustardTransitionToggleWindowScript.InvokeWindowToggle
         SceneManager.LoadScene("Coast-World");
+    }
+    
+    public void PlayClassic()
+    {
+        // not used at the moment, see CustardTransitionToggleWindowScript.InvokeWindowToggle
+        SceneManager.LoadScene("Tutorial-World");
     }    
 }
