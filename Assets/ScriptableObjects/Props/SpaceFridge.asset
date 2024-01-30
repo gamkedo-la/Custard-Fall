@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prototype: {fileID: 7585957481076514605, guid: 10444027bfb28174389cb76613abed7c, type: 3}
   placeablePreview: {fileID: 4748941054172021278, guid: 460946cee2887014cb284ea54c093e28, type: 3}
-  icon: {fileID: 21300000, guid: 1625da46ae74dec498128c511f58a24a, type: 3}
+  icon: {fileID: 21300000, guid: 30c070938d8b0a04c8f9b4fc2a860e58, type: 3}
   resourceName: Fridge

@@ -54,6 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: This fridge is not from this world!
   inhaleItemsProfile:
   - resourceName: Fridge
@@ -72,6 +73,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!65 &4327919105444324545
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -80,11 +84,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7585957481076514605}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.5586367, z: 1}
-  m_Center: {x: 0, y: 0.710621, z: 0}
+  m_Size: {x: 1.0984193, y: 2.8671167, z: 1.2133901}
+  m_Center: {x: -0.049216785, y: 1.1735193, z: 0.06528566}
 --- !u!114 &-3728704357975888051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,8 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84d0bd8b37f846e41a9c0222372cf5c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coziness: 1
-  maxEffective: 0
+  radiance: 1
 --- !u!114 &6851693088668701600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,11 +129,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   investedPoints: 0
-  expectedUpgradeMaterial: {fileID: 11400000, guid: 21f0531b3b7424c42b6555abeb726078, type: 2}
+  expectedUpgradeMaterial: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
   upgradeLevels:
   - comment: Take me home, fridge!
-    requiredPoints: 12
+    requiredPoints: 11
+    jumpToLevel: 5
     upgrade: {fileID: 0}
+    upgradeMaterial: {fileID: 0}
+  - comment: Take me home, fridge!
+    requiredPoints: 11
+    jumpToLevel: 5
+    upgrade: {fileID: 0}
+    upgradeMaterial: {fileID: 0}
+  - comment: Take me home, fridge!
+    requiredPoints: 11
+    jumpToLevel: 0
+    upgrade: {fileID: 0}
+    upgradeMaterial: {fileID: 0}
+  - comment: Take me home, fridge!
+    requiredPoints: 11
+    jumpToLevel: 0
+    upgrade: {fileID: 0}
+    upgradeMaterial: {fileID: 0}
+  - comment: Take me home, fridge!
+    requiredPoints: 11
+    jumpToLevel: 0
+    upgrade: {fileID: 0}
+    upgradeMaterial: {fileID: 0}
+  - comment: Take me home, fridge!
+    requiredPoints: 11
+    jumpToLevel: 0
+    upgrade: {fileID: 0}
+    upgradeMaterial: {fileID: 0}
 --- !u!114 &5804267302024571865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3658279135282206444, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.852
+      value: 3.49
       objectReference: {fileID: 0}
     - target: {fileID: 3658279135282206444, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
       propertyPath: m_LocalPosition.z
@@ -226,7 +256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.44
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_LocalScale.z
@@ -274,7 +304,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4822539351323105092, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_Layer

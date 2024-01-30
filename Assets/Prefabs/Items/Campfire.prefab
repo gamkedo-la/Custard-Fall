@@ -9708,18 +9708,22 @@ MonoBehaviour:
   upgradeLevels:
   - comment: warm campfire
     requiredPoints: 5
+    jumpToLevel: 0
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 0}
   - comment: nice campfire
     requiredPoints: 7
+    jumpToLevel: 0
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
   - comment: cozy campfire
     requiredPoints: 9
+    jumpToLevel: 0
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 11400000, guid: 6f0cc07d7c66b734e9d119b89c3467dd, type: 2}
   - comment: cozy campfire
     requiredPoints: 9
+    jumpToLevel: 0
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
 --- !u!114 &1539056187295167450

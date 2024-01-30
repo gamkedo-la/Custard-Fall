@@ -84,7 +84,15 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
             if (investedPoints >= obtainedUpgrade.RequiredPoints)
             {
-                currentLevel++;
+                if (obtainedUpgrade.JumpToLevel >= currentLevel)
+                {
+                    currentLevel = obtainedUpgrade.jumpToLevel;
+                }
+                else
+                {
+                    currentLevel++;
+                }
+
                 if (IsMaxedOut())
                 {
                     OnLevelUp?.Invoke(this,
@@ -116,6 +124,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     {
         public string comment;
         public int requiredPoints;
+        public int jumpToLevel;
 
         [Tooltip("optional, turn current object into the upgrade")]
         public PlaceableItem upgrade;
@@ -125,6 +134,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
 
         public string Comment => comment;
         public int RequiredPoints => requiredPoints;
+        public int JumpToLevel => jumpToLevel;
     }
 
     public class UpgradeArgs : EventArgs

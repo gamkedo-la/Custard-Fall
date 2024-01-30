@@ -18,7 +18,7 @@ public class UpgradableRadianceDispenser : MonoBehaviour
 
     private void OnLevelUp(object sender, UpgradeableStructure.UpgradeArgs e)
     {
-        _radianceDispenser.Radiance += 1;
+        _radianceDispenser.Radiance = e.level;
 
         // also update the comment
         if (_inhalable)
