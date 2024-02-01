@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,7 +24,7 @@ public class MusicBrain : MonoBehaviour {
 	private Tidesmanager tidesManager;
 	private Player player;
 
-	void Update() {
+	private void Update() {
 		// Day Night music logic
 		if (dayNightCycle != null) {
 			if (TimeManager.Instance.time < lastTime) holdForLoop = false;
@@ -45,7 +46,7 @@ public class MusicBrain : MonoBehaviour {
 		if (tidesManager != null) {
 			int targetTide = tidesManager.CustardManager.targetTideLevel;
 			if (currentLevel != targetTide) {
-				//Debug.Log(custardManager.currentTideIndex + " " + currentLevel);
+				Debug.Log(tidesManager.CustardManager.targetTideLevel + " " + currentLevel);
 				AudioClip clipToPlay = null;
 
 				if (targetTide - currentLevel == 1) {
@@ -72,8 +73,8 @@ public class MusicBrain : MonoBehaviour {
         }
 
 		if (player) {
-			Coords cellPosition = player.worldCells.GetCellPosition(player.transform.position.x, player.transform.position.z);
-			Danger(player.worldCells.GetTerrainHeightAt(cellPosition)+1 < currentLevel);
+			Coords cellPosition = player.worldCells.GetCellPosition(player.transform.position);
+			Danger(player.worldCells.GetHeightAt(cellPosition) <= currentLevel + 1);
 		} else {
 			player = FindObjectOfType<Player>();
 			Danger(false);
@@ -82,12 +83,18 @@ public class MusicBrain : MonoBehaviour {
 
 	public void Danger(bool value) {
 		if (value) {
-			if (!dangerStarted) currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDangerClip);
+			if (!dangerStarted)
+			{
+				currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDangerClip);
+				Debug.Log("Player in Danger");
+			}
 			dangerStarted = true;
-		} else if (currentCustardLevelSource != null) {
+		} else if (dangerStarted && currentCustardLevelSource != null) {
 			StartCoroutine(MusicManager.Instance.FadeOut(currentCustardLevelSource, 0.25f));
 			Destroy(currentCustardLevelSource.gameObject, 0.26f);
+			currentCustardLevelSource = null;
 			dangerStarted = false;
+			Debug.Log("Player out of Danger");
 		}
 	}
 

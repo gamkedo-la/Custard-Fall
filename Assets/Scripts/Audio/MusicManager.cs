@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using Random = UnityEngine.Random;
 
 public class MusicManager : MonoBehaviour {
 	public static MusicManager Instance;
@@ -20,6 +22,9 @@ public class MusicManager : MonoBehaviour {
 	private double trackStartTime = 0.0, nextTrackTime = 0.0, beatTime = 0.0, nextBeatTime = 0.0, bufferTime = 0.5;
 	private float bpm = 90f, fadeTime = 0.25f;
 	private int beatLength = 2;
+	[SerializeField] private float currentMaxVolume;
+	[SerializeField] private float volumeUnder = 1;
+	[SerializeField] private float volumeNotUnder = .4f;
 
 	void Awake() {
 		transform.parent = null;
@@ -55,6 +60,7 @@ public class MusicManager : MonoBehaviour {
 
 	public void StartTrack(MusicTrack track) {
 		currentTime = AudioSettings.dspTime;
+		currentMaxVolume = musicUnder?volumeUnder:volumeNotUnder;
 
 		if (musicPlaying) {
 			currentTrack = track;
@@ -71,6 +77,7 @@ public class MusicManager : MonoBehaviour {
 		freshSource.clip = topClip;
 		freshSource.loop = loop;
 		freshSource.PlayScheduled(nextBeatTime);
+		Debug.Log("play next "+topClip.name);
 		return freshSource;
 	}
 
@@ -81,15 +88,15 @@ public class MusicManager : MonoBehaviour {
 				musicUnder = isUnder;
 				return;
 			}
+			Debug.Log("isUnder "+ isUnder);
 			if (isUnder) {
 				StartCoroutine(FadeOut(currentBaseSource, fadeTime));
 				StartCoroutine(FadeIn(currentUnderSource, fadeTime));
-				musicUnder = isUnder;
 			} else {
 				StartCoroutine(FadeOut(currentUnderSource, fadeTime));
 				StartCoroutine(FadeIn(currentBaseSource, fadeTime));
-				musicUnder = isUnder;
 			}
+			musicUnder = isUnder;
 		}
 	}
 
@@ -140,24 +147,25 @@ public class MusicManager : MonoBehaviour {
 		while (startTime + fadeTime > Time.unscaledTime) {
 			currentTime = Time.unscaledTime - startTime;
 
-			source.volume = Mathf.Lerp(0f, 1f, currentTime / fadeTime);
+			source.volume = Mathf.Lerp(0f, currentMaxVolume, currentTime / fadeTime);
 			yield return null;
 		}
 
-		source.volume = 1f;
+		source.volume = currentMaxVolume;
 	}
 
 	public IEnumerator FadeOut(AudioSource source, float fadeTime) {
 		float startTime = Time.unscaledTime;
 		float currentTime = 0f;
 
-		source.volume = 1f;
+		// source.volume = 1f;
+		float startVolume = source.volume;
 
 		while (startTime + fadeTime > Time.unscaledTime) {
 			currentTime = Time.unscaledTime - startTime;
 
 			if (!source) yield break;
-			source.volume = Mathf.Lerp(1f, 0f, currentTime / fadeTime);
+			source.volume = Mathf.Lerp(startVolume, 0f, currentTime / fadeTime);
 			yield return null;
 		}
 
