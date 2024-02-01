@@ -63,30 +63,26 @@ public class LocalCustardListener : MonoBehaviour
 
         if (InsideCustard != insideCustard)
         {
-            timePassedSinceInsideCustardChange = 0f;
-            CheckTimeSpentInOrOutsideCustard();
+            timePassedSinceInsideCustardChange = graceTimeForBeingInsideOrOutsideCustard;
         }
 
-        CoveredByCustard = coveredByCustard;
+        if (timePassedSinceInsideCustardChange > 0)
+        {
+            timePassedSinceInsideCustardChange -= Time.deltaTime;
+        }
+
         InsideCustard = insideCustard;
 
-        if (CoveredByCustard || timePassedSinceInsideCustardChange >= graceTimeForBeingInsideOrOutsideCustard)
+        if (timePassedSinceInsideCustardChange <= 0)
         {
-            OnInsideCustard(insideCustard);
+            MusicManager.Instance.SetUnder(insideCustard);
+            timePassedSinceInsideCustardChange = 0;
         }
+        CoveredByCustard = coveredByCustard;
 
         if (CoveredByCustard)
         {
             CheckForDrownDamage(CoveredByCustard);
-        }
-    }
-
-    private void CheckTimeSpentInOrOutsideCustard()
-    {
-        // we are only interested in calculating the grace time period
-        if (timePassedSinceInsideCustardChange <= 2f)
-        {
-            timePassedSinceInsideCustardChange += Time.deltaTime;
         }
     }
 
@@ -95,11 +91,6 @@ public class LocalCustardListener : MonoBehaviour
         timePassedSinceCoveredByCustard = 0.0f;
         timePassedSinceLastDamage = 0.0f;
         player.EnterSwimMode(coveredByCustard);
-    }
-
-    private void OnInsideCustard(bool insideCustard)
-    {
-        MusicManager.Instance.SetUnder(insideCustard);
     }
 
     private void CheckForDrownDamage(bool coveredByCustard)
@@ -131,6 +122,7 @@ public class LocalCustardListener : MonoBehaviour
         }
         else
         {
+            timePassedSinceCoveredByCustard = 0;
             FadeCustardEffect(0, _fadeOutDuration);
         }
     }
