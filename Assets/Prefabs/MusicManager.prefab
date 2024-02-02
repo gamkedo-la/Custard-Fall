@@ -58,7 +58,7 @@ MonoBehaviour:
   currentTime: 0
   bpm: 90
   fadeTime: 0.375
-  volumeBase: 0.33
+  volumeBase: 0.29
   volumeUnder: 1
 --- !u!114 &774143550
 MonoBehaviour:
