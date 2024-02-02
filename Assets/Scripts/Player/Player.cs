@@ -67,6 +67,8 @@ public class Player : MonoBehaviour
     [SerializeField] private CombinatorProfileSO combinatorProfile;
 
     [SerializeField] private bool isSwimming;
+    public bool IsSwimming => isSwimming;
+
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     [SerializeField] private float yOffset = -.6f;

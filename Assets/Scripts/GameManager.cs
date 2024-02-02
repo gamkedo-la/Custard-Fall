@@ -9,11 +9,15 @@ public class GameManager : MonoBehaviour
 {
     public TerrainLoader terrainLoader;
     public CustardManager custardManager;
-    
-    private void Start()
+
+
+    private void Awake()
     {
         terrainLoader.LoadWorld();
+    }
+
+    private void Start()
+    {
         custardManager.InitCustardState();
     }
-    
 }
