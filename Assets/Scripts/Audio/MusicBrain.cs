@@ -74,7 +74,7 @@ public class MusicBrain : MonoBehaviour {
 
 		if (player) {
 			Coords cellPosition = player.worldCells.GetCellPosition(player.transform.position);
-			Danger(player.worldCells.GetHeightAt(cellPosition) <= currentLevel + 1);
+			Danger(player.worldCells.GetHeightAt(cellPosition) <= currentLevel);
 		} else {
 			player = FindObjectOfType<Player>();
 			Danger(false);
