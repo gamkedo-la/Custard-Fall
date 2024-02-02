@@ -83,6 +83,16 @@ public class MusicManager : MonoBehaviour {
 		Debug.Log("play next "+topClip.name);
 		return freshSource;
 	}
+	
+	public AudioSource SchedualTop(AudioClip topClip, float volume, bool loop = true) {
+		AudioSource freshSource = Instantiate(musicSourcePrefab).GetComponent<AudioSource>();
+		freshSource.clip = topClip;
+		freshSource.loop = loop;
+		freshSource.volume = volume;
+		freshSource.PlayScheduled(nextBeatTime);
+		Debug.Log("play next "+topClip.name);
+		return freshSource;
+	}
 
 	public void SetUnder(bool isUnder) {
 		if (isUnder == musicUnder) return;

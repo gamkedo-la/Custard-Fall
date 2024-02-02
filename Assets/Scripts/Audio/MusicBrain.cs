@@ -24,6 +24,9 @@ public class MusicBrain : MonoBehaviour {
 	private Tidesmanager tidesManager;
 	private Player player;
 
+	[SerializeField]
+	private float volumeDanger=.3f;
+
 	private void Update() {
 		// Day Night music logic
 		if (dayNightCycle != null) {
@@ -85,13 +88,13 @@ public class MusicBrain : MonoBehaviour {
 		if (value) {
 			if (!dangerStarted)
 			{
-				currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDangerClip);
+				currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDangerClip, volumeDanger);
 				Debug.Log("Player in Danger");
 			}
 			dangerStarted = true;
 		} else if (dangerStarted && currentCustardLevelSource != null) {
-			StartCoroutine(MusicManager.Instance.FadeOut(currentCustardLevelSource, 0.25f));
-			Destroy(currentCustardLevelSource.gameObject, 0.26f);
+			StartCoroutine(MusicManager.Instance.FadeOut(currentCustardLevelSource, 0.375f));
+			Destroy(currentCustardLevelSource.gameObject, 0.376f);
 			currentCustardLevelSource = null;
 			dangerStarted = false;
 			Debug.Log("Player out of Danger");
