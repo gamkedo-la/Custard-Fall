@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class MusicManager : MonoBehaviour {
@@ -22,9 +23,8 @@ public class MusicManager : MonoBehaviour {
 	private double trackStartTime = 0.0, nextTrackTime = 0.0, beatTime = 0.0, nextBeatTime = 0.0, bufferTime = 0.5;
 	private float bpm = 90f, fadeTime = 0.25f;
 	private int beatLength = 2;
-	[SerializeField] private float currentMaxVolume;
+	[SerializeField] private float volumeBase = 0.5f;
 	[SerializeField] private float volumeUnder = 1;
-	[SerializeField] private float volumeNotUnder = .4f;
 
 	void Awake() {
 		transform.parent = null;
@@ -60,7 +60,6 @@ public class MusicManager : MonoBehaviour {
 
 	public void StartTrack(MusicTrack track) {
 		currentTime = AudioSettings.dspTime;
-		currentMaxVolume = musicUnder?volumeUnder:volumeNotUnder;
 
 		if (musicPlaying) {
 			currentTrack = track;
@@ -76,6 +75,7 @@ public class MusicManager : MonoBehaviour {
 		AudioSource freshSource = Instantiate(musicSourcePrefab).GetComponent<AudioSource>();
 		freshSource.clip = topClip;
 		freshSource.loop = loop;
+		freshSource.volume = volumeBase;
 		freshSource.PlayScheduled(nextBeatTime);
 		Debug.Log("play next "+topClip.name);
 		return freshSource;
@@ -111,14 +111,14 @@ public class MusicManager : MonoBehaviour {
 		nextBeatTime = trackStartTime;
 		CalculateBeatTime();
 
-		currentBaseSource = Instantiate(musicSourcePrefab);
-		currentUnderSource = Instantiate(musicSourcePrefab);
+		currentBaseSource = Instantiate(musicSourcePrefab, gameObject.transform, true);
+		currentUnderSource = Instantiate(musicSourcePrefab, gameObject.transform, true);
 		currentBaseSource.clip = currentClip.clip;
 		currentUnderSource.clip = currentClip.underClip;
-		currentBaseSource.transform.parent = gameObject.transform;
-		currentUnderSource.transform.parent = gameObject.transform;
 		currentBaseSource.name = currentClip.clip.name;
 		currentUnderSource.name = currentClip.underClip.name;
+		currentBaseSource.volume = volumeBase;
+		currentUnderSource.volume = volumeUnder;
 		currentBaseSource.PlayScheduled(trackStartTime);
 		currentUnderSource.PlayScheduled(trackStartTime);
 
@@ -147,18 +147,18 @@ public class MusicManager : MonoBehaviour {
 		while (startTime + fadeTime > Time.unscaledTime) {
 			currentTime = Time.unscaledTime - startTime;
 
-			source.volume = Mathf.Lerp(0f, currentMaxVolume, currentTime / fadeTime);
+			source.volume = Mathf.Lerp(0f, volumeBase, currentTime / fadeTime);
 			yield return null;
 		}
 
-		source.volume = currentMaxVolume;
+		source.volume = volumeBase;
 	}
 
 	public IEnumerator FadeOut(AudioSource source, float fadeTime) {
 		float startTime = Time.unscaledTime;
 		float currentTime = 0f;
 
-		// source.volume = 1f;
+		source.volume = volumeBase;
 		float startVolume = source.volume;
 
 		while (startTime + fadeTime > Time.unscaledTime) {

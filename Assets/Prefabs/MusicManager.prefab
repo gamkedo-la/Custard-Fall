@@ -56,6 +56,8 @@ MonoBehaviour:
         BeatInEightNotes: 2
       weight: 1
   currentTime: 0
+  volumeBase: 0.7
+  volumeUnder: 1
 --- !u!114 &774143550
 MonoBehaviour:
   m_ObjectHideFlags: 0
