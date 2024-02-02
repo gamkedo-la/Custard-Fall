@@ -21,7 +21,10 @@ public class MusicManager : MonoBehaviour {
 
 	public double currentTime = 0.0;
 	private double trackStartTime = 0.0, nextTrackTime = 0.0, beatTime = 0.0, nextBeatTime = 0.0, bufferTime = 0.5;
-	private float bpm = 90f, fadeTime = 0.25f;
+	[SerializeField]
+	private float bpm = 90f;
+	[SerializeField]
+	private float fadeTime = 0.5f;
 	private int beatLength = 2;
 	[SerializeField] private float volumeBase = 0.5f;
 	[SerializeField] private float volumeUnder = 1;

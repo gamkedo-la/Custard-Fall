@@ -56,7 +56,9 @@ MonoBehaviour:
         BeatInEightNotes: 2
       weight: 1
   currentTime: 0
-  volumeBase: 0.7
+  bpm: 90
+  fadeTime: 0.375
+  volumeBase: 0.33
   volumeUnder: 1
 --- !u!114 &774143550
 MonoBehaviour:
