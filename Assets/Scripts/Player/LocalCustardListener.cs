@@ -23,6 +23,7 @@ public class LocalCustardListener : MonoBehaviour
     public int drowningDamage;
     private float timePassedSinceCoveredByCustard = 0.0f;
     private float timePassedSinceInsideCustardChange = 0.0f;
+    private float timePassedSinceCoveredByCustardChange = 0.0f;
     private float timePassedSinceLastDamage = 0.0f;
     private Coroutine inCustardEffectFader;
     [SerializeField] private float _fadeInDuration = 2.5f;
@@ -54,6 +55,7 @@ public class LocalCustardListener : MonoBehaviour
 
         if (CoveredByCustard != coveredByCustard)
         {
+            timePassedSinceCoveredByCustardChange = graceTimeForBeingInsideOrOutsideCustard;
             OnCoveredByCustard(coveredByCustard);
             if (!coveredByCustard)
             {
@@ -71,15 +73,24 @@ public class LocalCustardListener : MonoBehaviour
             timePassedSinceInsideCustardChange -= Time.deltaTime;
         }
 
+        if (timePassedSinceCoveredByCustardChange > 0)
+        {
+            timePassedSinceCoveredByCustardChange -= Time.deltaTime;
+        }
+
         InsideCustard = insideCustard;
 
         if (timePassedSinceInsideCustardChange <= 0)
         {
-            MusicManager.Instance.SetUnder(insideCustard);
+            MusicManager.Instance.SetUnder(InsideCustard);
             timePassedSinceInsideCustardChange = 0;
         }
         CoveredByCustard = coveredByCustard;
-
+        
+        if (timePassedSinceCoveredByCustardChange <= 0)
+        {
+            timePassedSinceCoveredByCustardChange = 0;
+        }
         if (CoveredByCustard)
         {
             CheckForDrownDamage(CoveredByCustard);
