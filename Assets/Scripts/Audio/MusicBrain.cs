@@ -26,6 +26,10 @@ public class MusicBrain : MonoBehaviour {
 
 	[SerializeField]
 	private float volumeDanger=.3f;
+	[SerializeField]
+	private float volumeStinger=1f;
+	
+	private int _custardLevelCounter = 0;
 
 	private void Update() {
 		// Day Night music logic
@@ -49,28 +53,49 @@ public class MusicBrain : MonoBehaviour {
 		if (tidesManager != null) {
 			int targetTide = tidesManager.CustardManager.targetTideLevel;
 			if (currentLevel != targetTide) {
-				Debug.Log(tidesManager.CustardManager.targetTideLevel + " " + currentLevel);
+				Debug.Log("target tide "+targetTide);
 				AudioClip clipToPlay = null;
 
-				if (targetTide - currentLevel == 1) {
+				// change stinger sound every time the custard changes in the one direction or the other
+				if (targetTide > currentLevel)
+				{
+					if (_custardLevelCounter < 0)
+					{
+						_custardLevelCounter = 1;
+					} else
+					{
+						_custardLevelCounter++;
+					}
+				} else if (targetTide < currentLevel)
+				{
+					if (_custardLevelCounter > 0)
+					{
+						_custardLevelCounter = -1;
+					} else
+					{
+						_custardLevelCounter--;
+					}
+				} 
+				
+				if (_custardLevelCounter == 1) {
 					clipToPlay = up1Clip;
-				} else if (targetTide - currentLevel == 2) {
+				} else if (_custardLevelCounter == 2) {
 					clipToPlay = up2Clip;
-				} else if (targetTide - currentLevel >= 3) {
+				} else if (_custardLevelCounter >= 3) {
 					clipToPlay = up3Clip;
-				} else if (targetTide - currentLevel == -1) {
+				} else if (_custardLevelCounter == -1) {
 					clipToPlay = down1Clip;
-				} else if (targetTide - currentLevel == -2) {
+				} else if (_custardLevelCounter == -2) {
 					clipToPlay = down2Clip;
-				} else if (targetTide - currentLevel <= -3) {
+				} else if (_custardLevelCounter <= -3) {
 					clipToPlay = down3Clip;
 				}
 
-				MusicManager.Instance.SchedualTop(clipToPlay, false);
+				MusicManager.Instance.SchedualTop(clipToPlay, volumeStinger, false);
 
 				currentLevel = targetTide;
 			}
-		} else if(tidesManager != null){
+		} else {
 			tidesManager = FindObjectOfType<Tidesmanager>();
 			currentLevel = tidesManager.CustardManager.targetTideLevel;
         }

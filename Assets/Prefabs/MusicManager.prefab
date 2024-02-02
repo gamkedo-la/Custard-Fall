@@ -332,3 +332,5 @@ MonoBehaviour:
   down1Clip: {fileID: 8300000, guid: 6936b3c0ca7c620409bc95985f90c41e, type: 3}
   down2Clip: {fileID: 8300000, guid: b4f1bbddae0175745bf1c33ec51ef3d1, type: 3}
   down3Clip: {fileID: 8300000, guid: 0ac012d342b52284793654e832bb9cdc, type: 3}
+  volumeDanger: 0.3
+  volumeStinger: 0.7

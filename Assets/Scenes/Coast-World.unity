@@ -27433,6 +27433,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6527455928574254391, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: volumeStinger
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 6638852354206576846, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

@@ -93,7 +93,6 @@ public class Tidesmanager : MonoBehaviour
 
             if (timeIndex != indexOfCurrentDayTimeTideLevel)
             {
-                Debug.Log($"Tide step {timeIndex}");
                 TideStep tideStep = _currentDailyTidesPlan.GetValueOrDefault(_tidesPlanIndices[timeIndex]);
                 indexOfCurrentDayTimeTideLevel = timeIndex;
 
