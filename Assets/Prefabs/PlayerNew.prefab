@@ -5474,7 +5474,7 @@ MonoBehaviour:
   radianceSettings: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
   requiredRadianceForLevelUp: 1
   requiredRadianceForLevelDown: 1
-  refillRate: 0.05
+  refillRate: 0.06
   refillTillLevel: 1
   refillStartDelay: 1.33
   refillIfDeclining: 1
@@ -5515,7 +5515,7 @@ MonoBehaviour:
   graceTimeForBeingInsideOrOutsideCustard: 0.6
   timeBeforePlayerTakesDamageFromDrawning: 1
   timeBetweenDamageTicks: 1.6
-  drowningDamage: 40
+  drowningDamage: 14
   _fadeInDuration: 2
   _fadeOutDuration: 1.5
 --- !u!114 &6589503392973350852
