@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7585957481076514606}
-  - component: {fileID: 5135395817058079032}
   - component: {fileID: 1494176172828261524}
   - component: {fileID: 4327919105444324545}
   - component: {fileID: -3728704357975888051}
   - component: {fileID: 8811513754317439231}
   - component: {fileID: 6851693088668701600}
   - component: {fileID: 5804267302024571865}
-  m_Layer: 0
+  - component: {fileID: 1415511603012602017}
+  m_Layer: 12
   m_Name: SpaceFridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,26 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5135395817058079032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7585957481076514605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72712ff255f549b197e0f358734b364a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
-  hasInhaleFocus: 0
-  optVisual: {fileID: 0}
-  interactionMessage: This fridge is not from this world!
-  inhaleItemsProfile:
-  - resourceName: Fridge
-    itemReference: {fileID: 11400000, guid: 7eadb48d2e108ce4ba3e79a1412db6ed, type: 2}
-    timeToTake: 2
 --- !u!114 &1494176172828261524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,30 +109,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   investedPoints: 0
-  expectedUpgradeMaterial: {fileID: 11400000, guid: a7a4d332510985444a79955c1198b829, type: 2}
+  expectedUpgradeMaterial: {fileID: 11400000, guid: 21f0531b3b7424c42b6555abeb726078, type: 2}
   upgradeLevels:
   - comment: Take me home, fridge!
-    requiredPoints: 11
+    requiredPoints: 3
     jumpToLevel: 5
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 0}
   - comment: Take me home, fridge!
-    requiredPoints: 11
+    requiredPoints: 3
     jumpToLevel: 5
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 0}
   - comment: Take me home, fridge!
-    requiredPoints: 11
+    requiredPoints: 1
     jumpToLevel: 0
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 0}
   - comment: Take me home, fridge!
-    requiredPoints: 11
+    requiredPoints: 1
     jumpToLevel: 0
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 0}
   - comment: Take me home, fridge!
-    requiredPoints: 11
+    requiredPoints: 5
     jumpToLevel: 0
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 0}
@@ -173,6 +153,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 002b131b4ce0463a9bb4bee16ca523ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1415511603012602017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7585957481076514605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa7f0dcf389c410387e84154786cdf72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  hasInhaleFocus: 0
+  optVisual: {fileID: 0}
+  interactionMessage: This fridge is not from this world!
+  inhaleItemsProfile:
+  - resourceName: Fridge
+    itemReference: {fileID: 11400000, guid: 7eadb48d2e108ce4ba3e79a1412db6ed, type: 2}
+    timeToTake: 2
+  Height: 2
 --- !u!1001 &2210951324199737158
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -180,6 +181,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7585957481076514606}
     m_Modifications:
+    - target: {fileID: 173460291320022249, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.005030444
+      objectReference: {fileID: 0}
+    - target: {fileID: 173460291320022249, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.005030444
+      objectReference: {fileID: 0}
+    - target: {fileID: 173460291320022249, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.005030444
+      objectReference: {fileID: 0}
+    - target: {fileID: 536529439287772012, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1532481459394922909, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045007751957281159, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Radius
+      value: 2.5684474
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045007751957281159, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Center.x
+      value: -0.0845584
+      objectReference: {fileID: 0}
+    - target: {fileID: 3045007751957281159, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Center.z
+      value: 0.0071829013
+      objectReference: {fileID: 0}
     - target: {fileID: 3658279135282206444, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -227,6 +260,46 @@ PrefabInstance:
     - target: {fileID: 3686381765981889238, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
       propertyPath: m_Name
       value: Visualizer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3686381765981889238, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278642886366157576, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5466007027074820412, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5701065217564886534, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6389207544373340680, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7065131850400884366, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7282142589638520144, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7282142589638520144, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472748110816557955, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f014122db5ed76949bc883a1171190a2, type: 3}
+    - target: {fileID: 7552776745596210501, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7627650759830103196, guid: b1b225f0c3385084a8abcd07a0a6fc35, type: 3}
       propertyPath: upgradeableStructure
@@ -308,19 +381,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4822539351323105092, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -1215088673186257983, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -1160963473664021009, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -1115671067845997023, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_Name
@@ -328,7 +401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 00004de90f8837a499a7d957409bbacb, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00004de90f8837a499a7d957409bbacb, type: 3}

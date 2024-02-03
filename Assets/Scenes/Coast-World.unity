@@ -10726,58 +10726,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Campfire
       objectReference: {fileID: 0}
-    - target: {fileID: 2829306823571587400, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.03724595
-      objectReference: {fileID: 0}
-    - target: {fileID: 2829306823571587400, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.03724595
-      objectReference: {fileID: 0}
-    - target: {fileID: 2829306823571587400, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.03724595
-      objectReference: {fileID: 0}
-    - target: {fileID: 2829306823571587400, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.000000029802322
-      objectReference: {fileID: 0}
-    - target: {fileID: 2829306823571587400, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2829306823571587400, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.1650004
-      objectReference: {fileID: 0}
-    - target: {fileID: 4269161646258710863, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.03724595
-      objectReference: {fileID: 0}
-    - target: {fileID: 4269161646258710863, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.03724595
-      objectReference: {fileID: 0}
-    - target: {fileID: 4269161646258710863, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.03724595
-      objectReference: {fileID: 0}
-    - target: {fileID: 4269161646258710863, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.000000029802322
-      objectReference: {fileID: 0}
-    - target: {fileID: 4269161646258710863, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4269161646258710863, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.1650004
-      objectReference: {fileID: 0}
-    - target: {fileID: 4987778666613375328, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.41
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b5442af8cf91474ebc5aefd6b828e78, type: 3}
 --- !u!1001 &917670503
@@ -10844,13 +10792,65 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 460949812260658109, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 479019817529562515, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1415511603012602017, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1856304589732476509, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1863577845810549802, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2724162699868081230, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3280388735443219856, guid: 10444027bfb28174389cb76613abed7c, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4327919105444324545, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4327919105444324545, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5045692854933175630, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5886380772152086848, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076580897463636160, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7316051358253614381, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7585957481076514605, guid: 10444027bfb28174389cb76613abed7c, type: 3}
       propertyPath: m_Name
       value: SpaceFridge
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514605, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
       propertyPath: m_RootOrder
@@ -10900,9 +10900,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8908611105304050198, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5804267302024571865, guid: 10444027bfb28174389cb76613abed7c, type: 3}
     - {fileID: 6851693088668701600, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+    - {fileID: 1415511603012602017, guid: 10444027bfb28174389cb76613abed7c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 10444027bfb28174389cb76613abed7c, type: 3}
 --- !u!1 &945092032
 GameObject:
@@ -22442,6 +22447,73 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1001 &1786885784
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3280388735443219856, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514605, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Name
+      value: SpaceFridge (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_RootOrder
+      value: 138
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 33.74
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 31.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8811513754317439231, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5804267302024571865, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+    - {fileID: 6851693088668701600, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 10444027bfb28174389cb76613abed7c, type: 3}
 --- !u!1001 &1793133090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25419,6 +25491,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4da539ab7b38c2c4b97d984132b718f1, type: 3}
+--- !u!1 &2084565208 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7585957481076514605, guid: 10444027bfb28174389cb76613abed7c, type: 3}
+  m_PrefabInstance: {fileID: 933196879}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2084565215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084565208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72712ff255f549b197e0f358734b364a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  hasInhaleFocus: 0
+  optVisual: {fileID: 0}
+  interactionMessage: This fridge is not from this world!
+  inhaleItemsProfile:
+  - resourceName: Fridge
+    itemReference: {fileID: 11400000, guid: 7eadb48d2e108ce4ba3e79a1412db6ed, type: 2}
+    timeToTake: 2
 --- !u!1001 &2100084623
 PrefabInstance:
   m_ObjectHideFlags: 0
