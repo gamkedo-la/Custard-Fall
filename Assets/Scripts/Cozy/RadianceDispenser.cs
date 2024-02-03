@@ -8,6 +8,8 @@ public class RadianceDispenser : MonoBehaviour
     [FormerlySerializedAs("coziness")] [SerializeField] private float radiance;
 
     private RadianceManager _radianceManager;
+    
+    public EventHandler<bool> onActivated;
 
     public float Radiance
     {

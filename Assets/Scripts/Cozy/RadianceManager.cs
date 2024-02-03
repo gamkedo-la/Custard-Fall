@@ -71,6 +71,7 @@ public class RadianceManager : MonoBehaviour
             foreach (var dispenser in leavingDispensers)
             {
                 nearDispensers.Remove(dispenser);
+                dispenser.onActivated?.Invoke(receiver, false);
             }
         }
 
@@ -84,7 +85,11 @@ public class RadianceManager : MonoBehaviour
                     continue;
 
                 var nearDispensers = receivers2Dispensers.GetValueOrDefault(receiver);
-                nearDispensers.Add(dispenser);
+                var added = nearDispensers.Add(dispenser);
+                if (added)
+                {
+                    dispenser.onActivated?.Invoke(receiver, true);
+                }
 
                 maxRadiance = Mathf.Max(maxRadiance, dispenser.Radiance);
             }
