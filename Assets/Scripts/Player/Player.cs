@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject playerDirectional;
     public float movementSpeed = 4;
-    [SerializeField] private float swimSpeed = 3.4f;
+    public float swimSpeed = 3.4f;
     private bool _isLookInMoveDirection = true;
     private Vector3 _targetMoveDirection = Vector3.zero;
     private Vector3 _currentMoveDirection = Vector3.zero;

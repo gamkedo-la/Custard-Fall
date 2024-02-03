@@ -18,9 +18,7 @@ public class RadianceReceiver : MonoBehaviour
     [SerializeField] private float refillTillLevel = 1;
     [SerializeField] private float refillStartDelay = 1.33f;
     [SerializeField] private bool refillIfDeclining = true;
-
-    [SerializeField] private GameObject optionalVisualizer;
-
+    
     public int RadianceLevelOfSurrounding => radianceLevelOfSurrounding;
     public int PersonalRadianceLevel => personalRadianceLevel;
     public float Radiance => radiance;

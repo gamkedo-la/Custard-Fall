@@ -11,6 +11,7 @@ public class ReactToRadianceLevel : MonoBehaviour
     [SerializeField] private List<LevelModification> modifications;
 
     private float baseSpeed;
+    private float baseSwimSpeed;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class ReactToRadianceLevel : MonoBehaviour
     private void Start()
     {
         baseSpeed = _player.movementSpeed;
+        baseSwimSpeed = _player.swimSpeed;
     }
 
     private void ReactToChangeInRadiance(int newlevel, int previouslevel)
@@ -35,6 +37,8 @@ public class ReactToRadianceLevel : MonoBehaviour
         if (modification != null)
         {
             _player.movementSpeed = baseSpeed * modification.SpeedMultiplier;
+            _player.swimSpeed = baseSwimSpeed * modification.SpeedMultiplier;
+            Debug.Log(newlevel+" lv: speed mod "+_player.movementSpeed);
         }
     }
 
