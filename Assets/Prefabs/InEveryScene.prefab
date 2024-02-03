@@ -6333,6 +6333,10 @@ PrefabInstance:
       propertyPath: custardManager
       value: 
       objectReference: {fileID: 8634744844989316037}
+    - target: {fileID: 8006690096804111679, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
+      propertyPath: optionalVisualizer
+      value: 
+      objectReference: {fileID: 5934050439246239777}
     - target: {fileID: 8640670049249949212, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0

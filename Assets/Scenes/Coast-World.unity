@@ -14331,6 +14331,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d56509fb84b351d4aa4a31b3825a91bf, type: 3}
+--- !u!1 &1240768656 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5934050439246239777, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+  m_PrefabInstance: {fileID: 8634744845791239551}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1267132116
 GameObject:
   m_ObjectHideFlags: 0
@@ -22447,73 +22452,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1001 &1786885784
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3280388735443219856, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514605, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_Name
-      value: SpaceFridge (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_RootOrder
-      value: 138
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 33.74
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7.79
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 31.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7585957481076514606, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8811513754317439231, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5804267302024571865, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-    - {fileID: 6851693088668701600, guid: 10444027bfb28174389cb76613abed7c, type: 3}
-  m_SourcePrefab: {fileID: 100100000, guid: 10444027bfb28174389cb76613abed7c, type: 3}
 --- !u!1001 &1793133090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26586,6 +26524,10 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 584847978606059184, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: visualizer
+      value: 
+      objectReference: {fileID: 1240768656}
     - target: {fileID: 681799856801855350, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_LocalPosition.x
       value: -53.86
