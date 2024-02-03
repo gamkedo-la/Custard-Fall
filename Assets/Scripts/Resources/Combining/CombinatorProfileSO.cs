@@ -11,7 +11,7 @@ public class CombinatorProfileSO : ScriptableObject
 
     public ItemReceiver CanCombine(PlaceableItem activeItem, Vector3 position)
     {
-            Debug.Log("Want to use activeItem "+activeItem.name);
+        Debug.Log("Want to use activeItem " + activeItem.name);
         if (Physics.Raycast(position + 5*Vector3.up, Vector3.down, out RaycastHit hit, 10f, layerMask.value))
         {
             var itemReceiver = hit.transform.GetComponent<ItemReceiver>();

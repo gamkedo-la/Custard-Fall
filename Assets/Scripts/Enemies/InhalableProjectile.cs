@@ -12,7 +12,6 @@ public class InhalableProjectile : Inhalable
 
     void OnPickup()
     {
-        Debug.Log("picked up projectile");
         onProjectileInhale?.Invoke(this, null);
         if (plusOnePrefab)
             Instantiate(plusOnePrefab,
@@ -39,6 +38,5 @@ public class InhalableProjectile : Inhalable
     void OnDestroy()
     {
         allCurrentProjectiles.Remove(gameObject);
-        Debug.Log($"remaining projectiles in Level {allCurrentProjectiles.Count}");
     }
 }
