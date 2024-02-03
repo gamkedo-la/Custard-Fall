@@ -3646,10 +3646,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthOrbPrefab: {fileID: 6303623572148944328, guid: f2678e4160372e947a7d82a8ee29597a, type: 3}
   radianceOrbPrefab: {fileID: 6303623572148944328, guid: f2678e4160372e947a7d82a8ee29597a, type: 3}
-  spawnHeight: 1
-  timeBetweenHealthOrbsChecks: 5
-  timeBetweenRadianceOrbsChecks: 5
-  spawnRadius: 20
+  spawnHeight: 1.5
+  timeBetweenHealthOrbsChecks: 10
+  timeBetweenRadianceOrbsChecks: 10
+  despawnDistance: 30
+  spawnRadius: 15
+  spawnInnerRadius: 6
+  spawnRetries: 20
+  maxConcurrentOrbs: 7
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
 --- !u!1 &8634744845233825456

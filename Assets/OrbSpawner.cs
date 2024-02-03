@@ -10,7 +10,7 @@ public class OrbSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject healthOrbPrefab;
     [SerializeField] private GameObject radianceOrbPrefab;
-    [SerializeField] private float spawnHeight = 1f;
+    [SerializeField] private float spawnHeight = 1.5f;
     [SerializeField] private float timeBetweenHealthOrbsChecks = 5f;
     [SerializeField] private float timeBetweenRadianceOrbsChecks = 5f;
     [SerializeField] private float despawnDistance = 40f;
