@@ -25801,6 +25801,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 17731859176024543, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Name
+      value: use
+      objectReference: {fileID: 0}
     - target: {fileID: 86211837562367682, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -26653,14 +26657,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1414586631803446308, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
-      propertyPath: m_margin.z
-      value: 85.25038
-      objectReference: {fileID: 0}
-    - target: {fileID: 1414586631803446308, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 26
-      objectReference: {fileID: 0}
     - target: {fileID: 1435682537933908290, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -27362,8 +27358,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6404731336846032650, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Name
+      value: UseBtnUi
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404731336846032650, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6487463897801733873, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
