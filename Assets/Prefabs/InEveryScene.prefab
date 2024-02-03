@@ -3604,7 +3604,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   receivers:
   - {fileID: 2699728651575149906}
-  searchRadius: 10
+  searchRadius: 9.2
 --- !u!114 &6826369342560504894
 MonoBehaviour:
   m_ObjectHideFlags: 0
