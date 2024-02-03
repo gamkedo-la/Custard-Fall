@@ -6288,6 +6288,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerNew
       objectReference: {fileID: 0}
+    - target: {fileID: 3806487020140500869, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
+      propertyPath: visualizer
+      value: 
+      objectReference: {fileID: 5934050439246239777}
     - target: {fileID: 4078713960622899494, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
       propertyPath: m_UIInputModule
       value: 
@@ -6571,6 +6575,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
+--- !u!1 &5934050439246239777 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4212270859569630551, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
+  m_PrefabInstance: {fileID: 7506662099287102838}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6568710309046800951 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3676549530017007425, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
