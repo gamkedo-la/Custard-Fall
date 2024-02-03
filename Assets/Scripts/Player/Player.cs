@@ -237,11 +237,12 @@ public class Player : MonoBehaviour
     public void TakeDamage(int damage, DamageImplication implication)
     {
         if (implication == DamageImplication.Health ||
-            _radianceReceiver.PersonalRadianceLevel == 0 &&
+            implication == DamageImplication.RadianceThenHealth && _radianceReceiver.PersonalRadianceLevel == 0 &&
             _radianceReceiver.Radiance <= 0.01f)
         {
             currentHealth -= damage;
             healthbar.SetHealth(currentHealth);
+            Debug.Log("taking health damage "+damage+" - now on "+currentHealth+"HP");
 
             if (currentHealth <= 0)
             {

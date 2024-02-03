@@ -112,8 +112,7 @@ public class LocalCustardListener : MonoBehaviour
             {
                 timePassedSinceCoveredByCustard += Time.deltaTime;
 
-                var timeTillDamage = timeBeforePlayerTakesDamageFromDrawning - timePassedSinceCoveredByCustard;
-                if (timeTillDamage <= .01f)
+                if (timePassedSinceCoveredByCustard >= timeBeforePlayerTakesDamageFromDrawning)
                 {
                     FadeCustardEffect(100, _fadeInDuration);
                 }
