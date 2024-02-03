@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 public class InhalableFloatingOrb : Inhalable
 {
@@ -12,7 +11,6 @@ public class InhalableFloatingOrb : Inhalable
 
     void OnPickup()
     {
-        Debug.Log("picked up orb");
         onInhale?.Invoke(this, null);
         if (plusOnePrefab)
         {
@@ -27,8 +25,6 @@ public class InhalableFloatingOrb : Inhalable
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
-        Debug.Log("inhaled orb");
-
         if (GetRemainingResourcesCount() == 0)
         {
             gameObject.SetActive(false);
@@ -44,6 +40,5 @@ public class InhalableFloatingOrb : Inhalable
     void OnDestroy()
     {
         allCurrentDynamicInhaleables.Remove(gameObject);
-        Debug.Log($"remaining orbs in Level {allCurrentDynamicInhaleables.Count}");
     }
 }

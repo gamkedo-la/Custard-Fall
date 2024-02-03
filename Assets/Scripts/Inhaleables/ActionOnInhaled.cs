@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 public class ActionOnInhaled : MonoBehaviour
 {
@@ -18,7 +16,6 @@ public class ActionOnInhaled : MonoBehaviour
     private void IncreaseRadiance(Inhaler inhaler, Resource resource, int amount)
     {
         var radianceReceiver = inhaler.gameObject.GetComponentInParent<RadianceReceiver>();
-        Debug.Log($"inhaled by player {radianceReceiver != null}");
         if (radianceReceiver != null)
         {
             radianceReceiver.IncreaseRadiance(radianceBonus);

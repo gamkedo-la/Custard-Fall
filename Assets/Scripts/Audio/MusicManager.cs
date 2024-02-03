@@ -101,7 +101,6 @@ public class MusicManager : MonoBehaviour {
 				musicUnder = isUnder;
 				return;
 			}
-			Debug.Log("isUnder "+ isUnder);
 			if (isUnder) {
 				StartCoroutine(FadeOut(currentBaseSource, fadeTime));
 				StartCoroutine(FadeIn(currentUnderSource, fadeTime));
