@@ -27,6 +27,11 @@ public class ReactToRadianceLevel : MonoBehaviour
     private void ReactToChangeInRadiance(int newlevel, int previouslevel)
     {
         var modification = modifications[newlevel];
+        if (modification == null)
+        {
+            modification = modifications[^1];
+        }
+
         if (modification != null)
         {
             _player.movementSpeed = baseSpeed * modification.SpeedMultiplier;
