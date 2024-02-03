@@ -18,7 +18,7 @@ public class WorldCells : ScriptableObject
     private readonly Dictionary<Coords, int> _worldItems = new Dictionary<Coords, int>();
     private bool _updateDebugVisualization = false;
     public bool isDebugMode = false;
-    
+
     public event Action<Coords> onItemHeightChanged;
 
     public void Init()
@@ -31,31 +31,31 @@ public class WorldCells : ScriptableObject
     {
         return GetHeightAt(Coords.Of(x, y));
     }
-    
+
     public int GetHeightAt(Coords coords)
     {
         if (IsOutOfBounds(coords))
             return OutOufBoundsHeight;
-        return _heightMap[coords.X, coords.Y] +  _worldItems.GetValueOrDefault(coords,0);
+        return _heightMap[coords.X, coords.Y] + _worldItems.GetValueOrDefault(coords, 0);
     }
-    
+
     public int GetTerrainHeightAt(int x, int y)
     {
         return GetTerrainHeightAt(Coords.Of(x, y));
     }
-    
+
     public int GetTerrainHeightAt(Coords coords)
     {
         if (IsOutOfBounds(coords))
             return OutOufBoundsHeight;
         return _heightMap[coords.X, coords.Y];
     }
-    
+
     public int GetWorldItemHeightAt(int x, int y)
     {
         return GetWorldItemHeightAt(Coords.Of(x, y));
     }
-    
+
     public int GetWorldItemHeightAt(Coords coords)
     {
         if (IsOutOfBounds(coords))
@@ -80,6 +80,7 @@ public class WorldCells : ScriptableObject
         {
             _worldItems.Remove(coords);
         }
+
         onItemHeightChanged?.Invoke(coords);
         _updateDebugVisualization = isDebugMode;
     }
@@ -92,7 +93,7 @@ public class WorldCells : ScriptableObject
 
             for (int x = 0; x < BlocksWidth; x++)
             for (int y = 0; y < BlocksHeight; y++)
-                _terrainList.Add(CellValue.Of(x, y, GetHeightAt(x,y)));
+                _terrainList.Add(CellValue.Of(x, y, GetHeightAt(x, y)));
             _updateDebugVisualization = false;
         }
 
@@ -103,13 +104,19 @@ public class WorldCells : ScriptableObject
     {
         return GetCellPosition(position.x, position.z);
     }
+
+    public Coords GetCellPosition(Vector2 position)
+    {
+        return GetCellPosition(position.x, position.y);
+    }
+
     public Coords GetCellPosition(double x, double y)
     {
         var cellX = Math.Floor(x) + WorldCells.BlocksWidth / 2f;
         var cellY = Math.Floor(y) + WorldCells.BlocksHeight / 2f;
-        return Coords.Of( (int)cellX,  (int)cellY);
+        return Coords.Of((int) cellX, (int) cellY);
     }
-    
+
     public static Vector2 GetWorldPosition(int x, int y)
     {
         return new Vector2(x - WorldCells.BlocksWidth / 2f + .5f, y - WorldCells.BlocksHeight / 2f + .5f);
@@ -125,7 +132,8 @@ public class WorldCells : ScriptableObject
         _worldItems.Clear();
     }
 
-    public static bool IsOutOfBounds(Coords coords){
+    public static bool IsOutOfBounds(Coords coords)
+    {
         return coords.X is < 0 or >= BlocksWidth || coords.Y is < 0 or >= BlocksHeight;
     }
 }

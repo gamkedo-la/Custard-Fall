@@ -3424,6 +3424,7 @@ GameObject:
   - component: {fileID: 8582329314383768474}
   - component: {fileID: 6826369342560504894}
   - component: {fileID: 7813956403757816861}
+  - component: {fileID: 3331152138923533538}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -3631,6 +3632,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3383a2c3b943e8aa76ccccb6b09de9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3331152138923533538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8634744844989316040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b772646660eb0b498f20730b8ff4a8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthOrbPrefab: {fileID: 6303623572148944328, guid: f2678e4160372e947a7d82a8ee29597a, type: 3}
+  radianceOrbPrefab: {fileID: 6303623572148944328, guid: f2678e4160372e947a7d82a8ee29597a, type: 3}
+  spawnHeight: 1
+  timeBetweenHealthOrbsChecks: 5
+  timeBetweenRadianceOrbsChecks: 5
+  spawnRadius: 20
+  worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
+  custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0
