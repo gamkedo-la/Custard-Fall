@@ -5480,7 +5480,7 @@ MonoBehaviour:
   refillStartDelay: 1.33
   refillIfDeclining: 1
   optionalVisualizer: {fileID: 0}
-  bonusValueSpeedup: 0.45
+  bonusValueSpeedup: 1.15
 --- !u!114 &4957307413913084025
 MonoBehaviour:
   m_ObjectHideFlags: 0
