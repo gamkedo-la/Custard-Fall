@@ -3653,7 +3653,7 @@ MonoBehaviour:
   spawnRadius: 15
   spawnInnerRadius: 6
   spawnRetries: 20
-  maxConcurrentOrbs: 7
+  maxConcurrentOrbs: 5
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
 --- !u!1 &8634744845233825456
