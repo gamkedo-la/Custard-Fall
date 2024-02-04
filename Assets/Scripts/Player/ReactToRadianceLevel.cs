@@ -38,7 +38,17 @@ public class ReactToRadianceLevel : MonoBehaviour
         {
             _player.movementSpeed = baseSpeed * modification.SpeedMultiplier;
             _player.swimSpeed = baseSwimSpeed * modification.SpeedMultiplier;
-            Debug.Log(newlevel+" lv: speed mod "+_player.movementSpeed);
+            Debug.Log(newlevel + " lv: speed mod " + _player.movementSpeed + " swim " + _player.swimSpeed);
+
+            if (modification.InhaleReach == 0)
+            {
+                _player.inhaler.Size = Inhaler.ConeSize.SMALL;
+            }
+            else
+            {
+                _player.inhaler.Size = Inhaler.ConeSize.NORMAL;
+            }
+            Debug.Log(" inhale cone size:  " + _player.inhaler.Size);
         }
     }
 
@@ -48,5 +58,6 @@ public class ReactToRadianceLevel : MonoBehaviour
         [SerializeField] private float speedMultiplier = 1.2f;
         [SerializeField] private int inhaleReach = 1;
         public float SpeedMultiplier => speedMultiplier;
+        public int InhaleReach => inhaleReach;
     }
 }
