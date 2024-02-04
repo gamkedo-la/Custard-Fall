@@ -5545,7 +5545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifications:
-  - speedMultiplier: 0.85
+  - speedMultiplier: 0.8
     inhaleReach: 0
   - speedMultiplier: 1
     inhaleReach: 1
