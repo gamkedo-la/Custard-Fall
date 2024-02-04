@@ -12,6 +12,7 @@ public class Tidesmanager : MonoBehaviour
 
     private TideStep _overrideTideStep = null;
     private int _overridenUntilIndex = 0;
+    private bool _handleOverride = false;
 
     private readonly SortedDictionary<float, TideStep> _tidesPlanFirstTime = new SortedDictionary<float, TideStep>();
     private readonly SortedDictionary<float, TideStep> _tidesPlanNormal0 = new SortedDictionary<float, TideStep>();
@@ -94,8 +95,10 @@ public class Tidesmanager : MonoBehaviour
                 return;
             }
 
-            if (timeIndex != indexOfCurrentDayTimeTideLevel)
+            if (_handleOverride || timeIndex != indexOfCurrentDayTimeTideLevel)
             {
+                _handleOverride = false;
+                
                 TideStep tideStep = GetTideStep(timeIndex);
                 indexOfCurrentDayTimeTideLevel = timeIndex;
 
@@ -135,6 +138,7 @@ public class Tidesmanager : MonoBehaviour
     {
         _overrideTideStep = step;
         _overridenUntilIndex = untilTimeIndex;
+        _handleOverride = true;
     }
 
     private static int FindLowestBound(List<float> list, float value)
