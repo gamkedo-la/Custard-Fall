@@ -6,9 +6,12 @@ using UnityEngine.Serialization;
 
 public class Tidesmanager : MonoBehaviour
 {
-    public CustardManager CustardManager;
+    [FormerlySerializedAs("CustardManager")] public CustardManager custardManager;
     public TimeManager timeManager;
-    public Player Player;
+    [FormerlySerializedAs("Player")] public Player player;
+
+    private TideStep _overrideTideStep = null;
+    private int _overridenUntilIndex = 0;
 
     private readonly SortedDictionary<float, TideStep> _tidesPlanFirstTime = new SortedDictionary<float, TideStep>();
     private readonly SortedDictionary<float, TideStep> _tidesPlanNormal0 = new SortedDictionary<float, TideStep>();
@@ -54,7 +57,7 @@ public class Tidesmanager : MonoBehaviour
 
         indexOfCurrentDayTimeTideLevel = 0;
         var tideStep = _currentDailyTidesPlan[indexOfCurrentDayTimeTideLevel];
-        CustardManager.targetTideLevel = tideStep.GetLevel();
+        custardManager.targetTideLevel = tideStep.GetLevel();
     }
 
     private void StartNextTidesDayOfWeek()
@@ -82,7 +85,7 @@ public class Tidesmanager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!CustardManager.pauseIterationCountDown && !pause)
+        if (!custardManager.pauseIterationCountDown && !pause)
         {
             int timeIndex = FindLowestBound(_tidesPlanIndices, timeManager.time);
             if (timeIndex == -1)
@@ -93,29 +96,45 @@ public class Tidesmanager : MonoBehaviour
 
             if (timeIndex != indexOfCurrentDayTimeTideLevel)
             {
-                TideStep tideStep = _currentDailyTidesPlan.GetValueOrDefault(_tidesPlanIndices[timeIndex]);
+                TideStep tideStep = GetTideStep(timeIndex);
                 indexOfCurrentDayTimeTideLevel = timeIndex;
 
                 // custard ai
                 var nextTideLevel = tideStep.GetLevel();
-                var currentTideLevel = CustardManager.targetTideLevel;
-                CustardManager.targetTideLevel = nextTideLevel;
+                var currentTideLevel = custardManager.targetTideLevel;
+                custardManager.targetTideLevel = nextTideLevel;
 
                 // spread custard hotspots
                 if (currentTideLevel > nextTideLevel)
                 {
-                    CustardManager.RimCustardUpdate();
+                    custardManager.RimCustardUpdate();
                 }
 
-                CustardManager.SeedCustardUpdate((int) Math.Floor(Time.time * 1000));
-                CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 2);
-                CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 4);
-                CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 8);
-                CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 16);
-                CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 32);
-                CustardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 64);
+                custardManager.SeedCustardUpdate((int) Math.Floor(Time.time * 1000));
+                custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 2);
+                custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 4);
+                custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 8);
+                custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 16);
+                custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 32);
+                custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 64);
             }
         }
+    }
+
+    private TideStep GetTideStep(int timeIndex)
+    {
+        if (timeIndex == _overridenUntilIndex)
+        {
+            _overrideTideStep = null;
+        }
+
+        return _overrideTideStep ?? _currentDailyTidesPlan.GetValueOrDefault(_tidesPlanIndices[timeIndex]);
+    }
+
+    public void OverrideTideStep(TideStep step, int untilTimeIndex)
+    {
+        _overrideTideStep = step;
+        _overridenUntilIndex = untilTimeIndex;
     }
 
     private static int FindLowestBound(List<float> list, float value)

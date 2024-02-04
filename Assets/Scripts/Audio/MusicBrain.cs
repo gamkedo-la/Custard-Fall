@@ -55,7 +55,7 @@ public class MusicBrain : MonoBehaviour
 
         if (tidesManager != null)
         {
-            int targetTide = tidesManager.CustardManager.targetTideLevel;
+            int targetTide = tidesManager.custardManager.targetTideLevel;
             if (currentLevel != targetTide)
             {
                 Debug.Log("target tide " + targetTide);
@@ -118,7 +118,7 @@ public class MusicBrain : MonoBehaviour
         else
         {
             tidesManager = FindObjectOfType<Tidesmanager>();
-            currentLevel = tidesManager.CustardManager.targetTideLevel;
+            currentLevel = tidesManager.custardManager.targetTideLevel;
         }
 
         if (player)
