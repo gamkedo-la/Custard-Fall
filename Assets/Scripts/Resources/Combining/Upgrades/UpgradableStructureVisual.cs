@@ -67,8 +67,10 @@ public class UpgradableStructureVisual : MonoBehaviour
 
     private void PrepareLvlDisplay(int currentLevel)
     {
-        lvlBackground.color = radianceSettings.GetColorForEffectiveLevel(currentLevel);
-        lvlDisplay.SetText("lvl " + currentLevel);
+        if (lvlBackground)
+            lvlBackground.color = radianceSettings.GetColorForEffectiveLevel(currentLevel);
+        if (lvlDisplay)
+            lvlDisplay.SetText("lvl " + currentLevel);
     }
 
     private void CenterSlots(int requieredPoints)
@@ -104,9 +106,10 @@ public class UpgradableStructureVisual : MonoBehaviour
         slots.CrossFadeAlpha(targetAlpha, .3f, false);
         filledSlots.CrossFadeAlpha(targetAlpha, .3f, false);
         previewSlots.CrossFadeAlpha(targetAlpha, .3f, false);
-        // XXX something wrong on fade complete
-        lvlDisplay.gameObject.SetActive(false);
-        lvlBackground.gameObject.SetActive(false);
+        if (lvlDisplay)
+            lvlDisplay.gameObject.SetActive(false);
+        if (lvlBackground)
+            lvlBackground.gameObject.SetActive(false);
         onFadeComplete = HideImmediately;
     }
 
@@ -114,8 +117,10 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         doFade = false;
         targetAlpha = 0f;
-        lvlDisplay.gameObject.SetActive(false);
-        lvlBackground.gameObject.SetActive(false);
+        if (lvlDisplay)
+            lvlDisplay.gameObject.SetActive(false);
+        if (lvlBackground)
+            lvlBackground.gameObject.SetActive(false);
         canvas.gameObject.SetActive(false);
     }
 
@@ -127,8 +132,10 @@ public class UpgradableStructureVisual : MonoBehaviour
         filledSlots.CrossFadeAlpha(targetAlpha, .3f, false);
         previewSlots.CrossFadeAlpha(targetAlpha, .3f, false);
         onFadeComplete = null;
-        lvlDisplay.gameObject.SetActive(true);
-        lvlBackground.gameObject.SetActive(true);
+        if (lvlDisplay)
+            lvlDisplay.gameObject.SetActive(true);
+        if (lvlBackground)
+            lvlBackground.gameObject.SetActive(true);
         canvas.gameObject.SetActive(true);
     }
 
