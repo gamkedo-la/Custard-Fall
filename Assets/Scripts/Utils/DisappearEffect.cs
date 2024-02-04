@@ -18,12 +18,6 @@ public class DisappearEffect : MonoBehaviour
         _color = _textMesh.color;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Activate()
     {
         _targetAlpha = 0;

@@ -26,10 +26,4 @@ public class Monolyth : MonoBehaviour
             _tidesmanager.OverrideTideStep(new Tidesmanager.TideStep(3),_tidesmanager.indexOfCurrentDayTimeTideLevel - 1);
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
