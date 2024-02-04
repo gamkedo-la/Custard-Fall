@@ -85,7 +85,11 @@ namespace Custard
                         custardState.RegisterUpdate(spawnPosition, 1);
                         custardState.QueueCellForNextIteration(spawnPosition);
                     }
+
+                    Destroy(custardSpawn);
                 }
+
+            _initialSpawns = null;
         }
 
         private void FillUp(Coords spawnPosition)
