@@ -717,7 +717,7 @@ public class Player : MonoBehaviour
                 blockedByOtherItem = true;
                 // set output
                 itemReceiver =
-                    combinatorProfile.CanCombine(placeModeItemReference, hitResult.transform.position + Vector3.up);
+                    combinatorProfile.CanCombine(placeModeItemReference, hitResult.transform);
             }
 
             var obstacleDistance = Vector2.Distance(new Vector2(position.x, position.z),

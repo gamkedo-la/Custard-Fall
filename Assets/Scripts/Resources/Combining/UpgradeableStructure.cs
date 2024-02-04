@@ -179,6 +179,10 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
                 new UpgradeArgs(currentLevel, upgradeConfig.comment, upgradeConfig.requiredPoints, investedPoints,
                     IsMaxedOut()));
         }
+        else
+        {
+            Debug.Log("Cannot upgrade with "+material.name);
+        }
 
         return canUpgradeWith;
     }
