@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Custard;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-
 
 public class Inhaler : MonoBehaviour
 {
@@ -18,13 +15,33 @@ public class Inhaler : MonoBehaviour
     private float _distance;
     public bool isInhale;
     [NonSerialized] public GameObject owner;
-    
+    private ConeSize _size = ConeSize.NORMAL;
+
     public delegate void OnInhaleStart(Inhaler inhaler);
+
     public OnInhaleStart onInhaleStart;
+
     public delegate void OnInhaleEnd(Inhaler inhaler);
+
     public OnInhaleEnd onInhaleEnd;
 
     private Quaternion _previousRotation;
+
+    public ConeSize Size
+    {
+        get => _size;
+        set => SetValue(value);
+    }
+
+    private ConeSize SetValue(ConeSize value)
+    {
+        onConeSizeChange?.Invoke(value, _size);
+        return _size = value;
+    }
+
+    public delegate void OnConeSizeChange(ConeSize newSize, ConeSize oldSize);
+
+    public OnConeSizeChange onConeSizeChange;
 
     private void FixedUpdate()
     {
@@ -166,46 +183,88 @@ public class Inhaler : MonoBehaviour
 
         // construct a cone
         // central pane
-        addConeRow(localConePoints, 3, 0, 0);
-        addConeRow(localConePoints, 5, 1, 0);
-        addConeRow(localConePoints, 5, 2, 0);
-        addConeRow(localConePoints, 5, 3, 0);
-        addConeRow(localConePoints, 5, 4, 0);
-        addConeRow(localConePoints, 5, 5, 0);
-        addConeRow(localConePoints, 5, 6, 0);
-        addConeRow(localConePoints, 5, 7, 0);
-        addConeRow(localConePoints, 3, 8, 0);
-        // lower pane
-        addConeRow(localConePoints, 3, 0, -1);
-        addConeRow(localConePoints, 5, 1, -1);
-        addConeRow(localConePoints, 5, 2, -1);
-        addConeRow(localConePoints, 5, 3, -1);
-        addConeRow(localConePoints, 5, 4, -1);
-        addConeRow(localConePoints, 5, 5, -1);
-        addConeRow(localConePoints, 5, 6, -1);
-        addConeRow(localConePoints, 5, 7, -1);
-        addConeRow(localConePoints, 3, 8, -1);
-        // higher pane
-        addConeRow(localConePoints, 3, 0, 1);
-        addConeRow(localConePoints, 5, 1, 1);
-        addConeRow(localConePoints, 5, 2, 1);
-        addConeRow(localConePoints, 5, 3, 1);
-        addConeRow(localConePoints, 5, 4, 1);
-        addConeRow(localConePoints, 5, 5, 1);
-        addConeRow(localConePoints, 5, 6, 1);
-        addConeRow(localConePoints, 5, 7, 1);
-        addConeRow(localConePoints, 3, 8, 1);
-        // and even another higher pane
-        addConeRow(localConePoints, 3, 0, 2);
-        addConeRow(localConePoints, 5, 1, 2);
-        addConeRow(localConePoints, 5, 2, 2);
-        addConeRow(localConePoints, 5, 3, 2);
-        addConeRow(localConePoints, 5, 4, 2);
-        addConeRow(localConePoints, 5, 5, 2);
-        addConeRow(localConePoints, 5, 6, 2);
-        addConeRow(localConePoints, 5, 7, 2);
-        addConeRow(localConePoints, 3, 8, 2);
+        if (_size > ConeSize.SMALL)
+        {
+            addConeRow(localConePoints, 3, 0, 0);
+            addConeRow(localConePoints, 5, 1, 0);
+            addConeRow(localConePoints, 5, 2, 0);
+            addConeRow(localConePoints, 5, 3, 0);
+            addConeRow(localConePoints, 5, 4, 0);
+            addConeRow(localConePoints, 5, 5, 0);
+            addConeRow(localConePoints, 5, 6, 0);
+            addConeRow(localConePoints, 5, 7, 0);
+            addConeRow(localConePoints, 3, 8, 0);
+        }
+        else
+        {
+            addConeRow(localConePoints, 3, 0, 0);
+            addConeRow(localConePoints, 3, 1, 0);
+            addConeRow(localConePoints, 5, 2, 0);
+            addConeRow(localConePoints, 3, 3, 0);
+        }
 
+        // lower pane
+        if (_size > ConeSize.SMALL)
+        {
+            addConeRow(localConePoints, 3, 0, -1);
+            addConeRow(localConePoints, 5, 1, -1);
+            addConeRow(localConePoints, 5, 2, -1);
+            addConeRow(localConePoints, 5, 3, -1);
+            addConeRow(localConePoints, 5, 4, -1);
+            addConeRow(localConePoints, 5, 5, -1);
+            addConeRow(localConePoints, 5, 6, -1);
+            addConeRow(localConePoints, 5, 7, -1);
+            addConeRow(localConePoints, 3, 8, -1);
+        }
+        else
+        {
+            addConeRow(localConePoints, 3, 0, -1);
+            addConeRow(localConePoints, 3, 1, -1);
+            addConeRow(localConePoints, 5, 2, -1);
+            addConeRow(localConePoints, 3, 3, -1);
+        }
+
+        // higher pane
+        if (_size > ConeSize.SMALL)
+        {
+            addConeRow(localConePoints, 3, 0, 1);
+            addConeRow(localConePoints, 5, 1, 1);
+            addConeRow(localConePoints, 5, 2, 1);
+            addConeRow(localConePoints, 5, 3, 1);
+            addConeRow(localConePoints, 5, 4, 1);
+            addConeRow(localConePoints, 5, 5, 1);
+            addConeRow(localConePoints, 5, 6, 1);
+            addConeRow(localConePoints, 5, 7, 1);
+            addConeRow(localConePoints, 3, 8, 1);
+        }
+        else
+        {
+            addConeRow(localConePoints, 3, 0, 1);
+            addConeRow(localConePoints, 3, 1, 1);
+            addConeRow(localConePoints, 3, 2, 1);
+            addConeRow(localConePoints, 3, 3, 1);
+        }
+
+        // and even another higher pane
+        if (_size > ConeSize.SMALL)
+        {
+            addConeRow(localConePoints, 3, 0, 2);
+            addConeRow(localConePoints, 5, 1, 2);
+            addConeRow(localConePoints, 5, 2, 2);
+            addConeRow(localConePoints, 5, 3, 2);
+            addConeRow(localConePoints, 5, 4, 2);
+            addConeRow(localConePoints, 5, 5, 2);
+            addConeRow(localConePoints, 5, 6, 2);
+            addConeRow(localConePoints, 5, 7, 2);
+            addConeRow(localConePoints, 3, 8, 2);
+        }
+        else
+        {
+            addConeRow(localConePoints, 3, 0, 2);
+            addConeRow(localConePoints, 3, 1, 2);
+            addConeRow(localConePoints, 3, 2, 2);
+            addConeRow(localConePoints, 3, 3, 2);
+        }
 
         foreach (var localPosition in localConePoints)
         {
@@ -255,6 +314,7 @@ public class Inhaler : MonoBehaviour
         {
             CallOnInhaleEndEvents();
         }
+
         isInhale = false;
         OnCustardInhaleStopped();
         inhalingConeParticleSystem.gameObject.SetActive(false);
@@ -298,6 +358,7 @@ public class Inhaler : MonoBehaviour
         InhalersTracker.Instance.onInhaleStart?.Invoke(this);
         onInhaleStart?.Invoke(this);
     }
+
     private void CallOnInhaleEndEvents()
     {
         InhalersTracker.Instance.onInhaleEnd?.Invoke(this);
@@ -336,5 +397,11 @@ public class Inhaler : MonoBehaviour
         {
             this._strength = strength;
         }
+    }
+
+    public enum ConeSize
+    {
+        SMALL,
+        NORMAL
     }
 }
