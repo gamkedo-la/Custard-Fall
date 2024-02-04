@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26931c617568282449a3c22c510a2f46, type: 3}
+  m_Name: Monolyth
+  m_EditorClassIdentifier: 
+  prototype: {fileID: 678207430211547810, guid: 8677f0f23e4bda44dad14395688f9845, type: 3}
+  placeablePreview: {fileID: 4792261598608316053, guid: f4939842372a677488205ebe02c2f584, type: 3}
+  icon: {fileID: 21300000, guid: 2da13f4520ca050469b9bce9ec129f6d, type: 3}
+  resourceName: Monolyth
