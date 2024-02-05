@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 3203314172375432165, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1e9f5a567fc60b94f9ede577661b9cab, type: 2}
+      objectReference: {fileID: 2100000, guid: 185679613ad624845ae0fa8b7a31de19, type: 2}
     - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Name
       value: ParticleItemPickup (1)
@@ -87,7 +87,7 @@ PrefabInstance:
     - target: {fileID: 3203314172375432165, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1e9f5a567fc60b94f9ede577661b9cab, type: 2}
+      objectReference: {fileID: 2100000, guid: 185679613ad624845ae0fa8b7a31de19, type: 2}
     - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Name
       value: ParticleItemPickup (3)
@@ -164,7 +164,7 @@ PrefabInstance:
     - target: {fileID: 3203314172375432165, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1e9f5a567fc60b94f9ede577661b9cab, type: 2}
+      objectReference: {fileID: 2100000, guid: 185679613ad624845ae0fa8b7a31de19, type: 2}
     - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Name
       value: ParticleItemPickup
@@ -317,10 +317,10 @@ PrefabInstance:
     - target: {fileID: -629392271669159207, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1e9f5a567fc60b94f9ede577661b9cab, type: 2}
+      objectReference: {fileID: 2100000, guid: 9c78d3b8f4b5a0e4b90829051495588e, type: 2}
     - target: {fileID: 919132149155446097, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}
       propertyPath: m_Name
-      value: RadianceOrb 1
+      value: HealthOrb
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}
@@ -375,7 +375,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43fae95d470548d6881348be63c1b17d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radianceBonus: 0.42
+  radianceBonus: 0.05
+  healthBonus: 33
 --- !u!114 &5783487300265022453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +454,7 @@ PrefabInstance:
     - target: {fileID: 3203314172375432165, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1e9f5a567fc60b94f9ede577661b9cab, type: 2}
+      objectReference: {fileID: 2100000, guid: 185679613ad624845ae0fa8b7a31de19, type: 2}
     - target: {fileID: 3203314172375432166, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
       propertyPath: m_Name
       value: ParticleItemPickup (2)
