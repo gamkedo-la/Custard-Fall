@@ -11,8 +11,10 @@ public class OrbSpawner : MonoBehaviour
     [SerializeField] private GameObject healthOrbPrefab;
     [SerializeField] private GameObject radianceOrbPrefab;
     [SerializeField] private float spawnHeight = 1.5f;
-    [SerializeField] private float timeBetweenHealthOrbsChecks = 5f;
-    [SerializeField] private float timeBetweenRadianceOrbsChecks = 5f;
+
+    [FormerlySerializedAs("timeBetweenRadianceOrbsChecks")] [SerializeField]
+    private float timeBetweenOrbsChecks = 5f;
+
     [SerializeField] private float despawnDistance = 40f;
     [SerializeField] private float spawnRadius = 20f;
     [SerializeField] private float spawnInnerRadius = 6f;
@@ -26,6 +28,8 @@ public class OrbSpawner : MonoBehaviour
     [SerializeField] private CustardState custardState;
     [SerializeField] private float usualHealthToRadianceFraction = .4f;
     [SerializeField] private float emergencyHealthToRadianceFraction = .8f;
+
+    [SerializeField] private float radiusOffsetInMoveDirection = 10f;
 
     void Start()
     {
@@ -92,21 +96,25 @@ public class OrbSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(timeBetweenRadianceOrbsChecks);
+            yield return new WaitForSeconds(timeBetweenOrbsChecks);
 
             if (_spawnedOrbs.Count > maxConcurrentOrbs)
                 continue;
 
             int retries = spawnRetries;
             var playerPosition = _player.gameObject.transform.position;
-            var playerPositionVector = new Vector2(playerPosition.x, playerPosition.z);
+
+
+            var moveDirection = _player.transform.forward;
+            var spawnCenter = new Vector2(playerPosition.x, playerPosition.z) +
+                              new Vector2(moveDirection.x, moveDirection.y) * radiusOffsetInMoveDirection;
             for (; retries > 0; retries--)
             {
                 var randVector = Random.insideUnitCircle * spawnRadius;
                 if (randVector.magnitude < spawnInnerRadius)
                     continue;
 
-                var spawnPos = randVector + playerPositionVector;
+                var spawnPos = randVector + spawnCenter;
                 var cellPosition = worldCells.GetCellPosition(spawnPos);
                 if (custardState.GetCurrentCustardLevelAt(cellPosition) == 1)
                 {
@@ -133,14 +141,6 @@ public class OrbSpawner : MonoBehaviour
         {
             spawnedOrb = Instantiate(radianceOrbPrefab, position, Quaternion.identity);
             _spawnedOrbs.Add(spawnedOrb.GetComponent<InhalableFloatingOrb>());
-        }
-    }
-
-    private IEnumerator SpawnHealthOrbs()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(timeBetweenHealthOrbsChecks);
         }
     }
 }
