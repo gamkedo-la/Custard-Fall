@@ -248,6 +248,10 @@ public class Player : MonoBehaviour
             {
                 DieAndRespawn();
             }
+            else if(currentHealth > maxHealth)
+            {
+                currentHealth = maxHealth;
+            }
         }
         else
         {
