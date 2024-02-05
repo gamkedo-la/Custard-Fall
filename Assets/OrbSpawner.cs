@@ -19,11 +19,13 @@ public class OrbSpawner : MonoBehaviour
     [SerializeField] private int spawnRetries = 20;
     [SerializeField] private int maxConcurrentOrbs = 7;
 
-    private readonly List<InhalableFloatingOrb> _spawnOrbs = new List<InhalableFloatingOrb>();
+    private readonly List<InhalableFloatingOrb> _spawnedOrbs = new List<InhalableFloatingOrb>();
 
     private Player _player;
     [SerializeField] private WorldCells worldCells;
     [SerializeField] private CustardState custardState;
+    [SerializeField] private float usualHealthToRadianceFraction = .4f;
+    [SerializeField] private float emergencyHealthToRadianceFraction = .8f;
 
     void Start()
     {
@@ -58,7 +60,7 @@ public class OrbSpawner : MonoBehaviour
             var playerPositionVector = new Vector2(playerPosition.x, playerPosition.z);
 
             List<GameObject> tobeDestroyed = new List<GameObject>();
-            _spawnOrbs.RemoveAll(orb =>
+            _spawnedOrbs.RemoveAll(orb =>
             {
                 bool delete = false;
                 if (!orb)
@@ -69,8 +71,8 @@ public class OrbSpawner : MonoBehaviour
                 {
                     var position = orb.transform.position;
                     delete = orb.IsUsedUp() ||
-                                 Vector2.Distance(new Vector2(position.x, position.z), playerPositionVector) >
-                                 despawnDistance;
+                             Vector2.Distance(new Vector2(position.x, position.z), playerPositionVector) >
+                             despawnDistance;
                     if (delete)
                     {
                         tobeDestroyed.Add(orb.gameObject);
@@ -92,7 +94,7 @@ public class OrbSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBetweenRadianceOrbsChecks);
 
-            if (_spawnOrbs.Count > maxConcurrentOrbs)
+            if (_spawnedOrbs.Count > maxConcurrentOrbs)
                 continue;
 
             int retries = spawnRetries;
@@ -110,12 +112,27 @@ public class OrbSpawner : MonoBehaviour
                 {
                     var height = worldCells.GetHeightAt(cellPosition) + spawnHeight;
                     var position = new Vector3(spawnPos.x, height, spawnPos.y);
-                    var spawnedOrb = Instantiate(radianceOrbPrefab, position, Quaternion.identity);
-                    var inhalableFloatingOrb = spawnedOrb.GetComponent<InhalableFloatingOrb>();
-                    _spawnOrbs.Add(inhalableFloatingOrb);
+
+                    SpawnMostNeededOrb(position, out var spawnedOrb);
+
                     break;
                 }
             }
+        }
+    }
+
+    private void SpawnMostNeededOrb(Vector3 position, out GameObject spawnedOrb)
+    {
+        if (_player.currentHealth < _player.maxHealth * 2.0f / 3 && Random.value <= emergencyHealthToRadianceFraction ||
+            _player.currentHealth < _player.maxHealth && Random.value <= usualHealthToRadianceFraction)
+        {
+            spawnedOrb = Instantiate(healthOrbPrefab, position, Quaternion.identity);
+            _spawnedOrbs.Add(spawnedOrb.GetComponent<InhalableFloatingOrb>());
+        }
+        else
+        {
+            spawnedOrb = Instantiate(radianceOrbPrefab, position, Quaternion.identity);
+            _spawnedOrbs.Add(spawnedOrb.GetComponent<InhalableFloatingOrb>());
         }
     }
 
