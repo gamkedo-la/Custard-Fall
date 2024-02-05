@@ -375,7 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43fae95d470548d6881348be63c1b17d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radianceBonus: 0.05
+  radianceBonus: 0.17
   healthBonus: 33
 --- !u!114 &5783487300265022453
 MonoBehaviour:
