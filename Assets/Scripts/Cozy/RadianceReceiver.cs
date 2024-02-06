@@ -56,6 +56,8 @@ public class RadianceReceiver : MonoBehaviour
     {
         if (personalRadianceLevel >= maxRadianceLevel && radiance >= 1.0f)
         {
+            _bonusValue = 0f;
+            radiance = 1.0f;
             return;
         }
         
