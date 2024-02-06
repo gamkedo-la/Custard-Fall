@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 public class RadianceReceiver : MonoBehaviour
 {
     [SerializeField] private float radiance = 0;
+    [SerializeField] private int maxRadianceLevel = 1;
     [SerializeField] private int radianceLevelOfSurrounding;
     [SerializeField] private int personalRadianceLevel = 0;
     [SerializeField] private float baseFillDuration = 3;
@@ -42,6 +43,10 @@ public class RadianceReceiver : MonoBehaviour
         if (radianceLevel == radianceLevelOfSurrounding)
             return;
 
+        if (maxRadianceLevel < radianceLevel)
+        {
+            maxRadianceLevel = radianceLevel;
+        }
         var oldLevel = radianceLevelOfSurrounding;
         radianceLevelOfSurrounding = radianceLevel;
         onRadianceChangeInZone?.Invoke(radianceLevelOfSurrounding, oldLevel);
@@ -49,6 +54,11 @@ public class RadianceReceiver : MonoBehaviour
 
     private void Update()
     {
+        if (personalRadianceLevel >= maxRadianceLevel && radiance >= 1.0f)
+        {
+            return;
+        }
+        
         var radianceBefore = radiance;
         float deltaRadiance = 0;
         if (personalRadianceLevel < radianceLevelOfSurrounding)
@@ -131,7 +141,7 @@ public class RadianceReceiver : MonoBehaviour
 
     private void ChangeLevel(int radianceLevel)
     {
-        if (radianceLevel >= 0 && radianceLevel <= radianceSettings.Levels.Count - 1)
+        if (radianceLevel >= 0 && radianceLevel <= maxRadianceLevel && radianceLevel <= radianceSettings.Levels.Count - 1)
         {
             var oldLevel = personalRadianceLevel;
             personalRadianceLevel = radianceLevel;
