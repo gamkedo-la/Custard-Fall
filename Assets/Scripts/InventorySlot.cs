@@ -70,8 +70,12 @@ public class InventorySlot : MonoBehaviour
         else
         {
             Resource tmpResource = new Resource(resource.Name, resource.PlaceableItem);
-            Player.EnterPlaceMode(resource.PlaceableItem, () => _inventory.GetResourceAmount(tmpResource) > 0,
-                () => _inventory.AddOrSubResourceAmount(tmpResource, -1) > 0);
+            Func<bool> canPlaceMoreCheck = () => _inventory.GetResourceAmount(tmpResource) > 0;
+            if (canPlaceMoreCheck.Invoke())
+            {
+                Player.EnterPlaceMode(resource.PlaceableItem, canPlaceMoreCheck,
+                    () => _inventory.AddOrSubResourceAmount(tmpResource, -1) > 0);
+            }
         }
     }
 }
