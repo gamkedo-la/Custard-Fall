@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Custard;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,8 +10,7 @@ public class Player : MonoBehaviour
     public WorldCells worldCells;
     public Inhaler inhaler;
 
-    [SerializeField]
-    private PauseActivator _pauseActivator;
+    [SerializeField] private PauseActivator _pauseActivator;
 
     [SerializeField] private Transform respawnPoint;
     [SerializeField] private Animator playerAnimator;
@@ -68,6 +68,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private bool isSwimming;
     public bool IsSwimming => isSwimming;
+
+    [SerializeField] private List<InventorySlot> inventorySlotReferences = new List<InventorySlot>();
 
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
@@ -140,7 +142,7 @@ public class Player : MonoBehaviour
         {
             grappleMarker.SetActive(false);
             var positionBefore = transform.position;
-            var realGrapplePoint = new Vector3(grapplePoint.x,positionBefore.y, grapplePoint.z);
+            var realGrapplePoint = new Vector3(grapplePoint.x, positionBefore.y, grapplePoint.z);
             transform.position =
                 Vector3.MoveTowards(positionBefore, realGrapplePoint, grappleSpeed * Time.fixedDeltaTime);
             grappleLine.SetPosition(0, grappleLine.gameObject.transform.position);
@@ -242,13 +244,13 @@ public class Player : MonoBehaviour
             currentHealth -= damage;
             healthbar.SetHealth(currentHealth);
             _radianceReceiver.DeclineRadiance(1);
-            Debug.Log("taking health damage "+damage+" - now on "+currentHealth+"HP");
+            Debug.Log("taking health damage " + damage + " - now on " + currentHealth + "HP");
 
             if (currentHealth <= 0)
             {
                 DieAndRespawn();
             }
-            else if(currentHealth > maxHealth)
+            else if (currentHealth > maxHealth)
             {
                 currentHealth = maxHealth;
             }
@@ -459,10 +461,7 @@ public class Player : MonoBehaviour
 
     public void OnInhale(InputValue context)
     {
-        if (placeModeItemReference)
-            return;
-        
-        if (context.isPressed)
+        if (context.isPressed && placeModeItemReference == null)
         {
             inhaler.BeginInhaleInTransformDirection(4f);
             inhaleSFX.Play();
@@ -647,7 +646,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void ExitPlaceMode()
+    public void ExitPlaceMode()
     {
         Destroy(itemInHand);
         itemInHand = null;
@@ -779,6 +778,46 @@ public class Player : MonoBehaviour
     public void OnPause(InputValue context)
     {
         _pauseActivator.TogglePause();
+    }
+
+    public void OnSlot1(InputValue context)
+    {
+        inventorySlotReferences[0].TakeItem();
+    }
+
+    public void OnSlot2(InputValue context)
+    {
+        inventorySlotReferences[1].TakeItem();
+    }
+
+    public void OnSlot3(InputValue context)
+    {
+        inventorySlotReferences[3].TakeItem();
+    }
+
+    public void OnSlot4(InputValue context)
+    {
+        inventorySlotReferences[3].TakeItem();
+    }
+
+    public void OnSlot5(InputValue context)
+    {
+        inventorySlotReferences[4].TakeItem();
+    }
+
+    public void OnSlot6(InputValue context)
+    {
+        inventorySlotReferences[5].TakeItem();
+    }
+
+    public void OnSlot7(InputValue context)
+    {
+        inventorySlotReferences[6].TakeItem();
+    }
+
+    public void OnSlot8(InputValue context)
+    {
+        inventorySlotReferences[7].TakeItem();
     }
 }
 
