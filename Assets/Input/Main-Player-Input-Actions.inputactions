@@ -1091,11 +1091,33 @@
                 },
                 {
                     "name": "",
+                    "id": "fd811b3f-f244-46a0-abfe-0152229c608e",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Slot1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ee3c5c07-df66-4c97-aed2-18029af85876",
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "Slot2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3878b9a-2eb4-4b03-9105-bc4ee1abfa6d",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Slot2",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1113,11 +1135,33 @@
                 },
                 {
                     "name": "",
+                    "id": "5f8f86ce-78fe-4664-8f67-c006d618fb3e",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Slot3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8508d4c3-21ef-4afd-a80d-9b8b1d1d9c18",
                     "path": "<Keyboard>/4",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "Slot4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dcbf394e-19b4-4b0d-94c8-471bef3d8508",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Slot4",
                     "isComposite": false,
                     "isPartOfComposite": false
