@@ -27,6 +27,7 @@ public class OrbSpawner : MonoBehaviour
     [SerializeField] private WorldCells worldCells;
     [SerializeField] private CustardState custardState;
     [SerializeField] private float usualHealthToRadianceFraction = .4f;
+    [SerializeField] private float whenFullRadianceOrbFraction = .4f;
     [SerializeField] private float emergencyHealthToRadianceFraction = .8f;
 
     [SerializeField] private float radiusOffsetInMoveDirection = 10f;
@@ -139,8 +140,20 @@ public class OrbSpawner : MonoBehaviour
         }
         else
         {
-            spawnedOrb = Instantiate(radianceOrbPrefab, position, Quaternion.identity);
-            _spawnedOrbs.Add(spawnedOrb.GetComponent<InhalableFloatingOrb>());
+            var radianceReceiver = _player.GetComponent<RadianceReceiver>();
+            if (radianceReceiver.PersonalRadianceLevel <= radianceReceiver.MaxRadianceLevel &&
+                radianceReceiver.Radiance < 1f ||
+                radianceReceiver.PersonalRadianceLevel == radianceReceiver.MaxRadianceLevel &&
+                radianceReceiver.Radiance >= 1f && Random.value <= whenFullRadianceOrbFraction)
+            {
+                spawnedOrb = Instantiate(radianceOrbPrefab, position, Quaternion.identity);
+                _spawnedOrbs.Add(spawnedOrb.GetComponent<InhalableFloatingOrb>());
+            }
+            else
+            {
+                // no orb spawned
+                spawnedOrb = null;
+            }
         }
     }
 }
