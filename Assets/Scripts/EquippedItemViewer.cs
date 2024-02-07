@@ -13,13 +13,13 @@ public class EquippedItemViewer : MonoBehaviour
     GameObject currentItemInHand = null;
 
     private void Update() {
-        if(currentItemInHand == player.itemInHand){
+        if(currentItemInHand == player.itemPreview){
             return;
         }
 
         InventoryIcon invIcon;
 
-        if(player.itemInHand.TryGetComponent<InventoryIcon>(out invIcon)){
+        if(player.itemPreview.TryGetComponent<InventoryIcon>(out invIcon)){
             equippedImage.sprite = invIcon.sprite;
             return;
         }

@@ -809,7 +809,7 @@ public class Player : MonoBehaviour
 
     public void OnSlot3(InputValue context)
     {
-        inventorySlotReferences[3].TakeItem();
+        inventorySlotReferences[2].TakeItem();
     }
 
     public void OnSlot4(InputValue context)
