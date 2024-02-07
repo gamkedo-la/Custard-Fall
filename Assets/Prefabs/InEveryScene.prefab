@@ -579,7 +579,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -71, y: -99.99997}
+  m_AnchoredPosition: {x: -103, y: -69}
   m_SizeDelta: {x: 73.2502, y: 73.2502}
   m_Pivot: {x: 1, y: 1}
 --- !u!1 &1711982423791296743
@@ -643,7 +643,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6117647}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -673,8 +673,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equippedImage: {fileID: 1711982423924344665}
-  defaultSprite: {fileID: 21300000, guid: a26fe483e563f2c41a8ad0433546fd6a, type: 3}
-  player: {fileID: 0}
+  defaultSprite: {fileID: 21300000, guid: 4601739395d23834c95826f83b3f3ec5, type: 3}
+  player: {fileID: 3927434655757161309}
 --- !u!1 &1711982423924344667
 GameObject:
   m_ObjectHideFlags: 0

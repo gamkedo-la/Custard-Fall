@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
     public GameObject itemPreview;
 
     [SerializeField] private PlaceableItem placeModeItemReference;
+    public PlaceableItem PlaceModeItemReference => placeModeItemReference;
 
     private Vector3 targetPoint4PlacingItem;
     private Vector3 _smoothPreviewPosition;
