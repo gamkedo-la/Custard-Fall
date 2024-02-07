@@ -63,7 +63,7 @@ public class InventorySlot : MonoBehaviour
 
     public void TakeItem()
     {
-        if (resource == null)
+        if (resource == null || Player.PlaceModeItemReference && Player.PlaceModeItemReference.ResourceName == resource.Name)
         {
             Player.ExitPlaceMode();
         }
