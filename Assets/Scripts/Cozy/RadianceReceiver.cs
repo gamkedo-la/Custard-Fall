@@ -23,6 +23,7 @@ public class RadianceReceiver : MonoBehaviour
     public int RadianceLevelOfSurrounding => radianceLevelOfSurrounding;
     public int PersonalRadianceLevel => personalRadianceLevel;
     public float Radiance => radiance;
+    public int MaxRadianceLevel => maxRadianceLevel;
 
     private bool _fillingUp = false;
 

@@ -459,6 +459,9 @@ public class Player : MonoBehaviour
 
     public void OnInhale(InputValue context)
     {
+        if (placeModeItemReference)
+            return;
+        
         if (context.isPressed)
         {
             inhaler.BeginInhaleInTransformDirection(4f);
@@ -541,6 +544,7 @@ public class Player : MonoBehaviour
         {
             // cancel place mode
             ExitPlaceMode();
+            return;
         }
 
         if (!ownsGrapplingHook) return; // maybe play null sound effect
