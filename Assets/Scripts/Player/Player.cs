@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Custard;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class Player : MonoBehaviour
 {
@@ -79,7 +80,7 @@ public class Player : MonoBehaviour
 
     public InputControlScheme gameplayScheme;
 
-    public GameObject itemInHand;
+    public GameObject itemPreview;
 
     [SerializeField] private PlaceableItem placeModeItemReference;
 
@@ -129,12 +130,12 @@ public class Player : MonoBehaviour
                         out ItemReceiver itemReceiver);
                 _smoothPreviewPosition = Vector3.SmoothDamp(_smoothPreviewPosition, targetPoint4PlacingItem,
                     ref _velSmoothPreviewPosition, 0.042f);
-                itemInHand.transform.position = _smoothPreviewPosition;
+                itemPreview.transform.position = _smoothPreviewPosition;
                 UpdatePlaceableItemState(playerPosition, itemReceiver);
             }
-            else if (itemInHand)
+            else if (itemPreview)
             {
-                itemInHand.SetActive(false);
+                itemPreview.SetActive(false);
             }
         }
 
@@ -461,14 +462,19 @@ public class Player : MonoBehaviour
 
     public void OnInhale(InputValue context)
     {
-        if (context.isPressed && placeModeItemReference == null)
+        if (context.isPressed)
         {
-            inhaler.BeginInhaleInTransformDirection(4f);
-            inhaleSFX.Play();
-
-            if (itemInHand != null)
+            if (placeModeItemReference == null)
             {
-                PlaceItemInHand();
+                inhaler.BeginInhaleInTransformDirection(4f);
+                inhaleSFX.Play();
+            }
+            else
+            {
+                if (itemPreview != null)
+                {
+                    PlaceItemInHand();
+                }
             }
         }
         else
@@ -517,7 +523,7 @@ public class Player : MonoBehaviour
         else
         {
             // on release
-            if (itemInHand != null)
+            if (itemPreview != null)
                 PlaceItemInHand();
         }
     }
@@ -648,8 +654,8 @@ public class Player : MonoBehaviour
 
     public void ExitPlaceMode()
     {
-        Destroy(itemInHand);
-        itemInHand = null;
+        Destroy(itemPreview);
+        itemPreview = null;
         canPlaceMoreCheckFunc = null;
         placeModeItemReference = null;
         focusedItemReceiver?.LeavePreview();
@@ -659,8 +665,16 @@ public class Player : MonoBehaviour
 
     public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> placingFunction)
     {
-        if (placeModeItemReference && placeModeItemReference.Prototype == item.Prototype)
-            return;
+        if (placeModeItemReference)
+        {
+            if (placeModeItemReference.Prototype == item.Prototype)
+            {
+                return;
+            }
+
+            if (itemPreview)
+                Destroy(itemPreview);
+        }
 
         Debug.Log("Enter place mode with " + item.ResourceName);
         placeModeItemReference = item;
@@ -670,7 +684,7 @@ public class Player : MonoBehaviour
             FindNearestPlaceModeItemPosition(playerPosition, playerDirectionalTransform.forward,
                 out ItemReceiver itemReceiver);
 
-        itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
+        itemPreview = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
         canPlaceMoreCheckFunc = canPlaceMoreCheck;
         onItemPlaced = placingFunction;
         _smoothPreviewPosition = targetPoint4PlacingItem;
@@ -691,18 +705,18 @@ public class Player : MonoBehaviour
         {
             if (itemReceiver == null)
             {
-                itemInHand.SetActive(true);
+                itemPreview.SetActive(true);
             }
             else
             {
-                itemInHand.SetActive(false);
+                itemPreview.SetActive(false);
                 itemReceiver.PreviewReceiveItem(placeModeItemReference);
                 focusedItemReceiver = itemReceiver;
             }
         }
         else
         {
-            itemInHand.SetActive(false);
+            itemPreview.SetActive(false);
         }
 
         return possible;
