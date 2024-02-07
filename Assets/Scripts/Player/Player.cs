@@ -553,6 +553,8 @@ public class Player : MonoBehaviour
             return;
         }
 
+        Debug.Log("Grapple button detected "+context.isPressed);
+
         if (!ownsGrapplingHook) return; // maybe play null sound effect
         if (grappling || nextGrappleTime < grappleCooldownTime)
         {
@@ -567,6 +569,7 @@ public class Player : MonoBehaviour
         {
             // this can only run when the OnGrapple is called and the button isn't pressed => release state
             grappleReleased?.Invoke(this, EventArgs.Empty);
+            return;
         }
         // when released the grapple is thrown towards grapplePoint
         // grapplehook hits terrain it can stick to?
