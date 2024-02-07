@@ -657,8 +657,11 @@ public class Player : MonoBehaviour
         requireUseButtonRelease = false;
     }
 
-    public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> onItemPlaced)
+    public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> placingFunction)
     {
+        if (placeModeItemReference && placeModeItemReference.Prototype == item.Prototype)
+            return;
+
         Debug.Log("Enter place mode with " + item.ResourceName);
         placeModeItemReference = item;
         var playerDirectionalTransform = playerDirectional.transform;
@@ -669,7 +672,7 @@ public class Player : MonoBehaviour
 
         itemInHand = Instantiate(item.PlaceablePreview, targetPoint4PlacingItem, Quaternion.identity);
         canPlaceMoreCheckFunc = canPlaceMoreCheck;
-        this.onItemPlaced = onItemPlaced;
+        onItemPlaced = placingFunction;
         _smoothPreviewPosition = targetPoint4PlacingItem;
         UpdatePlaceableItemState(playerPosition, itemReceiver);
     }
