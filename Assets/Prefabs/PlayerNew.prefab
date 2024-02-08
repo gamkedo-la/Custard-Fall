@@ -5222,13 +5222,14 @@ MonoBehaviour:
   ownsGrapplingHook: 0
   combinatorProfile: {fileID: 11400000, guid: 0e447b4e028cdbb49b9307791fcdc4a1, type: 2}
   isSwimming: 0
+  inventorySlotReferences: []
   yOffset: -0.1
   placementYOffset: 0.38
   gameplayScheme:
     m_Name: 
     m_BindingGroup: 
     m_DeviceRequirements: []
-  itemInHand: {fileID: 0}
+  itemPreview: {fileID: 0}
   placeModeItemReference: {fileID: 0}
   maxHealth: 90
   currentHealth: 0
@@ -5470,13 +5471,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radiance: 0
+  maxRadianceLevel: 1
   radianceLevelOfSurrounding: 0
   personalRadianceLevel: 1
   baseFillDuration: 2
   radianceSettings: {fileID: 11400000, guid: df6c070b44965774aa8c3cfed6914268, type: 2}
   requiredRadianceForLevelUp: 1
   requiredRadianceForLevelDown: 1
-  refillRate: 0.06
+  refillRate: 0.12
   refillTillLevel: 1
   refillStartDelay: 1.33
   refillIfDeclining: 1
