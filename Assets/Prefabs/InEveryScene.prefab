@@ -6440,6 +6440,10 @@ PrefabInstance:
       propertyPath: m_UIInputModule
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4789555097486638813, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
+      propertyPath: visualizer
+      value: 
+      objectReference: {fileID: 5934050439246239777}
     - target: {fileID: 5454419848131368307, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
       propertyPath: inCustardEffect
       value: 
