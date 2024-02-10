@@ -1,7 +1,7 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class InventorySlot : MonoBehaviour
 {
@@ -63,7 +63,8 @@ public class InventorySlot : MonoBehaviour
 
     public void TakeItem()
     {
-        if (resource == null || Player.PlaceModeItemReference && Player.PlaceModeItemReference.ResourceName == resource.Name)
+        if (resource == null ||
+            Player.PlaceModeItemReference && Player.PlaceModeItemReference.ResourceName == resource.Name)
         {
             Player.ExitPlaceMode();
         }
@@ -77,5 +78,15 @@ public class InventorySlot : MonoBehaviour
                     () => _inventory.AddOrSubResourceAmount(tmpResource, -1) > 0);
             }
         }
+    }
+
+    public void PreventUseAction()
+    {
+        Player.preventInhale = true;
+    }
+
+    public void AllowUseAction()
+    {
+        Player.preventInhale = false;
     }
 }

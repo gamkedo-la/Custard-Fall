@@ -463,7 +463,7 @@ public class Player : MonoBehaviour
 
     public void OnInhale(InputValue context)
     {
-        if (context.isPressed)
+        if (!preventInhale && context.isPressed)
         {
             if (placeModeItemReference == null)
             {
@@ -543,6 +543,7 @@ public class Player : MonoBehaviour
     private static readonly int Swimming = Animator.StringToHash("swimming");
     private static readonly int Walking = Animator.StringToHash("walking");
     private static readonly int Grappling = Animator.StringToHash("grappling");
+    public bool preventInhale = false;
 
     public void OnGrapple(InputValue context) // InputAction.CallbackContext context
     {
