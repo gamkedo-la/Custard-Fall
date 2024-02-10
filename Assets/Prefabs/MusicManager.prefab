@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicSourcePrefab: {fileID: -3829548200560104043, guid: d81ee3d0f2d720741a248df32c9157ef, type: 3}
-  playMusicOnStart: 1
+  playMusicOnStart: 0
   currentTrack:
     clips:
     - clip:

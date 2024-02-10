@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Custard;
 using UnityEngine;
@@ -6,7 +7,9 @@ using UnityEngine.Serialization;
 
 public class Tidesmanager : MonoBehaviour
 {
-    [FormerlySerializedAs("CustardManager")] public CustardManager custardManager;
+    [FormerlySerializedAs("CustardManager")]
+    public CustardManager custardManager;
+
     public TimeManager timeManager;
     [FormerlySerializedAs("Player")] public Player player;
 
@@ -36,6 +39,11 @@ public class Tidesmanager : MonoBehaviour
 
     [SerializeField] private bool useSerializedCycle;
     [SerializeField] private List<TideDay> cycle = new();
+
+    [SerializeField] private Animator dangerAnimatorController;
+    [SerializeField] private GameObject dangerText;
+    [SerializeField] private float dangerAnimationSeconds = 5f;
+    private int _currentTideDirection = 0;
 
     public int indexOfCurrentDayTimeTideLevel;
 
@@ -98,7 +106,7 @@ public class Tidesmanager : MonoBehaviour
             if (_handleOverride || timeIndex != indexOfCurrentDayTimeTideLevel)
             {
                 _handleOverride = false;
-                
+
                 TideStep tideStep = GetTideStep(timeIndex);
                 indexOfCurrentDayTimeTideLevel = timeIndex;
 
@@ -113,6 +121,18 @@ public class Tidesmanager : MonoBehaviour
                     custardManager.RimCustardUpdate();
                 }
 
+                if (currentTideLevel < nextTideLevel && _currentTideDirection < 0)
+                {
+                    dangerText.SetActive(true);
+                    dangerAnimatorController.SetTrigger("Danger");
+                    StartCoroutine(HideDangerPopup());
+                }
+
+                if (nextTideLevel != currentTideLevel)
+                {
+                    _currentTideDirection = nextTideLevel - currentTideLevel;
+                }
+
                 custardManager.SeedCustardUpdate((int) Math.Floor(Time.time * 1000));
                 custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 2);
                 custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 4);
@@ -122,6 +142,12 @@ public class Tidesmanager : MonoBehaviour
                 custardManager.SeedCustardUpdate(((int) Math.Floor(Time.time * 1000)) / 64);
             }
         }
+    }
+
+    private IEnumerator HideDangerPopup()
+    {
+        yield return new WaitForSeconds(dangerAnimationSeconds);
+        dangerText.SetActive(false);
     }
 
     private TideStep GetTideStep(int timeIndex)

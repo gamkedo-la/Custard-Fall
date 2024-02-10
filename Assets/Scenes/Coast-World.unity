@@ -37982,7 +37982,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[4].spawnAtNight
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[5].spawnAtNight
@@ -38010,7 +38010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[4].numberRetries
-      value: 32
+      value: 42
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[5].numberRetries
@@ -38142,7 +38142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[4].minTerrainLevel
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[4].quantityIn16X16
@@ -38242,7 +38242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[4].fractionFullmoon
-      value: 0.6
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[5].fractionFullmoon
@@ -38274,7 +38274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[4].fractionNormalDay
-      value: 0.5
+      value: 0.22
       objectReference: {fileID: 0}
     - target: {fileID: 377578497760066824, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: randomizedItems.Array.data[5].fractionNormalDay
@@ -38680,6 +38680,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1711982423791296741, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Color.a
+      value: 0.5411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711982423791296741, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Color.b
+      value: 0.8066038
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711982423791296741, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Color.g
+      value: 0.826928
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711982423791296741, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1736300944963231137, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: Item
       value: 
@@ -38727,6 +38743,10 @@ PrefabInstance:
     - target: {fileID: 1844524520163050663, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: CraftableItem, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1845901726556555521, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1863094658143921350, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -40292,6 +40312,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 2.063281
       objectReference: {fileID: 0}
+    - target: {fileID: 8634744845809120641, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
     - target: {fileID: 8634744845947213668, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 193.9
@@ -41010,7 +41034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8911655828509573760, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -34
+      value: -34.000122
       objectReference: {fileID: 0}
     - target: {fileID: 9024734049035711119, guid: b519f85aeb13a4649b64736696d8f120, type: 3}
       propertyPath: m_AnchorMax.y
