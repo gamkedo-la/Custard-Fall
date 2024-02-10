@@ -1,21 +1,14 @@
-﻿using System;
-using Unity.VisualScripting;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 public class InhaleableStepOn : Inhalable
 {
     private WorldCells _worldCells;
-    private PlaceableItem _placeableItem;
-    [SerializeField]
-    private int Height = 2;
+    [SerializeField] private int Height = 2;
     private bool hasRegisteredHeight;
 
     private void Awake()
     {
         AddObstacleToWorld(Height);
-        var placeableItemReference = GetComponent<PlaceableItemReference>();
-        _placeableItem = placeableItemReference.Item();
     }
 
     private void AddObstacleToWorld(int height)
