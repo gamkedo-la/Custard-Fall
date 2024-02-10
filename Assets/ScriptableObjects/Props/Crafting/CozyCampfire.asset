@@ -15,4 +15,8 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: b1900b632462ff049ae11739a9ca0aa7, type: 2}
   requirements:
   - resourceName: Creamy Cone Tree
-    amount: 10
+    amount: 5
+  - resourceName: pebble
+    amount: 5
+  - resourceName: glow orb
+    amount: 1

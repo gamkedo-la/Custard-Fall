@@ -123,7 +123,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
     public class UpgradeConfig
     {
         public string comment;
-        public int requiredPoints;
+        public int requiredPoints = 1;
         public int jumpToLevel;
 
         [Tooltip("optional, turn current object into the upgrade")]
