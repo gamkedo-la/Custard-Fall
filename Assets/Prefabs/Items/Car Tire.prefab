@@ -17,7 +17,8 @@ GameObject:
   - component: {fileID: 1776846035395798667}
   - component: {fileID: 4548285329376016947}
   - component: {fileID: 7446605153624581511}
-  m_Layer: 0
+  - component: {fileID: 7213534159327610940}
+  m_Layer: 12
   m_Name: Car Tire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3375,6 +3376,27 @@ MonoBehaviour:
   canMove: 0
   parent: {fileID: 0}
   shakeScale: 0.15
+--- !u!114 &7213534159327610940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941044459362297472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4278d01bd5e045319bdd2d2c707d5d46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: 1
+  investedPoints: 0
+  expectedUpgradeMaterial: {fileID: 11400000, guid: e0da90fdcf3a7154dbca075ab5fa791e, type: 2}
+  upgradeLevels:
+  - comment: 
+    requiredPoints: 1
+    jumpToLevel: 0
+    upgrade: {fileID: 11400000, guid: 75e6b3184f6c8ca4a8590866dfd0c627, type: 2}
+    upgradeMaterial: {fileID: 0}
 --- !u!1 &2223762597364661771
 GameObject:
   m_ObjectHideFlags: 0
@@ -3389,7 +3411,7 @@ GameObject:
   - component: {fileID: 1962409210685729868}
   - component: {fileID: 3110350095605287671}
   - component: {fileID: 8925633205965122023}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: hubcap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4439,7 +4461,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3183
+  m_VersionIndex: 3192
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
