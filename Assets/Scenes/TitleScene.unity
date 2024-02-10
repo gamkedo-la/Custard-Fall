@@ -6733,6 +6733,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MusicManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4339408314736491873, guid: f1815e417e8614d44a8da9f9276d5225, type: 3}
+      propertyPath: playMusicOnStart
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4339408314736491874, guid: f1815e417e8614d44a8da9f9276d5225, type: 3}
       propertyPath: m_RootOrder
       value: 6
