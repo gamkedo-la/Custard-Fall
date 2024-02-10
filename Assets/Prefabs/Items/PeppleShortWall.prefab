@@ -1845,7 +1845,7 @@ GameObject:
   - component: {fileID: 6720778346109180076}
   - component: {fileID: 6720778346109180067}
   - component: {fileID: 6720778346109180066}
-  - component: {fileID: 6720778346109180065}
+  - component: {fileID: 7114254541576631255}
   - component: {fileID: 1676370741757836971}
   - component: {fileID: 1546744424450555330}
   m_Layer: 12
@@ -1897,8 +1897,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170aaf4cd5514fa4ba85ff6718404b3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
---- !u!114 &6720778346109180065
+  item: {fileID: 11400000, guid: 634929c90f3cdb444b622e6d6efa62bf, type: 2}
+--- !u!114 &7114254541576631255
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1907,22 +1907,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 6720778346109180064}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ef49d5da33d4728b5e317b5cb6c04c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 72712ff255f549b197e0f358734b364a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   optVisual: {fileID: 0}
-  interactionMessage: a pebble
+  interactionMessage: short pebble wall
   inhaleItemsProfile:
   - resourceName: pebble
     itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
-    timeToTake: 1.5
+    timeToTake: 2
   - resourceName: pebble
     itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
-    timeToTake: 0
-  resourceName: pebble
-  timeToInhaleWhole: 0
+    timeToTake: 0.3
 --- !u!114 &1676370741757836971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1941,7 +1939,9 @@ MonoBehaviour:
   upgradeLevels:
   - comment: 
     requiredPoints: 1
+    jumpToLevel: 0
     upgrade: {fileID: 11400000, guid: 5d56ed74ba570ce47bd5837e102dafe7, type: 2}
+    upgradeMaterial: {fileID: 0}
 --- !u!114 &1546744424450555330
 MonoBehaviour:
   m_ObjectHideFlags: 0

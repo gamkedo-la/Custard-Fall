@@ -3589,7 +3589,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6720778346109180076}
-  - component: {fileID: 6720778346109180067}
   - component: {fileID: 6720778346109180066}
   - component: {fileID: 2572696627549159029}
   - component: {fileID: 5733093117253641945}
@@ -3619,19 +3618,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6720778346109180067
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6720778346109180064}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1.1314118, z: 1}
-  m_Center: {x: 0, y: 0.27742437, z: 0}
 --- !u!114 &6720778346109180066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3644,7 +3630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170aaf4cd5514fa4ba85ff6718404b3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
+  item: {fileID: 11400000, guid: 5d56ed74ba570ce47bd5837e102dafe7, type: 2}
 --- !u!114 &2572696627549159029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3676,17 +3662,17 @@ MonoBehaviour:
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
   optVisual: {fileID: 0}
-  interactionMessage: 
+  interactionMessage: nice pebble wall
   inhaleItemsProfile:
   - resourceName: pebble
     itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
-    timeToTake: 1.5
+    timeToTake: 2
   - resourceName: pebble
     itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
-    timeToTake: 0
+    timeToTake: 0.3
   - resourceName: pebble
     itemReference: {fileID: 11400000, guid: e4a4d39a3d5ce344f92a86d5564ef727, type: 2}
-    timeToTake: 0
+    timeToTake: 0.3
   Height: 1
 --- !u!1 &6786857016149217864
 GameObject:
