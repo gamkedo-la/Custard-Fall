@@ -35,7 +35,10 @@ public class Inhaler : MonoBehaviour
 
     private ConeSize SetValue(ConeSize value)
     {
-        onConeSizeChange?.Invoke(value, _size);
+        if(value != _size)
+        {
+            onConeSizeChange?.Invoke(value, _size);
+        }
         return _size = value;
     }
 
