@@ -58,6 +58,12 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         return currentLevel;
     }
 
+    public void SetCurrentLevelSilently(int level)
+    {
+        currentLevel = level;
+        investedPoints = 0;
+    }
+
     public int RequieredPoints()
     {
         if (currentLevel < upgradeLevels.Length)

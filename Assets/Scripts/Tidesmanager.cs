@@ -14,7 +14,8 @@ public class Tidesmanager : MonoBehaviour
     [FormerlySerializedAs("Player")] public Player player;
 
     private TideStep _overrideTideStep = null;
-    private int _overridenUntilIndex = 0;
+    private Action _afterOverride = null;
+    private int _overridenUntilIndex = -1;
     private bool _handleOverride = false;
 
     private readonly SortedDictionary<float, TideStep> _tidesPlanFirstTime = new SortedDictionary<float, TideStep>();
@@ -67,6 +68,11 @@ public class Tidesmanager : MonoBehaviour
         indexOfCurrentDayTimeTideLevel = 0;
         var tideStep = _currentDailyTidesPlan[indexOfCurrentDayTimeTideLevel];
         custardManager.targetTideLevel = tideStep.GetLevel();
+    }
+
+    public int CurrentMaxDayTimeIndex()
+    {
+        return _currentDailyTidesPlan.Count - 1;
     }
 
     private void StartNextTidesDayOfWeek()
@@ -155,16 +161,19 @@ public class Tidesmanager : MonoBehaviour
         if (timeIndex == _overridenUntilIndex)
         {
             _overrideTideStep = null;
+            _overridenUntilIndex = -1;
+            _afterOverride?.Invoke();
         }
 
         return _overrideTideStep ?? _currentDailyTidesPlan.GetValueOrDefault(_tidesPlanIndices[timeIndex]);
     }
 
-    public void OverrideTideStep(TideStep step, int untilTimeIndex)
+    public void OverrideTideStep(TideStep step, int untilTimeIndex, Action afterOverride = null)
     {
         _overrideTideStep = step;
         _overridenUntilIndex = untilTimeIndex;
         _handleOverride = true;
+        _afterOverride = afterOverride;
     }
 
     private static int FindLowestBound(List<float> list, float value)
