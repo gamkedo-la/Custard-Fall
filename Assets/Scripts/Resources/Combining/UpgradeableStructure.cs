@@ -58,10 +58,15 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         return currentLevel;
     }
 
-    public void SetCurrentLevelSilently(int level)
+    public void ForceSetCurrentLevel(int level)
     {
         currentLevel = level;
         investedPoints = 0;
+        var obtainedUpgrade = upgradeLevels[currentLevel - 1];
+        UpgradeConfig nextUpgrade = upgradeLevels[currentLevel - 1];
+        OnLevelUp?.Invoke(this, new UpgradeArgs(currentLevel, obtainedUpgrade.Comment, nextUpgrade.RequiredPoints,
+            investedPoints,
+            IsMaxedOut()));
     }
 
     public int RequieredPoints()
@@ -187,7 +192,7 @@ public class UpgradeableStructure : MonoBehaviour, ItemReceiver
         }
         else
         {
-            Debug.Log("Cannot upgrade with "+material.name);
+            Debug.Log("Cannot upgrade with " + material.name);
         }
 
         return canUpgradeWith;

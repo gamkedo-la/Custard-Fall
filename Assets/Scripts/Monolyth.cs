@@ -36,6 +36,6 @@ public class Monolyth : MonoBehaviour
 
     public void Reset()
     {
-        _upgrader.SetCurrentLevelSilently(2);
+        _upgrader.ForceSetCurrentLevel(2);
     }
 }
