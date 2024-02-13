@@ -72,6 +72,10 @@ public class Player : MonoBehaviour
 
     [SerializeField] private List<InventorySlot> inventorySlotReferences = new List<InventorySlot>();
 
+    [SerializeField] private GameObject inhalePrompt;
+    [SerializeField] private int toUnderStandInhaling = 2;
+    
+
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
     [SerializeField] private float yOffset = -.6f;
@@ -97,8 +101,7 @@ public class Player : MonoBehaviour
     public Healthbar healthbar;
 
     private int _mouseTargetLayerMask;
-
-    // Start is called before the first frame update
+    
     private void Start()
     {
         inhaleSFX = GetComponent<AudioSource>();
@@ -113,6 +116,8 @@ public class Player : MonoBehaviour
         inhaler.owner = gameObject;
 
         _radianceReceiver = GetComponent<RadianceReceiver>();
+        
+        inhalePrompt.SetActive(true);
     }
 
     private void FixedUpdate()
@@ -469,6 +474,17 @@ public class Player : MonoBehaviour
             {
                 inhaler.BeginInhaleInTransformDirection(4f);
                 inhaleSFX.Play();
+
+                switch (toUnderStandInhaling)
+                {
+                    case > 1:
+                        toUnderStandInhaling--;
+                        break;
+                    case > 0:
+                        toUnderStandInhaling = -1;
+                        StartCoroutine(HideInhalePrompt());
+                        break;
+                }
             }
             else
             {
@@ -484,6 +500,12 @@ public class Player : MonoBehaviour
             inhaleSFX.Stop();
             requireUseButtonRelease = false;
         }
+    }
+
+    private IEnumerator HideInhalePrompt()
+    {
+        yield return new WaitForSeconds(0.4f);
+        inhalePrompt.SetActive(false);
     }
 
     public void OnDash(InputValue context)
