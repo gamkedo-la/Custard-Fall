@@ -73,8 +73,7 @@ public class Player : MonoBehaviour
     [SerializeField] private List<InventorySlot> inventorySlotReferences = new List<InventorySlot>();
 
     [SerializeField] private GameObject inhalePrompt;
-    [SerializeField] private int toUnderStandInhaling = 2;
-    
+    [SerializeField] private int toUnderstandInhaling = 1;
 
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
@@ -475,15 +474,9 @@ public class Player : MonoBehaviour
                 inhaler.BeginInhaleInTransformDirection(4f);
                 inhaleSFX.Play();
 
-                switch (toUnderStandInhaling)
+                if (toUnderstandInhaling>1)
                 {
-                    case > 1:
-                        toUnderStandInhaling--;
-                        break;
-                    case > 0:
-                        toUnderStandInhaling = -1;
-                        StartCoroutine(HideInhalePrompt());
-                        break;
+                        toUnderstandInhaling--;
                 }
             }
             else
@@ -496,6 +489,12 @@ public class Player : MonoBehaviour
         }
         else
         {
+            if (toUnderstandInhaling > 0)
+            {
+                    toUnderstandInhaling = -1;
+                    StartCoroutine(HideInhalePrompt());
+            }
+            
             inhaler.StopInhale();
             inhaleSFX.Stop();
             requireUseButtonRelease = false;
@@ -504,7 +503,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator HideInhalePrompt()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(1f);
         inhalePrompt.SetActive(false);
     }
 

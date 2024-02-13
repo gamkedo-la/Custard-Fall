@@ -5489,6 +5489,8 @@ MonoBehaviour:
   combinatorProfile: {fileID: 11400000, guid: 0e447b4e028cdbb49b9307791fcdc4a1, type: 2}
   isSwimming: 0
   inventorySlotReferences: []
+  inhalePrompt: {fileID: 370918065367644038}
+  toUnderStandInhaling: 1
   yOffset: -0.1
   placementYOffset: 0.38
   gameplayScheme:
