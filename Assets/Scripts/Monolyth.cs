@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Custard;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class Monolyth : MonoBehaviour
