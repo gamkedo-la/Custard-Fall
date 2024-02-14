@@ -74,6 +74,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject inhalePrompt;
     [SerializeField] private int toUnderstandInhaling = 1;
+    
+    [SerializeField] private GameObject placePrompt;
 
 
     // yOffset represents local terrain detail the player can stand on, so they are not clipped to round numbers
@@ -687,6 +689,8 @@ public class Player : MonoBehaviour
         focusedItemReceiver?.LeavePreview();
         focusedItemReceiver = null;
         requireUseButtonRelease = false;
+        
+        placePrompt.SetActive(false);
     }
 
     public void EnterPlaceMode(PlaceableItem item, Func<bool> canPlaceMoreCheck, Func<bool> placingFunction)
@@ -715,6 +719,8 @@ public class Player : MonoBehaviour
         onItemPlaced = placingFunction;
         _smoothPreviewPosition = targetPoint4PlacingItem;
         UpdatePlaceableItemState(playerPosition, itemReceiver);
+        
+        placePrompt.SetActive(true);
     }
 
     private bool UpdatePlaceableItemState(Vector3 playerPosition, ItemReceiver itemReceiver)

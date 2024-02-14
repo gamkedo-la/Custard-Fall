@@ -5664,7 +5664,8 @@ MonoBehaviour:
   isSwimming: 0
   inventorySlotReferences: []
   inhalePrompt: {fileID: 370918065367644038}
-  toUnderStandInhaling: 1
+  toUnderstandInhaling: 1
+  placePrompt: {fileID: 5247487078015217715}
   yOffset: -0.1
   placementYOffset: 0.38
   gameplayScheme:
