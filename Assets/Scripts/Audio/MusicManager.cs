@@ -68,7 +68,7 @@ public class MusicManager : MonoBehaviour {
 			currentTrack = track;
 		} else {
 			currentTrack = track;
-			PlayNewClip(bufferTime + 1);
+			PlayNewClip(bufferTime + 2);
 
 			musicPlaying = true;
 		}
