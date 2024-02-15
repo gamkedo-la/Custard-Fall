@@ -19,13 +19,16 @@ public class StoryTeller : MonoBehaviour
     private float timeTillNextMessage = 0f;
     private float _timeInbetweenMessages = 1.6f;
     private float _timeForRethoricalPause = 1f;
-    private float _timeToReadAMessage = 4.6f;
+    private float _timeToReadAMessage = 5f;
+
+    [SerializeField] private Player player;
 
 
     // Start is called before the first frame update
 
     void Awake()
     {
+        player.preventInhale = true;
         text.CrossFadeAlpha(0, 0, true);
 
         TimeManager.onDayComplete += (sender, day) =>
@@ -36,7 +39,7 @@ public class StoryTeller : MonoBehaviour
                 // we do not want to overwhelm the player with infos on the start of the game
                 timeTillNextMessage = 0.1f;
                 messages.Enqueue(
-                    "I began collecting\nwhen the Custard first fell.\nAs it spread,\nI preserved what I saw fit.\n\n\nThe Collector");
+                    "Started my collection when the Custard first fell. As it spread, I preserved what I deemed worthy.\n\n                         The Collector");
                 // messages.Enqueue("7 days left till next calamity...");
             }
             // else if (relativeDay == 1)
@@ -74,11 +77,14 @@ public class StoryTeller : MonoBehaviour
         // cinematicBar.gameObject.SetActive(true);
         cinematicOverlay.CrossFadeAlpha(1, 0.5f, true);
         // cinematicBar.CrossFadeAlpha(1, 0, true);
-        yield return new WaitForSeconds(6.4f);
+        yield return new WaitForSeconds(6f);
         // cinematicOverlay.CrossFadeAlpha(0, .6f, true);
         text.CrossFadeAlpha(0, .24f, true);
         yield return new WaitForSeconds(.28f);
+        cinematicOverlay.CrossFadeAlpha(0, .6f, true);
+        yield return new WaitForSeconds(.6f);
         cinematicOverlay.gameObject.SetActive(false);
+        player.preventInhale = false;
     }
 
     private void DisplayStoryText(string message)
@@ -103,13 +109,13 @@ public class StoryTeller : MonoBehaviour
             timeTillNextMessage -= Time.deltaTime;
         else if (messages.Count != 0)
         {
-            if (text.text == "")
+            if (string.IsNullOrEmpty(text.text))
             {
                 DisplayStoryText(messages.Dequeue());
             }
             else
             {
-                text.SetText("");
+                // text.SetText("");
                 text.CrossFadeAlpha(0, 0, true);
                 timeTillNextMessage = _timeInbetweenMessages;
             }
