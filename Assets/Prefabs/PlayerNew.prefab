@@ -5914,7 +5914,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba9fe7187a334b4b866edf981911376c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiance: 0
+  radiance: 1
   maxRadianceLevel: 1
   radianceLevelOfSurrounding: 0
   personalRadianceLevel: 1

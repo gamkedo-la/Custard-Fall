@@ -3806,16 +3806,16 @@ MonoBehaviour:
   healthOrbPrefab: {fileID: 6303623572148944328, guid: f2678e4160372e947a7d82a8ee29597a, type: 3}
   radianceOrbPrefab: {fileID: 6303623572148944328, guid: 57816e9e14de0554cb5e57c69f5bc723, type: 3}
   spawnHeight: 1.5
-  timeBetweenOrbsChecks: 12
-  despawnDistance: 40
+  timeBetweenOrbsChecks: 17
+  despawnDistance: 35
   spawnRadius: 17
   spawnInnerRadius: 5
   spawnRetries: 32
-  maxConcurrentOrbs: 6
+  maxConcurrentOrbs: 4
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   custardState: {fileID: 11400000, guid: c59a0d203d46a4f42a93d3cff07de5fe, type: 2}
   usualHealthToRadianceFraction: 0.4
-  whenFullRadianceOrbFraction: 0.4
+  whenFullRadianceOrbFraction: 0.2
   emergencyHealthToRadianceFraction: 0.8
   radiusOffsetInMoveDirection: 6
 --- !u!1 &8634744845233825456
