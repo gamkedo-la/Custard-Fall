@@ -57,6 +57,9 @@ public class RadianceReceiver : MonoBehaviour
     {
         if (personalRadianceLevel >= maxRadianceLevel && radiance >= 1.0f)
         {
+            _bonusValue = 0f;
+            radiance = 1.0f;
+            StopDelayedRefill();
             return;
         }
         
@@ -72,7 +75,7 @@ public class RadianceReceiver : MonoBehaviour
             deltaRadiance += Time.deltaTime / baseFillDuration;
         }
 
-        if (_bonusValue >= 0)
+        if (_bonusValue > 0)
         {
             var deltaBonus = Time.deltaTime / baseFillDuration * bonusValueSpeedup;
             _bonusValue -= deltaBonus;
@@ -169,6 +172,10 @@ public class RadianceReceiver : MonoBehaviour
         if (personalRadianceLevel == 0 && amount >= radiance - 0.001f)
         {
             radiance = 0;
+            return;
+        }
+        if (radianceLevelOfSurrounding > 0)
+        {
             return;
         }
 
