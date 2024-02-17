@@ -13,6 +13,11 @@ public class CustardTransitionToggleWindowScript : MonoBehaviour
 
     public void InvokeWindowToggle()
     {
+        if (toggledOffImageWindow)
+            toggledOffImageWindow.gameObject.SetActive(false);
+        if (toggledOnImageWindow)
+            toggledOnImageWindow.gameObject.SetActive(true);
+        
         if (currentButtonName == "PlayButton")
         {
             SceneManager.LoadScene("Coast-World");
@@ -21,8 +26,5 @@ public class CustardTransitionToggleWindowScript : MonoBehaviour
         {
             SceneManager.LoadScene("Tutorial-World");
         }
-
-        toggledOffImageWindow.gameObject.SetActive(false);
-        toggledOnImageWindow.gameObject.SetActive(true);
     }
 }

@@ -28,6 +28,28 @@ public class MusicBrain : MonoBehaviour
     [SerializeField] private float volumeStinger = 1f;
 
     private int _custardLevelCounter = 0;
+    private bool _isAllInit = false;
+
+    private void Start()
+    {
+        StartCoroutine(WaitForRealLevel());
+        if (SceneManager.GetActiveScene().name == "TitleScene")
+            MusicManager.Instance.StartTrack(dayNightTracks[0].musicTrack);
+        dayNightCycle = FindObjectOfType<DayNightCycle>();
+    }
+
+    private IEnumerator WaitForRealLevel()
+    {
+        do
+        {
+            tidesManager = FindObjectOfType<Tidesmanager>();
+            dayNightCycle = FindObjectOfType<DayNightCycle>();
+            yield return new WaitForSeconds(0.5f);
+        } while (!tidesManager);
+
+        currentLevel = tidesManager.custardManager.targetTideLevel;
+        _isAllInit = true;
+    }
 
     private void Update()
     {
@@ -46,14 +68,8 @@ public class MusicBrain : MonoBehaviour
 
             lastTime = TimeManager.Instance.time;
         }
-        else
-        {
-            if (SceneManager.GetActiveScene().name == "TitleScene")
-                MusicManager.Instance.StartTrack(dayNightTracks[0].musicTrack);
-            dayNightCycle = FindObjectOfType<DayNightCycle>();
-        }
 
-        if (tidesManager != null)
+        if (_isAllInit)
         {
             int targetTide = tidesManager.custardManager.targetTideLevel;
             if (currentLevel != targetTide)
@@ -114,11 +130,6 @@ public class MusicBrain : MonoBehaviour
 
                 currentLevel = targetTide;
             }
-        }
-        else
-        {
-            tidesManager = FindObjectOfType<Tidesmanager>();
-            currentLevel = tidesManager.custardManager.targetTideLevel;
         }
 
         if (player)

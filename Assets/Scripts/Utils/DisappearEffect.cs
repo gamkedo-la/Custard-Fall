@@ -11,7 +11,6 @@ public class DisappearEffect : MonoBehaviour
     private Color _color;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         _textMesh = GetComponent<TextMeshProUGUI>();
