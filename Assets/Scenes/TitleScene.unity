@@ -373,34 +373,31 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'We recommend playing this game with the controller!
+  m_text: '#Keyboard & Mouse Controls:
 
-    Left Stick -
-    Move
+    WASD (or MMB) - Move
 
-    Right Stick - (optional) Look Around
+    Hold LMB or
+    Ctrl - Inhale Stuff
 
-    East Button / Left-Trigger
-    - Inhale
+    RMB or C / Q - Grappling Hook
 
-    Left/Right Bumper - Dash (use to get over the edge)
+    Space Key - Leap
+    of Faith
 
-
-    Keyboard
-    & Mouse Controls:
-
-    Left Click or Ctrl/Shift - Inhale
-
-    Right Click or
-    C Key - Grappling Hook
-
-    Space Key - Dash
+    Press 1..8 - Quick Select for Inventory Slot
 
 
-    Press I Button - Toggle inventory
-    ON/OFF
+    #Place-Mode:
 
-    Esc - Pause'
+    LMB
+    or E - Place / Build / Upgrade
+
+    Right Click or C / Q - Exit Place Mode
+
+
+    Esc
+    - Pause'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6735,7 +6732,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4339408314736491873, guid: f1815e417e8614d44a8da9f9276d5225, type: 3}
       propertyPath: playMusicOnStart
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4339408314736491874, guid: f1815e417e8614d44a8da9f9276d5225, type: 3}
       propertyPath: m_RootOrder
