@@ -5491,6 +5491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2746e8b21fd8f804d852356a46325a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inhaleEffect: {fileID: 5091640983758252951}
 --- !u!1 &2186254272399485286
 GameObject:
   m_ObjectHideFlags: 0
@@ -6543,8 +6544,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8470648943790319372}
+  - component: {fileID: 7887426396302211580}
   m_Layer: 0
-  m_Name: PlayerEffects
+  m_Name: OrbInhaleEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6566,6 +6568,20 @@ Transform:
   m_Father: {fileID: 6469833923234856233}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7887426396302211580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5091640983758252951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fb0d8e212e370546b496e6207905bce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vfx: {fileID: 3049335378868369007}
+  duration: 1
 --- !u!1 &5247487078015217715
 GameObject:
   m_ObjectHideFlags: 0
@@ -12184,7 +12200,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5567805054832206674
 Transform:
   m_ObjectHideFlags: 0
@@ -12245,7 +12261,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8187408694417275529}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

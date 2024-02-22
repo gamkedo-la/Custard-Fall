@@ -205,7 +205,7 @@ MonoBehaviour:
   optVisual: {fileID: 6491192973536895801}
   interactionMessage: 
   inhaleItemsProfile:
-  - resourceName: small-orb
+  - resourceName: health-orb
     itemReference: {fileID: 0}
     timeToTake: 0.6
   plusOnePrefab: {fileID: 2713394065547945622, guid: 474306a931cfbec498955a8f9d812fb1, type: 3}

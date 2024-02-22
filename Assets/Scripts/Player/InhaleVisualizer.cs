@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InhaleVisualizer : MonoBehaviour
 {
-    [SerializeField] private GameObject inhaleEffect;
+    [SerializeField] private EffectPromise inhaleEffect;
+
     void Start()
     {
         Inhaler inhaler = gameObject.GetComponent<Inhaler>();
@@ -13,6 +12,12 @@ public class InhaleVisualizer : MonoBehaviour
 
     private void OnInhaled(Resource resource, int amount)
     {
-        inhaleEffect.SetActive(true);
+        if (resource.Name == "radiance-orb" || resource.Name == "health-orb")
+        {
+            inhaleEffect.PlayEffect(() =>
+            {
+                Debug.Log("inhale effect ended");
+            });
+        }
     }
 }
