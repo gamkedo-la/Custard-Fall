@@ -123,7 +123,7 @@ public class Inhalable : MonoBehaviour, WorldItem
 
     public virtual void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
-        inhaler.OnResourceInhaled(resource, amount);
+        inhaler.InhaleResource(resource, amount);
 
         if (GetRemainingResourcesCount() == 0)
         {

@@ -45,6 +45,9 @@ public class Inhaler : MonoBehaviour
     public delegate void OnConeSizeChange(ConeSize newSize, ConeSize oldSize);
 
     public OnConeSizeChange onConeSizeChange;
+    public delegate void OnResourceInhaled(Resource resource, int amount);
+
+    public OnResourceInhaled onResourceInhaled;
 
     private void FixedUpdate()
     {
@@ -325,8 +328,11 @@ public class Inhaler : MonoBehaviour
     }
 
 
-    public void OnResourceInhaled(Resource resource, int amount)
+    public void InhaleResource(Resource resource, int amount)
     {
+
+        onResourceInhaled?.Invoke(resource, amount);
+        
         try
         {
             // a +1 style feedback number
