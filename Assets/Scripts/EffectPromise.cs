@@ -6,7 +6,7 @@ using UnityEngine.VFX;
 
 public class EffectPromise : MonoBehaviour
 {
-    [SerializeField] private VisualEffect vfx;
+    [SerializeField] private ParticleSystem vfx;
     [SerializeField] private float duration = 1;
 
     public void PlayEffect(Action onFinish)
