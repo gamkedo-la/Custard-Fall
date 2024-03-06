@@ -1,24 +1,25 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(RadianceReceiver))]
 public class RadianceZoneChangeVisualizer : MonoBehaviour
 {
-    
-    [SerializeField] private GameObject visualizer;
+    [FormerlySerializedAs("visualizer")] [SerializeField] private List<GameObject> visualizers;
 
     private RadianceReceiver _receiver;
-    
-    void Awake()
+
+    private void Awake()
     {
         _receiver = gameObject.GetComponent<RadianceReceiver>();
         _receiver.onRadianceChangeInZone += Visualize;
     }
 
-    public void Visualize(int newLevel, int oldLevel)
+    private void Visualize(int newLevel, int oldLevel)
     {
-        visualizer.gameObject.SetActive(newLevel != 0);
+        foreach (var visual in visualizers)
+        {
+            visual.gameObject.SetActive(newLevel != 0);
+        }
     }
-   
 }
