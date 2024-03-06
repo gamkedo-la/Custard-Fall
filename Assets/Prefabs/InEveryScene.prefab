@@ -6813,15 +6813,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3676549530017007425, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.2000064
+      value: 1.618
       objectReference: {fileID: 0}
     - target: {fileID: 3676549530017007425, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.2000064
+      value: 1.618
       objectReference: {fileID: 0}
     - target: {fileID: 3676549530017007425, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.2000064
+      value: 1.618
       objectReference: {fileID: 0}
     - target: {fileID: 3676549530017007425, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6965,7 +6965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8969934920765049543, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
       propertyPath: m_Name
-      value: RadianceBar
+      value: FloatingRadianceBar
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46c1325582feac24fb70b2ddb91d9915, type: 3}
