@@ -1,5 +1,7 @@
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class RadianceBar : MonoBehaviour
@@ -16,6 +18,11 @@ public class RadianceBar : MonoBehaviour
 
     private int _displayedRadianceLevel = 0;
     private bool _isProgressionMode = true;
+
+    [SerializeField] private VisualMode visualMode;
+    [SerializeField] private TweenFade fader;
+
+    private float _lastValue;
 
     private void Awake()
     {
@@ -34,14 +41,25 @@ public class RadianceBar : MonoBehaviour
         _isProgressionMode = progression >= 0;
         _displayedRadianceLevel = radianceReceiver.PersonalRadianceLevel;
 
+        var originalPreviousValue = _lastValue;
         UpdateSlider(progression);
         UpdateVisuals();
+
+        var isIdlePrevious = Math.Abs(originalPreviousValue - _lastValue) < .001f;
+        var isIdle = Math.Abs(_lastValue - slider.value) < .001f;
+        if (isIdle != isIdlePrevious && visualMode != VisualMode.Visible)
+        {
+            fader.SetFadeIn(((!isIdle || progression<0) && visualMode == VisualMode.ShowWhenActive) ||
+                           ((isIdle && progression>=0) && visualMode == VisualMode.ShowWhenIdle));
+            fader.enabled = true;
+        }
     }
 
     private void UpdateSlider(float progression)
     {
         // we reuse the single sliders to display decline (colors are swapped in this case)
         var fillAmount = progression >= 0 ? progression : 1f + progression;
+        _lastValue = slider.value;
         slider.value = fillAmount;
     }
 
@@ -60,5 +78,12 @@ public class RadianceBar : MonoBehaviour
             fill.color = radianceInfo.Color;
             backdrop.color = radianceInfo.DeclineColor;
         }
+    }
+
+    private enum VisualMode
+    {
+        Visible,
+        ShowWhenIdle,
+        ShowWhenActive
     }
 }
