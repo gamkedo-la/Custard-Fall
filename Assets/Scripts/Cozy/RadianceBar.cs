@@ -49,8 +49,8 @@ public class RadianceBar : MonoBehaviour
         var isIdle = Math.Abs(_lastValue - slider.value) < .001f;
         if (isIdle != isIdlePrevious && visualMode != VisualMode.Visible)
         {
-            fader.SetFadeIn(((!isIdle || progression<0) && visualMode == VisualMode.ShowWhenActive) ||
-                           ((isIdle && progression>=0) && visualMode == VisualMode.ShowWhenIdle));
+            fader.SetFadeIn(((!isIdle || progression<0 || radianceReceiver.PersonalRadianceLevel == 0) && visualMode == VisualMode.ShowWhenActive) ||
+                           ((isIdle && progression>=0 && radianceReceiver.PersonalRadianceLevel != 0) && visualMode == VisualMode.ShowWhenIdle));
             fader.enabled = true;
         }
     }
