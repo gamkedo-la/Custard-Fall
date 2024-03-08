@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class TweenFade : MonoBehaviour
 {
-    private bool fadeIn = true;
     [SerializeField] private GameObject visual;
     [SerializeField] private float fadeOutDelay = .4f;
     [SerializeField] private float fadeInDelay = .3f;
 
+    private bool _fadeIn = true;
     private float _waitTime = 0;
 
     public void SetFadeIn(bool doFadeIn)
     {
-        fadeIn = doFadeIn;
+        _fadeIn = doFadeIn;
         _waitTime = doFadeIn ? fadeInDelay : fadeOutDelay;
     }
 
@@ -20,7 +20,7 @@ public class TweenFade : MonoBehaviour
     {
         if(_waitTime <= 0)
         {
-            visual.SetActive(fadeIn);
+            visual.SetActive(_fadeIn);
             enabled = false;
         }
         else
