@@ -97,7 +97,13 @@ public class ItemRandomizer : MonoBehaviour
             {
                 for (int i = 0; i < item.quantityIn16X16 + item.variance * 2; i++)
                 {
-                    var instantiated = GameObject.Instantiate(item.prefab);
+                    var instantiated = Instantiate(item.prefab);
+                    var glowOrbItem = instantiated.GetComponent<GlowOrbItem>();
+                    if (glowOrbItem)
+                    {
+                        // TODO refactor (generalize)
+                        glowOrbItem.GetComponent<GlowOrbItem>().selfPlaced = false;
+                    }
                     instantiated.SetUsedUp(true);
                     instantiated.gameObject.SetActive(false);
                     if (!_generatedItemsPool.TryGetValue(item, out var sameTypeItems))

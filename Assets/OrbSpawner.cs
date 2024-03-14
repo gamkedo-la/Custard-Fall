@@ -135,7 +135,6 @@ public class OrbSpawner : MonoBehaviour
             _player.currentHealth < _player.maxHealth && Random.value <= usualHealthToRadianceFraction)
         {
             spawnedOrb = Instantiate(healthOrbPrefab, position, Quaternion.identity);
-            spawnedOrb.GetComponent<GlowOrbItem>().selfPlaced = false;
             _spawnedOrbs.Add(spawnedOrb.GetComponent<InhalableFloatingOrb>());
         }
         else
