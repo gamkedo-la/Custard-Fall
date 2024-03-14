@@ -279,6 +279,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wobbleStrength: 0
+  canMove: 0
+  parent: {fileID: 0}
+  shakeScale: 0.15
 --- !u!114 &8682344909492640671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,8 +296,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldCells: {fileID: 11400000, guid: 0c8925e16f7da5840938f1b0dd49b3f9, type: 2}
   hasInhaleFocus: 0
+  optVisual: {fileID: 0}
   interactionMessage: glowy
-  selfPlaced: 0
+  inhaleItemsProfile: []
+  selfPlaced: 1
+  healingAmount: 15
 --- !u!1 &6491192973536895801 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9102117403313577056, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}

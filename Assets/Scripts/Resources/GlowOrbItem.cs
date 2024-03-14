@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GlowOrbItem : Inhalable
 {
-    public bool selfPlaced = false;
+    public bool selfPlaced = true;
     private PlaceableItem _placeableItem;
     public int healingAmount = 15;
 
