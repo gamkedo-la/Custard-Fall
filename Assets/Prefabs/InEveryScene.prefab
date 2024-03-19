@@ -431,7 +431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.78699994, g: 0.5860638, b: 0.46466485, a: 0.9019608}
+  m_Color: {r: 0.78699994, g: 0.5860638, b: 0.46466485, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1230,7 +1230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.667, g: 0.36557278, b: 0.27347, a: 0.49019608}
+  m_Color: {r: 0.73800004, g: 0.5124008, b: 0.445014, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1242,7 +1242,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.122
+  m_FillAmount: 0.124
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -1753,7 +1753,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3386333702638455618}
-  m_LocalRotation: {x: -0, y: -0, z: -0.83752656, w: 0.5463967}
+  m_LocalRotation: {x: -0, y: -0, z: -0.84048873, w: 0.5418291}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.4812009, y: 1.4812009, z: 1.4812009}
   m_ConstrainProportionsScale: 0
@@ -1787,7 +1787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.31959775, g: 0.32093278, b: 0.3584906, a: 0.9019608}
+  m_Color: {r: 0.31959775, g: 0.32093278, b: 0.3584906, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1799,7 +1799,7 @@ MonoBehaviour:
   m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.087
+  m_FillAmount: 0.091
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -3067,7 +3067,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6142496318737037610}
-  m_LocalRotation: {x: 0.017586753, y: 0.01743562, z: -0.9532334, w: 0.30121893}
+  m_LocalRotation: {x: 0.017709203, y: 0.017311258, z: -0.9553324, w: 0.29449424}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.4812009, y: 1.4812009, z: 1.4812009}
   m_ConstrainProportionsScale: 0
@@ -3101,7 +3101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.273904, g: 0.28594238, b: 0.304, a: 0.9019608}
+  m_Color: {r: 0.273904, g: 0.28594238, b: 0.304, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4116,7 +4116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.009122973, g: 0, b: 0.009433985, a: 0.8235294}
+  m_Color: {r: 0.009122973, g: 0, b: 0.009433985, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6274,6 +6274,10 @@ PrefabInstance:
       propertyPath: dayCountText
       value: 
       objectReference: {fileID: 4236102027822663860}
+    - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
+      propertyPath: fullDayLength
+      value: 270
+      objectReference: {fileID: 0}
     - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
       propertyPath: dayCountAnimatorController
       value: 
