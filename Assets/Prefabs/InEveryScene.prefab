@@ -6271,12 +6271,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
+      propertyPath: dayStart
+      value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
+      propertyPath: startTime
+      value: 0.002
+      objectReference: {fileID: 0}
+    - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
+      propertyPath: nightStart
+      value: 0.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
       propertyPath: dayCountText
       value: 
       objectReference: {fileID: 4236102027822663860}
     - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
       propertyPath: fullDayLength
-      value: 270
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 3563752061733760334, guid: 61826f51c89ce784d9d4846a19dde5fd, type: 3}
       propertyPath: dayCountAnimatorController
