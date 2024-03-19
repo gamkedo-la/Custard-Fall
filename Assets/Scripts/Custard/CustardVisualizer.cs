@@ -130,7 +130,7 @@ namespace Custard
             for (int x = 0; x < WorldCells.BlocksWidth; x++)
             for (int y = 0; y < WorldCells.BlocksHeight; y++)
             {
-                var custardPosition = WorldCells.GetWorldPosition(x, y);
+                var custardPosition = worldCells.GetWorldPosition(x, y);
                 var custardCell = Instantiate(custardBlockPrefab,
                     new Vector3(custardPosition.x, 1.5f, custardPosition.y),
                     Quaternion.identity, _custardBlocksParent.transform);

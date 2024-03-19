@@ -30,7 +30,7 @@ public class ItemRandomizer : MonoBehaviour
 
     private HashSet<Coords> _activeChunks = new HashSet<Coords>();
     private Coords _playerChunk = Coords.Of(255, 255);
-    [SerializeField]private int itemsDisplayChunkRadius = 3;
+    [SerializeField] private int itemsDisplayChunkRadius = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -104,6 +104,7 @@ public class ItemRandomizer : MonoBehaviour
                         // TODO refactor (generalize)
                         glowOrbItem.GetComponent<GlowOrbItem>().selfPlaced = false;
                     }
+
                     instantiated.SetUsedUp(true);
                     instantiated.gameObject.SetActive(false);
                     if (!_generatedItemsPool.TryGetValue(item, out var sameTypeItems))
@@ -177,7 +178,13 @@ public class ItemRandomizer : MonoBehaviour
         Dictionary<RandomizedItem, HashSet<WorldItem>> chunk = _chunks[chunkX, chunkY];
         foreach (var item in itemTypes)
         {
-            if (!item.spawnAgain || item.dontSpawnNearPlayer &&  chunkX == chunkThePlayerIsIn.X && chunkY == chunkThePlayerIsIn.Y)
+            if (!item.spawnAgain || item.dontSpawnNearPlayer && (chunkX == chunkThePlayerIsIn.X &&
+                                                                 chunkY == chunkThePlayerIsIn.Y ||
+                                                                 Vector3.Distance(
+                                                                     new Vector2(player.transform.position.x,
+                                                                         player.transform.position.z),
+                                                                     worldCells.GetWorldPosition(chunkX, chunkY)) <
+                                                                 item.minDistanceToPlayer))
                 continue;
 
             // minAcceptableAmount for this round; we try to fill up complying to definition
@@ -255,7 +262,7 @@ public class ItemRandomizer : MonoBehaviour
                 terrainHeight > item.maxTerrainLevel)
                 continue;
 
-            var worldPosition = WorldCells.GetWorldPosition(cellX, cellY);
+            var worldPosition = worldCells.GetWorldPosition(cellX, cellY);
             worldPosition += new Vector2(Random.value - .5f, Random.value - .5f) * .5f;
 
             var newPosition = new Vector3(worldPosition.x, terrainHeight + .35f,
@@ -286,7 +293,7 @@ public class ItemRandomizer : MonoBehaviour
 
         if (force)
             _activeChunks.Clear();
-        else if(currentPlayerChunk.X == _playerChunk.X && currentPlayerChunk.Y == _playerChunk.Y)
+        else if (currentPlayerChunk.X == _playerChunk.X && currentPlayerChunk.Y == _playerChunk.Y)
             // still same chunk
             return;
 
@@ -373,6 +380,7 @@ public class ItemRandomizer : MonoBehaviour
         public int minTerrainLevel = 0;
         public int maxTerrainLevel = 14;
         public bool dontSpawnNearPlayer = false;
+        public float minDistanceToPlayer = 0f;
         public int numberRetries = 3;
 
         public string Id()

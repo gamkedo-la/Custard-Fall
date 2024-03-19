@@ -117,7 +117,7 @@ public class WorldCells : ScriptableObject
         return Coords.Of((int) cellX, (int) cellY);
     }
 
-    public static Vector2 GetWorldPosition(int x, int y)
+    public Vector2 GetWorldPosition(int x, int y)
     {
         return new Vector2(x - WorldCells.BlocksWidth / 2f + .5f, y - WorldCells.BlocksHeight / 2f + .5f);
     }
