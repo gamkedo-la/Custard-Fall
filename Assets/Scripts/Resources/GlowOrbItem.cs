@@ -6,13 +6,24 @@ public class GlowOrbItem : Inhalable
     public bool selfPlaced = true;
     private PlaceableItem _placeableItem;
     public int healingAmount = 15;
+    [SerializeField] private ParticleSystem vfxIn;
+    [SerializeField] private ParticleSystem vfxOut;
 
     protected override void Start()
     {
         base.Start();
         // exists only at night
-        if (!selfPlaced && TimeManager.Instance.IsDayTime)
-            Remove();
+        if (!selfPlaced)
+        {
+            if(TimeManager.Instance.IsDayTime)
+            {
+                Remove();
+            } else if (vfxIn)
+            {
+                vfxIn.Stop();
+                vfxIn.Play();
+            }
+        }
     }
 
     private void Awake()
@@ -24,7 +35,14 @@ public class GlowOrbItem : Inhalable
     {
         base.FixedUpdate();
         if (!selfPlaced && TimeManager.Instance.IsDayTime)
+        {
+            if (vfxOut)
+            {
+                vfxIn.Stop();
+                vfxOut.Play();
+            }
             Remove();
+        }
     }
 
     public override void Init()

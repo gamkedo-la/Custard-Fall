@@ -170,6 +170,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
+--- !u!198 &5749137480734938119 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 958526126119889616, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
+  m_PrefabInstance: {fileID: 4793048790675865303}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6015264494104184787
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -394,6 +399,8 @@ MonoBehaviour:
   inhaleItemsProfile: []
   selfPlaced: 1
   healingAmount: 15
+  vfxIn: {fileID: 5749137480734938119}
+  vfxOut: {fileID: 5749137480734938119}
 --- !u!1 &6491192973536895801 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9102117403313577056, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}
