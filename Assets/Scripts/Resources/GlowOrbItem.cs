@@ -20,7 +20,6 @@ public class GlowOrbItem : Inhalable
                 Remove();
             } else if (vfxIn)
             {
-                vfxIn.Stop();
                 vfxIn.Play();
             }
         }
@@ -38,7 +37,6 @@ public class GlowOrbItem : Inhalable
         {
             if (vfxOut)
             {
-                vfxIn.Stop();
                 vfxOut.Play();
             }
             Remove();
