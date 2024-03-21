@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3909797264216721477
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8206538337995240344}
+  m_Layer: 0
+  m_Name: vfxSpawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8206538337995240344
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909797264216721477}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.21, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6643135529607440242}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3119426035574826746
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77,104 +108,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1e7c6c64c996264bb272730f2066de2, type: 3}
---- !u!1001 &4793048790675865303
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 6643135529607440242}
-    m_Modifications:
-    - target: {fileID: 958526126119889616, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: lengthInSec
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 958526126119889616, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: InitialModule.startColor.maxColor.a
-      value: 0.49803922
-      objectReference: {fileID: 0}
-    - target: {fileID: 958526126119889616, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: EmissionModule.m_Bursts.Array.data[0].cycleCount
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 958526126119889616, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: EmissionModule.m_Bursts.Array.data[0].repeatInterval
-      value: 0.015
-      objectReference: {fileID: 0}
-    - target: {fileID: 958526126119889616, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 93.97454
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 93.97454
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 93.97454
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.261
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7288911162255026160, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7950398682452362297, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_Name
-      value: vfx_ripple_wave
-      objectReference: {fileID: 0}
-    - target: {fileID: 7950398682452362297, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
---- !u!198 &5749137480734938119 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 958526126119889616, guid: 3f4fb6f44fbad004e83b533a85a544b0, type: 3}
-  m_PrefabInstance: {fileID: 4793048790675865303}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6015264494104184787
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -399,8 +332,9 @@ MonoBehaviour:
   inhaleItemsProfile: []
   selfPlaced: 1
   healingAmount: 15
-  vfxIn: {fileID: 5749137480734938119}
-  vfxOut: {fileID: 5749137480734938119}
+  vfxIn: {fileID: 4449840564321084644, guid: df64db9fe2f3972488e361c08ed39e04, type: 3}
+  vfxOut: {fileID: 4449840564321084644, guid: a435e8538487d504da11dac07f112bed, type: 3}
+  vfxSpawn: {fileID: 8206538337995240344}
 --- !u!1 &6491192973536895801 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9102117403313577056, guid: f88877df796a6cc43b9fae650c988ad1, type: 3}

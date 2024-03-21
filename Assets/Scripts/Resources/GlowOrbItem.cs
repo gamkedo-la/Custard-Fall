@@ -1,13 +1,15 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GlowOrbItem : Inhalable
 {
     public bool selfPlaced = true;
     private PlaceableItem _placeableItem;
     public int healingAmount = 15;
-    [SerializeField] private ParticleSystem vfxIn;
-    [SerializeField] private ParticleSystem vfxOut;
+    [SerializeField] private VfxInstance vfxIn;
+    [SerializeField] private VfxInstance vfxOut;
+    [SerializeField] private Transform vfxSpawn;
 
     protected override void Start()
     {
@@ -20,7 +22,7 @@ public class GlowOrbItem : Inhalable
                 Remove();
             } else if (vfxIn)
             {
-                vfxIn.Play();
+                VfxInstance.Spawn(vfxIn, vfxSpawn.position, Quaternion.identity);
             }
         }
     }
@@ -37,7 +39,7 @@ public class GlowOrbItem : Inhalable
         {
             if (vfxOut)
             {
-                vfxOut.Play();
+                VfxInstance.Spawn(vfxOut, vfxSpawn.position, Quaternion.identity);
             }
             Remove();
         }
