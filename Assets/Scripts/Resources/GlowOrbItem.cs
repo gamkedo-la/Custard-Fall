@@ -20,9 +20,13 @@ public class GlowOrbItem : Inhalable
             if(TimeManager.Instance.IsDayTime)
             {
                 Remove();
-            } else if (vfxIn)
+            } else
             {
-                VfxInstance.Spawn(vfxIn, vfxSpawn.position, Quaternion.identity);
+                OrbIndicator.Instance.AddCandidate(transform);
+                if (vfxIn)
+                {
+                    VfxInstance.Spawn(vfxIn, vfxSpawn.position, Quaternion.identity);
+                }
             }
         }
     }

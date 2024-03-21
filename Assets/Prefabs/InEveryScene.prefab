@@ -4327,6 +4327,7 @@ GameObject:
   - component: {fileID: 6826369342560504894}
   - component: {fileID: 7813956403757816861}
   - component: {fileID: 3331152138923533538}
+  - component: {fileID: 6151384430494112323}
   m_Layer: 0
   m_Name: Gamemanager
   m_TagString: Untagged
@@ -4453,6 +4454,7 @@ MonoBehaviour:
     minTerrainLevel: 0
     maxTerrainLevel: 14
     dontSpawnNearPlayer: 0
+    minDistanceToPlayer: 0
     numberRetries: 3
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
     quantityIn16X16: 9
@@ -4466,6 +4468,7 @@ MonoBehaviour:
     minTerrainLevel: 0
     maxTerrainLevel: 14
     dontSpawnNearPlayer: 0
+    minDistanceToPlayer: 0
     numberRetries: 3
   - prefab: {fileID: 3343993881124649203, guid: de55bb4ac25393f41bb38a0f63cc71a5, type: 3}
     quantityIn16X16: 5
@@ -4479,6 +4482,7 @@ MonoBehaviour:
     minTerrainLevel: 5
     maxTerrainLevel: 9
     dontSpawnNearPlayer: 1
+    minDistanceToPlayer: 0
     numberRetries: 3
   - prefab: {fileID: 8682344909492640671, guid: 30103aed2e20d5a45acde190082438d1, type: 3}
     quantityIn16X16: 1
@@ -4492,8 +4496,10 @@ MonoBehaviour:
     minTerrainLevel: 7
     maxTerrainLevel: 15
     dontSpawnNearPlayer: 1
+    minDistanceToPlayer: 0
     numberRetries: 32
   itemsDisplayChunkRadius: 3
+  orbIndicator: {fileID: 6151384430494112323}
 --- !u!114 &8582329314383768474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4562,6 +4568,25 @@ MonoBehaviour:
   whenFullRadianceOrbFraction: 0.2
   emergencyHealthToRadianceFraction: 0.8
   radiusOffsetInMoveDirection: 6
+--- !u!114 &6151384430494112323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8634744844989316040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7614b5d2b28b8d4439323d9956412d44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indicatorVfx: {fileID: 4449840564321084644, guid: b482fdff23532a149889aab515168075, type: 3}
+  player: {fileID: 3927434655757161309}
+  camera: {fileID: 8634744844841693196}
+  checkRate: 0.4
+  maxDistance: 64
+  minDistance: 24
+  offset: 5
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,6 +32,8 @@ public class ItemRandomizer : MonoBehaviour
     private Coords _playerChunk = Coords.Of(255, 255);
     [SerializeField] private int itemsDisplayChunkRadius = 3;
 
+    [SerializeField] private OrbIndicator orbIndicator;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -44,7 +44,6 @@ public class OrbSpawner : MonoBehaviour
             Debug.Log("No WorldCells found!");
         }
 
-
         if (!custardState)
         {
             Debug.Log("No CustardState found!");

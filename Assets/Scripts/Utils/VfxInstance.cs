@@ -5,6 +5,7 @@ using UnityEngine;
 public class VfxInstance : MonoBehaviour
 {
     [SerializeField] private ParticleSystem vfx;
+    
 
     private void Start()
     {
