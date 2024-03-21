@@ -252,7 +252,7 @@ public class Player : MonoBehaviour
             currentHealth -= damage;
             healthbar.SetHealth(currentHealth);
             _radianceReceiver.DeclineRadiance(1);
-            Debug.Log("taking health damage " + damage + " - now on " + currentHealth + "HP");
+            // Debug.Log("taking health damage " + damage + " - now on " + currentHealth + "HP");
 
             if (currentHealth <= 0)
             {
@@ -577,7 +577,7 @@ public class Player : MonoBehaviour
             return;
         }
 
-        Debug.Log("Grapple button detected "+context.isPressed);
+        // Debug.Log("Grapple button detected "+context.isPressed);
 
         if (!ownsGrapplingHook) return; // maybe play null sound effect
         if (grappling || nextGrappleTime < grappleCooldownTime)

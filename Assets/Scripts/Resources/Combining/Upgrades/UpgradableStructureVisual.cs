@@ -209,7 +209,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("player entered");
+            // Debug.Log("player entered");
 
             if (_maxedOut)
                 return;
@@ -227,7 +227,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("player left");
+            // Debug.Log("player left");
             hideVisualCoroutine = StartCoroutine(HideVisualAfterSomeTime());
         }
     }

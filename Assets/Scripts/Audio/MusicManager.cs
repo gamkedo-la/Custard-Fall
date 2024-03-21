@@ -90,7 +90,7 @@ public class MusicManager : MonoBehaviour {
 		freshSource.loop = loop;
 		freshSource.volume = volume;
 		freshSource.PlayScheduled(nextBeatTime);
-		Debug.Log("play next "+topClip.name);
+		// Debug.Log("play next "+topClip.name);
 		return freshSource;
 	}
 

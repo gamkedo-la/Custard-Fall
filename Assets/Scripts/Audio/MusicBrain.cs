@@ -74,7 +74,7 @@ public class MusicBrain : MonoBehaviour
             int targetTide = tidesManager.custardManager.targetTideLevel;
             if (currentLevel != targetTide)
             {
-                Debug.Log("target tide " + targetTide);
+                // Debug.Log("target tide " + targetTide);
                 AudioClip clipToPlay = null;
 
                 // change stinger sound every time the custard changes in the one direction or the other
@@ -158,7 +158,7 @@ public class MusicBrain : MonoBehaviour
             if (!dangerStarted)
             {
                 currentCustardLevelSource = MusicManager.Instance.SchedualTop(custardDangerClip, volumeDanger);
-                Debug.Log("Player in Danger");
+                // Debug.Log("Player in Danger");
             }
 
             dangerStarted = true;
@@ -169,7 +169,7 @@ public class MusicBrain : MonoBehaviour
             Destroy(currentCustardLevelSource.gameObject, 0.376f);
             currentCustardLevelSource = null;
             dangerStarted = false;
-            Debug.Log("Player out of Danger");
+            // Debug.Log("Player out of Danger");
         }
     }
 }
