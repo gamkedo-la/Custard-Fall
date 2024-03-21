@@ -18,4 +18,9 @@ public class VfxInstance : MonoBehaviour
             Destroy(this);
         }
     }
+
+    public static VfxInstance Spawn(VfxInstance prefab, Vector3 position, Quaternion rotation)
+    {
+        return Instantiate(prefab, position, rotation);
+    }
 }
