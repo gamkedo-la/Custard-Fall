@@ -4586,7 +4586,8 @@ MonoBehaviour:
   checkRate: 0.4
   maxDistance: 64
   minDistance: 24
-  offset: 5
+  offset: 26
+  maxIndicators: 2
 --- !u!1 &8634744845233825456
 GameObject:
   m_ObjectHideFlags: 0
