@@ -38,7 +38,7 @@ public class ReactToRadianceLevel : MonoBehaviour
         {
             _player.movementSpeed = baseSpeed * modification.SpeedMultiplier;
             _player.swimSpeed = baseSwimSpeed * modification.SpeedMultiplier;
-            Debug.Log(newlevel + " lv: speed mod " + _player.movementSpeed + " swim " + _player.swimSpeed);
+            // Debug.Log(newlevel + " lv: speed mod " + _player.movementSpeed + " swim " + _player.swimSpeed);
 
             if (modification.InhaleReach == 0)
             {
@@ -48,7 +48,7 @@ public class ReactToRadianceLevel : MonoBehaviour
             {
                 _player.inhaler.Size = Inhaler.ConeSize.NORMAL;
             }
-            Debug.Log(" inhale cone size:  " + _player.inhaler.Size);
+            // Debug.Log(" inhale cone size:  " + _player.inhaler.Size);
         }
     }
 
