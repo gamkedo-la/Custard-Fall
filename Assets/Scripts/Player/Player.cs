@@ -391,7 +391,7 @@ public class Player : MonoBehaviour
                 {
                     case false when heightDifference < -2.5f || heightDifference + custardLevel < -1.25f:
                     {
-                        Debug.Log($"height difference: {heightDifference}");
+                        // Debug.Log($"height difference: {heightDifference}");
                         _isAtEdge = true;
                         buttonPrompt.SetActive(true);
                         var fadeInThenOutCanvasGroup = buttonPrompt.GetComponent<FadeInThenOutCanvasGroup>();

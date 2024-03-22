@@ -22,7 +22,7 @@ public class InhalableProjectile : Inhalable
 
     public override void OnResourceInhaledAndMaybeRemove(Inhaler inhaler, Resource resource, int amount)
     {
-        Debug.Log("inhaled projectile");
+        // Debug.Log("inhaled projectile");
         if (GetRemainingResourcesCount() == 0)
         {
             gameObject.SetActive(false);
