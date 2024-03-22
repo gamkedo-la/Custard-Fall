@@ -16,6 +16,7 @@ public class OrbIndicator : MonoBehaviour
     [SerializeField] private float maxDistance = 64f;
     [SerializeField] private float minDistance = 24f;
     [SerializeField] private float offset = 26f;
+    [SerializeField] private int maxIndicators = 2;
 
     private List<Transform> recentSpawns = new();
 
@@ -71,7 +72,7 @@ public class OrbIndicator : MonoBehaviour
             where candidate.Item1 < maxDistance && candidate.Item1 > minDistance
             select candidate.Item2;
         
-        return nearestSpawns;
+        return nearestSpawns.Take(maxIndicators);
     }
 
     private Vector3 GetScreenEdgePosition(Transform nearestSpawn)
