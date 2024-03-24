@@ -24,6 +24,7 @@ public class UpgradableStructureVisual : MonoBehaviour
     [SerializeField] private Image previewSlots;
     [SerializeField] private TextMeshProUGUI lvlDisplay;
     [SerializeField] private Image lvlBackground;
+    [SerializeField] private Image iconBackground;
     [SerializeField] private Image resourceIcon;
 
     [FormerlySerializedAs("_cozySettings")] [SerializeField]
@@ -69,6 +70,8 @@ public class UpgradableStructureVisual : MonoBehaviour
     {
         if (lvlBackground)
             lvlBackground.color = radianceSettings.GetColorForEffectiveLevel(currentLevel);
+        if (iconBackground)
+            iconBackground.color = radianceSettings.GetColorForEffectiveLevel(currentLevel);
         if (lvlDisplay)
             lvlDisplay.SetText("lvl " + currentLevel);
     }
