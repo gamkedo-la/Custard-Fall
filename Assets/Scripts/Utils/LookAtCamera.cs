@@ -1,31 +1,35 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
+public class LookAtCamera : MonoBehaviour
+{
+    private Transform _camera;
 
-    public class LookAtCamera : MonoBehaviour
+    private enum Mode
     {
+        LookAtCamera,
+        LookAtCameraInverted
+    }
 
-        private enum Mode
-        {
-            LookAtCamera,
-            LookAtCameraInverted,
-        }
+    [SerializeField] private Mode lookAtMode;
 
-        [SerializeField] private Mode lookAtMode;
-    
-        private void LateUpdate()
+    private void Start()
+    {
+        _camera = Camera.main!.transform;
+    }
+
+    private void LateUpdate()
+    {
+        switch (lookAtMode)
         {
-            switch (lookAtMode)
-            {
-                case Mode.LookAtCamera:
-                    this.transform.forward = Camera.main.transform.forward;
-                    break;
-                case Mode.LookAtCameraInverted:
-                    this.transform.forward = -Camera.main.transform.forward;
-                    break;
-                default:
-                    this.transform.LookAt(Camera.main.transform);
-                    break;
-            }
+            case Mode.LookAtCamera:
+                transform.forward = _camera.transform.forward;
+                break;
+            case Mode.LookAtCameraInverted:
+                transform.forward = -_camera.transform.forward;
+                break;
+            default:
+                transform.LookAt(_camera.transform);
+                break;
         }
     }
+}
