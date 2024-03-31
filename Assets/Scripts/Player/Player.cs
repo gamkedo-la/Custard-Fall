@@ -55,6 +55,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float grappleSpeed = 8f;
 
     [SerializeField] private GameObject grappleMarker;
+    [SerializeField] private float grappleMarkerMinShowDistance = 2.5f;
     private Vector3 grapplePoint;
     [SerializeField] private LineRenderer grappleLine;
 
@@ -74,7 +75,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject inhalePrompt;
     [SerializeField] private int toUnderstandInhaling = 1;
-    
+
     [SerializeField] private GameObject placePrompt;
 
 
@@ -102,7 +103,7 @@ public class Player : MonoBehaviour
     public Healthbar healthbar;
 
     private int _mouseTargetLayerMask;
-    
+
     private void Start()
     {
         inhaleSFX = GetComponent<AudioSource>();
@@ -117,7 +118,7 @@ public class Player : MonoBehaviour
         inhaler.owner = gameObject;
 
         _radianceReceiver = GetComponent<RadianceReceiver>();
-        
+
         inhalePrompt.SetActive(true);
     }
 
@@ -168,8 +169,9 @@ public class Player : MonoBehaviour
             var hit = UpdateGrapplePoint();
             if (hit)
             {
-                grappleMarker.transform.position = grapplePoint - transform.forward + Vector3.up * .5f;
-                grappleMarker.SetActive(true);
+                grappleMarker.transform.position = grapplePoint;
+                var showMarker = Vector3.Distance(grapplePoint, playerPosition) > grappleMarkerMinShowDistance;
+                grappleMarker.SetActive(showMarker);
             }
             else if (grappleIntoTheVoid)
             {
@@ -476,9 +478,9 @@ public class Player : MonoBehaviour
                 inhaler.BeginInhaleInTransformDirection(4f);
                 inhaleSFX.Play();
 
-                if (toUnderstandInhaling>1)
+                if (toUnderstandInhaling > 1)
                 {
-                        toUnderstandInhaling--;
+                    toUnderstandInhaling--;
                 }
             }
             else
@@ -493,10 +495,10 @@ public class Player : MonoBehaviour
         {
             if (toUnderstandInhaling > 0)
             {
-                    toUnderstandInhaling = -1;
-                    StartCoroutine(HideInhalePrompt());
+                toUnderstandInhaling = -1;
+                StartCoroutine(HideInhalePrompt());
             }
-            
+
             inhaler.StopInhale();
             inhaleSFX.Stop();
             requireUseButtonRelease = false;
@@ -689,7 +691,7 @@ public class Player : MonoBehaviour
         focusedItemReceiver?.LeavePreview();
         focusedItemReceiver = null;
         requireUseButtonRelease = false;
-        
+
         placePrompt.SetActive(false);
     }
 
@@ -719,7 +721,7 @@ public class Player : MonoBehaviour
         onItemPlaced = placingFunction;
         _smoothPreviewPosition = targetPoint4PlacingItem;
         UpdatePlaceableItemState(playerPosition, itemReceiver);
-        
+
         placePrompt.SetActive(true);
     }
 

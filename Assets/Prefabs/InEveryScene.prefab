@@ -3619,7 +3619,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7377553103838467910
 Transform:
   m_ObjectHideFlags: 0
@@ -7454,6 +7454,10 @@ PrefabInstance:
       propertyPath: _pauseActivator
       value: 
       objectReference: {fileID: 997554135429052598}
+    - target: {fileID: 9001336511291437872, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
+      propertyPath: grappleMarkerMinShowDistance
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 9001336511291437872, guid: d233a19d7501e7e4a8294630a0974bec, type: 3}
       propertyPath: inventorySlotReferences.Array.size
       value: 8
