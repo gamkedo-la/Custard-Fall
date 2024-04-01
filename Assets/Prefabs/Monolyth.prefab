@@ -90,6 +90,11 @@ MonoBehaviour:
     jumpToLevel: 0
     upgrade: {fileID: 0}
     upgradeMaterial: {fileID: 0}
+  - comment: 
+    requiredPoints: 5
+    jumpToLevel: 0
+    upgrade: {fileID: 0}
+    upgradeMaterial: {fileID: 0}
 --- !u!114 &5759300706779691201
 MonoBehaviour:
   m_ObjectHideFlags: 0

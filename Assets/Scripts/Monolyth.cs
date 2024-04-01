@@ -33,16 +33,18 @@ public class Monolyth : MonoBehaviour
         }
         if (e.maxedOut)
         {
+            Debug.Log("set custard level to 1 layer");
             _tidesmanager.OverrideTideStep(new Tidesmanager.TideStep(1),tidesmanagerIndexOfCurrentDayTimeTideLevel, Reset);
         }
         else
         {
+            Debug.Log("decrease custard level to 3");
             _tidesmanager.OverrideTideStep(new Tidesmanager.TideStep(3),tidesmanagerIndexOfCurrentDayTimeTideLevel);
         }
     }
 
     public void Reset()
     {
-        _upgrader.ForceSetCurrentLevel(2);
+        _upgrader.ForceSetCurrentLevel(1);
     }
 }
